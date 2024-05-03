@@ -15,7 +15,7 @@
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา"
+          <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
             aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
             <button class="btn btn-warning bg-gradient-purple" type="button">
@@ -38,9 +38,7 @@
         <li class="nav-item dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            <span
-              class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'].' '.$_SESSION['lastname']; ?>
-            </span>
+            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo isset($_SESSION['name']) ? $_SESSION['name'] : ''; ?></span>
             <img class="img-profile rounded-circle" src="img/picture.png">
           </a>
           <!-- Dropdown - User Information -->
@@ -71,7 +69,7 @@
             <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
             <path fill-rule="evenodd"
               d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-          </svg>&nbsp;รายการ
+          </svg>&nbsp;Inventory
         </div>
 
         <div class="card-body">

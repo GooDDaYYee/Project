@@ -9,20 +9,15 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>psnktelecom</title>
+  <title>PSNK TELECOM</title>
 
   <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" type="text/css"><link
     href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
     rel="stylesheet">
-
   <link href='https://fonts.googleapis.com/css?family=Mitr' rel='stylesheet'>
-
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
-
   <!-- Bootstrap CSS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
@@ -39,6 +34,9 @@
     table {
       text-align: center;
     }
+    .warning {
+        color: #ffc404;
+    }
   </style>
 </head>
 
@@ -53,17 +51,12 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?page=home">
         <div class="sidebar-brand-icon rotate-n-15">
-          <i>P</i>
+          <i class="warning">P</i>
         </div>
-        <div class="sidebar-brand-text mx-3">psnktelecom<sup>CP</sup></div>
+        <div class="sidebar-brand-text mx-3">psnktelecom<sup class="warning">CP</sup></div>
       </a>
       <!-- Divider -->
       <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        menu
-      </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
@@ -72,33 +65,26 @@
           <i class="fas fa-align-justify"></i>
           <span>Menu</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header collapseTwo"><i class="fas fa-align-justify"></i>ไฟล์</h6>
-
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
+          <div id="collapseTwo" class="collapse bg-gradient-purple" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
+              </div>
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสาร</h6>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการใบเสนอราคา</a>
+                <a class="collapse-item " href="index.php?page=report">&nbsp; จัดการใบวางบิล</a>
+                <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
+              </div>
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือนพนักงาน</a>
+              </div>
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
+              </div>
           </div>
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">จัดการเอกสาร</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการใบเสนอราคา</a>
-            <a class="collapse-item " href="index.php?page=report">&nbsp; จัดการใบวางบิล</a>
-            <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
-          </div>
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">พนักงาน</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือนพนักงาน</a>
-          </div>
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">สต๊อก</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
-          </div>
-        </div>
       </li>
 
 

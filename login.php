@@ -15,8 +15,7 @@
   <title>Login</title>
 
   <!-- Custom fonts for this template-->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" type="text/css"><link
     href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
     rel="stylesheet">
 
@@ -28,17 +27,23 @@
   <!-- Bootstrap CSS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
-
+  
   <style>
+    .bg-gradient-purple {
+    background-color: #8A2BE2;
+    }
     body {
       font-family: 'Mitr';
       font-size: 22px;
+    }
+    table {
+      text-align: center;
     }
   </style>
 
 </head>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-purple">
 
   <div class="container">
 
@@ -69,10 +74,10 @@
                       <div class="form-group">
                         <div class="custom-control custom-checkbox small">
                           <input type="checkbox" class="custom-control-input" id="customCheck" name="customCheck">
-                          <label class="custom-control-label" for="customCheck">Remember Me</label>
+                          <label class="custom-control-label" for="customCheck">Remember</label>
                         </div>
                       </div>
-                      <button href="index.php?page=home" class="btn btn-primary btn-user btn-block" type="submit">
+                      <button href="index.php?page=home" class="btn btn-warning bg-gradient-purple btn-user btn-block" type="submit">
                         <h5>Sign in</h5>
                       </button>
                     </form>
