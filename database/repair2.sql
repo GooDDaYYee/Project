@@ -1,4 +1,4 @@
-SELECT * FROM repair.user;
+SELECT * FROM psnktelecom.detail;
 DROP TABLE IF EXISTS `detail`;
 CREATE TABLE `detail` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,

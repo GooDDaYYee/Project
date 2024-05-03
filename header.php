@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Repair</title>
+  <title>psnktelecom</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,11 +22,16 @@
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
+
 
   <style>
+    .bg-gradient-purple {
+    background-color: #8A2BE2;
+    }
     body {
       font-family: 'Mitr';
       font-size: 16px;
@@ -43,14 +48,14 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-purple sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?page=home">
         <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-wrench"></i>
+          <i>P</i>
         </div>
-        <div class="sidebar-brand-text mx-3">Repair<sup>CP</sup></div>
+        <div class="sidebar-brand-text mx-3">psnktelecom<sup>CP</sup></div>
       </a>
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -62,20 +67,40 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
           aria-controls="collapseTwo">
           <i class="fas fa-align-justify"></i>
-          <span>Components</span>
+          <span>Menu</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Components:</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; รายการ</a>
-            <a class="collapse-item " href="index.php?page=report">&nbsp; แจ้งซ่อม</a>
-            <a class="collapse-item " href="index.php?page=register">&nbsp; เพิ่มผู้ใช้</a>
+            <h6 class="collapse-header collapseTwo"><i class="fas fa-align-justify"></i>ไฟล์</h6>
+
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
+          </div>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">จัดการเอกสาร</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการใบเสนอราคา</a>
+            <a class="collapse-item " href="index.php?page=report">&nbsp; จัดการใบวางบิล</a>
+            <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
+          </div>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">พนักงาน</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือนพนักงาน</a>
+          </div>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">สต๊อก</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
           </div>
         </div>
       </li>
+
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

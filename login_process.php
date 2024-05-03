@@ -18,7 +18,7 @@
     }
     
     //echo "Connected successfully";
-    $sql="select * FROM repair.user where status='1' and username='$user';";
+    $sql="select * FROM psnktelecom.user where status='1' and username='$user';";
 
     //echo $sql;
     
