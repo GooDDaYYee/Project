@@ -15,7 +15,7 @@
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+          <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา"
             aria-label="Search" aria-describedby="basic-addon2">
           <div class="input-group-append">
             <button class="btn btn-warning bg-gradient-purple" type="button">
@@ -38,7 +38,9 @@
         <li class="nav-item dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo isset($_SESSION['name']) ? $_SESSION['name'] : ''; ?></span>
+            <span
+              class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'].' '.$_SESSION['lastname']; ?>
+            </span>
             <img class="img-profile rounded-circle" src="img/picture.png">
           </a>
           <!-- Dropdown - User Information -->
@@ -69,7 +71,8 @@
             <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
             <path fill-rule="evenodd"
               d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-          </svg>&nbsp;Inventory
+          </svg>&nbsp;จัดการผู้ใช้
+          <a href="index.php?page=register">เพิ่มผู้ใช้</a>
         </div>
 
         <div class="card-body">
@@ -78,16 +81,18 @@
               <thead>
                 <tr>
                   <th scope="col">ลำดับ</th>
+                  <th scope="col">ชื่อผู้ใช้</th>
+                  <th scope="col">รหัสผ่าน</th>
                   <th scope="col">ชื่อ</th>
-                  <th scope="col">ประเภท</th>
-                  <th scope="col">ชนิดอุปกรณ์</th>
-                  <th scope="col">จำนวน</th>
+                  <th scope="col">นามสกุล</th>
+                  <th scope="col">เลเวล</th>
+                  <th scope="col">สถานะ</th>
                   <th scope="col"></th>
                 </tr>
               </thead>
               <?php
               include('connect.php');
-              $strsql = "SELECT * FROM detail ORDER BY Id DESC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
+              $strsql = "SELECT * FROM user ORDER BY Id DESC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
               $result = mysqli_query($con,$strsql);
               $rowcount=mysqli_num_rows($result);
               if($rowcount>0){
@@ -97,15 +102,15 @@
                 <tbody>
                   <tr>
                     <th scope="row"><?php echo $rs['Id'];?></th>
-                    <td><?php echo $rs['machine'];?></td>
-                    <td><?php echo $rs['category'];?></td>
-                    <td><?php echo $rs['type'];?></td>
-                    <td><?php echo $rs['create_date'];?></td>
-                    <td><?php echo $rs[''];?></td>
+                    <td><?php echo $rs['username'];?></td>
+                    <td><?php echo $rs['passW'];?></td>
+                    <td><?php echo $rs['name'];?></td>
+                    <td><?php echo $rs['lastname'];?></td>
+                    <td><?php echo $rs['lv'];?></td>
+                    <td><?php echo $rs['status'];?></td>
                     <td>
                       <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-outline-success">แก้ไข้</button>
-                        <button type="button" class="btn btn-outline-warning">รายละเอียด</button>
                         <button type="button" class="btn btn-outline-danger">ลบ</button>
                       </div>
                     </td>
@@ -122,7 +127,10 @@
           </div>
         </div>
       </div>
+
+
     </div>
+
   </div>
 
 </div>

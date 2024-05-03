@@ -95,7 +95,7 @@
               </div>
               <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
-                <a class="collapse-item " href="index.php?page=manage_user.php">&nbsp; จัดการผู้ใช้</a>
+                <a class="collapse-item " href="index.php?page=manage_user">&nbsp; จัดการผู้ใช้</a>
               </div>
           </div>
       </li>

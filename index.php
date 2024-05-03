@@ -13,7 +13,9 @@ if($page=='home'){
     include_once("home.php");
 }elseif($page=='report'){
     include_once("report.php");
-}else{
+}elseif($page=='manage_user'){
+    include_once("manage_user.php");
+}elseif($page=='register'){
     include_once("register.php");
 }
 
