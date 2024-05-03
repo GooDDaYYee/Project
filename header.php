@@ -24,8 +24,17 @@
 
 
   <style>
+    .btn-warning{
+      border: 1px solid #8A2BE2;
+    }
     .bg-gradient-purple {
-    background-color: #8A2BE2;
+      background-color: #8A2BE2;
+    }
+    .bg-gradient-purple2{
+      background-color: #8A2BE2;
+      padding: 10px;
+      border: 1px solid #8A2BE2;
+      border-radius: 10px;
     }
     body {
       font-family: 'Mitr';
@@ -65,7 +74,7 @@
           <i class="fas fa-align-justify"></i>
           <span>Menu</span>
         </a>
-          <div id="collapseTwo" class="collapse bg-gradient-purple" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div id="collapseTwo" class="collapse bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
               <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
                 <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
@@ -78,11 +87,15 @@
               </div>
               <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือนพนักงาน</a>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือน</a>
               </div>
               <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
                 <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
+              </div>
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
+                <a class="collapse-item " href="index.php?page=manage_user.php">&nbsp; จัดการผู้ใช้</a>
               </div>
           </div>
       </li>

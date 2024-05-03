@@ -1,24 +1,17 @@
 <?php
-    // insertStudent.php ใช้เพิ่มข้อมูลเข้าตาราง student
-    /* */
-    // 1. เปิดการเชื่อมต่อฐานข้อมูล
     include "connect_register.php";
 
-    // 2. รับข้อมูลจากไฟล์ studentForm
     $name = $_POST["name"];
     $lastname = $_POST["lastname"];
     $username = $_POST["username"];
-    $password = $_POST["password"];
-    $password = sha1($password);
+    $password = $_POST["passW"];
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-
-    // 3. insert ข้อมูลเข้าตาราง
-    $sql = "insert into user(name,lastname,username,password)
-    VALUES ('$name','$lastname','$username','$password');";
+    $sql = "insert into user(name,lastname,username,passW)
+    VALUES ('$name','$lastname','$username','$hashed_password');";
 
     $result=mysqli_query($conn, $sql);
     
-    // 4. ตรวจสอบว่าบันทึกเข้าตารางหรือไม่
     if($result==True){
         echo '<script>
 		alert("เพิ่มข้อมูลสำเร็จ");
@@ -32,6 +25,5 @@
 		</script>
 		';
     }
-    // 5. ปิดการเชื่อมต่อ
     mysqli_close($conn);
 ?>
