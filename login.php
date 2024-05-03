@@ -37,6 +37,9 @@
     table {
       text-align: center;
     }
+    .btn-warning{
+      border: 1px solid #8A2BE2;
+    }
   </style>
 
 </head>
@@ -46,7 +49,7 @@
   <div class="container">
 
   <!-- Outer Row -->
-  <form class="form-signin" name="form_login" id="form_login" method="post" action="login_process.php">
+  <form class="form-signin container" name="form_login" id="form_login" method="post" action="login_process.php">
       <div class="row justify-content-center">
           <div class="col-xl-10 col-lg-12 col-md-9">
               <div class="card o-hidden border-0 shadow-lg my-5">
@@ -81,9 +84,15 @@
                                               <label class="custom-control-label" for="customCheck">Remember</label>
                                           </div>
                                       </div>
-                                      <button href="index.php?page=home" class="btn btn-warning bg-gradient-purple btn-user btn-block" type="submit">
-                                          <h5>Sign in</h5>
-                                      </button>
+                                      <div class="row align-items-start">
+                                      <button href="index.php?page=home" class="btn btn-secondary col" type="submit">
+                                            <h5>ลืมรหัสผ่าน</h5>
+                                        </button>
+                                        <div class="col"></div>
+                                        <button href="index.php?page=home" class="btn btn-warning bg-gradient-purple col" type="submit">
+                                            <h5>เข้าสู่ระบบ</h5>
+                                        </button>
+                                      </div>
                                   </form>
                               </div>
                           </div>

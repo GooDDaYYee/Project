@@ -22,7 +22,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
 
-
   <style>
     .btn-warning{
       border: 1px solid #8A2BE2;
@@ -86,12 +85,16 @@
                 <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
               </div>
               <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือน</a>
-              </div>
-              <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
                 <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
+              </div>
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> รายงาน</h6>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; รายงานปฏิบัติงาน</a>
+              </div>
+              <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
+                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือน</a>
               </div>
               <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
