@@ -40,7 +40,3 @@
 
 <!-- Show picture -->
 <script src="upload.js"></script>
-
-</body>
-
-</html>

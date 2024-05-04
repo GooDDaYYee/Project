@@ -27,6 +27,10 @@ session_start();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
 
     <style>
+        .btn-warning {
+            border: 1px solid #8A2BE2;
+        }
+
         .bg-gradient-purple {
             background-color: #8A2BE2;
         }
@@ -34,25 +38,42 @@ session_start();
         body {
             font-family: 'Mitr';
             font-size: 22px;
+            background-color: #8A2BE2;
         }
 
         table {
             text-align: center;
         }
 
-        .btn-warning {
-            border: 1px solid #8A2BE2;
+        .warning {
+            color: #ffc404;
+        }
+
+        h1 {
+            font-size: 100px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 
 </head>
 
-<body class="bg-gradient-purple">
+<body>
 
     <div class="container">
 
         <!-- Outer Row -->
         <form class="form-signin container" name="form_login" id="form_login" method="post" action="login_process.php">
+            <div>
+                <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
+            </div>
             <div class="row justify-content-center">
                 <div class="col-xl-10 col-lg-12 col-md-9">
                     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -62,7 +83,7 @@ session_start();
                                 <div class="col-lg">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">Welcome</h1>
+                                            <h2 class="h4 text-gray-900 mb-4">Welcome</h2>
                                         </div>
                                         <form class="user">
                                             <div class="form-group">
