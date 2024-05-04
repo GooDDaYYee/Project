@@ -12,9 +12,8 @@
   <title>PSNK TELECOM</title>
 
   <!-- Custom fonts for this template-->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" type="text/css"><link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Mitr' rel='stylesheet'>
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.min.css" rel="stylesheet">
@@ -23,27 +22,32 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
 
   <style>
-    .btn-warning{
+    .btn-warning {
       border: 1px solid #8A2BE2;
     }
+
     .bg-gradient-purple {
       background-color: #8A2BE2;
     }
-    .bg-gradient-purple2{
+
+    .bg-gradient-purple2 {
       background-color: #8A2BE2;
       padding: 10px;
       border: 1px solid #8A2BE2;
       border-radius: 10px;
     }
+
     body {
       font-family: 'Mitr';
       font-size: 16px;
     }
+
     table {
       text-align: center;
     }
+
     .warning {
-        color: #ffc404;
+      color: #ffc404;
     }
   </style>
 </head>
@@ -68,39 +72,38 @@
 
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-          aria-controls="collapseTwo">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-align-justify"></i>
           <span>Menu</span>
         </a>
-          <div id="collapseTwo" class="collapse bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-              <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
-              </div>
-              <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสาร</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการใบเสนอราคา</a>
-                <a class="collapse-item " href="index.php?page=report">&nbsp; จัดการใบวางบิล</a>
-                <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
-              </div>
-              <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
-              </div>
-              <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> รายงาน</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; รายงานปฏิบัติงาน</a>
-              </div>
-              <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
-                <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือน</a>
-              </div>
-              <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
-                <a class="collapse-item " href="index.php?page=manage_user">&nbsp; จัดการผู้ใช้</a>
-              </div>
+        <div id="collapseTwo" class="collapse bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
           </div>
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสาร</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการใบเสนอราคา</a>
+            <a class="collapse-item " href="index.php?page=report">&nbsp; จัดการใบวางบิล</a>
+            <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
+          </div>
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
+          </div>
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> รายงาน</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; รายงานปฏิบัติงาน</a>
+          </div>
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือน</a>
+          </div>
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
+            <a class="collapse-item " href="index.php?page=manage_user">&nbsp; จัดการผู้ใช้</a>
+          </div>
+        </div>
       </li>
 
 

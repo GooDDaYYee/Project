@@ -13,9 +13,7 @@
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <!-- font mitr -->
   <link href='https://fonts.googleapis.com/css?family=Mitr' rel='stylesheet'>
@@ -57,17 +55,14 @@
 
           <!-- Nav Item - Search Dropdown (Visible Only XS) -->
           <li class="nav-item dropdown no-arrow d-sm-none">
-            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-search fa-fw"></i>
             </a>
             <!-- Dropdown - Messages -->
-            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-              aria-labelledby="searchDropdown">
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
               <form class="form-inline mr-auto w-100 navbar-search">
                 <div class="input-group">
-                  <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                    aria-label="Search" aria-describedby="basic-addon2">
+                  <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                   <div class="input-group-append">
                     <button class="btn btn-warning" type="button">
                       <i class="fas fa-search fa-sm"></i>
@@ -80,15 +75,13 @@
 
           <!-- Nav Item - Alerts -->
           <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-bell fa-fw"></i>
               <!-- Counter - Alerts -->
               <span class="badge badge-danger badge-counter">+99</span>
             </a>
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-              aria-labelledby="alertsDropdown">
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
               <h6 class="dropdown-header">
                 Alerts Center
               </h6>
@@ -131,15 +124,13 @@
 
           <!-- Nav Item - Messages -->
           <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-envelope fa-fw"></i>
               <!-- Counter - Messages -->
               <span class="badge badge-danger badge-counter">7</span>
             </a>
             <!-- Dropdown - Messages -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-              aria-labelledby="messagesDropdown">
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
               <h6 class="dropdown-header">
                 Message Center
               </h6>
@@ -197,10 +188,8 @@
 
           <!-- Nav Item - User Information -->
           <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              <span
-                class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['name'].' '.$_SESSION['lastname']; ?></span>
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
               <img class="img-profile rounded-circle" src="img/picture.png">
             </a>
             <!-- Dropdown - User Information -->
@@ -232,16 +221,16 @@
 
                   <div class="form-group row">
                     <div class="col-sm-6 mb-4 mb-sm-0">
-                      <input type="text" id="machine" name="machine" class="form-control form-control-user"
-                        placeholder="หมายเลขเครื่อง" required="">
+                      <input type="text" id="machine" name="machine" class="form-control form-control-user" placeholder="หมายเลขเครื่อง" required="">
                     </div>
                     <div class="col-sm-6">
-                    <select class="form-control" id="category" name="category">
+                      <select class="form-control" id="category" name="category">
                         <option>ประเภท</option>
-                        <option>คอมพิวเตอร์</option></option>
+                        <option>คอมพิวเตอร์</option>
+                        </option>
                       </select>
                     </div>
-                    </div>
+                  </div>
 
                   <div class="form-group row">
                     <div class="col-sm-6 mb-4 mb-sm-0">
@@ -254,32 +243,29 @@
                       </select>
                     </div>
                     <div class="col-sm-6">
-                      <textarea class="form-control" id="cause" name="cause" rows="3"
-                        placeholder="สาเหตุ"></textarea>
+                      <textarea class="form-control" id="cause" name="cause" rows="3" placeholder="สาเหตุ"></textarea>
                     </div>
                   </div>
                   <div class="form-group row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
-                      <input type="numberphone" id="numberphone" name="numberphone" class="form-control form-control-user"
-                        placeholder="เบอร์โทรศัพท์" required="">
+                      <input type="numberphone" id="numberphone" name="numberphone" class="form-control form-control-user" placeholder="เบอร์โทรศัพท์" required="">
                     </div>
                     <div class="col-sm-6">
-                    <li class="form-control" id="time" name="time">เวลาแจ้งซ่อม &nbsp;<?php 
-                    date_default_timezone_set('Asia/Bangkok');
-                    echo date("d/m/Y h:i A") . "\n";
-                    ?> </li>
-                    
+                      <li class="form-control" id="time" name="time">เวลาแจ้งซ่อม &nbsp;<?php
+                                                                                        date_default_timezone_set('Asia/Bangkok');
+                                                                                        echo date("d/m/Y h:i A") . "\n";
+                                                                                        ?> </li>
+
                     </div>
                   </div>
-                  
+
                   <!-- picture -->
                   <div class="form-group">
 
-                      <img id="showimg" alt="" width="150" height="150">
+                    <img id="showimg" alt="" width="150" height="150">
                     <br>
                     <h6>แนปรูปภาพ :</h6>
-                    <input type="file" class="btn btn-outline-warning col-md-3" id="showimg" name="showimg"
-                      accept="image/png, image/jpeg, image/gif " onchange="preview_image(event)">
+                    <input type="file" class="btn btn-outline-warning col-md-3" id="showimg" name="showimg" accept="image/png, image/jpeg, image/gif " onchange="preview_image(event)">
                   </div>
 
                   <!-- End picture -->
