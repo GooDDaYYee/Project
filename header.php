@@ -83,9 +83,9 @@
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสาร</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการใบเสนอราคา</a>
-            <a class="collapse-item " href="index.php?page=report">&nbsp; จัดการใบวางบิล</a>
-            <a class="collapse-item " href="index.php?page=register">&nbsp; จัดการใบกำกับภาษี</a>
+            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; ทำเอกสารMixed</a>
+            <a class="collapse-item " href="index.php?page=report">&nbsp; ทำเอกสารMixed</a>
+            <a class="collapse-item " href="index.php?page=register">&nbsp; ทำเอกสารMixed</a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>

@@ -17,6 +17,8 @@ if ($page == 'home') {
     include_once("manage_user.php");
 } elseif ($page == 'register') {
     include_once("register.php");
+} elseif ($page == 'mixed_report') {
+    include_once("mixed_report.php");
 }
 
 include_once("footer.php");
