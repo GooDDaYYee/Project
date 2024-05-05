@@ -42,48 +42,142 @@
                 <div class="col-lg">
                   <div class="p-5">
                     <div class="text-center">
-                      <h1 class="h2 text-gray-900 mb-2">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัทmixed</h1>
+                      <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท Mixed</h1>
                     </div>
                     <hr class="user">
-                    <div class="form-group row">
-                      <div class="col-sm-2 mb-3 mb-sm-0">
+                    <div class="row mt-md-3">
+                      <div class="col">
+                        <h4>เลขที่</h4>
                         <input type="text" id="number" name="number" class="form-control form-control-user" placeholder="เลขที่" required="">
                       </div>
-                      <div class="col-sm-2 mb-4 mb-sm-10">
+                      <div class="col">
+                        <h4>วันที่</h4>
                         <li class="form-control">
-                          วันที่ &nbsp;<?php
-                                        date_default_timezone_set('Asia/Bangkok');
-                                        setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
+                          <?php
+                          date_default_timezone_set('Asia/Bangkok');
+                          setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
 
-                                        $thai_month = array(
-                                          1 => "มกราคม",
-                                          2 => "กุมภาพันธ์",
-                                          3 => "มีนาคม",
-                                          4 => "เมษายน",
-                                          5 => "พฤษภาคม",
-                                          6 => "มิถุนายน",
-                                          7 => "กรกฎาคม",
-                                          8 => "สิงหาคม",
-                                          9 => "กันยายน",
-                                          10 => "ตุลาคม",
-                                          11 => "พฤศจิกายน",
-                                          12 => "ธันวาคม"
-                                        );
-                                        $thai_month_num = (int)strftime("%m");
-                                        $thai_date = strftime("%d $thai_month[$thai_month_num] %Y", strtotime("+543 years", strtotime(date('Y-m-d'))));
-                                        echo $thai_date;
-                                        ?>
+                          $thai_month = array(
+                            1 => "มกราคม",
+                            2 => "กุมภาพันธ์",
+                            3 => "มีนาคม",
+                            4 => "เมษายน",
+                            5 => "พฤษภาคม",
+                            6 => "มิถุนายน",
+                            7 => "กรกฎาคม",
+                            8 => "สิงหาคม",
+                            9 => "กันยายน",
+                            10 => "ตุลาคม",
+                            11 => "พฤศจิกายน",
+                            12 => "ธันวาคม"
+                          );
+                          $thai_month_num = (int)strftime("%m");
+                          $thai_date = strftime("%d $thai_month[$thai_month_num] %Y", strtotime("+543 years", strtotime(date('Y-m-d'))));
+                          echo $thai_date;
+                          ?>
                         </li>
                         <input type="hidden" name="thai_date" value="<?php echo $thai_date; ?>">
                       </div>
+                      <div class="col">
+                        <h4>วันที่</h4>
+                        <input type="date" id="thai_date_product" name="thai_date_product" class="form-control form-control-user">
+                      </div>
+                    </div>
+                    <div class="row mt-md-3">
+                      <div class="col-md-6">
+                        <h4>เงื่อนไขการชำระเงิน</h4>
+                        <input type="text" id="payment" name="payment" class="form-control form-control-user" value="N/A">
+                      </div>
+                      <div class="col-md-3">
+                        <h4>เงื่อนไขการชำระเงิน</h4>
+                        <input type="date" id="thai_date_product" name="thai_date_product" class="form-control form-control-user">
+                      </div>
+                      <div class="col-md-3">
+                        <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
+                        <input type="text" id="refer" name="refer" class="form-control form-control-user" value="-">
+                      </div>
+                    </div>
+                    <div class="row mt-md-3">
+                      <div class="col-md-3">
+                        <h4>Site</h4>
+                        <input type="text" id="refer" name="refer" class="form-control form-control-user" placeholder="Site">
+                      </div>
+                      <div class="col-md-3">
+                        <h4>จำนวนAU</h4>
+                        <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU">
+                      </div>
+
+                      <div class="col-md-2">
+                        <h4>&nbsp;</h4>
+                        <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่มกรอบกรอกข้อมูล</button>
+                      </div>
+                    </div>
+                    <div class="row-md-auto mt-md-3">
                       <button class="btn btn-warning bg-gradient-purple btn-user btn-block" type="submit">
                         <h5>ทำเอกสาร</h5>
                       </button>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
+          </div>
         </form>
-
       </div>
+
+      <script>
+        // เพิ่มกรอบกรอกข้อมูลเมื่อกดปุ่ม
+        document.getElementById("addInputFrame").addEventListener("click", function() {
+          // รับค่าจำนวน AU จากฟอร์ม
+          var numAU = parseInt(document.getElementById("numAU").value);
+
+          // ตรวจสอบว่ามีจำนวน AU มากกว่า 0 หรือไม่
+          if (numAU > 0) {
+            var inputFields = document.querySelector(".row-md-auto");
+
+            // หาจำนวนกรอบ AU ที่มีอยู่แล้ว
+            var existingInputFrames = document.querySelectorAll(".inputFrame").length;
+
+            // สร้างกรอบกรอกข้อมูลตามจำนวน AU และเพิ่มลำดับตามลำดับ
+            for (var i = existingInputFrames; i < existingInputFrames + numAU; i++) {
+              var newInputFrame = document.createElement("div");
+              newInputFrame.classList.add("inputFrame");
+              newInputFrame.innerHTML = `
+                <div class="row mt-md-3" style="margin-bottom: 1rem;">
+                    <div class="col-md-3">
+                        <h4>AU ลำดับที่ ${i + 1}</h4>
+                        <input type="text" id="au" name="au[]" class="form-control form-control-user">
+                    </div>
+                    <div class="col-md-3">
+                        <h4>รายละเอียดAU</h4>
+                        <input type="email" id="auNamed" name="auNamed[]" class="form-control form-control-user">
+                    </div>
+                    <div class="col-md-4">
+                    </div>
+                </div>
+            `;
+              inputFields.insertBefore(newInputFrame, inputFields.firstChild); // แทรกข้อมูลด้านบนของปุ่ม
+            }
+          }
+        });
+
+
+
+
+        // // เพิ่มกรอบกรอกข้อมูลเมื่อกดปุ่ม
+        // document.addEventListener("DOMContentLoaded", function() {
+        //   document.getElementById("gregorianDate").addEventListener("change", function() {
+        //     var gregorianDate = new Date(this.value);
+        //     var thaiMonth = gregorianDate.toLocaleDateString('th-TH', {
+        //       month: 'long'
+        //     });
+        //     var thaiYear = gregorianDate.toLocaleDateString('th-TH', {
+        //       year: 'numeric'
+        //     });
+
+        //     var thaiDate = thaiMonth + ' ' + thaiYear;
+        //     document.getElementById("thaiDate").value = thaiDate;
+        //   });
+        // });
+      </script>

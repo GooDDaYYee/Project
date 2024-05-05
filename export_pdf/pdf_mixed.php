@@ -18,16 +18,16 @@ $pdf->SetFont('THSarabun', '', 12);
 
 
 $pdf->SetXY(172, 12);
-$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1);
+$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
 
 $pdf->SetXY(173.5, 18);
-$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1);
+$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
 
 $pdf->SetFont('THSarabun', '', 9.4);
 //AU
 for ($i = 0; $i < 78.75; $i += 5.25) {
     $pdf->SetXY(22, 82.4 + $i); //+5.25
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', 'TPCHDMX067C'), 0, 1);
+    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', 'TPCHDMX067C'), 0, 1,);
 }
 // //name Au
 // for ($i = 0; $i < 78.75; $i += 5.25) {
