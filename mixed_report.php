@@ -151,9 +151,12 @@
                     </div>
                     <div class="col-md-3">
                         <h4>รายละเอียดAU</h4>
-                        <input type="email" id="auNamed" name="auNamed[]" class="form-control form-control-user">
+                        <div class="form-control form-control-user">
+                        </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
+                    <h4>จำนวน</h4>
+                    <input type="number" id="unit" name="unit[]" class="form-control form-control-user">
                     </div>
                 </div>
             `;
