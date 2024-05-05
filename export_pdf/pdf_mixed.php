@@ -6,6 +6,7 @@ $number = $_POST['number'];
 $thai_date = $_POST['thai_date'];
 $payment = $_POST['payment'];
 $refer = $_POST['refer'];
+$thai_date_product = $_POST['thai_date_product'];
 
 
 $pdf = new FPDF();
@@ -27,6 +28,9 @@ $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
 
 $pdf->SetXY(-215, 63);
 $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+
+$pdf->SetXY(-215, 63);
+$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
 
 $pdf->SetFont('THSarabun', 'B', 12);
 $pdf->SetXY(89.5, 68.5);
