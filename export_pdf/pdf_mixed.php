@@ -22,7 +22,7 @@ $pdf->SetFont('THSarabun', '', 12);
 $pdf->SetXY(172, 12);
 $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
 
-$pdf->SetXY(173.5, 18);
+$pdf->SetXY(172, 18);
 $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
 
 $pdf->SetXY(-215, 63);
