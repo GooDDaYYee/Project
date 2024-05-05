@@ -7,6 +7,7 @@ $thai_date = $_POST['thai_date'];
 $payment = $_POST['payment'];
 $refer = $_POST['refer'];
 $thai_date_product = $_POST['thai_date_product'];
+$browser = $_POST['browser'];
 
 
 $pdf = new FPDF();
@@ -39,8 +40,8 @@ $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'L');
 $pdf->SetFont('THSarabun', '', 9.4);
 //AU
 for ($i = 0; $i < 78.75; $i += 5.25) {
-    $pdf->SetXY(22, 82.4 + $i); //+5.25
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', 'TPCHDMX067C'), 0, 1,);
+    $pdf->SetXY(-349, 82.4 + $i); //+5.25
+    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $browser), 0, 1, 'C');
 }
 // //name Au
 // for ($i = 0; $i < 78.75; $i += 5.25) {
