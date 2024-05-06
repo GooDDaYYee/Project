@@ -121,7 +121,7 @@
                  </div>
                  <script>
                    document.getElementById('addInputFrame').addEventListener('click', function() {
-                     var numAU = document.getElementById('numAU').value; // รับค่าจำนวน AU จากฟิลด์
+                     var numAU = document.getElementById('numAU').value;
                      var additionalForms = document.getElementById('additionalForms');
 
                      for (var i = 1; i <= numAU; i++) {
@@ -131,17 +131,18 @@
                           <h4>AU ลำดับที่ ${i}</h4>
                           <input list="dataList" id="inputField_${i}" name="inputField[]" class="form-control">
                           <datalist id="dataList">
-                            <?php mysqli_data_seek($result, 0); // ย้อนกลับ pointer ของข้อมูล 
-                            ?>
+                            <?php mysqli_data_seek($result, 0); ?>
                             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                               <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
-                            <?php } ?>
+                              <?php } ?>
                           </datalist>
                         </div>
                         <div class="col-md-3">
                           <h4>รายละเอียด AU</h4>
                           <p id="selectedData_${i}"></p>
-                          <div></div>
+                          <input type="hidden" id="selectedData_${i}" name="selectedDataDetail[]">
+                          <input type="hidden" id="selectedDataType_${i}" name="selectedDataType[]">
+                          <input type="hidden" id="selectedDataPrice_${i}" name="selectedDataPrice[]">
                         </div>
                         <div class="col-md-3">
                           <h4>จำนวน</h4>
@@ -159,11 +160,12 @@
                          for (var j = 0; j < options.length; j++) {
                            if (options[j].value === selectedOption) {
                              var auId = options[j].value;
-                             fetchDetails(auId, i); // เรียกใช้ฟังก์ชัน fetchDetails พร้อมส่งค่า i เป็นอาร์กิวเมนต์
+                             var index = parseInt(event.target.id.split('_')[1]); // ดึงหมายเลขลำดับ AU ออกจาก ID
+                             fetchDetails(auId, index); // เรียกใช้ฟังก์ชัน fetchDetails พร้อมส่งค่า index เป็นอาร์กิวเมนต์
                              break;
                            }
                          }
-                       })(i); // ส่งค่า i เป็นอาร์กิวเมนต์
+                       });
                      }
                    });
 
@@ -172,6 +174,10 @@
                        .then(response => response.text())
                        .then(data => {
                          document.getElementById(`selectedData_${index}`).innerText = data;
+                         document.getElementById(`selectedDataDetail_${index}`).value = data.detail;
+                         document.getElementById(`selectedDataType_${index}`).value = data.type;
+                         document.getElementById(`selectedDataPrice_${index}`).value = data.price;
+                         document.getElementById(`unit_${index}`).value = data.unit;
                        });
                    }
                  </script>
