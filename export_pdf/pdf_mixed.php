@@ -17,7 +17,7 @@ $pdf = new FPDF();
 $pdf->AddPage();
 $pdf->AddFont('THSarabun', '', 'THSarabun.php');
 $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
-$pdf->Image('img/D_CMI0057-1.png', 1, 1, 210, 297);
+$pdf->Image('img/D_CMI0057-2.png', 1, 1, 210, 297);
 
 // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
 $pdf->SetFont('THSarabun', '', 12);
@@ -30,7 +30,7 @@ $pdf->SetXY(172, 18);
 $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
 
 $pdf->SetXY(-215, 63);
-$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $payment), 0,  'C');
+$pdf->Cell(0, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
 
 $pdf->SetXY(-215, 63);
 $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
