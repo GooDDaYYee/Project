@@ -171,7 +171,7 @@
                      fetch('fetch_details.php?au_id=' + auId)
                        .then(response => response.text())
                        .then(data => {
-                         document.getElementById(`selectedData_${index}`).innerText = "รายละเอียด: " + data;
+                         document.getElementById(`selectedData_${index}`).innerText = data;
                        });
                    }
                  </script>
