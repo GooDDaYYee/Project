@@ -126,29 +126,29 @@
 
                      for (var i = 1; i <= numAU; i++) {
                        var formHTML = `
-                      <div class="row mt-md-3" style="margin-bottom: 1rem;">
-                        <div class="col-md-3">
-                          <h4>AU ลำดับที่ ${i}</h4>
-                          <input list="dataList" id="inputField_${i}" name="inputField[]" class="form-control">
-                          <datalist id="dataList">
-                            <?php mysqli_data_seek($result, 0); ?>
-                            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                              <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
-                              <?php } ?>
-                          </datalist>
-                        </div>
-                        <div class="col-md-3">
-                          <h4>รายละเอียด AU</h4>
-                          <p id="selectedData_${i}"></p>
-                          <input type="hidden" id="selectedData_${i}" name="selectedDataDetail[]">
+                        <div class="row mt-md-3" style="margin-bottom: 1rem;">
+                          <div class="col-md-3">
+                            <h4>AU ลำดับที่ ${i}</h4>
+                            <input list="dataList" id="inputField_${i}" name="inputField[]" class="form-control">
+                            <datalist id="dataList">
+                              <?php mysqli_data_seek($result, 0); ?>
+                              <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                                <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
+                                <?php } ?>
+                            </datalist>
+                          </div>
+                          <div class="col-md-3">
+                            <h4>รายละเอียด AU</h4>
+                            <p id="selectedData_${i}"></p>
+                          </div>
+                          <input type="hidden" id="selectedDataDetail_${i}" name="selectedDataDetail[]">
                           <input type="hidden" id="selectedDataType_${i}" name="selectedDataType[]">
                           <input type="hidden" id="selectedDataPrice_${i}" name="selectedDataPrice[]">
+                          <div class="col-md-3">
+                            <h4>จำนวน</h4>
+                            <input type="number" id="unit_${i}" name="unit[]" class="form-control form-control-user">
+                          </div>
                         </div>
-                        <div class="col-md-3">
-                          <h4>จำนวน</h4>
-                          <input type="number" id="unit_${i}" name="unit[]" class="form-control form-control-user">
-                        </div>
-                      </div>
                     `;
                        additionalForms.insertAdjacentHTML('beforeend', formHTML);
 
@@ -174,7 +174,7 @@
                        .then(response => response.text())
                        .then(data => {
                          document.getElementById(`selectedData_${index}`).innerText = data;
-                         document.getElementById(`selectedDataDetail_${index}`).value = data.detail;
+                         document.getElementById(`selectedDataDetail_${index}`).value = data;
                          document.getElementById(`selectedDataType_${index}`).value = data.type;
                          document.getElementById(`selectedDataPrice_${index}`).value = data.price;
                          document.getElementById(`unit_${index}`).value = data.unit;
