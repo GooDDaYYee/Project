@@ -7,7 +7,7 @@ $thai_date = $_POST['thai_date'];
 $payment = $_POST['payment'];
 $refer = $_POST['refer'];
 $thai_date_product = $_POST['thai_date_product'];
-$browser = $_POST['browser'];
+$inputField = $_POST['inputField'];
 
 
 $pdf = new FPDF();
@@ -39,10 +39,18 @@ $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'L');
 
 $pdf->SetFont('THSarabun', '', 9.4);
 //AU
+$x = 0; // เริ่มต้นที่ index 0
 for ($i = 0; $i < 78.75; $i += 5.25) {
-    $pdf->SetXY(-349, 82.4 + $i); //+5.25
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $browser), 0, 1, 'C');
+    $pdf->SetXY(-349, 82.4 + $i);
+    if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+    } else {
+        $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+    }
+    $x++;
 }
+
+
 // //name Au
 // for ($i = 0; $i < 78.75; $i += 5.25) {
 //     $pdf->SetXY(22, 82.4 + $i); //+5.25
