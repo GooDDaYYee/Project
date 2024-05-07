@@ -83,7 +83,7 @@
                          <input type="hidden" name="unit" value="&nbsp;">
                        </div>
                        <div class="col">
-                         <h4>วันที่</h4>
+                         <h4>วันที่ส่งสินค้า</h4>
                          <input type="date" id="thai_date_product" name="thai_date_product" class="form-control form-control-user">
                        </div>
                      </div>
@@ -93,7 +93,7 @@
                          <input type="text" id="payment" name="payment" class="form-control form-control-user" value="N/A">
                        </div>
                        <div class="col-md-3">
-                         <h4>เงื่อนไขการชำระเงิน</h4>
+                         <h4>วันครบกำหนด</h4>
                          <input type="date" id="thai_due_date" name="thai_due_date" class="form-control">
                        </div>
                        <div class="col-md-3">
