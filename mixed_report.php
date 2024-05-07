@@ -104,7 +104,7 @@
                      <div class="row mt-md-3">
                        <div class="col-md-3">
                          <h4>Site</h4>
-                         <input type="text" id="refer" name="refer" class="form-control form-control-user" placeholder="Site">
+                         <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
                        </div>
                        <div class="col-md-3">
                          <h4>จำนวนAU</h4>
