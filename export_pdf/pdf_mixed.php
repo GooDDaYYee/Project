@@ -1,8 +1,8 @@
 <?php
 
-function Convert($amount_number)
+function Convert($amount_number, $decimal_count)
 {
-    $amount_number = number_format($amount_number, 2, ".", "");
+    $amount_number = number_format($amount_number, $decimal_count, ".", "");
     $pt = strpos($amount_number, ".");
     $number = $fraction = "";
     if ($pt === false)
@@ -24,6 +24,7 @@ function Convert($amount_number)
         $ret .= "ถ้วน";
     return $ret;
 }
+
 
 function ReadNumber($number)
 {
@@ -52,7 +53,6 @@ function ReadNumber($number)
 
 require('fpdf/fpdf.php');
 
-
 $number = $_POST['number'];
 $thai_date = $_POST['thai_date'];
 $payment = $_POST['payment'];
@@ -62,6 +62,7 @@ $inputField = $_POST['inputField'];
 $selectedDataDetail = $_POST['selectedDataDetail'];
 $selectedDataPrice = $_POST['selectedDataPrice'];
 $selectedDataType = $_POST['selectedDataType'];
+$selectedDataPrice = $_POST['selectedDataPrice'];
 $unit = $_POST['unit'];
 
 
@@ -116,33 +117,46 @@ for ($i = 0; $i < 78.75; $i += 5.25) {
     $x++;
 }
 
+$num = 1;
+$sum = 0;
 $x = 0; // เริ่มต้นที่ index 0
 for ($i = 0; $i < 78.75; $i += 5.25) {
-    $pdf->SetXY(160.4, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-    if (isset($unit[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-        $formatted_unit = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $formatted_unit), 0, 'R');
+    if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+        $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+        $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+        $pdf->SetXY(-385, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+        $pdf->SetXY(175.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+        $pdf->SetXY(159.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+        $pdf->SetXY(-100, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+        $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
     } else {
         $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
     }
     $x++;
 }
 
-// $x = 0; // เริ่มต้นที่ index 0
-// for ($i = 0; $i < 78.75; $i += 5.25) {
-//     $pdf->SetXY(170, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-//     if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-//         $a = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-//         $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $a), 0, 'R');
-//     } else {
-//         $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-//     }
-//     $x++;
-// }
 
+$pdf->SetFont('THSarabun', 'B', 12);
+$pdf->SetXY(192.5, 162.4);
+$pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+$pdf->SetXY(192.5, 174.5);
+$pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+$pdf->SetXY(192.5, 181);
+$pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+$pdf->SetXY(192.5, 187.5);
+$pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+$pdf->SetXY(192.5, 205);
+$pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+
+$pdf->SetFont('THSarabun', '', 9.4);
 $x = 0; // เริ่มต้นที่ index 0
 for ($i = 0; $i < 78.75; $i += 5.25) {
-    $pdf->SetXY(120, 82.4 + $i);
+    $pdf->SetXY(81, 82.4 + $i);
     if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
         $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
     } else {
@@ -162,8 +176,9 @@ for ($i = 0; $i < 78.75; $i += 5.25) {
     }
     $x++;
 }
+$pdf->SetFont('THSarabun', '', 12);
+$pdf->SetXY(-253, 208);
+$pdf->Cell(0, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
 
-$pdf->SetXY(89.5, 68.5);
-$pdf->Cell(0, 8, iconv('utf-8', 'cp874', Convert(120)), 0, 1, 'L');
 
 $pdf->Output('I', 'created_pdf.pdf');
