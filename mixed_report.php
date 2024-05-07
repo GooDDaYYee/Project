@@ -83,8 +83,22 @@
                          <input type="hidden" name="unit" value="&nbsp;">
                        </div>
                        <div class="col">
+                         <?php
+                          // รับวันที่ปัจจุบันเป็นรูปแบบปีไทย
+                          function getThaiDate()
+                          {
+                            // ดึงวันที่ปัจจุบัน
+                            $currentDate = date("Y-m-d");
+                            // แปลงวันที่ปัจจุบันเป็นรูปแบบปีไทย
+                            $thaiDate = date("Y-m-d", strtotime("+543 year", strtotime($currentDate)));
+                            return $thaiDate;
+                          }
+
+                          // แสดงวันที่ปีไทย
+                          $thaiDate = getThaiDate();
+                          ?>
                          <h4>วันที่ส่งสินค้า</h4>
-                         <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo date('d-m-Y', strtotime('+543 years', strtotime(date('d-m-Y')))); ?>">
+                         <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $thaiDate; ?>">
                        </div>
                      </div>
                      <div class=" row mt-md-3">
@@ -94,7 +108,7 @@
                        </div>
                        <div class="col-md-3">
                          <h4>วันครบกำหนด</h4>
-                         <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo date('d-m-Y', strtotime('+543 years', strtotime(date('d-m-Y')))); ?>">
+                         <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo $thaiDate; ?>">
                        </div>
                        <div class="col-md-3">
                          <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
@@ -111,7 +125,7 @@
                          <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
                        </div>
 
-                       <div class="col-md-1">
+                       <div class="col-md-2">
                          <h4>&nbsp;</h4>
                          <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
                        </div>

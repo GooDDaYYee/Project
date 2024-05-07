@@ -75,8 +75,6 @@ $pdf->AddFont('THSarabun', '', 'THSarabun.php');
 $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
 $pdf->Image('img/D_CMI0057-2.png', 1, 1, 210, 297);
 
-
-
 // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
 $pdf->SetFont('THSarabun', '', 12);
 $pdf->SetXY(172, 12);
@@ -91,9 +89,47 @@ $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
 $pdf->SetXY(63, 63);
 $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
 
+$thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+$thai_date_product_array = explode(" ", $thai_date_product);
+$thai_date_product = implode(" ", $thai_date_product_array);
+$thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+$thai_month2 = [
+    'January' => 'มกราคม',
+    'February' => 'กุมภาพันธ์',
+    'March' => 'มีนาคม',
+    'April' => 'เมษายน',
+    'May' => 'พฤษภาคม',
+    'June' => 'มิถุนายน',
+    'July' => 'กรกฎาคม',
+    'August' => 'สิงหาคม',
+    'September' => 'กันยายน',
+    'October' => 'ตุลาคม',
+    'November' => 'พฤศจิกายน',
+    'December' => 'ธันวาคม'
+];
+$thai_date_product = strtr($thai_date_product, $thai_month2);
 $pdf->SetXY(6.5, 63);
 $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
 
+$thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+$thai_due_date_array = explode(" ", $thai_due_date);
+$thai_due_date = implode(" ", $thai_due_date_array);
+$thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+$thai_month = [
+    'January' => 'มกราคม',
+    'February' => 'กุมภาพันธ์',
+    'March' => 'มีนาคม',
+    'April' => 'เมษายน',
+    'May' => 'พฤษภาคม',
+    'June' => 'มิถุนายน',
+    'July' => 'กรกฎาคม',
+    'August' => 'สิงหาคม',
+    'September' => 'กันยายน',
+    'October' => 'ตุลาคม',
+    'November' => 'พฤศจิกายน',
+    'December' => 'ธันวาคม'
+];
+$thai_due_date = strtr($thai_due_date, $thai_month);
 $pdf->SetXY(132, 63);
 $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
 
@@ -187,6 +223,5 @@ for ($i = 0; $i < 78.75; $i += 5.25) {
 $pdf->SetFont('THSarabun', '', 12);
 $pdf->SetXY(6.5, 208);
 $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
-
 
 $pdf->Output('I', 'created_pdf.pdf');
