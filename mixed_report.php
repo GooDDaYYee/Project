@@ -84,7 +84,7 @@
                        </div>
                        <div class="col">
                          <h4>วันที่ส่งสินค้า</h4>
-                         <input type="date" id="thai_date_product" name="thai_date_product" class="form-control form-control-user">
+                         <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo date('d-m-Y', strtotime('+543 years', strtotime(date('d-m-Y')))); ?>">
                        </div>
                      </div>
                      <div class=" row mt-md-3">
@@ -94,7 +94,7 @@
                        </div>
                        <div class="col-md-3">
                          <h4>วันครบกำหนด</h4>
-                         <input type="date" id="thai_due_date" name="thai_due_date" class="form-control">
+                         <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo date('d-m-Y', strtotime('+543 years', strtotime(date('d-m-Y')))); ?>">
                        </div>
                        <div class="col-md-3">
                          <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
@@ -108,7 +108,7 @@
                        </div>
                        <div class="col-md-3">
                          <h4>จำนวนAU</h4>
-                         <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU">
+                         <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
                        </div>
 
                        <div class="col-md-1">
@@ -142,7 +142,7 @@
                               <div class="row mt-md-3" style="margin-bottom: 1rem;">
                                 <div class="col-md-3">
                                   <h4>AU ลำดับที่ ${existingInputFrames+1}</h4>
-                                  <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control">
+                                  <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
                                   <datalist id="dataList">
                                     <?php mysqli_data_seek($result, 0); ?>
                                     <?php while ($row = mysqli_fetch_assoc($result)) { ?>
@@ -159,7 +159,7 @@
                                 <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
                                 <div class="col-md-3">
                                   <h4>จำนวน</h4>
-                                  <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user">
+                                  <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
                                 </div>
                               </div>
                             `;
@@ -195,7 +195,6 @@
                            });
                        }
                      </script>
-
                      <div class="row-md-auto mt-md-3">
                        <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit'>
                          <h5>ทำเอกสาร</h5>
