@@ -121,6 +121,10 @@
                          <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
                        </div>
                        <div class="col-md-3">
+                         <h4>PR No.</h4>
+                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No.(เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                       </div>
+                       <div class="col-md-3">
                          <h4>จำนวนAU</h4>
                          <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
                        </div>
@@ -210,8 +214,14 @@
                        }
                      </script>
                      <div class="row-md-auto mt-md-3">
-                       <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit'>
-                         <h5>ทำเอกสาร</h5>
+                       <button class='btn btn-warning bg-gradient-purple btn-user' type='submit' name="sub1" value="ทำเอกสาร">
+                         <h5>ใบเสนอราคา</h5>
+                       </button>
+                       <button class='btn btn-warning bg-gradient-purple btn-user' type='submit' name="sub2" value="asdas">
+                         <h5>ใบแจ้งหนี้</h5>
+                       </button>
+                       <button class='btn btn-warning bg-gradient-purple btn-user' type='submit' name="sub3" value="ทำเอกสาร">
+                         <h5>ใบเสร็จรับเงิน</h5>
                        </button>
                      </div>
                    </div>

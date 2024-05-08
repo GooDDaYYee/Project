@@ -84,19 +84,10 @@
             <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสารบริษัท Mixed</h6>
-            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; ทำเอกสาร</a>
-
-          </div>
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสารบริษัท W&W</h6>
-            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; ทำเอกสาร</a>
-
-          </div>
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสารบริษัท FBH</h6>
-            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; ทำเอกสาร</a>
-
+            <h6 class="collapse-header"><i class="fa-solid fa-file"></i> ออกเอกสาร</h6>
+            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; บริษัท Mixed</a>
+            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; บริษัท FBH</a>
+            <a class="collapse-item " href="index.php?page=mixed_report">&nbsp; บริษัท W&W </a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
