@@ -29,10 +29,9 @@
                  </a>
                </div>
              </li>
-
            </ul>
-
          </nav>
+
          <!-- End of Topbar -->
          <form action="export_pdf/pdf_mixed.php" method="post">
            <div class="card o-hidden border-0 shadow-lg my-5">
@@ -125,38 +124,75 @@
                          <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No.(เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
                        </div>
                        <div class="col-md-3">
+                         <h4>Work No :</h4>
+                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="Work No">
+                       </div>
+                       <div class="col-md-3">
+                         <h4>Project :</h4>
+                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="Project :">
+                       </div>
+                     </div>
+                     <div class="row mt-md-3">
+                       <div class="col-md-3">
                          <h4>จำนวนAU</h4>
                          <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
                        </div>
-
                        <div class="col-md-2">
                          <h4>&nbsp;</h4>
                          <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
                        </div>
+                       <div class="form-check">
+                         <h4>&nbsp;</h4>
+                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault" checked value="sub1">
+                         <label class="form-check-label" for="flexRadioDefault1">
+                           ทำใบเสนอราคา &nbsp;
+                         </label>
+                       </div>
+
+                       <div class="form-check">
+                         <h4>&nbsp;</h4>
+                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault" value="sub2">
+                         <label class="form-check-label" for="flexRadioDefault2">
+                           ใบแจ้งหนี้ &nbsp;
+                         </label>
+                       </div>
+                       <div class="form-check">
+                         <h4>&nbsp;</h4>
+                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault" value="sub3">
+                         <label class="form-check-label" for="flexRadioDefault2">
+                           ใบเสร็จรับเงิน&nbsp;
+                         </label>
+                       </div>
                      </div>
+                     <div class="row-md-auto mt-md-3">
+                       <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit' name="sub1" value="ทำเอกสาร">
+                         <h5>ทำเอกสาร</h5>
+                       </button>
+                     </div>
+                   </div>
 
-                     <?php
-                      include('connect.php');
-                      $strsql = "SELECT * FROM au_all"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ au_detail
-                      $result = mysqli_query($con, $strsql);
-                      $rowcount = mysqli_num_rows($result);
-                      ?>
-                     <script>
-                       // เพิ่มกรอบกรอกข้อมูลเมื่อกดปุ่ม
-                       document.getElementById("addInputFrame").addEventListener("click", function() {
-                         var numAU = parseInt(document.getElementById("numAU").value);
+                   <?php
+                    include('connect.php');
+                    $strsql = "SELECT * FROM au_all"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ au_detail
+                    $result = mysqli_query($con, $strsql);
+                    $rowcount = mysqli_num_rows($result);
+                    ?>
+                   <script>
+                     // เพิ่มกรอบกรอกข้อมูลเมื่อกดปุ่ม
+                     document.getElementById("addInputFrame").addEventListener("click", function() {
+                       var numAU = parseInt(document.getElementById("numAU").value);
 
-                         if (numAU > 0) {
-                           var inputFields = document.querySelector(".row-md-auto");
-                           var documentButton = document.querySelector(".row-md-auto button");
+                       if (numAU > 0) {
+                         var inputFields = document.querySelector(".row-md-auto");
+                         var documentButton = document.querySelector(".row-md-auto button");
 
-                           for (var i = 0; i < numAU; i++) {
-                             var existingInputFrames = document.querySelectorAll(".inputFrame").length;
-                             var newIndex = existingInputFrames + i;
+                         for (var i = 0; i < numAU; i++) {
+                           var existingInputFrames = document.querySelectorAll(".inputFrame").length;
+                           var newIndex = existingInputFrames + i;
 
-                             var newInputFrame = document.createElement("div");
-                             newInputFrame.classList.add("inputFrame");
-                             newInputFrame.innerHTML = `
+                           var newInputFrame = document.createElement("div");
+                           newInputFrame.classList.add("inputFrame");
+                           newInputFrame.innerHTML = `
                               <div class="row mt-md-3" style="margin-bottom: 1rem;">
                                 <div class="col-md-3">
                                   <h4>AU ลำดับที่ ${existingInputFrames+1}</h4>
@@ -181,56 +217,45 @@
                                 </div>
                               </div>
                             `;
-                             inputFields.insertBefore(newInputFrame, documentButton);
+                           inputFields.insertBefore(newInputFrame, documentButton);
 
-                             // เพิ่ม Event Listener สำหรับฟิลด์ input ของ AU ลำดับที่ i
-                             document.getElementById(`inputField_${newIndex}`).addEventListener('input', function(event) {
-                               var selectedOption = event.target.value;
-                               var dataList = document.getElementById('dataList');
-                               var options = dataList.getElementsByTagName('option');
-                               for (var j = 0; j < options.length; j++) {
-                                 if (options[j].value === selectedOption) {
-                                   var auId = options[j].value;
-                                   var index = parseInt(event.target.id.split('_')[1]); // ดึงหมายเลขลำดับ AU ออกจาก ID
-                                   fetchDetails(auId, index); // เรียกใช้ฟังก์ชัน fetchDetails พร้อมส่งค่า index เป็นอาร์กิวเมนต์
-                                   break;
-                                 }
+                           // เพิ่ม Event Listener สำหรับฟิลด์ input ของ AU ลำดับที่ i
+                           document.getElementById(`inputField_${newIndex}`).addEventListener('input', function(event) {
+                             var selectedOption = event.target.value;
+                             var dataList = document.getElementById('dataList');
+                             var options = dataList.getElementsByTagName('option');
+                             for (var j = 0; j < options.length; j++) {
+                               if (options[j].value === selectedOption) {
+                                 var auId = options[j].value;
+                                 var index = parseInt(event.target.id.split('_')[1]); // ดึงหมายเลขลำดับ AU ออกจาก ID
+                                 fetchDetails(auId, index); // เรียกใช้ฟังก์ชัน fetchDetails พร้อมส่งค่า index เป็นอาร์กิวเมนต์
+                                 break;
                                }
-                             });
-                           }
-                         }
-                       });
-
-                       function fetchDetails(auId, index) {
-                         fetch('fetch_details.php?au_id=' + auId)
-                           .then(response => response.json()) // รับข้อมูลเป็น JSON
-                           .then(data => {
-                             document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
-                             document.getElementById(`selectedDataDetail_${index}`).value = data.au_detail;
-                             document.getElementById(`selectedDataType_${index}`).value = data.au_type; // เข้าถึงข้อมูล au_type
-                             document.getElementById(`selectedDataPrice_${index}`).value = data.au_price; // เข้าถึงข้อมูล au_price
-                             document.getElementById(`unit_${index}`).value = data.unit;
+                             }
                            });
+                         }
                        }
-                     </script>
-                     <div class="row-md-auto mt-md-3">
-                       <button class='btn btn-warning bg-gradient-purple btn-user' type='submit' name="sub1" value="ทำเอกสาร">
-                         <h5>ใบเสนอราคา</h5>
-                       </button>
-                       <button class='btn btn-warning bg-gradient-purple btn-user' type='submit' name="sub2" value="asdas">
-                         <h5>ใบแจ้งหนี้</h5>
-                       </button>
-                       <button class='btn btn-warning bg-gradient-purple btn-user' type='submit' name="sub3" value="ทำเอกสาร">
-                         <h5>ใบเสร็จรับเงิน</h5>
-                       </button>
-                     </div>
-                   </div>
+                     });
+
+                     function fetchDetails(auId, index) {
+                       fetch('fetch_details.php?au_id=' + auId)
+                         .then(response => response.json()) // รับข้อมูลเป็น JSON
+                         .then(data => {
+                           document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
+                           document.getElementById(`selectedDataDetail_${index}`).value = data.au_detail;
+                           document.getElementById(`selectedDataType_${index}`).value = data.au_type; // เข้าถึงข้อมูล au_type
+                           document.getElementById(`selectedDataPrice_${index}`).value = data.au_price; // เข้าถึงข้อมูล au_price
+                           document.getElementById(`unit_${index}`).value = data.unit;
+                         });
+                     }
+                   </script>
                  </div>
                </div>
              </div>
            </div>
-         </form>
-         <?php
-          mysqli_close($con);
-          ?>
        </div>
+       </form>
+       <?php
+        mysqli_close($con);
+        ?>
+     </div>

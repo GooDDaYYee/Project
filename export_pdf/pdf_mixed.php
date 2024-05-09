@@ -52,531 +52,1059 @@ function ReadNumber($number)
 }
 
 require('fpdf/fpdf.php');
+if ($_POST['numAU'] <= 15) {
+    if ($_POST['flexRadioDefault'] == "sub1") {
+        $number = $_POST['number'];
+        $thai_date = $_POST['thai_date'];
+        $payment = $_POST['payment'];
+        $refer = $_POST['refer'];
+        $Site = $_POST['Site'];
+        $thai_date_product = $_POST['thai_date_product'];
+        $thai_due_date = $_POST['thai_due_date'];
+        $inputField = $_POST['inputField'];
+        $selectedDataDetail = $_POST['selectedDataDetail'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $selectedDataType = $_POST['selectedDataType'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $unit = $_POST['unit'];
 
-if (!empty($_POST['sub1'])) {
-    $number = $_POST['number'];
-    $thai_date = $_POST['thai_date'];
-    $payment = $_POST['payment'];
-    $refer = $_POST['refer'];
-    $Site = $_POST['Site'];
-    $thai_date_product = $_POST['thai_date_product'];
-    $thai_due_date = $_POST['thai_due_date'];
-    $inputField = $_POST['inputField'];
-    $selectedDataDetail = $_POST['selectedDataDetail'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $selectedDataType = $_POST['selectedDataType'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $unit = $_POST['unit'];
 
+        $pdf = new FPDF();
 
-    $pdf = new FPDF();
+        $pdf->AddPage();
+        $pdf->AddFont('THSarabun', '', 'THSarabun.php');
+        $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+        $pdf->Image('img/D_CMI0057-2_15.png', 1, 1, 210, 297);
 
-    $pdf->AddPage();
-    $pdf->AddFont('THSarabun', '', 'THSarabun.php');
-    $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
-    $pdf->Image('img/D_CMI0057-2.png', 1, 1, 210, 297);
+        // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(172, 12);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
 
-    // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
-    $pdf->SetFont('THSarabun', '', 12);
-    $pdf->SetXY(172, 12);
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
+        $pdf->SetXY(172, 18);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
 
-    $pdf->SetXY(172, 18);
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
+        $pdf->SetXY(166.5, 63);
+        $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
 
-    $pdf->SetXY(166.5, 63);
-    $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
+        $pdf->SetXY(63, 63);
+        $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
 
-    $pdf->SetXY(63, 63);
-    $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_date_product_array = explode(" ", $thai_date_product);
+        $thai_date_product = implode(" ", $thai_date_product_array);
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_month2 = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_date_product = strtr($thai_date_product, $thai_month2);
+        $pdf->SetXY(6.5, 63);
+        $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
 
-    $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
-    $thai_date_product_array = explode(" ", $thai_date_product);
-    $thai_date_product = implode(" ", $thai_date_product_array);
-    $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
-    $thai_month2 = [
-        'January' => 'มกราคม',
-        'February' => 'กุมภาพันธ์',
-        'March' => 'มีนาคม',
-        'April' => 'เมษายน',
-        'May' => 'พฤษภาคม',
-        'June' => 'มิถุนายน',
-        'July' => 'กรกฎาคม',
-        'August' => 'สิงหาคม',
-        'September' => 'กันยายน',
-        'October' => 'ตุลาคม',
-        'November' => 'พฤศจิกายน',
-        'December' => 'ธันวาคม'
-    ];
-    $thai_date_product = strtr($thai_date_product, $thai_month2);
-    $pdf->SetXY(6.5, 63);
-    $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_due_date_array = explode(" ", $thai_due_date);
+        $thai_due_date = implode(" ", $thai_due_date_array);
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_month = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_due_date = strtr($thai_due_date, $thai_month);
+        $pdf->SetXY(132, 63);
+        $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
 
-    $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
-    $thai_due_date_array = explode(" ", $thai_due_date);
-    $thai_due_date = implode(" ", $thai_due_date_array);
-    $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
-    $thai_month = [
-        'January' => 'มกราคม',
-        'February' => 'กุมภาพันธ์',
-        'March' => 'มีนาคม',
-        'April' => 'เมษายน',
-        'May' => 'พฤษภาคม',
-        'June' => 'มิถุนายน',
-        'July' => 'กรกฎาคม',
-        'August' => 'สิงหาคม',
-        'September' => 'กันยายน',
-        'October' => 'ตุลาคม',
-        'November' => 'พฤศจิกายน',
-        'December' => 'ธันวาคม'
-    ];
-    $thai_due_date = strtr($thai_due_date, $thai_month);
-    $pdf->SetXY(132, 63);
-    $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(89.5, 68.5);
+        $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
 
-    $pdf->SetFont('THSarabun', 'B', 12);
-    $pdf->SetXY(89.5, 68.5);
-    $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
+        $pdf->SetFont('THSarabun', '', 9.4);
 
-    $pdf->SetFont('THSarabun', '', 9.4);
-
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(42, 82.4 + $i);
-        if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
-            $textWidth = mb_strwidth($trimmedText);
-            if ($textWidth > 88) {
-                // ข้อความยาวเกินกรอบ
-                // ตัดแต่งข้อความให้สั้นลง
-                $shortenedText = mb_substr($trimmedText, 0, 88);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(42, 82.4 + $i);
+            if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
+                $textWidth = mb_strwidth($trimmedText);
+                if ($textWidth > 88) {
+                    // ข้อความยาวเกินกรอบ
+                    // ตัดแต่งข้อความให้สั้นลง
+                    $shortenedText = mb_substr($trimmedText, 0, 88);
+                } else {
+                    // ข้อความอยู่ในกรอบ
+                    // ใช้ข้อความเต็มรูปแบบ
+                    $shortenedText = $trimmedText;
+                }
+                $pdf->Cell(88, 8, $shortenedText, 0, 1);
             } else {
-                // ข้อความอยู่ในกรอบ
-                // ใช้ข้อความเต็มรูปแบบ
-                $shortenedText = $trimmedText;
+                $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
             }
-            $pdf->Cell(88, 8, $shortenedText, 0, 1);
-        } else {
-            $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            $x++;
         }
-        $x++;
-    }
 
-    $num = 1;
-    $sum = 0;
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-            $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-            $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
-            $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
-            $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
-            $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
-            $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
-        } else {
-            $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-        }
-        $x++;
-    }
-
-
-    $pdf->SetFont('THSarabun', 'B', 12);
-    $pdf->SetXY(192.5, 162.4);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 174.5);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 181);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 187.5);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 205);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
-
-
-    $pdf->SetFont('THSarabun', '', 9.4);
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(132, 82.4 + $i);
-        if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
-        } else {
-            $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-        }
-        $x++;
-    }
-
-    //AU
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(18.5, 82.4 + $i);
-        if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
-        } else {
-            $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-        }
-        $x++;
-    }
-    $pdf->SetFont('THSarabun', '', 12);
-    $pdf->SetXY(6.5, 208);
-    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
-    //*********************************************************************************************************************************************************************** */
-} elseif (!empty($_POST['sub2'])) {
-    $number = $_POST['number'];
-    $thai_date = $_POST['thai_date'];
-    $payment = $_POST['payment'];
-    $refer = $_POST['refer'];
-    $Site = $_POST['Site'];
-    $thai_date_product = $_POST['thai_date_product'];
-    $thai_due_date = $_POST['thai_due_date'];
-    $inputField = $_POST['inputField'];
-    $selectedDataDetail = $_POST['selectedDataDetail'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $selectedDataType = $_POST['selectedDataType'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $unit = $_POST['unit'];
-    $pr = $_POST['pr'];
-
-
-    $pdf = new FPDF();
-
-    $pdf->AddPage();
-    $pdf->AddFont('THSarabun', '', 'THSarabun.php');
-    $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
-    $pdf->Image('img/D_CMI0057-4.png', 1, 1, 210, 297);
-
-    // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
-    $pdf->SetFont('THSarabun', '', 12);
-    $pdf->SetXY(172, 12);
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
-
-    $pdf->SetXY(172, 18);
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
-
-    $pdf->SetXY(166.5, 63);
-    $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
-
-    $pdf->SetXY(63, 63);
-    $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
-
-    $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
-    $thai_date_product_array = explode(" ", $thai_date_product);
-    $thai_date_product = implode(" ", $thai_date_product_array);
-    $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
-    $thai_month2 = [
-        'January' => 'มกราคม',
-        'February' => 'กุมภาพันธ์',
-        'March' => 'มีนาคม',
-        'April' => 'เมษายน',
-        'May' => 'พฤษภาคม',
-        'June' => 'มิถุนายน',
-        'July' => 'กรกฎาคม',
-        'August' => 'สิงหาคม',
-        'September' => 'กันยายน',
-        'October' => 'ตุลาคม',
-        'November' => 'พฤศจิกายน',
-        'December' => 'ธันวาคม'
-    ];
-    $thai_date_product = strtr($thai_date_product, $thai_month2);
-    $pdf->SetXY(6.5, 63);
-    $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
-
-    $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
-    $thai_due_date_array = explode(" ", $thai_due_date);
-    $thai_due_date = implode(" ", $thai_due_date_array);
-    $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
-    $thai_month = [
-        'January' => 'มกราคม',
-        'February' => 'กุมภาพันธ์',
-        'March' => 'มีนาคม',
-        'April' => 'เมษายน',
-        'May' => 'พฤษภาคม',
-        'June' => 'มิถุนายน',
-        'July' => 'กรกฎาคม',
-        'August' => 'สิงหาคม',
-        'September' => 'กันยายน',
-        'October' => 'ตุลาคม',
-        'November' => 'พฤศจิกายน',
-        'December' => 'ธันวาคม'
-    ];
-    $thai_due_date = strtr($thai_due_date, $thai_month);
-    $pdf->SetXY(132, 63);
-    $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
-
-    $pdf->SetFont('THSarabun', 'B', 12);
-    $pdf->SetXY(13.5, 68.7);
-    $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
-
-    $pdf->SetXY(73.5, 68.7);
-    $pdf->Cell(93, 8, iconv('utf-8', 'cp874', $pr), 0, 1, 'L');
-
-    $pdf->SetFont('THSarabun', '', 9.4);
-
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(42, 82.4 + $i);
-        if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
-            $textWidth = mb_strwidth($trimmedText);
-            if ($textWidth > 88) {
-                // ข้อความยาวเกินกรอบ
-                // ตัดแต่งข้อความให้สั้นลง
-                $shortenedText = mb_substr($trimmedText, 0, 88);
+        $num = 1;
+        $sum = 0;
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+                $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
             } else {
-                // ข้อความอยู่ในกรอบ
-                // ใช้ข้อความเต็มรูปแบบ
-                $shortenedText = $trimmedText;
+                $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
             }
-            $pdf->Cell(88, 8, $shortenedText, 0, 1);
-        } else {
-            $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            $x++;
         }
-        $x++;
-    }
-
-    $num = 1;
-    $sum = 0;
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-            $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-            $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
-            $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
-            $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
-            $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
-            $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
-        } else {
-            $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-        }
-        $x++;
-    }
 
 
-    $pdf->SetFont('THSarabun', 'B', 12);
-    $pdf->SetXY(192.5, 162.4);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 174.5);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 181);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 187.5);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 205);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(192.5, 162.4);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 174.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 181);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 187.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 205);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
 
 
-    $pdf->SetFont('THSarabun', '', 9.4);
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(132, 82.4 + $i);
-        if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
-        } else {
-            $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-        }
-        $x++;
-    }
-
-    //AU
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(18.5, 82.4 + $i);
-        if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
-        } else {
-            $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
-        }
-        $x++;
-    }
-    $pdf->SetFont('THSarabun', '', 12);
-    $pdf->SetXY(6.5, 208);
-    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
-    //*********************************************************************************************************************************************************************** */
-} elseif (!empty($_POST['sub3'])) {
-    $number = $_POST['number'];
-    $thai_date = $_POST['thai_date'];
-    $payment = $_POST['payment'];
-    $refer = $_POST['refer'];
-    $Site = $_POST['Site'];
-    $thai_date_product = $_POST['thai_date_product'];
-    $thai_due_date = $_POST['thai_due_date'];
-    $inputField = $_POST['inputField'];
-    $selectedDataDetail = $_POST['selectedDataDetail'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $selectedDataType = $_POST['selectedDataType'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $unit = $_POST['unit'];
-    $pr = $_POST['pr'];
-
-
-    $pdf = new FPDF();
-
-    $pdf->AddPage();
-    $pdf->AddFont('THSarabun', '', 'THSarabun.php');
-    $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
-    $pdf->Image('img/D_CMI0057-6.png', 1, 1, 210, 297);
-
-    // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
-    $pdf->SetFont('THSarabun', '', 12);
-    $pdf->SetXY(172, 12);
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
-
-    $pdf->SetXY(172, 18);
-    $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
-
-    $pdf->SetXY(166.5, 63);
-    $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
-
-    $pdf->SetXY(63, 63);
-    $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
-
-    $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
-    $thai_date_product_array = explode(" ", $thai_date_product);
-    $thai_date_product = implode(" ", $thai_date_product_array);
-    $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
-    $thai_month2 = [
-        'January' => 'มกราคม',
-        'February' => 'กุมภาพันธ์',
-        'March' => 'มีนาคม',
-        'April' => 'เมษายน',
-        'May' => 'พฤษภาคม',
-        'June' => 'มิถุนายน',
-        'July' => 'กรกฎาคม',
-        'August' => 'สิงหาคม',
-        'September' => 'กันยายน',
-        'October' => 'ตุลาคม',
-        'November' => 'พฤศจิกายน',
-        'December' => 'ธันวาคม'
-    ];
-    $thai_date_product = strtr($thai_date_product, $thai_month2);
-    $pdf->SetXY(6.5, 63);
-    $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
-
-    $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
-    $thai_due_date_array = explode(" ", $thai_due_date);
-    $thai_due_date = implode(" ", $thai_due_date_array);
-    $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
-    $thai_month = [
-        'January' => 'มกราคม',
-        'February' => 'กุมภาพันธ์',
-        'March' => 'มีนาคม',
-        'April' => 'เมษายน',
-        'May' => 'พฤษภาคม',
-        'June' => 'มิถุนายน',
-        'July' => 'กรกฎาคม',
-        'August' => 'สิงหาคม',
-        'September' => 'กันยายน',
-        'October' => 'ตุลาคม',
-        'November' => 'พฤศจิกายน',
-        'December' => 'ธันวาคม'
-    ];
-    $thai_due_date = strtr($thai_due_date, $thai_month);
-    $pdf->SetXY(132, 63);
-    $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
-
-    $pdf->SetFont('THSarabun', 'B', 12);
-    $pdf->SetXY(13.5, 68.7);
-    $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
-
-    $pdf->SetXY(73.5, 68.7);
-    $pdf->Cell(93, 8, iconv('utf-8', 'cp874', $pr), 0, 1, 'L');
-
-    $pdf->SetFont('THSarabun', '', 9.4);
-
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(42, 82.4 + $i);
-        if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
-            $textWidth = mb_strwidth($trimmedText);
-            if ($textWidth > 88) {
-                // ข้อความยาวเกินกรอบ
-                // ตัดแต่งข้อความให้สั้นลง
-                $shortenedText = mb_substr($trimmedText, 0, 88);
+        $pdf->SetFont('THSarabun', '', 9.4);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(132, 82.4 + $i);
+            if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
             } else {
-                // ข้อความอยู่ในกรอบ
-                // ใช้ข้อความเต็มรูปแบบ
-                $shortenedText = $trimmedText;
+                $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
             }
-            $pdf->Cell(88, 8, $shortenedText, 0, 1);
-        } else {
-            $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            $x++;
         }
-        $x++;
-    }
 
-    $num = 1;
-    $sum = 0;
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-            $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
-            $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
-            $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
-            $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
-            $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
-            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
-            $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
-        } else {
-            $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+        //AU
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(18.5, 82.4 + $i);
+            if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
         }
-        $x++;
-    }
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(6.5, 208);
+        $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+        //*********************************************************************************************************************************************************************** */
+    } elseif ($_POST['flexRadioDefault'] == "sub2") {
+        $number = $_POST['number'];
+        $thai_date = $_POST['thai_date'];
+        $payment = $_POST['payment'];
+        $refer = $_POST['refer'];
+        $Site = $_POST['Site'];
+        $thai_date_product = $_POST['thai_date_product'];
+        $thai_due_date = $_POST['thai_due_date'];
+        $inputField = $_POST['inputField'];
+        $selectedDataDetail = $_POST['selectedDataDetail'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $selectedDataType = $_POST['selectedDataType'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $unit = $_POST['unit'];
+        $pr = $_POST['pr'];
 
 
-    $pdf->SetFont('THSarabun', 'B', 12);
-    $pdf->SetXY(192.5, 162.4);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 174.5);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 181);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 187.5);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
-    $pdf->SetXY(192.5, 205);
-    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+        $pdf = new FPDF();
 
+        $pdf->AddPage();
+        $pdf->AddFont('THSarabun', '', 'THSarabun.php');
+        $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+        $pdf->Image('img/D_CMI0057-4_15.png', 1, 1, 210, 297);
 
-    $pdf->SetFont('THSarabun', '', 9.4);
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(132, 82.4 + $i);
-        if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
-        } else {
-            $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+        // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(172, 12);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
+
+        $pdf->SetXY(172, 18);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
+
+        $pdf->SetXY(166.5, 63);
+        $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
+
+        $pdf->SetXY(63, 63);
+        $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_date_product_array = explode(" ", $thai_date_product);
+        $thai_date_product = implode(" ", $thai_date_product_array);
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_month2 = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_date_product = strtr($thai_date_product, $thai_month2);
+        $pdf->SetXY(6.5, 63);
+        $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
+
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_due_date_array = explode(" ", $thai_due_date);
+        $thai_due_date = implode(" ", $thai_due_date_array);
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_month = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_due_date = strtr($thai_due_date, $thai_month);
+        $pdf->SetXY(132, 63);
+        $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(13.5, 68.7);
+        $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
+
+        $pdf->SetXY(73.5, 68.7);
+        $pdf->Cell(93, 8, iconv('utf-8', 'cp874', $pr), 0, 1, 'L');
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(42, 82.4 + $i);
+            if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
+                $textWidth = mb_strwidth($trimmedText);
+                if ($textWidth > 88) {
+                    // ข้อความยาวเกินกรอบ
+                    // ตัดแต่งข้อความให้สั้นลง
+                    $shortenedText = mb_substr($trimmedText, 0, 88);
+                } else {
+                    // ข้อความอยู่ในกรอบ
+                    // ใช้ข้อความเต็มรูปแบบ
+                    $shortenedText = $trimmedText;
+                }
+                $pdf->Cell(88, 8, $shortenedText, 0, 1);
+            } else {
+                $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
         }
-        $x++;
-    }
 
-    //AU
-    $x = 0; // เริ่มต้นที่ index 0
-    for ($i = 0; $i < 78.75; $i += 5.25) {
-        $pdf->SetXY(18.5, 82.4 + $i);
-        if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
-            $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
-        } else {
-            $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+        $num = 1;
+        $sum = 0;
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+                $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
+            } else {
+                $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
         }
-        $x++;
+
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(192.5, 162.4);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 174.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 181);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 187.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 205);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(132, 82.4 + $i);
+            if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        //AU
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(18.5, 82.4 + $i);
+            if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(6.5, 208);
+        $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+        //*********************************************************************************************************************************************************************** */
+    } elseif ($_POST['flexRadioDefault'] == "sub3") {
+        $number = $_POST['number'];
+        $thai_date = $_POST['thai_date'];
+        $payment = $_POST['payment'];
+        $refer = $_POST['refer'];
+        $Site = $_POST['Site'];
+        $thai_date_product = $_POST['thai_date_product'];
+        $thai_due_date = $_POST['thai_due_date'];
+        $inputField = $_POST['inputField'];
+        $selectedDataDetail = $_POST['selectedDataDetail'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $selectedDataType = $_POST['selectedDataType'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $unit = $_POST['unit'];
+        $pr = $_POST['pr'];
+
+
+        $pdf = new FPDF();
+
+        $pdf->AddPage();
+        $pdf->AddFont('THSarabun', '', 'THSarabun.php');
+        $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+        $pdf->Image('img/D_CMI0057-6_15.png', 1, 1, 210, 297);
+
+        // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(172, 12);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
+
+        $pdf->SetXY(172, 18);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
+
+        $pdf->SetXY(166.5, 63);
+        $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
+
+        $pdf->SetXY(63, 63);
+        $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_date_product_array = explode(" ", $thai_date_product);
+        $thai_date_product = implode(" ", $thai_date_product_array);
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_month2 = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_date_product = strtr($thai_date_product, $thai_month2);
+        $pdf->SetXY(6.5, 63);
+        $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
+
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_due_date_array = explode(" ", $thai_due_date);
+        $thai_due_date = implode(" ", $thai_due_date_array);
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_month = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_due_date = strtr($thai_due_date, $thai_month);
+        $pdf->SetXY(132, 63);
+        $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(13.5, 68.7);
+        $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
+
+        $pdf->SetXY(73.5, 68.7);
+        $pdf->Cell(93, 8, iconv('utf-8', 'cp874', $pr), 0, 1, 'L');
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(42, 82.4 + $i);
+            if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
+                $textWidth = mb_strwidth($trimmedText);
+                if ($textWidth > 88) {
+                    // ข้อความยาวเกินกรอบ
+                    // ตัดแต่งข้อความให้สั้นลง
+                    $shortenedText = mb_substr($trimmedText, 0, 88);
+                } else {
+                    // ข้อความอยู่ในกรอบ
+                    // ใช้ข้อความเต็มรูปแบบ
+                    $shortenedText = $trimmedText;
+                }
+                $pdf->Cell(88, 8, $shortenedText, 0, 1);
+            } else {
+                $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        $num = 1;
+        $sum = 0;
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+                $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
+            } else {
+                $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(192.5, 162.4);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 174.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 181);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 187.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 205);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(132, 82.4 + $i);
+            if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        //AU
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(18.5, 82.4 + $i);
+            if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(6.5, 208);
+        $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
     }
-    $pdf->SetFont('THSarabun', '', 12);
-    $pdf->SetXY(6.5, 208);
-    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+} else {
+    if ($_POST['flexRadioDefault'] == "sub1") {
+        $number = $_POST['number'];
+        $thai_date = $_POST['thai_date'];
+        $payment = $_POST['payment'];
+        $refer = $_POST['refer'];
+        $Site = $_POST['Site'];
+        $thai_date_product = $_POST['thai_date_product'];
+        $thai_due_date = $_POST['thai_due_date'];
+        $inputField = $_POST['inputField'];
+        $selectedDataDetail = $_POST['selectedDataDetail'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $selectedDataType = $_POST['selectedDataType'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $unit = $_POST['unit'];
+
+
+        $pdf = new FPDF();
+
+        $pdf->AddPage();
+        $pdf->AddFont('THSarabun', '', 'THSarabun.php');
+        $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+        $pdf->Image('img/D_CMI0057-2_20.png', 1, 1, 210, 297);
+
+        // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(172, 12);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
+
+        $pdf->SetXY(172, 18);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
+
+        $pdf->SetXY(166.5, 63);
+        $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
+
+        $pdf->SetXY(63, 63);
+        $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_date_product_array = explode(" ", $thai_date_product);
+        $thai_date_product = implode(" ", $thai_date_product_array);
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_month2 = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_date_product = strtr($thai_date_product, $thai_month2);
+        $pdf->SetXY(6.5, 63);
+        $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
+
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_due_date_array = explode(" ", $thai_due_date);
+        $thai_due_date = implode(" ", $thai_due_date_array);
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_month = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_due_date = strtr($thai_due_date, $thai_month);
+        $pdf->SetXY(132, 63);
+        $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(89.5, 68.5);
+        $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 105; $i += 5.25) {
+            $pdf->SetXY(42, 82.4 + $i);
+            if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
+                $textWidth = mb_strwidth($trimmedText);
+                if ($textWidth > 88) {
+                    // ข้อความยาวเกินกรอบ
+                    // ตัดแต่งข้อความให้สั้นลง
+                    $shortenedText = mb_substr($trimmedText, 0, 88);
+                } else {
+                    // ข้อความอยู่ในกรอบ
+                    // ใช้ข้อความเต็มรูปแบบ
+                    $shortenedText = $trimmedText;
+                }
+                $pdf->Cell(88, 8, $shortenedText, 0, 1);
+            } else {
+                $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        $num = 1;
+        $sum = 0;
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 105; $i += 5.25) {
+            if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+                $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
+            } else {
+                $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(192.5, 162.4);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 174.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 181);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 187.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 205);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 105; $i += 5.25) {
+            $pdf->SetXY(132, 82.4 + $i);
+            if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        //AU
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 105; $i += 5.25) {
+            $pdf->SetXY(18.5, 82.4 + $i);
+            if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(6.5, 208);
+        $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+        //*********************************************************************************************************************************************************************** */
+    } elseif ($_POST['flexRadioDefault'] == "sub2") {
+        $number = $_POST['number'];
+        $thai_date = $_POST['thai_date'];
+        $payment = $_POST['payment'];
+        $refer = $_POST['refer'];
+        $Site = $_POST['Site'];
+        $thai_date_product = $_POST['thai_date_product'];
+        $thai_due_date = $_POST['thai_due_date'];
+        $inputField = $_POST['inputField'];
+        $selectedDataDetail = $_POST['selectedDataDetail'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $selectedDataType = $_POST['selectedDataType'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $unit = $_POST['unit'];
+        $pr = $_POST['pr'];
+
+
+        $pdf = new FPDF();
+
+        $pdf->AddPage();
+        $pdf->AddFont('THSarabun', '', 'THSarabun.php');
+        $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+        $pdf->Image('img/D_CMI0057-4.png', 1, 1, 210, 297);
+
+        // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(172, 12);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
+
+        $pdf->SetXY(172, 18);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
+
+        $pdf->SetXY(166.5, 63);
+        $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
+
+        $pdf->SetXY(63, 63);
+        $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_date_product_array = explode(" ", $thai_date_product);
+        $thai_date_product = implode(" ", $thai_date_product_array);
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_month2 = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_date_product = strtr($thai_date_product, $thai_month2);
+        $pdf->SetXY(6.5, 63);
+        $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
+
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_due_date_array = explode(" ", $thai_due_date);
+        $thai_due_date = implode(" ", $thai_due_date_array);
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_month = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_due_date = strtr($thai_due_date, $thai_month);
+        $pdf->SetXY(132, 63);
+        $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(13.5, 68.7);
+        $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
+
+        $pdf->SetXY(73.5, 68.7);
+        $pdf->Cell(93, 8, iconv('utf-8', 'cp874', $pr), 0, 1, 'L');
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(42, 82.4 + $i);
+            if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
+                $textWidth = mb_strwidth($trimmedText);
+                if ($textWidth > 88) {
+                    // ข้อความยาวเกินกรอบ
+                    // ตัดแต่งข้อความให้สั้นลง
+                    $shortenedText = mb_substr($trimmedText, 0, 88);
+                } else {
+                    // ข้อความอยู่ในกรอบ
+                    // ใช้ข้อความเต็มรูปแบบ
+                    $shortenedText = $trimmedText;
+                }
+                $pdf->Cell(88, 8, $shortenedText, 0, 1);
+            } else {
+                $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        $num = 1;
+        $sum = 0;
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+                $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
+            } else {
+                $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(192.5, 162.4);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 174.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 181);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 187.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 205);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(132, 82.4 + $i);
+            if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        //AU
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(18.5, 82.4 + $i);
+            if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(6.5, 208);
+        $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+        //*********************************************************************************************************************************************************************** */
+    } elseif ($_POST['flexRadioDefault'] == "sub3") {
+        $number = $_POST['number'];
+        $thai_date = $_POST['thai_date'];
+        $payment = $_POST['payment'];
+        $refer = $_POST['refer'];
+        $Site = $_POST['Site'];
+        $thai_date_product = $_POST['thai_date_product'];
+        $thai_due_date = $_POST['thai_due_date'];
+        $inputField = $_POST['inputField'];
+        $selectedDataDetail = $_POST['selectedDataDetail'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $selectedDataType = $_POST['selectedDataType'];
+        $selectedDataPrice = $_POST['selectedDataPrice'];
+        $unit = $_POST['unit'];
+        $pr = $_POST['pr'];
+
+
+        $pdf = new FPDF();
+
+        $pdf->AddPage();
+        $pdf->AddFont('THSarabun', '', 'THSarabun.php');
+        $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+        $pdf->Image('img/D_CMI0057-6.png', 1, 1, 210, 297);
+
+        // $pdf->SetFont('THSarabun', 'B', 8.8); ตัวหนา
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(172, 12);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $number), 0, 1, 'C');
+
+        $pdf->SetXY(172, 18);
+        $pdf->Cell(0, 8, iconv('utf-8', 'cp874', $thai_date), 0, 1, 'C');
+
+        $pdf->SetXY(166.5, 63);
+        $pdf->Cell(38.5, 8, iconv('utf-8', 'cp874', $refer), 0, 1, 'C');
+
+        $pdf->SetXY(63, 63);
+        $pdf->Cell(69, 8, iconv('utf-8', 'cp874', $payment), 0, 1, 'C');
+
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_date_product_array = explode(" ", $thai_date_product);
+        $thai_date_product = implode(" ", $thai_date_product_array);
+        $thai_date_product = strftime("%d %B %Y", strtotime($thai_date_product));
+        $thai_month2 = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_date_product = strtr($thai_date_product, $thai_month2);
+        $pdf->SetXY(6.5, 63);
+        $pdf->Cell(56.5, 8, iconv('utf-8', 'cp874', $thai_date_product), 0, 1, 'C');
+
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_due_date_array = explode(" ", $thai_due_date);
+        $thai_due_date = implode(" ", $thai_due_date_array);
+        $thai_due_date = strftime("%d %B %Y", strtotime($thai_due_date));
+        $thai_month = [
+            'January' => 'มกราคม',
+            'February' => 'กุมภาพันธ์',
+            'March' => 'มีนาคม',
+            'April' => 'เมษายน',
+            'May' => 'พฤษภาคม',
+            'June' => 'มิถุนายน',
+            'July' => 'กรกฎาคม',
+            'August' => 'สิงหาคม',
+            'September' => 'กันยายน',
+            'October' => 'ตุลาคม',
+            'November' => 'พฤศจิกายน',
+            'December' => 'ธันวาคม'
+        ];
+        $thai_due_date = strtr($thai_due_date, $thai_month);
+        $pdf->SetXY(132, 63);
+        $pdf->Cell(34.5, 8, iconv('utf-8', 'cp874', $thai_due_date), 0, 1, 'C');
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(13.5, 68.7);
+        $pdf->Cell(30, 8, iconv('utf-8', 'cp874', $Site), 0, 1, 'L');
+
+        $pdf->SetXY(73.5, 68.7);
+        $pdf->Cell(93, 8, iconv('utf-8', 'cp874', $pr), 0, 1, 'L');
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(42, 82.4 + $i);
+            if (isset($selectedDataDetail[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $trimmedText = trim(iconv('utf-8', 'cp874', $selectedDataDetail[$x]));
+                $textWidth = mb_strwidth($trimmedText);
+                if ($textWidth > 88) {
+                    // ข้อความยาวเกินกรอบ
+                    // ตัดแต่งข้อความให้สั้นลง
+                    $shortenedText = mb_substr($trimmedText, 0, 88);
+                } else {
+                    // ข้อความอยู่ในกรอบ
+                    // ใช้ข้อความเต็มรูปแบบ
+                    $shortenedText = $trimmedText;
+                }
+                $pdf->Cell(88, 8, $shortenedText, 0, 1);
+            } else {
+                $pdf->Cell(88, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        $num = 1;
+        $sum = 0;
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            if (isset($selectedDataPrice[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $formatted_unit1 = number_format($selectedDataPrice[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $formatted_unit2 = number_format($unit[$x], 2); // จัดรูปแบบเพื่อแสดงทศนิยม 2 ตำแหน่ง
+                $pdf->SetXY(8.6, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                $pdf->SetXY(171.3, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                $pdf->SetXY(154, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                $pdf->SetXY(192.5, 82.4 + $i); // กำหนดตำแหน่ง x เป็น 10 เช่นเดิม
+                $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+                $sum += $formatted_unit2 * $formatted_unit1; // เพิ่มค่าของ $formatted_unit2 * $formatted_unit1 ใน $sum
+            } else {
+                $pdf->Cell(0, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+
+        $pdf->SetFont('THSarabun', 'B', 12);
+        $pdf->SetXY(192.5, 162.4);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 174.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 181);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 187.5);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+        $pdf->SetXY(192.5, 205);
+        $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+
+        $pdf->SetFont('THSarabun', '', 9.4);
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(132, 82.4 + $i);
+            if (isset($selectedDataType[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $selectedDataType[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(12, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+
+        //AU
+        $x = 0; // เริ่มต้นที่ index 0
+        for ($i = 0; $i < 78.75; $i += 5.25) {
+            $pdf->SetXY(18.5, 82.4 + $i);
+            if (isset($inputField[$x])) { // ตรวจสอบว่า index นั้นมีการกำหนดหรือไม่
+                $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $inputField[$x]), 0, 1, 'C');
+            } else {
+                $pdf->Cell(23.5, 8, '', 0, 1, 'C'); // ในกรณีไม่มีการกำหนดค่าให้แสดงช่องว่าง
+            }
+            $x++;
+        }
+        $pdf->SetFont('THSarabun', '', 12);
+        $pdf->SetXY(6.5, 208);
+        $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+    }
 }
+
 
 
 $pdf->Output('I', 'created_pdf.pdf');
