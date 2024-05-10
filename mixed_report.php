@@ -120,16 +120,16 @@
                          <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
                        </div>
                        <div class="col-md-3">
-                         <h4>PR No.</h4>
-                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No.(เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                         <h4>PR No</h4>
+                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
                        </div>
                        <div class="col-md-3">
-                         <h4>Work No :</h4>
-                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="Work No">
+                         <h4>Work No</h4>
+                         <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="Work No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
                        </div>
                        <div class="col-md-3">
-                         <h4>Project :</h4>
-                         <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="Project :">
+                         <h4>Project</h4>
+                         <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="Project (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
                        </div>
                      </div>
                      <div class="row mt-md-3">
