@@ -173,7 +173,7 @@
 
                    <?php
                     include('connect.php');
-                    $strsql = "SELECT * FROM au_all"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ au_detail
+                    $strsql = "SELECT * FROM au_mixed"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ au_detail
                     $result = mysqli_query($con, $strsql);
                     $rowcount = mysqli_num_rows($result);
                     ?>
