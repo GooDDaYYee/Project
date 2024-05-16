@@ -181,7 +181,7 @@
                             <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
                             <datalist id="dataList">
                               <?php mysqli_data_seek($result, 0); ?>
-                              <?php while ($row = mysqli_fetch_assoc($result)) { ?>s
+                              <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                                 <option value="<?php echo $row['au_id']; ?>" required=""><?php echo $row['au_id']; ?></option>
                               <?php } ?>
                             </datalist>
