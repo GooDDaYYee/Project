@@ -42,6 +42,7 @@
     body {
       font-family: 'Mitr';
       font-size: 16px;
+      background-color: #8A2BE2;
     }
 
     table {

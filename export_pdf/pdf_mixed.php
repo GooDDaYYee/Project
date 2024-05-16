@@ -52,7 +52,7 @@ function ReadNumber($number)
 }
 
 require('fpdf/fpdf.php');
-if ($_POST['numAU'] <= 15) {
+if ($_POST['auCount'] <= 15) {
     if ($_POST['flexRadioDefault'] == "sub1") {
         $number = $_POST['number'];
         $thai_date = $_POST['thai_date'];
@@ -555,7 +555,7 @@ if ($_POST['numAU'] <= 15) {
         $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     }
-} else {
+} elseif ($_POST['auCount'] > 15) {
     if ($_POST['flexRadioDefault'] == "sub1") {
         $number = $_POST['number'];
         $thai_date = $_POST['thai_date'];

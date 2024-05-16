@@ -38,7 +38,10 @@ session_start();
         body {
             font-family: 'Mitr';
             font-size: 22px;
-            background-color: #8A2BE2;
+            background-image: url("img/background-login.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         table {
