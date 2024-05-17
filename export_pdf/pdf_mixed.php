@@ -25,7 +25,6 @@ function Convert($amount_number, $decimal_count)
     return $ret;
 }
 
-
 function ReadNumber($number)
 {
     $position_call = array("แสน", "หมื่น", "พัน", "ร้อย", "สิบ", "");
@@ -50,33 +49,32 @@ function ReadNumber($number)
     }
     return $ret;
 }
+$number = $_POST['number'];
+$thai_date = $_POST['thai_date'];
+$payment = $_POST['payment'];
+$refer = $_POST['refer'];
+$Site = $_POST['Site'];
+$work_no = $_POST['work_no'];
+$project = $_POST['project'];
+$thai_date_product = $_POST['thai_date_product'];
+$thai_due_date = $_POST['thai_due_date'];
+$inputField = $_POST['inputField'];
+$selectedDataDetail = $_POST['selectedDataDetail'];
+$selectedDataPrice = $_POST['selectedDataPrice'];
+$pr = $_POST['pr'];
+$work_no = $_POST['work_no'];
+$project = $_POST['project'];
+$selectedDataType = $_POST['selectedDataType'];
+$selectedDataPrice = $_POST['selectedDataPrice'];
+$unit = $_POST['unit'];
 
 require('fpdf/fpdf.php');
+$pdf = new FPDF();
+$pdf->AddPage();
+$pdf->AddFont('THSarabun', '', 'THSarabun.php');
+$pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
+
 if ($_POST['auCount'] <= 15) {
-    $number = $_POST['number'];
-    $thai_date = $_POST['thai_date'];
-    $payment = $_POST['payment'];
-    $refer = $_POST['refer'];
-    $Site = $_POST['Site'];
-    $work_no = $_POST['work_no'];
-    $project = $_POST['project'];
-    $thai_date_product = $_POST['thai_date_product'];
-    $thai_due_date = $_POST['thai_due_date'];
-    $inputField = $_POST['inputField'];
-    $selectedDataDetail = $_POST['selectedDataDetail'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $pr = $_POST['pr'];
-    $work_no = $_POST['work_no'];
-    $project = $_POST['project'];
-    $selectedDataType = $_POST['selectedDataType'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $unit = $_POST['unit'];
-
-    $pdf = new FPDF();
-
-    $pdf->AddPage();
-    $pdf->AddFont('THSarabun', '', 'THSarabun.php');
-    $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
     if ($_POST['flexRadioDefault'] == "sub1") {
         $pdf->Image('img/quotation_15.png', 1, 1, 210, 297);
     } elseif ($_POST['flexRadioDefault'] == "sub2") {
@@ -223,32 +221,8 @@ if ($_POST['auCount'] <= 15) {
     $pdf->SetFont('THSarabun', '', 12);
     $pdf->SetXY(6.5, 213);
     $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
+    /************************************************************************************************************************************************************************************ */
 } elseif ($_POST['auCount'] > 15) {
-    $number = $_POST['number'];
-    $thai_date = $_POST['thai_date'];
-    $payment = $_POST['payment'];
-    $refer = $_POST['refer'];
-    $Site = $_POST['Site'];
-    $work_no = $_POST['work_no'];
-    $project = $_POST['project'];
-    $thai_date_product = $_POST['thai_date_product'];
-    $thai_due_date = $_POST['thai_due_date'];
-    $inputField = $_POST['inputField'];
-    $selectedDataDetail = $_POST['selectedDataDetail'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $pr = $_POST['pr'];
-    $work_no = $_POST['work_no'];
-    $project = $_POST['project'];
-    $selectedDataType = $_POST['selectedDataType'];
-    $selectedDataPrice = $_POST['selectedDataPrice'];
-    $unit = $_POST['unit'];
-
-
-    $pdf = new FPDF();
-
-    $pdf->AddPage();
-    $pdf->AddFont('THSarabun', '', 'THSarabun.php');
-    $pdf->AddFont('THSarabun', 'B', 'THSarabun Bold.php');
     if ($_POST['flexRadioDefault'] == "sub1") {
         $pdf->Image('img/quotation_20.png', 1, 1, 210, 297);
     } elseif ($_POST['flexRadioDefault'] == "sub2") {
