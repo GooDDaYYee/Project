@@ -61,11 +61,10 @@ $thai_due_date = $_POST['thai_due_date'];
 $inputField = $_POST['inputField'];
 $selectedDataDetail = $_POST['selectedDataDetail'];
 $selectedDataPrice = $_POST['selectedDataPrice'];
+$selectedDataType = $_POST['selectedDataType'];
 $pr = $_POST['pr'];
 $work_no = $_POST['work_no'];
 $project = $_POST['project'];
-$selectedDataType = $_POST['selectedDataType'];
-$selectedDataPrice = $_POST['selectedDataPrice'];
 $unit = $_POST['unit'];
 
 require('fpdf/fpdf.php');
