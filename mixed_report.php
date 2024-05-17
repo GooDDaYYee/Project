@@ -170,35 +170,35 @@
 
                     for (var i = 0; i < numAU; i++) {
                       var existingInputFrames = document.querySelectorAll(".inputFrame").length;
-                      var newIndex = existingInputFrames + i;
+                      var newIndex = existingInputFrames + 1; // Fixing the index increment
 
                       var newInputFrame = document.createElement("div");
                       newInputFrame.classList.add("inputFrame");
                       newInputFrame.innerHTML = `
-                        <div class="row mt-md-3" style="margin-bottom: 1rem;">
-                          <div class="col-md-3">
-                            <h4>AU ลำดับที่ ${existingInputFrames+1}</h4>
-                            <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
-                            <datalist id="dataList">
-                              <?php mysqli_data_seek($result, 0); ?>
-                              <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                <div class="row mt-md-3" style="margin-bottom: 1rem;">
+                    <div class="col-md-3">
+                        <h4>AU ลำดับที่ ${newIndex}</h4>
+                        <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
+                        <datalist id="dataList">
+                            <?php mysqli_data_seek($result, 0); ?>
+                            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
                                 <option value="<?php echo $row['au_id']; ?>" required=""><?php echo $row['au_id']; ?></option>
-                              <?php } ?>
-                            </datalist>
-                          </div>
-                          <div class="col-md-3">
-                            <h4>รายละเอียด AU</h4>
-                            <p id="selectedData_${newIndex}"></p>
-                          </div>
-                          <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
-                          <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
-                          <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
-                          <div class="col-md-3">
-                            <h4>จำนวน</h4>
-                            <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
-                          </div>
-                        </div>
-                      `;
+                            <?php } ?>
+                        </datalist>
+                    </div>
+                    <div class="col-md-3">
+                        <h4>รายละเอียด AU</h4>
+                        <p id="selectedData_${newIndex}"></p>
+                    </div>
+                    <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
+                    <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
+                    <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
+                    <div class="col-md-3">
+                        <h4>จำนวน</h4>
+                        <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
+                    </div>
+                </div>
+            `;
                       inputFields.insertBefore(newInputFrame, documentButton);
                       auCounter.value = parseInt(auCounter.value) + 1;
 
@@ -240,6 +240,7 @@
                   }
                 });
               </script>
+
             </div>
           </div>
         </div>
