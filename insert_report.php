@@ -19,13 +19,13 @@ $result = mysqli_query($conn, $sql);
 
 // 4. ตรวจสอบว่าบันทึกเข้าตารางหรือไม่
 if ($result == True) {
-    echo '<script>
+	echo '<script>
 		alert("เพิ่มข้อมูลสำเร็จ");
 		history.back();
 		</script>
 		';
 } else {
-    echo '<script>
+	echo '<script>
 		alert("เพิ่มข้อมูลไม่สำเร็จ");
 		history.back();
 		</script>

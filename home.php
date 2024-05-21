@@ -32,11 +32,11 @@
           <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-search fa-fw"></i>
           </a>
-          <!-- Nav Item - User Information -->
+        </li>
+        <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?>
-            </span>
+            <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
             <img class="img-profile rounded-circle" src="img/picture.png">
           </a>
           <!-- Dropdown - User Information -->
@@ -47,12 +47,10 @@
             </a>
           </div>
         </li>
-
-
       </ul>
-
     </nav>
     <!-- End of Topbar -->
+
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
@@ -83,46 +81,50 @@
               <?php
               include('connect.php');
               $strsql = "SELECT * FROM detail ORDER BY Id DESC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
-              $result = mysqli_query($con, $strsql);
-              $rowcount = mysqli_num_rows($result);
-              if ($rowcount > 0) {
-                while ($rs = mysqli_fetch_array($result))  //สร้างตัวแปร $rs มารับค่าจากการ fetch array
-                {
+
+              try {
+                $stmt = $con->prepare($strsql);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $rowcount = count($result);
+
+                if ($rowcount > 0) {
+                  foreach ($result as $rs) { //สร้างตัวแปร $rs มารับค่าจากการ fetch array
               ?>
-                  <tbody>
-                    <tr>
-                      <th scope="row"><?php echo $rs['Id']; ?></th>
-                      <td><?php echo $rs['machine']; ?></td>
-                      <td><?php echo $rs['category']; ?></td>
-                      <td><?php echo $rs['type']; ?></td>
-                      <td><?php echo $rs['create_date']; ?></td>
-                      <td><?php echo $rs['']; ?></td>
-                      <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-outline-success">แก้ไข้</button>
-                          <button type="button" class="btn btn-outline-warning">รายละเอียด</button>
-                          <button type="button" class="btn btn-outline-danger">ลบ</button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><?php echo $rs['Id']; ?></th>
+                        <td><?php echo $rs['machine']; ?></td>
+                        <td><?php echo $rs['category']; ?></td>
+                        <td><?php echo $rs['type']; ?></td>
+                        <td><?php echo $rs['create_date']; ?></td>
+                        <td><?php echo $rs['']; ?></td>
+                        <td>
+                          <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-success">แก้ไข</button>
+                            <button type="button" class="btn btn-outline-warning">รายละเอียด</button>
+                            <button type="button" class="btn btn-outline-danger">ลบ</button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
               <?php
+                  }
+                } else {
+                  echo "<tr><td colspan='6'>ไม่พบข้อมูล</td></tr>";
                 }
-              } else {
-                echo  "<tr><td colspan='6'>ไม่พบข้อมูล</td></tr>";
+              } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
               }
-              mysqli_close($con);
+              // ปิดการเชื่อมต่อฐานข้อมูล
+              $con = null;
               ?>
             </table>
           </div>
         </div>
       </div>
-
-
     </div>
-
   </div>
-
 </div>
 <!-- End of Main Content -->
 

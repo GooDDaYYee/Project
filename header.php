@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -20,8 +19,6 @@
   <!-- Bootstrap CSS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
-
-
 
   <style>
     .btn-warning {
@@ -79,7 +76,7 @@
           <i class="fas fa-align-justify"></i>
           <span>Menu</span>
         </a>
-        <div id="collapseTwo" class="collapse bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse show bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
             <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
@@ -88,7 +85,6 @@
             <h6 class="collapse-header"><i class="fa-solid fa-file"></i> ออกเอกสาร</h6>
             <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท Mixed</a>
             <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท FBH</a>
-            <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท W&W </a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
@@ -109,7 +105,6 @@
         </div>
       </li>
 
-
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -120,3 +115,6 @@
 
     </ul>
     <!-- End of Sidebar -->
+</body>
+
+</html>
