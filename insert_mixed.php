@@ -23,13 +23,14 @@ try {
     $stmtInvoice->execute();
     $invoiceId = $con->lastInsertId();
 
-    $stmtInvoiceItem = $con->prepare("INSERT INTO bill_detail (bill_id, au_id) 
-                                       VALUES (:bill_id, :au_id)");
+    $stmtInvoiceItem = $con->prepare("INSERT INTO bill_detail (bill_id, au_id, unit) 
+                                       VALUES (:bill_id, :au_id, :unit)");
 
     $auCount = count($_POST['inputField']);
     for ($i = 0; $i < $auCount; $i++) {
         $stmtInvoiceItem->bindParam(':bill_id', $_POST['number']);
         $stmtInvoiceItem->bindParam(':au_id', $_POST['inputField'][$i]);
+        $stmtInvoiceItem->bindParam(':unit', $_POST['unit'][$i]);
         $stmtInvoiceItem->execute();
     }
     $con->commit();
