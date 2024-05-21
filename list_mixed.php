@@ -80,20 +80,20 @@
                   <th scope="col">Pr</th>
                   <th scope="col">WORK</th>
                   <th scope="col">Project</th>
-                  <th scope="col">Company</th>
                   <th scope="col"></th>
                 </tr>
               </thead>
               <?php
               include('connect.php');
 
-              // Your SQL query
-              $strsql = "SELECT b.*, a.*, d.* 
-              FROM bill_detail b 
-              INNER JOIN au_all a ON b.au_id = a.au_id 
-              INNER JOIN bill d ON b.bill_id = d.bill_id 
-              WHERE a.au_company = 'mixed' 
-              ORDER BY b.bill_id DESC";
+              // $strsql = "SELECT b.bill_id, b.bill_date, b.bill_site, b.bill_pr, b.bill_work_no, b.bill_project, a.au_company 
+              // FROM bill_detail bd
+              // INNER JOIN au_all a ON bd.au_id = a.au_id 
+              // INNER JOIN bill b ON bd.bill_id = b.bill_id 
+              // WHERE a.au_company = 'mixed' 
+              // ORDER BY b.bill_id DESC";
+
+              $strsql = "SELECT * FROM bill ORDER BY bill_id ASC";
 
               try {
                 $stmt = $con->prepare($strsql);
@@ -111,7 +111,6 @@
                         <td><?php echo $rs['bill_pr']; ?></td>
                         <td><?php echo $rs['bill_work_no']; ?></td>
                         <td><?php echo $rs['bill_project']; ?></td>
-                        <td><?php echo $rs['au_company']; ?></td> <!-- Display au_company from au_all table -->
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success">แก้ไข</button>
@@ -124,13 +123,11 @@
               <?php
                   }
                 } else {
-                  echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>"; // Updated colspan to 8 for the new column
+                  echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
                 }
               } catch (PDOException $e) {
                 echo "Error in SQL query: " . $e->getMessage();
               }
-
-              // Close the database connection
               $con = null;
               ?>
             </table>
@@ -140,7 +137,4 @@
     </div>
   </div>
 </div>
-<!-- End of Main Content -->
-
 </div>
-<!-- End of Content Wrapper -->

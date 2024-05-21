@@ -33,7 +33,7 @@
     </nav>
     <!-- End of Topbar -->
 
-    <form action="export_pdf/pdf_mixed.php" method="post">
+    <form id="myForm" action="insert_mixed.php" method="post">
       <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
           <div class="row">
@@ -50,25 +50,13 @@
                   </div>
                   <div class="col">
                     <h4>วันที่</h4>
-                    <li class="form-control">
-                      <?php
-                      date_default_timezone_set('Asia/Bangkok');
-                      setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
-                      $thai_month = array(1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม", 4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน", 7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน", 10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม");
-                      $thai_month_num = (int)strftime("%m");
-                      $thai_date = strftime("%d $thai_month[$thai_month_num] %Y", strtotime("+543 years", strtotime(date('Y-m-d'))));
-                      echo $thai_date;
-                      ?>
-                    </li>
-                    <input type="hidden" name="thai_date" value="<?php echo $thai_date; ?>">
-                    <input type="hidden" name="inputField" value="&nbsp;">
-                    <input type="hidden" name="selectedDataDetail" value="&nbsp;">
-                    <input type="hidden" name="selectedDataType" value="&nbsp;">
-                    <input type="hidden" name="selectedDataPrice" value="&nbsp;">
-                    <input type="hidden" name="unit" value="&nbsp;">
-                  </div>
-                  <div class="col">
                     <?php
+                    date_default_timezone_set('Asia/Bangkok');
+                    setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
+                    $thai_month = array(1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม", 4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน", 7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน", 10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม");
+                    $thai_month_num = (int)strftime("%m");
+                    $thai_date = strftime("%d $thai_month[$thai_month_num] %Y", strtotime("+543 years", strtotime(date('Y-m-d'))));
+
                     function getThaiDate()
                     {
                       $currentDate = date("Y-m-d");
@@ -77,6 +65,15 @@
                     }
                     $thaiDate = getThaiDate();
                     ?>
+                    <input type="text" class="form-control" value="<?php echo $thai_date; ?>" readonly>
+                    <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
+                    <input type="hidden" name="inputField" value="&nbsp;">
+                    <input type="hidden" name="selectedDataDetail" value="&nbsp;">
+                    <input type="hidden" name="selectedDataType" value="&nbsp;">
+                    <input type="hidden" name="selectedDataPrice" value="&nbsp;">
+                    <input type="hidden" name="unit" value="&nbsp;">
+                  </div>
+                  <div class="col">
                     <h4>วันที่ส่งสินค้า</h4>
                     <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $thaiDate; ?>">
                   </div>
@@ -215,8 +212,8 @@
                         for (var j = 0; j < options.length; j++) {
                           if (options[j].value === selectedOption) {
                             var auId = options[j].value;
-                            var index = parseInt(event.target.id.split('_')[1]); // Get the AU index from ID
-                            fetchDetails(auId, index); // Call fetchDetails with the index
+                            var index = parseInt(event.target.id.split('_')[1]);
+                            fetchDetails(auId, index);
                             break;
                           }
                         }
@@ -231,8 +228,8 @@
                     .then(data => {
                       document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
                       document.getElementById(`selectedDataDetail_${index}`).value = data.au_detail;
-                      document.getElementById(`selectedDataType_${index}`).value = data.au_type; // Access au_type data
-                      document.getElementById(`selectedDataPrice_${index}`).value = data.au_price; // Access au_price data
+                      document.getElementById(`selectedDataType_${index}`).value = data.au_type;
+                      document.getElementById(`selectedDataPrice_${index}`).value = data.au_price;
                       document.getElementById(`unit_${index}`).value = data.unit;
                     });
                 }
@@ -241,6 +238,7 @@
                   var auCount = parseInt(document.getElementById("auCount").value);
                   if (auCount > 0) {
                     document.getElementById("myForm").submit();
+                    location.href = 'index.php?page=list_mixed.php';
                   } else {
                     alert("เพิ่ม AU Count");
                   }
