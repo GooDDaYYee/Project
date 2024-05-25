@@ -5,8 +5,8 @@ try {
 
     $con->beginTransaction();
 
-    $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num) 
-                                   VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num)");
+    $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total) 
+                                   VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total)");
 
     $stmtInvoice->bindParam(':bill_id', $_POST['number']);
     $stmtInvoice->bindParam(':bill_date', $_POST['thai_date']);
@@ -20,26 +20,52 @@ try {
     $stmtInvoice->bindParam(':bill_project', $_POST['project']);
     $stmtInvoice->bindParam(':list_num', $_POST['auCount']);
 
-    $stmtInvoice->execute();
-    $invoiceId = $con->lastInsertId();
+    // คำนวณ total_amount, vat, และ withholding
+    $total = 0;
+    $vat = 0.07; // 7% VAT
+    $withholding = 0.03; // 3% withholding
 
-    $stmtInvoiceItem = $con->prepare("INSERT INTO bill_detail (bill_id, au_id, unit) 
-                                       VALUES (:bill_id, :au_id, :unit)");
+    $stmtInvoiceItem = $con->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
     $auCount = count($_POST['inputField']);
     for ($i = 0; $i < $auCount; $i++) {
+        $auId = $_POST['inputField'][$i];
+
+        // ดึงราคา au_price จากตาราง au_all
+        $stmtPrice = $con->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
+        $stmtPrice->bindParam(':au_id', $auId);
+        $stmtPrice->execute();
+        $auPrice = $stmtPrice->fetchColumn();
+
+        $unit = $_POST['unit'][$i];
+        $price = $unit * $auPrice;
+
         $stmtInvoiceItem->bindParam(':bill_id', $_POST['number']);
-        $stmtInvoiceItem->bindParam(':au_id', $_POST['inputField'][$i]);
-        $stmtInvoiceItem->bindParam(':unit', $_POST['unit'][$i]);
+        $stmtInvoiceItem->bindParam(':au_id', $auId);
+        $stmtInvoiceItem->bindParam(':unit', $unit);
+        $stmtInvoiceItem->bindParam(':price', $price);
         $stmtInvoiceItem->execute();
+
+        $total += $price;
     }
+
+    $totalVat = $total * $vat;
+    $totalWithholding = $total * $withholding;
+    $grand_total = $total - $totalVat;
+
+    $stmtInvoice->bindParam(':total_amount', $total);
+    $stmtInvoice->bindParam(':vat', $totalVat);
+    $stmtInvoice->bindParam(':withholding', $totalWithholding);
+    $stmtInvoice->bindParam(':grand_total', $grand_total);
+
+    $stmtInvoice->execute();
+
     $con->commit();
 
     // Redirect to list_mixed.php
     header("Location: index.php?page=list_mixed");
     exit();
 } catch (PDOException $e) {
-
     $con->rollBack();
     echo "Error: " . $e->getMessage();
 }

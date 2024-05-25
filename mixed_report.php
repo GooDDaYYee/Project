@@ -33,6 +33,45 @@
     </nav>
     <!-- End of Topbar -->
 
+    <?php
+    include("connect.php");
+
+    // ดึงลำดับบิลล่าสุดจากฐานข้อมูล
+    try {
+      $stmt = $con->prepare("SELECT bill_id FROM bill ORDER BY bill_id DESC LIMIT 1");
+      $stmt->execute();
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if ($result) {
+        // แยกข้อมูลปีและลำดับบิลจาก bill_id ล่าสุด
+        $lastBillId = $result['bill_id'];
+        preg_match('/(\d{2})\/(\d+)$/', $lastBillId, $matches);
+        $lastYear = $matches[1];
+        $lastNumber = intval($matches[2]);
+      } else {
+        // ถ้าไม่มีบิลในฐานข้อมูล ให้ตั้งค่าเริ่มต้น
+        $lastYear = date('y') + 43; // ปีพุทธศักราช 2 หลักสุดท้าย
+        $lastNumber = 0;
+      }
+
+      // คำนวณปีปัจจุบันและลำดับบิลใหม่
+      $currentYear = (date('Y') + 543) % 100; // ปีพุทธศักราช 2 หลักสุดท้าย
+      if ($currentYear != $lastYear) {
+        // ถ้าปีเปลี่ยน ให้เริ่มลำดับบิลใหม่
+        $newNumber = 1;
+      } else {
+        // ถ้าเป็นปีเดียวกัน ให้เพิ่มลำดับบิล
+        $newNumber = $lastNumber + 1;
+      }
+
+      // สร้างเลขบิลใหม่ตามรูปแบบที่ต้องการ
+      $newBillId = sprintf("PSNK/MIXED/%02d/%03d", $currentYear, $newNumber);
+    } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+    }
+    ?>
+
+    <!-- Form HTML -->
     <form id="myForm" action="insert_mixed.php" method="post">
       <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
@@ -46,7 +85,7 @@
                 <div class="row mt-md-3">
                   <div class="col">
                     <h4>เลขที่</h4>
-                    <input type="text" id="number" name="number" class="form-control form-control-user" placeholder="เลขที่" required="">
+                    <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $newBillId; ?>" readonly>
                   </div>
                   <div class="col">
                     <h4>วันที่</h4>
@@ -55,7 +94,7 @@
                     setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
                     $thai_month = array(1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม", 4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน", 7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน", 10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม");
                     $thai_month_num = (int)strftime("%m");
-                    $thai_date = strftime("%d $thai_month[$thai_month_num] %Y", strtotime("+543 years", strtotime(date('Y-m-d'))));
+                    $thai_date = strftime("%d $thai_month[$thai_month_num] %Y");
 
                     function getThaiDate()
                     {
@@ -123,31 +162,10 @@
                     <h4>จำนวน AU ที่เพิ่ม</h4>
                     <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
                   </div>
-                  <div class="form-check">
-                    <h4>&nbsp;</h4>
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked value="sub1">
-                    <label class="form-check-label" for="flexRadioDefault1">
-                      ทำใบเสนอราคา &nbsp;
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <h4>&nbsp;</h4>
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="sub2">
-                    <label class="form-check-label" for="flexRadioDefault2">
-                      ใบแจ้งหนี้ &nbsp;
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <h4>&nbsp;</h4>
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="sub3">
-                    <label class="form-check-label" for="flexRadioDefault3">
-                      ใบเสร็จรับเงิน&nbsp;
-                    </label>
-                  </div>
                 </div>
                 <div class="row-md-auto mt-md-3">
                   <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit' id="submitButton">
-                    <h5>ทำเอกสาร</h5>
+                    <h5>เพิ่มข้อมูล</h5>
                   </button>
                 </div>
               </div>
@@ -179,29 +197,29 @@
                       var newInputFrame = document.createElement("div");
                       newInputFrame.classList.add("inputFrame");
                       newInputFrame.innerHTML = `
-                      <div class="row mt-md-3" style="margin-bottom: 1rem;">
-                          <div class="col-md-3">
-                              <h4>AU ลำดับที่ ${newIndex}</h4>
-                              <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
-                              <datalist id="dataList">
-                                  <?php foreach ($result as $row) { ?>
-                                      <option value="<?php echo $row['au_id']; ?>" required=""><?php echo $row['au_id']; ?></option>
-                                  <?php } ?>
-                              </datalist>
-                          </div>
-                          <div class="col-md-3">
-                              <h4>รายละเอียด AU</h4>
-                              <p id="selectedData_${newIndex}"></p>
-                          </div>
-                          <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
-                          <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
-                          <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
-                          <div class="col-md-3">
-                              <h4>จำนวน</h4>
-                              <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
-                          </div>
+                  <div class="row mt-md-3" style="margin-bottom: 1rem;">
+                      <div class="col-md-3">
+                          <h4>AU ลำดับที่ ${newIndex}</h4>
+                          <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
+                          <datalist id="dataList">
+                              <?php foreach ($result as $row) { ?>
+                                  <option value="<?php echo $row['au_id']; ?>" required=""><?php echo $row['au_id']; ?></option>
+                              <?php } ?>
+                          </datalist>
                       </div>
-                  `;
+                      <div class="col-md-3">
+                          <h4>รายละเอียด AU</h4>
+                          <p id="selectedData_${newIndex}"></p>
+                      </div>
+                      <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
+                      <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
+                      <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
+                      <div class="col-md-3">
+                          <h4>จำนวน</h4>
+                          <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
+                      </div>
+                  </div>
+              `;
                       inputFields.insertBefore(newInputFrame, documentButton);
                       auCounter.value = parseInt(auCounter.value) + 1;
 

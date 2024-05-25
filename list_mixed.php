@@ -57,15 +57,13 @@
       <!-- List table -->
       <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
-          <div>
-            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-ui-checks" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
-              <path fill-rule="evenodd" d="M2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646l2-2a.5.5 0 1 0-.708-.708L2.5 4.293l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0zm0 8l2-2a.5.5 0 0 0-.708-.708L2.5 12.293l-.646-.647a.5.5 0 0 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
-              <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
-              <path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-            </svg>&nbsp;จัดการบิลบริษัท Mixed
-          </div>
-          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=mixed_report', '_blank')">เพิ่มบิล</button>
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-ui-checks" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
+            <path fill-rule="evenodd" d="M2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646l2-2a.5.5 0 1 0-.708-.708L2.5 4.293l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0zm0 8l2-2a.5.5 0 0 0-.708-.708L2.5 12.293l-.646-.647a.5.5 0 0 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
+            <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
+            <path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+          </svg>&nbsp;จัดการบิลบริษัท Mixed
+          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=mixed_report', '_parent')">เพิ่มบิล</button>
         </div>
 
 
@@ -77,9 +75,9 @@
                   <th scope="col">เลขที่</th>
                   <th scope="col">วันที่ออกบิล</th>
                   <th scope="col">Site</th>
-                  <th scope="col">Pr</th>
-                  <th scope="col">WORK</th>
-                  <th scope="col">Project</th>
+                  <th scope="col">Final BOQ 100%</th>
+                  <th scope="col">VAT 7%</th>
+                  <th scope="col">GRAND Total</th>
                   <th scope="col"></th>
                 </tr>
               </thead>
@@ -106,11 +104,23 @@
                     <tbody>
                       <tr>
                         <th scope="row"><?php echo $rs['bill_id']; ?></th>
-                        <td><?php echo $rs['bill_date']; ?></td>
+                        <td>
+                          <?php
+                          $timestamp = strtotime($rs['bill_date']);
+                          $thai_month = array(
+                            1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
+                            4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
+                            7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
+                            10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
+                          );
+                          $thai_month_num = date('n', $timestamp);
+                          echo date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . date('Y', $timestamp);
+                          ?>
+                        </td>
                         <td><?php echo $rs['bill_site']; ?></td>
-                        <td><?php echo $rs['bill_pr']; ?></td>
-                        <td><?php echo $rs['bill_work_no']; ?></td>
-                        <td><?php echo $rs['bill_project']; ?></td>
+                        <td><?php echo number_format($rs['total_amount'], 2); ?></td>
+                        <td><?php echo number_format($rs['vat'], 2); ?></td>
+                        <td><?php echo number_format($rs['grand_total'], 2); ?></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success">แก้ไข</button>
