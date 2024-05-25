@@ -88,7 +88,7 @@
                     <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $newBillId; ?>" readonly>
                   </div>
                   <div class="col">
-                    <h4>วันที่</h4>
+                    <h4>วันที่ออกบิล</h4>
                     <?php
                     date_default_timezone_set('Asia/Bangkok');
                     setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');

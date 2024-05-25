@@ -21,6 +21,9 @@ if ($page == 'home') {
     include_once("list_mixed.php");
 } elseif ($page == 'mixed_report') {
     include_once("mixed_report.php");
+} elseif ($page == 'search_bill') {
+    include_once("search_bill.php");
 }
+
 
 include_once("footer.php");

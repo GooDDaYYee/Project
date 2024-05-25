@@ -16,7 +16,7 @@
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
           <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา" aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group-append">
+          <div class="input-group">
             <button class="btn btn-warning bg-gradient-purple" type="button">
               <i class="fas fa-search fa-sm"></i>
             </button>
@@ -66,7 +66,6 @@
           <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=mixed_report', '_parent')">เพิ่มบิล</button>
         </div>
 
-
         <div class="card-body">
           <div class="card border h-100">
             <table class="table table-striped">
@@ -84,14 +83,7 @@
               <?php
               include('connect.php');
 
-              // $strsql = "SELECT b.bill_id, b.bill_date, b.bill_site, b.bill_pr, b.bill_work_no, b.bill_project, a.au_company 
-              // FROM bill_detail bd
-              // INNER JOIN au_all a ON bd.au_id = a.au_id 
-              // INNER JOIN bill b ON bd.bill_id = b.bill_id 
-              // WHERE a.au_company = 'mixed' 
-              // ORDER BY b.bill_id DESC";
-
-              $strsql = "SELECT * FROM bill ORDER BY bill_id ASC";
+              $strsql = "SELECT * FROM bill ORDER BY bill_id DESC";
 
               try {
                 $stmt = $con->prepare($strsql);
@@ -123,9 +115,9 @@
                         <td><?php echo number_format($rs['grand_total'], 2); ?></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-success">แก้ไข</button>
+                            <button type="button" class="btn btn-outline-success" id="myBtn" onclick="<?php echo $rs['bill_id']; ?>">แก้ไข</button>
                             <button type="button" class="btn btn-outline-warning">ทำเอกสาร</button>
-                            <button type="button" class="btn btn-outline-danger">ลบ</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['bill_id']; ?>')">ลบ</button>
                           </div>
                         </td>
                       </tr>
@@ -138,7 +130,6 @@
               } catch (PDOException $e) {
                 echo "Error in SQL query: " . $e->getMessage();
               }
-              $con = null;
               ?>
             </table>
           </div>
@@ -148,3 +139,232 @@
   </div>
 </div>
 </div>
+
+<div id="myModal" class="modal">
+  <span class="close">&times;</span>
+  <!-- Form HTML -->
+  <form id="myForm" action="insert_mixed.php" method="post">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-0">
+        <div class="row">
+          <div class="col-lg">
+            <div class="p-5">
+              <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท Mixed</h1>
+              </div>
+              <hr class="user">
+              <div class="row mt-md-3">
+                <div class="col">
+                  <h4>เลขที่</h4>
+                  <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $billId; ?>" readonly>
+                </div>
+                <div class="col">
+                  <h4>วันที่ออกบิล</h4>
+                  <?php
+                  date_default_timezone_set('Asia/Bangkok');
+                  setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
+                  $thai_month = array(1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม", 4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน", 7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน", 10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม");
+                  $thai_month_num = (int)strftime("%m");
+                  $thai_date = strftime("%d $thai_month[$thai_month_num] %Y");
+
+                  function getThaiDate()
+                  {
+                    $currentDate = date("Y-m-d");
+                    $thaiDate = date("Y-m-d", strtotime("+543 year", strtotime($currentDate)));
+                    return $thaiDate;
+                  }
+                  $thaiDate = getThaiDate();
+                  ?>
+                  <input type="text" class="form-control" value="<?php echo $thai_date; ?>" readonly>
+                  <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
+                  <input type="hidden" name="inputField" value="&nbsp;">
+                  <input type="hidden" name="selectedDataDetail" value="&nbsp;">
+                  <input type="hidden" name="selectedDataType" value="&nbsp;">
+                  <input type="hidden" name="selectedDataPrice" value="&nbsp;">
+                  <input type="hidden" name="unit" value="&nbsp;">
+                </div>
+                <div class="col">
+                  <h4>วันที่ส่งสินค้า</h4>
+                  <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $thaiDate; ?>">
+                </div>
+              </div>
+              <div class=" row mt-md-3">
+                <div class="col-md-6">
+                  <h4>เงื่อนไขการชำระเงิน</h4>
+                  <input type="text" id="payment" name="payment" class="form-control form-control-user" value="N/A">
+                </div>
+                <div class="col-md-3">
+                  <h4>วันครบกำหนด</h4>
+                  <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo $thaiDate; ?>">
+                </div>
+                <div class="col-md-3">
+                  <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
+                  <input type="text" id="refer" name="refer" class="form-control form-control-user" value="-">
+                </div>
+              </div>
+              <div class="row mt-md-3">
+                <div class="col-md-3">
+                  <h4>Site</h4>
+                  <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
+                </div>
+                <div class="col-md-3">
+                  <h4>PR No</h4>
+                  <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                </div>
+                <div class="col-md-3">
+                  <h4>Work No</h4>
+                  <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="Work No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                </div>
+                <div class="col-md-3">
+                  <h4>Project</h4>
+                  <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="Project (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                </div>
+              </div>
+              <div class="row mt-md-3">
+                <div class="col-md-3">
+                  <h4>จำนวนAU</h4>
+                  <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
+                </div>
+                <div class="col-md-2">
+                  <h4>&nbsp;</h4>
+                  <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
+                </div>
+                <div class="col-md-2">
+                  <h4>จำนวน AU ที่เพิ่ม</h4>
+                  <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
+                </div>
+              </div>
+              <div class="row-md-auto mt-md-3">
+                <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit' id="submitButton">
+                  <h5>เพิ่มข้อมูล</h5>
+                </button>
+              </div>
+            </div>
+            <?php
+            $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ au_detail
+
+            try {
+              $stmt = $con->prepare($strsql);
+              $stmt->execute();
+              $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+              $rowcount = count($result);
+            } catch (PDOException $e) {
+              echo "Error: " . $e->getMessage();
+            }
+            ?>
+            <script>
+              document.getElementById("addInputFrame").addEventListener("click", function() {
+                var numAU = parseInt(document.getElementById("numAU").value);
+                if (numAU > 0) {
+                  var inputFields = document.querySelector(".row-md-auto");
+                  var documentButton = document.querySelector(".row-md-auto button");
+                  var auCounter = document.getElementById("auCount");
+
+                  for (var i = 0; i < numAU; i++) {
+                    var existingInputFrames = document.querySelectorAll(".inputFrame").length;
+                    var newIndex = existingInputFrames + 1; // Fixing the index increment
+
+                    var newInputFrame = document.createElement("div");
+                    newInputFrame.classList.add("inputFrame");
+                    newInputFrame.innerHTML = `
+                      <div class="row mt-md-3" style="margin-bottom: 1rem;">
+                          <div class="col-md-3">
+                              <h4>AU ลำดับที่ ${newIndex}</h4>
+                              <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
+                              <datalist id="dataList">
+                                  <?php foreach ($result as $row) { ?>
+                                      <option value="<?php echo $row['au_id']; ?>" required=""><?php echo $row['au_id']; ?></option>
+                                  <?php } ?>
+                              </datalist>
+                          </div>
+                          <div class="col-md-3">
+                              <h4>รายละเอียด AU</h4>
+                              <p id="selectedData_${newIndex}"></p>
+                          </div>
+                          <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
+                          <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
+                          <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
+                          <div class="col-md-3">
+                              <h4>จำนวน</h4>
+                              <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
+                          </div>
+                      </div>
+                    `;
+                    inputFields.insertBefore(newInputFrame, documentButton);
+                    auCounter.value = parseInt(auCounter.value) + 1;
+
+                    document.getElementById(`inputField_${newIndex}`).addEventListener('input', function(event) {
+                      var selectedOption = event.target.value;
+                      var dataList = document.getElementById('dataList');
+                      var options = dataList.getElementsByTagName('option');
+                      for (var j = 0; j < options.length; j++) {
+                        if (options[j].value === selectedOption) {
+                          var auId = options[j].value;
+                          var index = parseInt(event.target.id.split('_')[1]);
+                          fetchDetails(auId, index);
+                          break;
+                        }
+                      }
+                    });
+                  }
+                }
+              });
+
+              function fetchDetails(auId, index) {
+                fetch('fetch_details_mixed.php?au_id=' + auId)
+                  .then(response => response.json()) // Convert response to JSON
+                  .then(data => {
+                    document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
+                    document.getElementById(`selectedDataDetail_${index}`).value = data.au_detail;
+                    document.getElementById(`selectedDataType_${index}`).value = data.au_type;
+                    document.getElementById(`selectedDataPrice_${index}`).value = data.au_price;
+                    document.getElementById(`unit_${index}`).value = data.unit;
+                  });
+              }
+
+              document.getElementById("submitButton").addEventListener("click", function() {
+                var auCount = parseInt(document.getElementById("auCount").value);
+                if (auCount > 0) {
+                  document.getElementById("myForm").submit();
+                  location.href = 'index.php?page=list_mixed.php';
+                } else {
+                  alert("เพิ่ม AU Count");
+                }
+              });
+            </script>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <?php $con = null; ?>
+</div>
+
+<script>
+  function confirmDelete(billId) {
+    if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
+      window.location.href = 'delete_bill.php?bill_id=' + billId;
+    }
+  }
+
+  var modal = document.getElementById("myModal");
+
+  var btn = document.getElementById("myBtn");
+
+  var span = document.getElementsByClassName("close")[0];
+
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
