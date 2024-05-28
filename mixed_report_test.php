@@ -187,29 +187,29 @@
                        var newInputFrame = document.createElement("div");
                        newInputFrame.classList.add("inputFrame");
                        newInputFrame.innerHTML = `
-                        <div class="row mt-md-3" style="margin-bottom: 1rem;">
-                            <div class="col-md-3">
-                                <h4>AU ลำดับที่ ${newIndex}</h4>
-                                <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
-                                <datalist id="dataList">
-                                    <?php foreach ($result as $row) { ?>
-                                        <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
-                                    <?php } ?>
-                                </datalist>
-                            </div>
-                            <div class="col-md-3">
-                                <h4>รายละเอียด AU</h4>
-                                <p id="selectedData_${newIndex}"></p>
-                            </div>
-                            <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
-                            <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
-                            <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
-                            <div class="col-md-3">
-                                <h4>จำนวน</h4>
-                                <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
-                            </div>
-                        </div>
-                      `;
+          <div class="row mt-md-3" style="margin-bottom: 1rem;">
+              <div class="col-md-3">
+                  <h4>AU ลำดับที่ ${newIndex}</h4>
+                  <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
+                  <datalist id="dataList">
+                      <?php foreach ($result as $row) { ?>
+                          <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
+                      <?php } ?>
+                  </datalist>
+              </div>
+              <div class="col-md-3">
+                  <h4>รายละเอียด AU</h4>
+                  <p id="selectedData_${newIndex}"></p>
+              </div>
+              <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
+              <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
+              <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
+              <div class="col-md-3">
+                  <h4>จำนวน</h4>
+                  <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
+              </div>
+          </div>
+        `;
                        inputFields.insertBefore(newInputFrame, documentButton);
                        auCounter.value = parseInt(auCounter.value) + 1;
 
@@ -246,9 +246,17 @@
                    var auIds = document.querySelectorAll('input[name="inputField[]"]');
                    var auIdValues = Array.from(auIds).map(input => input.value);
                    var duplicates = auIdValues.filter((item, index) => auIdValues.indexOf(item) !== index);
+                   var duplicateIndices = [];
 
                    if (duplicates.length > 0) {
-                     alert("มี AU ID ชื่อ " + duplicates + " ซ้ำกัน กรุณาตรวจสอบและแก้ไข");
+                     duplicates.forEach(duplicate => {
+                       auIdValues.forEach((id, index) => {
+                         if (id === duplicate) {
+                           duplicateIndices.push(index + 1);
+                         }
+                       });
+                     });
+                     alert("มี AU ID ซ้ำกันที่ลำดับ: " + duplicateIndices.join(', ') + " กรุณาตรวจสอบและแก้ไข");
                      return true;
                    }
                    return false;
@@ -268,6 +276,7 @@
                    }
                  });
                </script>
+
              </div>
            </div>
          </div>

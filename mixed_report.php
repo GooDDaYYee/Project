@@ -68,12 +68,6 @@
 
      <!-- Form HTML -->
      <form id="myForm" action="insert_mixed.php" method="post">
-       <?php
-        if (isset($_SESSION['error_message'])) {
-          echo "<div class='alert alert-danger'>" . $_SESSION['error_message'] . "</div>";
-          unset($_SESSION['error_message']);
-        }
-        ?>
        <div class="card o-hidden border-0 shadow-lg my-5">
          <div class="card-body p-0">
            <div class="row">
@@ -239,9 +233,17 @@
                    var auIds = document.querySelectorAll('input[name="inputField[]"]');
                    var auIdValues = Array.from(auIds).map(input => input.value);
                    var duplicates = auIdValues.filter((item, index) => auIdValues.indexOf(item) !== index);
+                   var duplicateIndices = [];
 
                    if (duplicates.length > 0) {
-                     alert("มี AU ID ชื่อ " + duplicates + " ซ้ำกัน กรุณาตรวจสอบและแก้ไข");
+                     duplicates.forEach(duplicate => {
+                       auIdValues.forEach((id, index) => {
+                         if (id === duplicate) {
+                           duplicateIndices.push(index + 1);
+                         }
+                       });
+                     });
+                     alert("มี AU ID ชื่อ " + duplicates.join(', ') + ' ซ้ำกันที่ลำดับ: ' + duplicateIndices.join(', ') + " กรุณาตรวจสอบและแก้ไข");
                      return true;
                    }
                    return false;
@@ -261,6 +263,7 @@
                    }
                  });
                </script>
+
              </div>
            </div>
          </div>
@@ -269,7 +272,4 @@
      <?php $con = null; ?>
    </div>
  </div>
- <!-- End of Main Content -->
-
  </div>
- <!-- End of Content Wrapper -->
