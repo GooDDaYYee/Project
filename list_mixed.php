@@ -1,32 +1,26 @@
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
-
   <!-- Main Content -->
   <div id="content">
-
     <!-- Topbar -->
     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
       <!-- Sidebar Toggle (Topbar) -->
       <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
         <i class="fa fa-bars"></i>
       </button>
-
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
           <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา" aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group">
+          <div class="input-group-append">
             <button class="btn btn-warning bg-gradient-purple" type="button">
               <i class="fas fa-search fa-sm"></i>
             </button>
           </div>
         </div>
       </form>
-
       <!-- Topbar Navbar -->
       <ul class="navbar-nav ml-auto">
-
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
         <li class="nav-item dropdown no-arrow d-sm-none">
           <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,7 +30,7 @@
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
+            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
             <img class="img-profile rounded-circle" src="img/picture.png">
           </a>
           <!-- Dropdown - User Information -->
@@ -53,7 +47,6 @@
 
     <!-- Begin Page Content -->
     <div class="container-fluid">
-
       <!-- List table -->
       <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
@@ -82,14 +75,11 @@
               </thead>
               <?php
               include('connect.php');
-
               $strsql = "SELECT * FROM bill ORDER BY bill_id DESC";
-
               try {
                 $stmt = $con->prepare($strsql);
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
                 if (count($result) > 0) {
                   foreach ($result as $rs) {
               ?>
@@ -115,8 +105,8 @@
                         <td><?php echo number_format($rs['grand_total'], 2); ?></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-success" id="myBtn" onclick="<?php echo $rs['bill_id']; ?>">แก้ไข</button>
-                            <button type="button" class="btn btn-outline-warning">ทำเอกสาร</button>
+                            <button type="button" class="btn btn-outline-success" onclick="openEditModal('<?php echo $rs['bill_id']; ?>')">แก้ไข</button>
+                            <button type="button" class="btn btn-outline-warning" onclick="openDocumentModal('<?php echo $rs['bill_id']; ?>')">ทำเอกสาร</button>
                             <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['bill_id']; ?>')">ลบ</button>
                           </div>
                         </td>
@@ -138,11 +128,10 @@
     </div>
   </div>
 </div>
-</div>
 
-<div id="myModal" class="modal">
+<!-- Edit Modal -->
+<div id="editModal" class="modal">
   <span class="close">&times;</span>
-  <!-- Form HTML -->
   <form id="myForm" action="insert_mixed.php" method="post">
     <div class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-body p-0">
@@ -156,74 +145,54 @@
               <div class="row mt-md-3">
                 <div class="col">
                   <h4>เลขที่</h4>
-                  <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $billId; ?>" readonly>
+                  <input type="text" id="number" name="number" class="form-control form-control-user" readonly>
                 </div>
                 <div class="col">
                   <h4>วันที่ออกบิล</h4>
-                  <?php
-                  date_default_timezone_set('Asia/Bangkok');
-                  setlocale(LC_TIME, 'th_TH.UTF-8', 'th_TH');
-                  $thai_month = array(1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม", 4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน", 7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน", 10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม");
-                  $thai_month_num = (int)strftime("%m");
-                  $thai_date = strftime("%d $thai_month[$thai_month_num] %Y");
-
-                  function getThaiDate()
-                  {
-                    $currentDate = date("Y-m-d");
-                    $thaiDate = date("Y-m-d", strtotime("+543 year", strtotime($currentDate)));
-                    return $thaiDate;
-                  }
-                  $thaiDate = getThaiDate();
-                  ?>
-                  <input type="text" class="form-control" value="<?php echo $thai_date; ?>" readonly>
-                  <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
-                  <input type="hidden" name="inputField" value="&nbsp;">
-                  <input type="hidden" name="selectedDataDetail" value="&nbsp;">
-                  <input type="hidden" name="selectedDataType" value="&nbsp;">
-                  <input type="hidden" name="selectedDataPrice" value="&nbsp;">
-                  <input type="hidden" name="unit" value="&nbsp;">
+                  <input type="text" class="form-control" id="thai_date" readonly>
+                  <input type="hidden" name="thai_date" id="hidden_thai_date">
                 </div>
                 <div class="col">
                   <h4>วันที่ส่งสินค้า</h4>
-                  <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $thaiDate; ?>">
+                  <input type="date" id="thai_date_product" name="thai_date_product" class="form-control">
                 </div>
               </div>
-              <div class=" row mt-md-3">
+              <div class="row mt-md-3">
                 <div class="col-md-6">
                   <h4>เงื่อนไขการชำระเงิน</h4>
-                  <input type="text" id="payment" name="payment" class="form-control form-control-user" value="N/A">
+                  <input type="text" id="payment" name="payment" class="form-control form-control-user">
                 </div>
                 <div class="col-md-3">
                   <h4>วันครบกำหนด</h4>
-                  <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo $thaiDate; ?>">
+                  <input type="date" id="thai_due_date" name="thai_due_date" class="form-control">
                 </div>
                 <div class="col-md-3">
                   <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
-                  <input type="text" id="refer" name="refer" class="form-control form-control-user" value="-">
+                  <input type="text" id="refer" name="refer" class="form-control form-control-user">
                 </div>
               </div>
               <div class="row mt-md-3">
                 <div class="col-md-3">
                   <h4>Site</h4>
-                  <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
+                  <input type="text" id="Site" name="Site" class="form-control form-control-user">
                 </div>
                 <div class="col-md-3">
                   <h4>PR No</h4>
-                  <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                  <input type="text" id="pr" name="pr" class="form-control form-control-user">
                 </div>
                 <div class="col-md-3">
                   <h4>Work No</h4>
-                  <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="Work No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                  <input type="text" id="work_no" name="work_no" class="form-control form-control-user">
                 </div>
                 <div class="col-md-3">
                   <h4>Project</h4>
-                  <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="Project (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                  <input type="text" id="project" name="project" class="form-control form-control-user">
                 </div>
               </div>
               <div class="row mt-md-3">
                 <div class="col-md-3">
                   <h4>จำนวนAU</h4>
-                  <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
+                  <input type="number" id="numAU" name="numAU" class="form-control form-control-user" required="">
                 </div>
                 <div class="col-md-2">
                   <h4>&nbsp;</h4>
@@ -241,13 +210,11 @@
               </div>
             </div>
             <?php
-            $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ au_detail
-
+            $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'";
             try {
               $stmt = $con->prepare($strsql);
               $stmt->execute();
               $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-              $rowcount = count($result);
             } catch (PDOException $e) {
               echo "Error: " . $e->getMessage();
             }
@@ -259,11 +226,9 @@
                   var inputFields = document.querySelector(".row-md-auto");
                   var documentButton = document.querySelector(".row-md-auto button");
                   var auCounter = document.getElementById("auCount");
-
                   for (var i = 0; i < numAU; i++) {
                     var existingInputFrames = document.querySelectorAll(".inputFrame").length;
-                    var newIndex = existingInputFrames + 1; // Fixing the index increment
-
+                    var newIndex = existingInputFrames + 1;
                     var newInputFrame = document.createElement("div");
                     newInputFrame.classList.add("inputFrame");
                     newInputFrame.innerHTML = `
@@ -273,7 +238,7 @@
                               <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
                               <datalist id="dataList">
                                   <?php foreach ($result as $row) { ?>
-                                      <option value="<?php echo $row['au_id']; ?>" required=""><?php echo $row['au_id']; ?></option>
+                                      <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
                                   <?php } ?>
                               </datalist>
                           </div>
@@ -292,7 +257,6 @@
                     `;
                     inputFields.insertBefore(newInputFrame, documentButton);
                     auCounter.value = parseInt(auCounter.value) + 1;
-
                     document.getElementById(`inputField_${newIndex}`).addEventListener('input', function(event) {
                       var selectedOption = event.target.value;
                       var dataList = document.getElementById('dataList');
@@ -312,7 +276,7 @@
 
               function fetchDetails(auId, index) {
                 fetch('fetch_details_mixed.php?au_id=' + auId)
-                  .then(response => response.json()) // Convert response to JSON
+                  .then(response => response.json())
                   .then(data => {
                     document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
                     document.getElementById(`selectedDataDetail_${index}`).value = data.au_detail;
@@ -326,7 +290,6 @@
                 var auCount = parseInt(document.getElementById("auCount").value);
                 if (auCount > 0) {
                   document.getElementById("myForm").submit();
-                  location.href = 'index.php?page=list_mixed.php';
                 } else {
                   alert("เพิ่ม AU Count");
                 }
@@ -341,6 +304,26 @@
   <?php $con = null; ?>
 </div>
 
+<!-- Modal for Document Options -->
+<div id="documentModal" class="modal">
+  <span class="close">&times;</span>
+  <div class="modal-content">
+    <form id="documentForm" action="export_pdf/pdf_mixed.php" method="post">
+      <h2>เลือกประเภทเอกสาร</h2>
+      <input type="hidden" id="billId" name="billId" value="<?php echo $rs['bill_id']; ?>">
+      <div class="form-group">
+        <label for="documentType">ประเภทเอกสาร:</label>
+        <select id="documentType" name="documentType" class="form-control">
+          <option value="quotation">ใบเสนอราคา</option>
+          <option value="invoice">ใบแจ้งหนี้</option>
+          <option value="receipt">ใบเสร็จรับเงิน</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-warning bg-gradient-purple ml-auto">สร้างเอกสาร</button>
+    </form>
+  </div>
+</div>
+
 <script>
   function confirmDelete(billId) {
     if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
@@ -348,23 +331,53 @@
     }
   }
 
-  var modal = document.getElementById("myModal");
+  var documentModal = document.getElementById("documentModal");
+  var editModal = document.getElementById("editModal");
+  var spanDocument = documentModal.getElementsByClassName("close")[0];
+  var spanEdit = editModal.getElementsByClassName("close")[0];
 
-  var btn = document.getElementById("myBtn");
-
-  var span = document.getElementsByClassName("close")[0];
-
-  btn.onclick = function() {
-    modal.style.display = "block";
+  function openDocumentModal(billId) {
+    document.getElementById("billId").value = billId;
+    documentModal.style.display = "block";
   }
 
-  span.onclick = function() {
-    modal.style.display = "none";
+  spanDocument.onclick = function() {
+    documentModal.style.display = "none";
+  }
+
+  spanEdit.onclick = function() {
+    editModal.style.display = "none";
   }
 
   window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (event.target == documentModal) {
+      documentModal.style.display = "none";
+    } else if (event.target == editModal) {
+      editModal.style.display = "none";
     }
+  }
+
+  function openEditModal(billId) {
+    fetch('fetch_bill.php?bill_id=' + billId)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("number").value = data.bill_id;
+        document.getElementById("thai_date").value = data.bill_date;
+        document.getElementById("hidden_thai_date").value = data.bill_date;
+        document.getElementById("payment").value = data.payment_terms;
+        document.getElementById("thai_due_date").value = data.due_date;
+        document.getElementById("refer").value = data.reference_number;
+        document.getElementById("Site").value = data.bill_site;
+        document.getElementById("pr").value = data.pr_no;
+        document.getElementById("work_no").value = data.work_no;
+        document.getElementById("project").value = data.project_name;
+        document.getElementById("numAU").value = data.au_count;
+      });
+    editModal.style.display = "block";
+  }
+
+  function submitDocumentForm() {
+    var form = document.getElementById('documentForm');
+    form.submit();
   }
 </script>

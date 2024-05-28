@@ -53,7 +53,7 @@
     .modal {
       display: none;
       position: fixed;
-      z-index: 1;
+      padding-top: 60px;
       left: 0;
       top: 0;
       width: 100%;
@@ -65,10 +65,9 @@
 
     .modal-content {
       background-color: #fefefe;
-      margin: 15% auto;
+      margin: 5% auto;
       padding: 20px;
       border: 1px solid #888;
-      height: 100%;
       width: 80%;
     }
 
