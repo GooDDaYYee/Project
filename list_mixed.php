@@ -106,7 +106,7 @@
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success" onclick="openEditModal('<?php echo $rs['bill_id']; ?>')">แก้ไข</button>
-                            <button type="button" class="btn btn-outline-warning" onclick="openDocumentModal('<?php echo $rs['bill_id']; ?>')">ทำเอกสาร</button>
+                            <button type="button" class="btn btn-outline-warning" onclick="openDocumentModal('<?php echo $rs['bill_id']; ?>')">PDF</button>
                             <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['bill_id']; ?>')">ลบ</button>
                           </div>
                         </td>
@@ -308,7 +308,7 @@
 <div id="documentModal" class="modal">
   <span class="close">&times;</span>
   <div class="modal-content">
-    <form id="documentForm" action="export_pdf/pdf_mixed.php" method="post">
+    <form id="documentForm" action="export_pdf/pdf_mixed.php" target="_blank" method="post">
       <h2>เลือกประเภทเอกสาร</h2>
       <input type="hidden" id="billId" name="billId" value="<?php echo $rs['bill_id']; ?>">
       <div class="form-group">
