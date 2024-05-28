@@ -146,6 +146,73 @@ if (isset($_POST['billId'])) {
             $pdf->SetXY(75, 68.7);
             $pdf->Cell(48, 8, iconv('utf-8', 'cp874', $bill['bill_pr']), 0, 1, 'L');
 
+            $strsql = "SELECT * FROM bill_detail b INNER JOIN au_all a ON b.au_id = a.au_id WHERE b.bill_id = ?";
+            $stmt = $con->prepare($strsql);
+            $stmt->execute([$billId]);
+            $bill_details = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $pdf->SetFont('THSarabun', '', 9.4);
+
+            $x = 0;
+            for ($i = 0; $i < $list; $i += 5.25) {
+                $pdf->SetXY(42, 87.4 + $i);
+                if (isset($bill_details[$x]['au_detail'])) {
+                    $trimmedText = trim(iconv('utf-8', 'cp874', $bill_details[$x]['au_detail']));
+                    $textWidth = mb_strwidth($trimmedText);
+                    if ($textWidth > 88) {
+                        $shortenedText = mb_substr($trimmedText, 0, 88);
+                    } else {
+                        $shortenedText = $trimmedText;
+                    }
+                    $pdf->Cell(88, 8, $shortenedText, 0, 1);
+                } else {
+                    $pdf->Cell(88, 8, '', 0, 1, 'C');
+                }
+                $x++;
+            }
+
+            $pdf->SetFont('THSarabun', '', 12);
+            $num = 1;
+            $sum = 0;
+            $x = 0;
+            for ($i = 0; $i < $list; $i += 5.25) {
+                if (isset($bill_details[$x]['price'])) {
+                    $formatted_unit1 = number_format($bill_details[$x]['au_price'], 2);
+                    $formatted_unit2 = number_format($bill_details[$x]['unit'], 2);
+                    $pdf->SetXY(8.6, 87.4 + $i);
+                    $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+                    $pdf->SetXY(18.5, 87.4 + $i);
+                    $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $bill_details[$x]['au_id']), 0, 1, 'C');
+                    $pdf->SetXY(171.3, 87.4 + $i);
+                    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+                    $pdf->SetXY(154, 87.4 + $i);
+                    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+                    $pdf->SetXY(192.5, 87.4 + $i);
+                    $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill_details[$x]['price'], 2)), 0, 1, 'R');
+                    $pdf->SetXY(132, 87.4 + $i);
+                    $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $bill_details[$x]['au_type']), 0, 1, 'C');
+                } else {
+                    $pdf->Cell(0, 8, '', 0, 1, 'C');
+                }
+                $x++;
+            }
+
+            $pdf->SetFont('THSarabun', 'B', 12);
+            $pdf->SetXY(192.5, 167.4);
+            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['total_amount'], 2)), 0, 1, 'R');
+            $pdf->SetXY(192.5, 179.5);
+            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['total_amount'], 2)), 0, 1, 'R');
+            $pdf->SetXY(192.5, 186);
+            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['total_amount'], 2)), 0, 1, 'R');
+            $pdf->SetXY(192.5, 192.5);
+            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['vat'], 2)), 0, 1, 'R');
+            $pdf->SetXY(192.5, 210.5);
+            $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['grand_total'], 2)), 0, 1, 'R');
+
+            $pdf->SetFont('THSarabun', '', 12);
+            $pdf->SetXY(6.5, 213);
+            $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'], 2)), 0, 1, 'C');
+
             $pdf->Output('I', 'created_pdf.pdf');
         } else {
             echo "Bill not found.";

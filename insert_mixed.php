@@ -8,18 +8,6 @@ function checkDuplicates($array)
 
 try {
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $auIds = $_POST['inputField'];
-
-    if (checkDuplicates($auIds)) {
-        // If duplicates are found, set a session variable with an error message and redirect back to the form
-        session_start();
-        $_SESSION['error_message'] = 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข';
-        header("Location: index.php?page=mixed_report");
-        exit();
-    }
-
-    // Proceed with the transaction if no duplicates are found
     $con->beginTransaction();
 
     $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total) 

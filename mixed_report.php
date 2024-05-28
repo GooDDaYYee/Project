@@ -132,7 +132,7 @@
                  <div class="row mt-md-3">
                    <div class="col-md-3">
                      <h4>จำนวนAU</h4>
-                     <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
+                     <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required=" ">
                    </div>
                    <div class="col-md-2">
                      <h4>&nbsp;</h4>
@@ -249,14 +249,6 @@
                    return false;
                  }
 
-                 document.getElementById("submitButton").addEventListener("click", function(event) {
-                   if (checkDuplicates()) {
-                     event.preventDefault();
-                   } else {
-                     document.getElementById("myForm").submit();
-                   }
-                 });
-
                  document.getElementById("myForm").addEventListener("submit", function(event) {
                    if (checkDuplicates()) {
                      event.preventDefault();
@@ -272,4 +264,7 @@
      <?php $con = null; ?>
    </div>
  </div>
+ <!-- End of Main Content -->
+
  </div>
+ <!-- End of Content Wrapper -->
