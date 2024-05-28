@@ -72,10 +72,9 @@
                 <tr>
                   <th scope="col">ลำดับ</th>
                   <th scope="col">ชื่อผู้ใช้</th>
-                  <th scope="col">รหัสผ่าน</th>
                   <th scope="col">ชื่อ</th>
                   <th scope="col">นามสกุล</th>
-                  <th scope="col">เลเวล</th>
+                  <th scope="col">ประเภทผู้ใช้</th>
                   <th scope="col">สถานะ</th>
                   <th scope="col"></th>
                 </tr>
@@ -91,17 +90,29 @@
                 $rowcount = count($result);
 
                 if ($rowcount > 0) {
+                  $i = 1;
                   foreach ($result as $rs) { //สร้างตัวแปร $rs มารับค่าจากการ fetch array
               ?>
                     <tbody>
                       <tr>
-                        <th scope="row"><?php echo $rs['Id']; ?></th>
+                        <th scope="row"><?php echo $i; ?></th>
                         <td><?php echo $rs['username']; ?></td>
-                        <td><?php echo $rs['passW']; ?></td>
                         <td><?php echo $rs['name']; ?></td>
                         <td><?php echo $rs['lastname']; ?></td>
-                        <td><?php echo $rs['lv']; ?></td>
-                        <td><?php echo $rs['status']; ?></td>
+                        <td><?php
+                            if ($rs['lv'] == 0) {
+                              echo "แอดมิน";
+                            } elseif ($rs['lv'] == 1) {
+                              echo "ผู้ใช้";
+                            }
+                            ?></td>
+                        <td><?php
+                            if ($rs['status'] == 0) {
+                              echo "แบน";
+                            } elseif ($rs['status'] == 1) {
+                              echo "ปกติ";
+                            }
+                            ?></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success">แก้ไข</button>
@@ -111,6 +122,7 @@
                       </tr>
                     </tbody>
               <?php
+                    $i++;
                   }
                 } else {
                   echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
