@@ -19,7 +19,7 @@ if ($page == 'home') {
     include_once("list_mixed.php");
 } elseif ($page == 'mixed_report') {
     include_once("mixed_report.php");
+} else {
+    include_once("home.php");
 }
-
-
 include_once("footer.php");

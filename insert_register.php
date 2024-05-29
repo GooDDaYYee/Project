@@ -31,6 +31,8 @@ try {
             </script>
         ';
     }
+    header("Location: index.php?page=manage_user");
+    exit();
 } catch (PDOException $e) {
     echo '<script>
         alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");

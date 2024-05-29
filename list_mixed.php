@@ -129,10 +129,30 @@
   </div>
 </div>
 
+<!-- Modal for Document Options -->
+<div id="documentModal" class="modal">
+  <span class="close">&times;</span>
+  <div class="modal-content">
+    <form id="documentForm" action="export_pdf/pdf_mixed.php" target="_blank" method="post">
+      <h2>เลือกประเภทเอกสาร</h2>
+      <input type="hidden" id="billId" name="billId" value="<?php echo $rs['bill_id']; ?>">
+      <div class="form-group">
+        <label for="documentType">ประเภทเอกสาร:</label>
+        <select id="documentType" name="documentType" class="form-control">
+          <option value="quotation">ใบเสนอราคา</option>
+          <option value="invoice">ใบแจ้งหนี้</option>
+          <option value="receipt">ใบเสร็จรับเงิน</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-warning bg-gradient-purple ml-auto">สร้างเอกสาร</button>
+    </form>
+  </div>
+</div>
+
 <!-- Edit Modal -->
 <div id="editModal" class="modal">
   <span class="close">&times;</span>
-  <form id="myForm" action="insert_mixed.php" method="post">
+  <form id="myForm" action="insert_mixed.php" method="POST">
     <div class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-body p-0">
         <div class="row">
@@ -145,26 +165,26 @@
               <div class="row mt-md-3">
                 <div class="col">
                   <h4>เลขที่</h4>
-                  <input type="text" id="number" name="number" class="form-control form-control-user" readonly>
+                  <input type="text" id="bill_Id" name="bill_Id" class="form-control form-control-user" value="<?php echo $rs['bill_id']; ?>" readonly>
                 </div>
                 <div class="col">
                   <h4>วันที่ออกบิล</h4>
-                  <input type="text" class="form-control" id="thai_date" readonly>
+                  <input type="date" class="form-control" id="thai_date" value="<?php echo $rs['bill_date']; ?>">
                   <input type="hidden" name="thai_date" id="hidden_thai_date">
                 </div>
                 <div class="col">
                   <h4>วันที่ส่งสินค้า</h4>
-                  <input type="date" id="thai_date_product" name="thai_date_product" class="form-control">
+                  <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $rs['bill_date_product']; ?>">
                 </div>
               </div>
-              <div class="row mt-md-3">
+              <div class=" row mt-md-3">
                 <div class="col-md-6">
                   <h4>เงื่อนไขการชำระเงิน</h4>
-                  <input type="text" id="payment" name="payment" class="form-control form-control-user">
+                  <input type="text" id="payment" name="payment" class="form-control form-control-user" value="<?php echo $rs['bill_payment']; ?>">
                 </div>
                 <div class="col-md-3">
                   <h4>วันครบกำหนด</h4>
-                  <input type="date" id="thai_due_date" name="thai_due_date" class="form-control">
+                  <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo $rs['bill_due_date']; ?>">
                 </div>
                 <div class="col-md-3">
                   <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
@@ -205,20 +225,10 @@
               </div>
               <div class="row-md-auto mt-md-3">
                 <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit' id="submitButton">
-                  <h5>เพิ่มข้อมูล</h5>
+                  <h5>แก้ไขบิล</h5>
                 </button>
               </div>
             </div>
-            <?php
-            $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'";
-            try {
-              $stmt = $con->prepare($strsql);
-              $stmt->execute();
-              $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } catch (PDOException $e) {
-              echo "Error: " . $e->getMessage();
-            }
-            ?>
             <script>
               document.getElementById("addInputFrame").addEventListener("click", function() {
                 var numAU = parseInt(document.getElementById("numAU").value);
@@ -295,33 +305,12 @@
                 }
               });
             </script>
-
           </div>
         </div>
       </div>
     </div>
   </form>
   <?php $con = null; ?>
-</div>
-
-<!-- Modal for Document Options -->
-<div id="documentModal" class="modal">
-  <span class="close">&times;</span>
-  <div class="modal-content">
-    <form id="documentForm" action="export_pdf/pdf_mixed.php" target="_blank" method="post">
-      <h2>เลือกประเภทเอกสาร</h2>
-      <input type="hidden" id="billId" name="billId" value="<?php echo $rs['bill_id']; ?>">
-      <div class="form-group">
-        <label for="documentType">ประเภทเอกสาร:</label>
-        <select id="documentType" name="documentType" class="form-control">
-          <option value="quotation">ใบเสนอราคา</option>
-          <option value="invoice">ใบแจ้งหนี้</option>
-          <option value="receipt">ใบเสร็จรับเงิน</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-warning bg-gradient-purple ml-auto">สร้างเอกสาร</button>
-    </form>
-  </div>
 </div>
 
 <script>
@@ -357,22 +346,8 @@
     }
   }
 
-  function openEditModal(billId) {
-    fetch('fetch_bill.php?bill_id=' + billId)
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("number").value = data.bill_id;
-        document.getElementById("thai_date").value = data.bill_date;
-        document.getElementById("hidden_thai_date").value = data.bill_date;
-        document.getElementById("payment").value = data.payment_terms;
-        document.getElementById("thai_due_date").value = data.due_date;
-        document.getElementById("refer").value = data.reference_number;
-        document.getElementById("Site").value = data.bill_site;
-        document.getElementById("pr").value = data.pr_no;
-        document.getElementById("work_no").value = data.work_no;
-        document.getElementById("project").value = data.project_name;
-        document.getElementById("numAU").value = data.au_count;
-      });
+  function openEditModal(bill_Id) {
+    document.getElementById("bill_Id").value = bill_Id;
     editModal.style.display = "block";
   }
 
