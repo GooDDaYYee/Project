@@ -139,6 +139,10 @@
                      <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
                    </div>
                    <div class="col-md-2">
+                     <h4>&nbsp;</h4>
+                     <button type="button" id="removeInputFrame" name="removeInputFrame" class="btn btn-danger bg-gradient-red btn-user btn-block">ลบ AU</button>
+                   </div>
+                   <div class="col-md-2">
                      <h4>จำนวน AU ที่เพิ่ม</h4>
                      <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
                    </div>
@@ -175,26 +179,26 @@
                        newInputFrame.classList.add("inputFrame");
                        newInputFrame.innerHTML = `
                         <div class="row mt-md-3" style="margin-bottom: 1rem;">
-                            <div class="col-md-3">
-                                <h4>AU ลำดับที่ ${newIndex}</h4>
-                                <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
-                                <datalist id="dataList">
-                                    <?php foreach ($result as $row) { ?>
-                                        <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
-                                    <?php } ?>
-                                </datalist>
-                            </div>
-                            <div class="col-md-3">
-                                <h4>รายละเอียด AU</h4>
-                                <p id="selectedData_${newIndex}"></p>
-                            </div>
-                            <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
-                            <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
-                            <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
-                            <div class="col-md-3">
-                                <h4>จำนวน</h4>
-                                <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
-                            </div>
+                          <div class="col-md-3">
+                            <h4>AU ลำดับที่ ${newIndex}</h4>
+                            <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
+                            <datalist id="dataList">
+                              <?php foreach ($result as $row) { ?>
+                                <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
+                              <?php } ?>
+                            </datalist>
+                          </div>
+                          <div class="col-md-3">
+                            <h4>รายละเอียด AU</h4>
+                            <p id="selectedData_${newIndex}"></p>
+                          </div>
+                          <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
+                          <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
+                          <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
+                          <div class="col-md-3">
+                            <h4>จำนวน</h4>
+                            <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
+                          </div>
                         </div>
                       `;
                        inputFields.insertBefore(newInputFrame, documentButton);
@@ -214,6 +218,16 @@
                          }
                        });
                      }
+                   }
+                 });
+
+                 document.getElementById("removeInputFrame").addEventListener("click", function() {
+                   var inputFrames = document.querySelectorAll(".inputFrame");
+                   if (inputFrames.length > 0) {
+                     var lastInputFrame = inputFrames[inputFrames.length - 1];
+                     lastInputFrame.parentNode.removeChild(lastInputFrame);
+                     var auCounter = document.getElementById("auCount");
+                     auCounter.value = parseInt(auCounter.value) - 1;
                    }
                  });
 
