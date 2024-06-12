@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$user = $_POST['input_username'];
+$users = $_POST['input_username'];
 $pass = $_POST['input_password'];
 
 $servername = "localhost";
@@ -18,11 +18,11 @@ if (!$con) {
 }
 
 // Prepare SQL statement
-$sql = "SELECT * FROM user WHERE status='1' AND username=?";
+$sql = "SELECT * FROM users WHERE status='1' AND username=?";
 
 // Prepare and bind
 $stmt = mysqli_prepare($con, $sql);
-mysqli_stmt_bind_param($stmt, "s", $user);
+mysqli_stmt_bind_param($stmt, "s", $users);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 

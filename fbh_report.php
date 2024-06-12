@@ -33,24 +33,24 @@
 
       // ดึงลำดับบิลล่าสุดจากฐานข้อมูล
       try {
-        $stmt = $con->prepare("SELECT bill_id FROM bill ORDER BY bill_id DESC LIMIT 1");
+        $stmt = $con->prepare("SELECT bill_id FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC LIMIT 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
           // แยกข้อมูลปีและลำดับบิลจาก bill_id ล่าสุด
           $lastBillId = $result['bill_id'];
-          preg_match('/(\d{2})\/(\d+)$/', $lastBillId, $matches);
+          preg_match('/(\d{4})\/(\d+)$/', $lastBillId, $matches);
           $lastYear = $matches[1];
           $lastNumber = intval($matches[2]);
         } else {
           // ถ้าไม่มีบิลในฐานข้อมูล ให้ตั้งค่าเริ่มต้น
-          $lastYear = date('y') + 43; // ปีพุทธศักราช 2 หลักสุดท้าย
+          $lastYear = date('Y') + 543; // ปีพุทธศักราช 4 หลักเต็ม
           $lastNumber = 0;
         }
 
         // คำนวณปีปัจจุบันและลำดับบิลใหม่
-        $currentYear = (date('Y') + 543) % 100; // ปีพุทธศักราช 2 หลักสุดท้าย
+        $currentYear = date('Y') + 543; // ปีพุทธศักราช 4 หลักเต็ม
         if ($currentYear != $lastYear) {
           // ถ้าปีเปลี่ยน ให้เริ่มลำดับบิลใหม่
           $newNumber = 1;
@@ -58,29 +58,22 @@
           // ถ้าเป็นปีเดียวกัน ให้เพิ่มลำดับบิล
           $newNumber = $lastNumber + 1;
         }
-
         // สร้างเลขบิลใหม่ตามรูปแบบที่ต้องการ
-        $newBillId = sprintf("PSNK/MIXED/%02d/%03d", $currentYear, $newNumber);
+        $newBillId = sprintf("PS%04d/%03d", $currentYear, $newNumber);
       } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
       }
       ?>
 
      <!-- Form HTML -->
-     <form id="myForm" action="insert_mixed.php" method="post">
-       <?php
-        if (isset($_SESSION['error_message'])) {
-          echo "<div class='alert alert-danger'>" . $_SESSION['error_message'] . "</div>";
-          unset($_SESSION['error_message']);
-        }
-        ?>
+     <form id="myForm" action="insert_bill.php" method="post">
        <div class="card o-hidden border-0 shadow-lg my-5">
          <div class="card-body p-0">
            <div class="row">
              <div class="col-lg">
                <div class="p-5">
                  <div class="text-center">
-                   <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท Mixed</h1>
+                   <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
                  </div>
                  <hr class="user">
                  <div class="row mt-md-3">
@@ -92,18 +85,12 @@
                      <h4>วันที่ออกบิล</h4>
                      <?php
                       date_default_timezone_set('Asia/Bangkok');
-                      $thai_month = array(
-                        1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
-                        4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
-                        7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
-                        10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
-                      );
-                      $thai_month_num = date('n');
-                      $thai_date = date('d') . ' ' . $thai_month[$thai_month_num] . ' ' . (date('Y') + 543);
+                      $thai_date = date('d/m/') . (date('Y') + 543);
                       $thaiDate = date("Y-m-d", strtotime("+543 year", strtotime(date("Y-m-d"))));
                       ?>
                      <input type="text" class="form-control" value="<?php echo $thai_date; ?>" readonly>
                      <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
+                     <input type="hidden" name="company" value="FBH">
                    </div>
                    <div class="col">
                      <h4>วันที่ส่งสินค้า</h4>
@@ -145,11 +132,15 @@
                  <div class="row mt-md-3">
                    <div class="col-md-3">
                      <h4>จำนวนAU</h4>
-                     <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required="">
+                     <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required=" ">
                    </div>
                    <div class="col-md-2">
                      <h4>&nbsp;</h4>
                      <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
+                   </div>
+                   <div class="col-md-2">
+                     <h4>&nbsp;</h4>
+                     <button type="button" id="removeInputFrame" name="removeInputFrame" class="btn btn-danger bg-gradient-red btn-user btn-block">ลบ AU</button>
                    </div>
                    <div class="col-md-2">
                      <h4>จำนวน AU ที่เพิ่ม</h4>
@@ -163,7 +154,7 @@
                  </div>
                </div>
                <?php
-                $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'";
+                $strsql = "SELECT * FROM au_all WHERE au_company = 'FBH'";
                 try {
                   $stmt = $con->prepare($strsql);
                   $stmt->execute();
@@ -187,29 +178,29 @@
                        var newInputFrame = document.createElement("div");
                        newInputFrame.classList.add("inputFrame");
                        newInputFrame.innerHTML = `
-          <div class="row mt-md-3" style="margin-bottom: 1rem;">
-              <div class="col-md-3">
-                  <h4>AU ลำดับที่ ${newIndex}</h4>
-                  <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
-                  <datalist id="dataList">
-                      <?php foreach ($result as $row) { ?>
-                          <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
-                      <?php } ?>
-                  </datalist>
-              </div>
-              <div class="col-md-3">
-                  <h4>รายละเอียด AU</h4>
-                  <p id="selectedData_${newIndex}"></p>
-              </div>
-              <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
-              <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
-              <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
-              <div class="col-md-3">
-                  <h4>จำนวน</h4>
-                  <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
-              </div>
-          </div>
-        `;
+                        <div class="row mt-md-3" style="margin-bottom: 1rem;">
+                          <div class="col-md-3">
+                            <h4>AU ลำดับที่ ${newIndex}</h4>
+                            <input list="dataList" id="inputField_${newIndex}" name="inputField[]" class="form-control" required="">
+                            <datalist id="dataList">
+                              <?php foreach ($result as $row) { ?>
+                                <option value="<?php echo $row['au_id']; ?>"><?php echo $row['au_id']; ?></option>
+                              <?php } ?>
+                            </datalist>
+                          </div>
+                          <div class="col-md-3">
+                            <h4>รายละเอียด AU</h4>
+                            <p id="selectedData_${newIndex}"></p>
+                          </div>
+                          <input type="hidden" id="selectedDataDetail_${newIndex}" name="selectedDataDetail[]">
+                          <input type="hidden" id="selectedDataType_${newIndex}" name="selectedDataType[]">
+                          <input type="hidden" id="selectedDataPrice_${newIndex}" name="selectedDataPrice[]">
+                          <div class="col-md-3">
+                            <h4>จำนวน</h4>
+                            <input type="number" id="unit_${newIndex}" name="unit[]" class="form-control form-control-user" required="">
+                          </div>
+                        </div>
+                      `;
                        inputFields.insertBefore(newInputFrame, documentButton);
                        auCounter.value = parseInt(auCounter.value) + 1;
 
@@ -230,8 +221,18 @@
                    }
                  });
 
+                 document.getElementById("removeInputFrame").addEventListener("click", function() {
+                   var inputFrames = document.querySelectorAll(".inputFrame");
+                   if (inputFrames.length > 0) {
+                     var lastInputFrame = inputFrames[inputFrames.length - 1];
+                     lastInputFrame.parentNode.removeChild(lastInputFrame);
+                     var auCounter = document.getElementById("auCount");
+                     auCounter.value = parseInt(auCounter.value) - 1;
+                   }
+                 });
+
                  function fetchDetails(auId, index) {
-                   fetch('fetch_details_mixed.php?au_id=' + auId)
+                   fetch('fetch_bill_details.php?au_id=' + auId)
                      .then(response => response.json())
                      .then(data => {
                        document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
@@ -256,23 +257,15 @@
                          }
                        });
                      });
-                     alert("มี AU ID ซ้ำกันที่ลำดับ: " + duplicateIndices.join(', ') + " กรุณาตรวจสอบและแก้ไข");
+                     alert("มี AU ID ชื่อ " + duplicates.join(', ') + ' ซ้ำกันที่ลำดับ: ' + duplicateIndices.join(', ') + " กรุณาตรวจสอบและแก้ไข");
                      return true;
                    }
                    return false;
                  }
 
-                 document.getElementById("submitButton").addEventListener("click", function(event) {
-                   if (checkDuplicates()) {
-                     event.preventDefault(); // Prevent form submission
-                   } else {
-                     document.getElementById("myForm").submit();
-                   }
-                 });
-
                  document.getElementById("myForm").addEventListener("submit", function(event) {
                    if (checkDuplicates()) {
-                     event.preventDefault(); // Prevent form submission
+                     event.preventDefault();
                    }
                  });
                </script>

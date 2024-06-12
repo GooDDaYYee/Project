@@ -77,7 +77,7 @@ try {
 
     $totalVat = $total * $vat;
     $totalWithholding = $total * $withholding;
-    $grand_total = $total - $totalWithholding;
+    $grand_total = $total - $totalVat;
 
     $stmtUpdateBill->bindParam(':total_amount', $total);
     $stmtUpdateBill->bindParam(':vat', $totalVat);
@@ -89,7 +89,11 @@ try {
     $con->commit();
 
     // Redirect to list_mixed.php
-    header("Location: index.php?page=list_mixed");
+    if ($_POST['company'] == "mixed") {
+        header("Location: index.php?page=list_mixed");
+    } elseif (($_POST['company'] == "FBH")) {
+        header("Location: index.php?page=list_fbh");
+    }
     exit();
 } catch (PDOException $e) {
     $con->rollBack();

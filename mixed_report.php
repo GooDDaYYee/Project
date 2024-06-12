@@ -33,7 +33,7 @@
 
       // ดึงลำดับบิลล่าสุดจากฐานข้อมูล
       try {
-        $stmt = $con->prepare("SELECT bill_id FROM bill ORDER BY bill_id DESC LIMIT 1");
+        $stmt = $con->prepare("SELECT bill_id FROM bill WHERE bill_company = 'mixed' ORDER BY bill_id DESC LIMIT 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -67,7 +67,7 @@
       ?>
 
      <!-- Form HTML -->
-     <form id="myForm" action="insert_mixed.php" method="post">
+     <form id="myForm" action="insert_bill.php" method="post">
        <div class="card o-hidden border-0 shadow-lg my-5">
          <div class="card-body p-0">
            <div class="row">
@@ -91,6 +91,7 @@
                       ?>
                      <input type="text" class="form-control" value="<?php echo $thai_date; ?>" readonly>
                      <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
+                     <input type="hidden" name="company" value="mixed">
                    </div>
                    <div class="col">
                      <h4>วันที่ส่งสินค้า</h4>
@@ -232,7 +233,7 @@
                  });
 
                  function fetchDetails(auId, index) {
-                   fetch('fetch_details_mixed.php?au_id=' + auId)
+                   fetch('fetch_bill_details.php?au_id=' + auId)
                      .then(response => response.json())
                      .then(data => {
                        document.getElementById(`selectedData_${index}`).innerText = data.au_detail;

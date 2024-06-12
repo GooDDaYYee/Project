@@ -10,8 +10,8 @@ try {
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $con->beginTransaction();
 
-    $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total) 
-                                    VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total)");
+    $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company) 
+                                    VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company)");
 
     $stmtInvoice->bindParam(':bill_id', $_POST['number']);
     $stmtInvoice->bindParam(':bill_date', $_POST['thai_date']);
@@ -24,6 +24,7 @@ try {
     $stmtInvoice->bindParam(':bill_work_no', $_POST['work_no']);
     $stmtInvoice->bindParam(':bill_project', $_POST['project']);
     $stmtInvoice->bindParam(':list_num', $_POST['auCount']);
+    $stmtInvoice->bindParam(':bill_company', $_POST['company']);
 
     // คำนวณ total_amount, vat, และ withholding
     $total = 0;
@@ -68,7 +69,12 @@ try {
     $con->commit();
 
     // Redirect to list_mixed.php
-    header("Location: index.php?page=list_mixed");
+    if ($_POST['company'] == "mixed") {
+        header("Location: index.php?page=list_mixed");
+    } elseif (($_POST['company'] == "FBH")) {
+        header("Location: index.php?page=list_fbh");
+    }
+
     exit();
 } catch (PDOException $e) {
     $con->rollBack();

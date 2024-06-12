@@ -211,16 +211,18 @@ if (isset($_POST['billId'])) {
                 if ($documentType == "quotation" || $documentType == "invoice") {
                     $pdf->SetXY(192.5, 210.5);
                     $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['grand_total'], 2)), 0, 1, 'R');
+                    $pdf->SetFont('THSarabun', '', 12);
+                    $pdf->SetXY(6.5, 213);
+                    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'], 2)), 0, 1, 'C');
                 } elseif ($documentType == "receipt") {
                     $pdf->SetXY(192.5, 199.4);
                     $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['withholding'], 2)), 0, 1, 'R');
                     $pdf->SetXY(192.5, 210.5);
                     $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['grand_total'] - $bill['withholding'], 2)), 0, 1, 'R');
+                    $pdf->SetFont('THSarabun', '', 12);
+                    $pdf->SetXY(6.5, 213);
+                    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'] - $bill['withholding'], 2)), 0, 1, 'C');
                 }
-
-                $pdf->SetFont('THSarabun', '', 12);
-                $pdf->SetXY(6.5, 213);
-                $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'] - $bill['withholding'], 2)), 0, 1, 'C');
             } elseif ($bill['list_num'] > 15) {
                 $pdf->SetFont('THSarabun', 'B', 12);
                 $pdf->SetXY(192.5, 193.8);
@@ -249,7 +251,7 @@ if (isset($_POST['billId'])) {
 
 
 
-            $pdf->Output('I', 'created_pdf.pdf');
+            $pdf->Output('I', $bill['bill_id'] . '.pdf');
         } else {
             echo "Bill not found.";
         }

@@ -10,6 +10,7 @@
 
   <title>PSNK TELECOM</title>
 
+
   <!-- Custom fonts for this template-->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -114,12 +115,12 @@
         <div id="collapseTwo" class="collapse show bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการไฟล์</a>
+            <a class="collapse-item " href="index.php?page=files">&nbsp; จัดการไฟล์</a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-file"></i> ออกเอกสาร</h6>
             <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท Mixed</a>
-            <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท FBH</a>
+            <a class="collapse-item " href="index.php?page=list_fbh">&nbsp; บริษัท FBH</a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>

@@ -7,7 +7,7 @@ $username = $_POST["username"];
 $password = $_POST["passW"];
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-$sql = "INSERT INTO user(name, lastname, username, passW) VALUES (:name, :lastname, :username, :passW)";
+$sql = "INSERT INTO users(name, lastname, username, passW) VALUES (:name, :lastname, :username, :passW)";
 
 try {
     $stmt = $con->prepare($sql);

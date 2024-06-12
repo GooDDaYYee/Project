@@ -50,19 +50,19 @@
       </ul>
     </nav>
     <!-- End of Topbar -->
+
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
       <!-- List table -->
       <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center py-3">
+        <div class="card-header py-3">
           <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-ui-checks" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
             <path fill-rule="evenodd" d="M2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646l2-2a.5.5 0 1 0-.708-.708L2.5 4.293l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0zm0 8l2-2a.5.5 0 0 0-.708-.708L2.5 12.293l-.646-.647a.5.5 0 0 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
             <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
             <path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-          </svg>&nbsp;จัดการผู้ใช้
-          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_blank')">เพิ่มผู้ใช้</button>
+          </svg>&nbsp;จัดการไฟล์
         </div>
 
         <div class="card-body">
@@ -71,17 +71,16 @@
               <thead>
                 <tr>
                   <th scope="col">ลำดับ</th>
-                  <th scope="col">ชื่อผู้ใช้</th>
                   <th scope="col">ชื่อ</th>
-                  <th scope="col">นามสกุล</th>
-                  <th scope="col">ประเภทผู้ใช้</th>
-                  <th scope="col">สถานะ</th>
+                  <th scope="col">ประเภท</th>
+                  <th scope="col">ชนิดอุปกรณ์</th>
+                  <th scope="col">จำนวน</th>
                   <th scope="col"></th>
                 </tr>
               </thead>
               <?php
               include('connect.php');
-              $strsql = "SELECT * FROM users ORDER BY user_id DESC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
+              $strsql = "SELECT * FROM detail ORDER BY Id DESC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
 
               try {
                 $stmt = $con->prepare($strsql);
@@ -90,47 +89,33 @@
                 $rowcount = count($result);
 
                 if ($rowcount > 0) {
-                  $i = 1;
                   foreach ($result as $rs) { //สร้างตัวแปร $rs มารับค่าจากการ fetch array
               ?>
                     <tbody>
                       <tr>
-                        <th scope="row"><?php echo $i; ?></th>
-                        <td><?php echo $rs['username']; ?></td>
-                        <td><?php echo $rs['name']; ?></td>
-                        <td><?php echo $rs['lastname']; ?></td>
-                        <td><?php
-                            if ($rs['lv'] == 0) {
-                              echo "แอดมิน";
-                            } elseif ($rs['lv'] == 1) {
-                              echo "ผู้ใช้";
-                            }
-                            ?></td>
-                        <td><?php
-                            if ($rs['status'] == 0) {
-                              echo "แบน";
-                            } elseif ($rs['status'] == 1) {
-                              echo "ปกติ";
-                            }
-                            ?></td>
+                        <th scope="row"><?php echo $rs['Id']; ?></th>
+                        <td><?php echo $rs['machine']; ?></td>
+                        <td><?php echo $rs['category']; ?></td>
+                        <td><?php echo $rs['type']; ?></td>
+                        <td><?php echo $rs['create_date']; ?></td>
+                        <td><?php echo $rs['']; ?></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success">แก้ไข</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['username']; ?>')">ลบ</button>
+                            <button type="button" class="btn btn-outline-warning">รายละเอียด</button>
+                            <button type="button" class="btn btn-outline-danger">ลบ</button>
                           </div>
                         </td>
                       </tr>
                     </tbody>
               <?php
-                    $i++;
                   }
                 } else {
-                  echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
+                  echo "<tr><td colspan='6'>ไม่พบข้อมูล</td></tr>";
                 }
               } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();
               }
-
               // ปิดการเชื่อมต่อฐานข้อมูล
               $con = null;
               ?>
@@ -139,16 +124,9 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
 <!-- End of Main Content -->
+
 </div>
 <!-- End of Content Wrapper -->
-<script>
-  function confirmDelete(username) {
-    if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-      window.location.href = 'delete_uasr.php?username=' + username;
-    }
-  }
-</script>

@@ -55,8 +55,8 @@
             <path fill-rule="evenodd" d="M2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646l2-2a.5.5 0 1 0-.708-.708L2.5 4.293l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0zm0 8l2-2a.5.5 0 0 0-.708-.708L2.5 12.293l-.646-.647a.5.5 0 0 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
             <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
             <path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-          </svg>&nbsp;จัดการบิลบริษัท Mixed
-          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=mixed_report', '_parent')">เพิ่มบิล</button>
+          </svg>&nbsp;จัดการบิลบริษัท FBH
+          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=fbh_report', '_parent')">เพิ่มบิล</button>
         </div>
 
         <div class="card-body">
@@ -76,7 +76,7 @@
               <tbody>
                 <?php
                 include('connect.php');
-                $strsql = "SELECT * FROM bill WHERE bill_company = 'mixed' ORDER BY bill_id DESC";
+                $strsql = "SELECT * FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC";
                 try {
                   $stmt = $con->prepare($strsql);
                   $stmt->execute();
@@ -232,7 +232,7 @@
                       <div class="col-md-3">
                         <h5>จำนวน AU ที่เพิ่ม</h5>
                         <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
-                        <input type="hidden" name="company" value="mixed">
+                        <input type="hidden" name="company" value="FBH">
                       </div>
                     </div>
                     <div class="row-md-auto mt-md-3">
@@ -242,7 +242,7 @@
                     </div>
                   </div>
                   <?php
-                  $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'";
+                  $strsql = "SELECT * FROM au_all WHERE au_company = 'FBH'";
                   try {
                     $stmt = $con->prepare($strsql);
                     $stmt->execute();
