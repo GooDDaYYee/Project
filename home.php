@@ -8,6 +8,17 @@
 			<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
 				<i class="fa fa-bars"></i>
 			</button>
+
+			<!-- Topbar Search -->
+			<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+				<div class="input-group">
+					<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+					<div class="input-group-append">
+						<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+			</form>
+
 			<!-- Topbar Navbar -->
 			<ul class="navbar-nav ml-auto">
 				<!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -16,6 +27,7 @@
 						<i class="fas fa-search fa-fw"></i>
 					</a>
 				</li>
+
 				<!-- Nav Item - User Information -->
 				<li class="nav-item dropdown no-arrow">
 					<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,7 +95,7 @@
 						</div>
 						<div class="card col-md-2 bg-primary offset-2 ml-1 float-left">
 							<div class="card-body text-white">
-								<h5><b>Files</b></h5>
+								<h5><b>ไฟล์</b></h5>
 								<hr>
 								<span class="card-icon"><i class="fa fa-file"></i></span>
 								<h3 class="text-right"><b>
@@ -95,27 +107,32 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>&nbsp;
 
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
-						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-ui-checks" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
-							<path fill-rule="evenodd" d="M2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646l2-2a.5.5 0 1 0-.708-.708L2.5 4.293l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0zm0 8l2-2a.5.5 0 0 0-.708-.708L2.5 12.293l-.646-.647a.5.5 0 0 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
-							<path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
-							<path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-						</svg>&nbsp;แชร์ไฟล์
+						<i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;แชร์ไฟล์
 					</div>
 					<div class="row mt-3 ml-3 mr-3">
-						<div class="card col-md-12">
-							<div class="card-body">
-								<table width="100%">
-									<tr>
-										<th width="20%" class="">ผู้แชร์</th>
-										<th width="30%" class="">เอกสาร</th>
-										<th width="20%" class="">วันที่</th>
-										<th width="30%" class="">รายละเอียด</th>
-									</tr>
+						<div class="col-md-12">
+							<div class="card border h-100">
+								<table width="100%" class="table-striped">
+									<thead>
+										<tr>
+											<th style="padding-top: 10px;" width="20%" scope="col">
+												<h5>ผู้แชร์</h5>
+											</th>
+											<th style="padding-top: 10px;" width="30%" scope="col">
+												<h5>เอกสาร</h5>
+											</th>
+											<th style="padding-top: 10px;" width="20%" scope="col">
+												<h5>วันที่</h5>
+											</th>
+											<th style="padding-top: 10px;" width="30%" scope="col">
+												<h5>รายละเอียด</h5>
+											</th>
+										</tr>
+									</thead>
 									<?php
 									while ($row = $files->fetch(PDO::FETCH_ASSOC)) :
 										$name = explode(' ||', $row['name']);
@@ -134,15 +151,25 @@
 											$icon = 'fa-file-excel';
 										if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
 											$icon = 'fa-file-archive';
+										if (in_array(strtolower($row['file_type']), ['kmz']))
+											$icon = 'fa fa-globe';
+										if (in_array(strtolower($row['file_type']), ['dwg']))
+											$icon = 'fa fa-cube';
+										if (in_array(strtolower($row['file_type']), ['psd']))
+											$icon = 'fa fa-scissors';
 									?>
 										<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
-											<td><i><?php echo ucwords($row['uname']) ?></i></td>
+											<td><i class="to_file"><?php echo ucwords($row['uname']) ?></i></td>
 											<td>
-												<large><span><i class="fa <?php echo $icon ?>"></i></span><b> <?php echo $name ?></b></large>
+												<span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
 												<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
 											</td>
-											<td><i><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
-											<td><i><?php echo $row['description'] ?></i></td>
+											<td><i class="to_file"><?php
+																	$timestamp = strtotime($row['date_updated']);
+																	$year_buddhist = date('Y', $timestamp) + 543;
+																	$date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
+																	echo $date_buddhist; ?></i></td>
+											<td><i class="to_file"><?php echo $row['description'] ?></i></td>
 										</tr>
 									<?php endwhile; ?>
 								</table>
@@ -194,4 +221,25 @@
 			$('#file-item').removeClass('active')
 		}
 	})
+
+	$(document).ready(function() {
+		$('#search').keyup(function() {
+			var _f = $(this).val().toLowerCase();
+			$('tbody tr').each(function() {
+				var found = false;
+				$(this).find('.to_folder, .to_file').each(function() {
+					var val = $(this).text().toLowerCase();
+					if (val.includes(_f)) {
+						found = true;
+						return false; // Exit .find() loop
+					}
+				});
+				if (found) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			});
+		});
+	});
 </script>

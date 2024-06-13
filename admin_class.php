@@ -66,7 +66,7 @@ class Action
 		extract($_POST);
 		if (empty($id)) {
 			if ($_FILES['upload']['tmp_name'] != '') {
-				$fname = strtotime(date('y-m-d H:i')) . '_' . $_FILES['upload']['name'];
+				$fname = strtotime(date("y-m-d H:i")) . '_' . $_FILES['upload']['name'];
 				$move = move_uploaded_file($_FILES['upload']['tmp_name'], 'uploads/' . $fname);
 
 				if ($move) {

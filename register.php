@@ -55,7 +55,7 @@
             </nav>
             <!-- End of Topbar -->
 
-            <form action="insert_register.php" method="post">
+            <form action="insert_register.php" id="insert_users" method="post">
                 <!-- Begin Page Content -->
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
@@ -82,7 +82,7 @@
                                     <div class="form-group">
                                         <input type="password" id="password" name="passW" class="form-control form-control-user" placeholder="Password" required="">
                                     </div>
-                                    <button class="btn btn-warning bg-gradient-purple btn-user btn-block" type="submit">
+                                    <button class="btn btn-warning bg-gradient-purple btn-user btn-block" id="insert_users" type="submit">
                                         <h5>Submit</h5>
                                     </button>
                                 </div>

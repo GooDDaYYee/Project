@@ -174,6 +174,12 @@
       cursor: pointer;
     }
 
+    .file-item:hover {
+      background: #eaeaea;
+      color: black;
+      box-shadow: 3px 3px #0000000f;
+    }
+
     a.custom-menu-list:hover,
     .file-item:hover,
     .file-item.active {
@@ -221,6 +227,7 @@
         <div id="collapseTwo" class="collapse show bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
+            <a class="collapse-item " href="index.php?page=home">&nbsp; แชร์ไฟล์</a>
             <a class="collapse-item " href="index.php?page=files">&nbsp; จัดการไฟล์</a>
           </div>
           <div class="bg-white py-2 collapse-inner rounded">
