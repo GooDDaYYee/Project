@@ -7,25 +7,14 @@ if (!$_SESSION['login']) {
 
 include_once("header.php");
 
-$page = $_GET['page'];
+$page = isset($_GET['page']) ? $_GET['page'] : 'home';
+$pageFile = $page . '.php';
 
-if ($page == 'home') {
-    include_once("home.php");
-} elseif ($page == 'files') {
-    include_once("files.php");
-} elseif ($page == 'manage_user') {
-    include_once("manage_user.php");
-} elseif ($page == 'register') {
-    include_once("register.php");
-} elseif ($page == 'list_mixed') {
-    include_once("list_mixed.php");
-} elseif ($page == 'mixed_report') {
-    include_once("mixed_report.php");
-} elseif ($page == 'list_fbh') {
-    include_once("list_fbh.php");
-} elseif ($page == 'fbh_report') {
-    include_once("fbh_report.php");
-} else {
-    include_once("home.php");
+// ตรวจสอบว่าไฟล์มีอยู่หรือไม่ หากไม่มีให้ใช้หน้า home
+if (!file_exists($pageFile)) {
+    $pageFile = 'home.php';
 }
+
+include $pageFile;
+
 include_once("footer.php");

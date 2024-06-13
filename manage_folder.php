@@ -1,11 +1,9 @@
 <?php
 include('connect.php');
 if (isset($_GET['id'])) {
-	$qry = $conn->query("SELECT * FROM folders where id=" . $_GET['id']);
-	if ($qry->num_rows > 0) {
-		foreach ($qry->fetch_array() as $k => $v) {
-			$meta[$k] = $v;
-		}
+	$qry = $con->query("SELECT * FROM folders where id=" . $_GET['id']);
+	if ($qry->rowCount() > 0) {
+		$meta = $qry->fetch(PDO::FETCH_ASSOC);
 	}
 }
 ?>
@@ -18,7 +16,6 @@ if (isset($_GET['id'])) {
 			<input type="text" name="name" id="name" value="<?php echo isset($meta['name']) ? $meta['name'] : '' ?>" class="form-control">
 		</div>
 		<div class="form-group" id="msg"></div>
-
 	</form>
 </div>
 <script>

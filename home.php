@@ -95,9 +95,9 @@
 				?>
 				<div class="row">
 					<div class="col-lg-12">
-						<div class="card col-md-4 offset-2 bg-info float-left">
+						<div class="card col-md-2 offset-2 bg-info float-left">
 							<div class="card-body text-white">
-								<h4><b>Users</b></h4>
+								<h5><b>ผู้ใช้</b></h5>
 								<hr>
 								<span class="card-icon"><i class="fa fa-users"></i></span>
 								<h3 class="text-right"><b>
@@ -108,9 +108,35 @@
 									</b></h3>
 							</div>
 						</div>
-						<div class="card col-md-4 offset-2 bg-primary ml-4 float-left">
+						<div class="card col-md-2 bg-success offset-2 ml-1 float-left">
 							<div class="card-body text-white">
-								<h4><b>Files</b></h4>
+								<h5><b>พนักงานเอกสาร</b></h5>
+								<hr>
+								<span class="card-icon"><i class="fa fa-users"></i></span>
+								<h3 class="text-right"><b>
+										<?php
+										$stmt = $con->query("SELECT * FROM employee WHERE employee_position = 'พนักงานเอกสาร'");
+										echo $stmt->rowCount();
+										?>
+									</b></h3>
+							</div>
+						</div>
+						<div class="card col-md-2 bg-warning offset-2 ml-1 float-left">
+							<div class="card-body text-white">
+								<h5><b>พนักงานปฏิบัติงาน</b></h5>
+								<hr>
+								<span class="card-icon"><i class="fa fa-users"></i></span>
+								<h3 class="text-right"><b>
+										<?php
+										$stmt = $con->query("SELECT * FROM employee WHERE employee_position = 'พนักงานปฏิบัติงาน'");
+										echo $stmt->rowCount();
+										?>
+									</b></h3>
+							</div>
+						</div>
+						<div class="card col-md-2 bg-primary offset-2 ml-1 float-left">
+							<div class="card-body text-white">
+								<h5><b>Files</b></h5>
 								<hr>
 								<span class="card-icon"><i class="fa fa-file"></i></span>
 								<h3 class="text-right"><b>

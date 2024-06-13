@@ -1,11 +1,9 @@
 <?php
 include 'connect.php';
-$qry = $conn->query("SELECT * FROM files where id=" . $_GET['id'])->fetch_array();
-
-extract($_POST);
+$qry = $con->query("SELECT * FROM files where id=" . $_GET['id'])->fetch(PDO::FETCH_ASSOC);
 
 $fname = $qry['file_path'];
-$file = ("assets/uploads/" . $fname);
+$file = ("uploads/" . $fname);
 
 header("Content-Type: " . filetype($file));
 header("Content-Length: " . filesize($file));
