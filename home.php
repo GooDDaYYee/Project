@@ -1,68 +1,15 @@
-<style>
-	.custom-menu {
-		z-index: 1000;
-		position: absolute;
-		background-color: #ffffff;
-		border: 1px solid #0000001c;
-		border-radius: 5px;
-		padding: 8px;
-		min-width: 13vw;
-	}
-
-	a.custom-menu-list {
-		width: 100%;
-		display: flex;
-		color: #4c4b4b;
-		font-weight: 600;
-		font-size: 1em;
-		padding: 1px 11px;
-	}
-
-	span.card-icon {
-		position: absolute;
-		font-size: 3em;
-		bottom: .2em;
-		color: #ffffff80;
-	}
-
-	.file-item {
-		cursor: pointer;
-	}
-
-	a.custom-menu-list:hover,
-	.file-item:hover,
-	.file-item.active {
-		background: #80808024;
-	}
-
-	/* table th,
-	td {
-		border-left: 1px solid gray;
-	} */
-
-	a.custom-menu-list span.icon {
-		width: 1em;
-		margin-right: 5px
-	}
-</style>
-
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
-
 	<!-- Main Content -->
 	<div id="content">
-
 		<!-- Topbar -->
 		<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
 			<!-- Sidebar Toggle (Topbar) -->
 			<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
 				<i class="fa fa-bars"></i>
 			</button>
-
 			<!-- Topbar Navbar -->
 			<ul class="navbar-nav ml-auto">
-
 				<!-- Nav Item - Search Dropdown (Visible Only XS) -->
 				<li class="nav-item dropdown no-arrow d-sm-none">
 					<a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -150,62 +97,68 @@
 					</div>
 				</div>
 
-				<div class="row mt-3 ml-3 mr-3">
-					<div class="card col-md-12">
-						<div class="card-body">
-							<table width="100%">
-								<tr>
-									<th width="20%" class="">Uploader</th>
-									<th width="30%" class="">Filename</th>
-									<th width="20%" class="">Date</th>
-									<th width="30%" class="">Description</th>
-								</tr>
-								<?php
-								while ($row = $files->fetch(PDO::FETCH_ASSOC)) :
-									$name = explode(' ||', $row['name']);
-									$name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
-									$img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
-									$doc_arr = array('doc', 'docx');
-									$pdf_arr = array('pdf', 'ps', 'eps', 'prn');
-									$icon = 'fa-file';
-									if (in_array(strtolower($row['file_type']), $img_arr))
-										$icon = 'fa-image';
-									if (in_array(strtolower($row['file_type']), $doc_arr))
-										$icon = 'fa-file-word';
-									if (in_array(strtolower($row['file_type']), $pdf_arr))
-										$icon = 'fa-file-pdf';
-									if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
-										$icon = 'fa-file-excel';
-									if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
-										$icon = 'fa-file-archive';
-
-								?>
-									<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
-										<td><i><?php echo ucwords($row['uname']) ?></i></td>
-										<td>
-											<large><span><i class="fa <?php echo $icon ?>"></i></span><b> <?php echo $name ?></b></large>
-											<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
-
-										</td>
-										<td><i><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
-										<td><i><?php echo $row['description'] ?></i></td>
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-ui-checks" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							<path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
+							<path fill-rule="evenodd" d="M2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646l2-2a.5.5 0 1 0-.708-.708L2.5 4.293l-.646-.647a.5.5 0 1 0-.708.708l1 1a.5.5 0 0 0 .708 0zm0 8l2-2a.5.5 0 0 0-.708-.708L2.5 12.293l-.646-.647a.5.5 0 0 0-.708.708l1 1a.5.5 0 0 0 .708 0z" />
+							<path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
+							<path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+						</svg>&nbsp;แชร์ไฟล์
+					</div>
+					<div class="row mt-3 ml-3 mr-3">
+						<div class="card col-md-12">
+							<div class="card-body">
+								<table width="100%">
+									<tr>
+										<th width="20%" class="">ผู้แชร์</th>
+										<th width="30%" class="">เอกสาร</th>
+										<th width="20%" class="">วันที่</th>
+										<th width="30%" class="">รายละเอียด</th>
 									</tr>
-
-								<?php endwhile; ?>
-							</table>
-
+									<?php
+									while ($row = $files->fetch(PDO::FETCH_ASSOC)) :
+										$name = explode(' ||', $row['name']);
+										$name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
+										$img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
+										$doc_arr = array('doc', 'docx');
+										$pdf_arr = array('pdf', 'ps', 'eps', 'prn');
+										$icon = 'fa-file';
+										if (in_array(strtolower($row['file_type']), $img_arr))
+											$icon = 'fa-image';
+										if (in_array(strtolower($row['file_type']), $doc_arr))
+											$icon = 'fa-file-word';
+										if (in_array(strtolower($row['file_type']), $pdf_arr))
+											$icon = 'fa-file-pdf';
+										if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
+											$icon = 'fa-file-excel';
+										if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
+											$icon = 'fa-file-archive';
+									?>
+										<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
+											<td><i><?php echo ucwords($row['uname']) ?></i></td>
+											<td>
+												<large><span><i class="fa <?php echo $icon ?>"></i></span><b> <?php echo $name ?></b></large>
+												<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
+											</td>
+											<td><i><?php echo date('Y/m/d h:i A', strtotime($row['date_updated'])) ?></i></td>
+											<td><i><?php echo $row['description'] ?></i></td>
+										</tr>
+									<?php endwhile; ?>
+								</table>
+							</div>
 						</div>
 					</div>
-
+					&nbsp;
 				</div>
-			</div>
-
-			<div id="menu-file-clone" style="display: none;">
-				<a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
+				<div id="menu-file-clone" style="display: none;">
+					<a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <!-- End of Main Content -->
 <script>
 	//FILE
@@ -224,26 +177,21 @@
 			left: event.pageX + "px"
 		});
 
-
 		$("div.file.custom-menu .download").click(function(e) {
 			e.preventDefault()
 			window.open('download.php?id=' + $(this).attr('data-id'))
 		})
-
-
-
 	})
+
 	$(document).bind("click", function(event) {
 		$("div.custom-menu").hide();
 		$('#file-item').removeClass('active')
-
 	});
-	$(document).keyup(function(e) {
 
+	$(document).keyup(function(e) {
 		if (e.keyCode === 27) {
 			$("div.custom-menu").hide();
 			$('#file-item').removeClass('active')
-
 		}
 	})
 </script>

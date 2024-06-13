@@ -12,7 +12,9 @@ if (isset($_GET['id'])) {
 		<input type="hidden" name="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
 		<input type="hidden" name="parent_id" value="<?php echo isset($_GET['fid']) ? $_GET['fid'] : '' ?>">
 		<div class="form-group">
-			<label for="name" class="control-label">Folder Name</label>
+			<label for="name" class="control-label">
+				<h5><b>ชื่อโฟลเดอร์</b></h5>
+			</label>
 			<input type="text" name="name" id="name" value="<?php echo isset($meta['name']) ? $meta['name'] : '' ?>" class="form-control">
 		</div>
 		<div class="form-group" id="msg"></div>

@@ -17,16 +17,18 @@ if (isset($_GET['id'])) {
 				</div>
 				<div class="custom-file">
 					<input type="file" class="custom-file-input" name="upload" id="upload" onchange="displayname(this,$(this))">
-					<label class="custom-file-label" for="upload">Choose file</label>
+					<label class="custom-file-label" for="upload">เลือกไฟล์</label>
 				</div>
 			</div>
 		<?php endif; ?>
 		<div class="form-group">
-			<label for="" class="control-label">Description</label>
+			<label for="" class="control-label">รายละเอียด</label>
 			<textarea name="description" id="" cols="30" rows="10" class="form-control"><?php echo isset($meta['description']) ? $meta['description'] : '' ?></textarea>
 		</div>
 		<div class="form-group">
-			<label for="is_public" class="control-label"><input type="checkbox" name="is_public" id="is_public" <?php echo isset($meta['is_public']) && $meta['is_public'] == 1 ? 'checked' : '' ?>><i> Share to All Users</i></label>
+			<label for="is_public" class="control-label"><input type="checkbox" name="is_public" id="is_public" <?php echo isset($meta['is_public']) && $meta['is_public'] == 1 ? 'checked' : '' ?>>
+				แชร์เอกสาร
+			</label>
 		</div>
 		<div class="form-group" id="msg"></div>
 	</form>

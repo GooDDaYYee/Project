@@ -1,53 +1,3 @@
-<style>
-  .folder-item {
-    cursor: pointer;
-  }
-
-  .folder-item:hover {
-    background: #eaeaea;
-    color: black;
-    box-shadow: 3px 3px #0000000f;
-  }
-
-  .custom-menu {
-    z-index: 1000;
-    position: absolute;
-    background-color: #ffffff;
-    border: 1px solid #0000001c;
-    border-radius: 5px;
-    padding: 8px;
-    min-width: 13vw;
-  }
-
-  a.custom-menu-list {
-    width: 100%;
-    display: flex;
-    color: #4c4b4b;
-    font-weight: 600;
-    font-size: 1em;
-    padding: 1px 11px;
-  }
-
-  .file-item {
-    cursor: pointer;
-  }
-
-  a.custom-menu-list:hover,
-  .file-item:hover,
-  .file-item.active {
-    background: #80808024;
-  }
-
-  /* table th,
-	td {
-		border-left: 1px solid gray;
-	} */
-
-  a.custom-menu-list span.icon {
-    width: 1em;
-    margin-right: 5px
-  }
-</style>
 <?php
 include 'connect.php';
 $folder_parent = isset($_GET['fid']) ? $_GET['fid'] : 0;
@@ -82,11 +32,9 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา" aria-label="Search" aria-describedby="basic-addon2">
+          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
           <div class="input-group-append">
-            <button class="btn btn-warning bg-gradient-purple" type="button">
-              <i class="fas fa-search fa-sm"></i>
-            </button>
+            <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
           </div>
         </div>
       </form>
@@ -129,46 +77,36 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <div class="container-fluid">
           <div class="col-lg-12 card-body">
-            <div id="paths">
-              <?php
-              $id = $folder_parent;
-              while ($id > 0) {
-                $path_stmt = $con->prepare("SELECT * FROM folders WHERE id = :id ORDER BY name ASC");
-                $path_stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                $path_stmt->execute();
-                $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
-                echo '<script>
+            <div class="row">
+              <div id="paths">
+                <?php
+                $id = $folder_parent;
+                while ($id > 0) {
+                  $path_stmt = $con->prepare("SELECT * FROM folders WHERE id = :id ORDER BY name ASC");
+                  $path_stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                  $path_stmt->execute();
+                  $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
+                  echo '<script>
                                     $("#paths").prepend("<a href=\"index.php?page=files&fid=' . $path['id'] . '\">' . $path['name'] . '</a>/")
                                 </script>';
-                $id = $path['parent_id'];
-              }
-              echo '<script>
+                  $id = $path['parent_id'];
+                }
+                echo '<script>
                                 $("#paths").prepend("<a href=\"index.php?page=files\">หน้าหลัก</a>/")
                             </script>';
-              ?>
-            </div>
-
-            <div class="row">
-              <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> New Folder</button>
-              <button class="btn btn-primary btn-sm ml-4" id="new_file"><i class="fa fa-upload"></i> Upload File</button>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="col-md-4 input-group offset-4">
-                  <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
-                  </div>
-                </div>
+                ?>
+              </div>
+              <div class="ml-auto">
+                <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> Add โฟลเดอร์</button>
+                <button class="btn btn-primary btn-sm" id="new_file"><i class="fa fa-upload"></i> Add ไฟล์</button>
               </div>
             </div>
+            <hr>
             <div class="row">
               <div class="col-md-12">
-                <h4><b>Folders</b></h4>
+                <h4><b>โฟลเดอร์</b></h4>
               </div>
             </div>
-            <hr>
             <div class="row">
               <?php
               foreach ($folders as $row) :
@@ -186,9 +124,9 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card-body">
                   <table width="100%">
                     <tr>
-                      <th width="40%" class="">Filename</th>
-                      <th width="20%" class="">Date</th>
-                      <th width="40%" class="">Description</th>
+                      <th width="40%" class="">ไฟล์</th>
+                      <th width="20%" class="">วันที่</th>
+                      <th width="40%" class="">รายละเอียด</th>
                     </tr>
                     <?php
                     foreach ($files as $row) :
@@ -212,6 +150,8 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $icon = 'fa fa-globe';
                       if (in_array(strtolower($row['file_type']), ['dwg']))
                         $icon = 'fa fa-cube';
+                      if (in_array(strtolower($row['file_type']), ['psd']))
+                        $icon = 'fa fa-scissors';
                     ?>
                       <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
                         <td>
@@ -275,7 +215,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     })
     $("div.custom-menu .delete").click(function(e) {
       e.preventDefault()
-      _conf("Are you sure to delete this Folder?", 'delete_folder', [$(this).attr('data-id')])
+      _conf("คุณแน่ใจที่จะลบโฟลเดอร์นี้หรือไม่?", 'delete_folder', [$(this).attr('data-id')])
     })
   })
 
@@ -304,7 +244,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     })
     $("div.file.custom-menu .delete").click(function(e) {
       e.preventDefault()
-      _conf("Are you sure to delete this file?", 'delete_file', [$(this).attr('data-id')])
+      _conf("คุณแน่ใจหรือว่าจะลบไฟล์นี้?", 'delete_file', [$(this).attr('data-id')])
     })
     $("div.file.custom-menu .download").click(function(e) {
       e.preventDefault()

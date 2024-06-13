@@ -23,25 +23,79 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
   <style>
+    /* ส่วนโหลด */
+    #preloader,
+    #preloader2 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    #preloader2 {
+      background: #ffffff82;
+    }
+
+    #preloader:before,
+    #preloader2:before {
+      content: "";
+      position: fixed;
+      top: calc(50% - 30px);
+      left: calc(50% - 30px);
+      border: 6px solid #1977cc;
+      border-top-color: #d1e6f9;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      -webkit-animation: animate-preloader 1s linear infinite;
+      animation: animate-preloader 1s linear infinite;
+    }
+
+    @-webkit-keyframes animate-preloader {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes animate-preloader {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* สิ้นสุดส่วนโหลด */
+
     .btn-warning {
-      border: 1px solid #8A2BE2;
+      border: 1px solid #8a2be2;
     }
 
     .bg-gradient-purple {
-      background-color: #8A2BE2;
+      background-color: #8a2be2;
     }
 
     .bg-gradient-purple2 {
-      background-color: #8A2BE2;
+      background-color: #8a2be2;
       padding: 10px;
-      border: 1px solid #8A2BE2;
+      border: 1px solid #8a2be2;
       border-radius: 10px;
     }
 
     body {
-      font-family: 'Mitr';
+      font-family: "Mitr";
       font-size: 16px;
-      background-color: #8A2BE2;
+      background-color: #8a2be2;
     }
 
     table {
@@ -85,6 +139,57 @@
       color: black;
       text-decoration: none;
       cursor: pointer;
+    }
+
+    .folder-item {
+      cursor: pointer;
+    }
+
+    .folder-item:hover {
+      background: #eaeaea;
+      color: black;
+      box-shadow: 3px 3px #0000000f;
+    }
+
+    .custom-menu {
+      z-index: 1000;
+      position: absolute;
+      background-color: #ffffff;
+      border: 1px solid #0000001c;
+      border-radius: 5px;
+      padding: 8px;
+      min-width: 13vw;
+    }
+
+    a.custom-menu-list {
+      width: 100%;
+      display: flex;
+      color: #4c4b4b;
+      font-weight: 600;
+      font-size: 1em;
+      padding: 1px 11px;
+    }
+
+    .file-item {
+      cursor: pointer;
+    }
+
+    a.custom-menu-list:hover,
+    .file-item:hover,
+    .file-item.active {
+      background: #80808024;
+    }
+
+    a.custom-menu-list span.icon {
+      width: 1em;
+      margin-right: 5px;
+    }
+
+    span.card-icon {
+      position: absolute;
+      font-size: 3em;
+      bottom: 0.2em;
+      color: #ffffff80;
     }
   </style>
 </head>

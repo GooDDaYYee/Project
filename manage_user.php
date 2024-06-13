@@ -62,7 +62,7 @@
             <path d="M7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1z" />
             <path fill-rule="evenodd" d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
           </svg>&nbsp;จัดการผู้ใช้
-          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_blank')">เพิ่มผู้ใช้</button>
+          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_parent')">เพิ่มผู้ใช้</button>
         </div>
 
         <div class="card-body">
@@ -81,7 +81,7 @@
               </thead>
               <?php
               include('connect.php');
-              $strsql = "SELECT * FROM users ORDER BY user_id DESC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
+              $strsql = "SELECT * FROM users ORDER BY user_id ASC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
 
               try {
                 $stmt = $con->prepare($strsql);

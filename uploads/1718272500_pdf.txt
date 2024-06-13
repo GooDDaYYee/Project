@@ -1,0 +1,62 @@
+            // $pdf->SetFont('THSarabun', '', 9.4);
+
+            // $x = 0;
+            // for ($i = 0; $i < $list; $i += 5.25) {
+            //     $pdf->SetXY(42, 87.4 + $i);
+            //     if (isset($_POST['selectedDataDetail'][$x])) {
+            //         $trimmedText = trim(iconv('utf-8', 'cp874', $_POST['selectedDataDetail'][$x]));
+            //         $textWidth = mb_strwidth($trimmedText);
+            //         if ($textWidth > 88) {
+            //             $shortenedText = mb_substr($trimmedText, 0, 88);
+            //         } else {
+            //             $shortenedText = $trimmedText;
+            //         }
+            //         $pdf->Cell(88, 8, $shortenedText, 0, 1);
+            //     } else {
+            //         $pdf->Cell(88, 8, '', 0, 1, 'C');
+            //     }
+            //     $x++;
+            // }
+
+            // $pdf->SetFont('THSarabun', '', 12);
+            // $num = 1;
+            // $sum = 0;
+            // $x = 0;
+            // for ($i = 0; $i < $list; $i += 5.25) {
+            //     if (isset($_POST['selectedDataPrice'][$x])) {
+            //         $formatted_unit1 = number_format($_POST['selectedDataPrice'][$x], 2);
+            //         $formatted_unit2 = number_format($_POST['unit'][$x], 2);
+            //         $pdf->SetXY(18.5, 87.4 + $i);
+            //         $pdf->Cell(23.5, 8, iconv('utf-8', 'cp874', $_POST['inputField'][$x]), 0, 1, 'C');
+            //         $pdf->SetXY(8.6, 87.4 + $i);
+            //         $pdf->Cell(8, 8, iconv('utf-8', 'cp874', $num++), 0, 1, 'C');
+            //         $pdf->SetXY(171.3, 87.4 + $i);
+            //         $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit1), 0, 1, 'R');
+            //         $pdf->SetXY(154, 87.4 + $i);
+            //         $pdf->Cell(13, 8, iconv('utf-8', 'cp874', $formatted_unit2), 0, 1, 'R');
+            //         $pdf->SetXY(192.5, 87.4 + $i);
+            //         $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($formatted_unit2 * $formatted_unit1, 2)), 0, 1, 'R');
+            //         $pdf->SetXY(132, 87.4 + $i);
+            //         $pdf->Cell(17, 8, iconv('utf-8', 'cp874', $_POST['selectedDataType'][$x]), 0, 1, 'C');
+            //         $sum += $formatted_unit2 * $formatted_unit1;
+            //     } else {
+            //         $pdf->Cell(0, 8, '', 0, 1, 'C');
+            //     }
+            //     $x++;
+            // }
+
+            // $pdf->SetFont('THSarabun', 'B', 12);
+            // $pdf->SetXY(192.5, 167.4);
+            // $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+            // $pdf->SetXY(192.5, 179.5);
+            // $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+            // $pdf->SetXY(192.5, 186);
+            // $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum, 2)), 0, 1, 'R');
+            // $pdf->SetXY(192.5, 192.5);
+            // $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum * 7 / 100, 2)), 0, 1, 'R');
+            // $pdf->SetXY(192.5, 210.5);
+            // $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($sum - ($sum * 7 / 100), 2)), 0, 1, 'R');
+
+            // $pdf->SetFont('THSarabun', '', 12);
+            // $pdf->SetXY(6.5, 213);
+            // $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($sum - ($sum * 7 / 100), 2)), 0, 1, 'C');
