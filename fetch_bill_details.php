@@ -31,7 +31,6 @@ function fetchDetails($con, $auId, $auCompany)
     }
 }
 
-// fetch_bill_details.php functionality
 if (isset($_GET['bill_id'])) {
     $bill_id = $_GET['bill_id'];
 
@@ -51,7 +50,7 @@ if (isset($_GET['bill_id'])) {
         $auId = $detail['au_id'];
         if ($_GET['au_company'] = 'mixed') {
             $auDetails = fetchDetails($con, $auId, 'mixed');
-        } elseif ($_GET['au_company'] = 'FBH') {
+        } else {
             $auDetails = fetchDetails($con, $auId, 'FBH');
         }
 
@@ -78,20 +77,16 @@ if (isset($_GET['bill_id'])) {
     echo json_encode($response);
 }
 
-// fetch_details_FBH.php and fetch_details_mixed.php functionality
 if (isset($_GET['au_id'])) {
     $auId = $_GET['au_id'];
-    $auCompany = isset($_GET['au_company']) ? $_GET['au_company'] : 'mixed';  // Default to 'mixed' if not provided
+    $auCompany = isset($_GET['au_company']) ? $_GET['au_company'] : 'mixed';
 
-    // Add condition for 'FBH' and 'mixed'
     if ($auCompany == 'FBH' || $auCompany == 'mixed') {
         $auDetails = fetchDetails($con, $auId, $auCompany);
         echo json_encode($auDetails);
     } else {
-        // If the au_company is neither 'FBH' nor 'mixed', handle accordingly
         echo json_encode(array('error' => 'Invalid au_company'));
     }
 }
 
-// ปิดการเชื่อมต่อฐานข้อมูล
 $con = null;

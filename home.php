@@ -12,12 +12,10 @@
 			<!-- Topbar Search -->
 			<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 				<div class="input-group">
-					<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-					<div class="input-group-append">
-						<span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
-					</div>
+					<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
 				</div>
 			</form>
+
 
 			<!-- Topbar Navbar -->
 			<ul class="navbar-nav ml-auto">
@@ -231,7 +229,7 @@
 					var val = $(this).text().toLowerCase();
 					if (val.includes(_f)) {
 						found = true;
-						return false; // Exit .find() loop
+						return false;
 					}
 				});
 				if (found) {

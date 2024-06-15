@@ -2,7 +2,6 @@
 include 'connect.php';
 $folder_parent = isset($_GET['fid']) ? $_GET['fid'] : 0;
 
-// Prepared statement to prevent SQL injection
 $stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY name ASC");
 $stmt->bindParam(':parent_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
@@ -29,10 +28,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-          <div class="input-group-append">
-            <span class="input-group-text" id="inputGroup-sizing-sm"><i class="fa fa-search"></i></span>
-          </div>
+          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
       </form>
 
@@ -218,7 +214,6 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     })
   })
 
-  //FILE
   $('.file-item').bind("contextmenu", function(event) {
     event.preventDefault();
 
@@ -278,7 +273,6 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       }
     })
   })
-  //FILE
 
   $('.file-item').click(function() {
     if ($(this).find('input.rename_file').is(':visible') == true)
@@ -304,7 +298,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
           var val = $(this).text().toLowerCase();
           if (val.includes(_f)) {
             found = true;
-            return false; // Exit .find() loop
+            return false;
           }
         });
         if (found) {

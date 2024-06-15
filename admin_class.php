@@ -23,9 +23,9 @@ class Action
 		$data = " name ='" . $name . "' ";
 		$data .= ", parent_id ='" . $parent_id . "' ";
 		if (empty($id)) {
-			$data .= ", user_id ='" . $_SESSION['login'] . "' ";
+			$data .= ", user_id ='" . $_SESSION['user_id'] . "' "; // Use user_id from session
 
-			$check = $this->db->query("SELECT * FROM folders where user_id ='" . $_SESSION['login'] . "' and name  ='" . $name . "'")->rowCount();
+			$check = $this->db->query("SELECT * FROM folders where user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "'")->rowCount();
 			if ($check > 0) {
 				return json_encode(array('status' => 2, 'msg' => 'Folder name already exist'));
 			} else {
@@ -33,7 +33,7 @@ class Action
 				if ($save) return json_encode(array('status' => 1));
 			}
 		} else {
-			$check = $this->db->query("SELECT * FROM folders where user_id ='" . $_SESSION['login'] . "' and name  ='" . $name . "' and id !=" . $id)->rowCount();
+			$check = $this->db->query("SELECT * FROM folders where user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "' and id !=" . $id)->rowCount();
 			if ($check > 0) {
 				return json_encode(array('status' => 2, 'msg' => 'Folder name already exist'));
 			} else {
@@ -79,7 +79,7 @@ class Action
 					$data = " name = '" . $file[0] . "' ";
 					$data .= ", folder_id = '" . $folder_id . "' ";
 					$data .= ", description = '" . $description . "' ";
-					$data .= ", user_id = '" . $_SESSION['login'] . "' ";
+					$data .= ", user_id = '" . $_SESSION['user_id'] . "' "; // Use user_id from session
 					$data .= ", file_type = '" . $file[1] . "' ";
 					$data .= ", file_path = '" . $fname . "' ";
 					$data .= ", is_public = " . (isset($is_public) && $is_public == 'on' ? 1 : 0);

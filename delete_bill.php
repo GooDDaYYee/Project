@@ -8,19 +8,36 @@ if (isset($_GET['bill_id'])) {
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $con->beginTransaction();
 
-        $stmtDetail = $con->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id");
-        $stmtDetail->bindParam(':bill_id', $billId);
-        $stmtDetail->execute();
-        $stmtBill = $con->prepare("DELETE FROM bill WHERE bill_id = :bill_id");
-        $stmtBill->bindParam(':bill_id', $billId);
-        $stmtBill->execute();
+        $stmtchk = $con->prepare("SELECT bill_company FROM bill WHERE bill_id = :bill_id");
+        $stmtchk->bindParam(':bill_id', $billId);
+        $stmtchk->execute();
+        $result = $stmtchk->fetch(PDO::FETCH_ASSOC);
 
-        $con->commit();
+        if ($result) {
+            $stmtDetail = $con->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id");
+            $stmtDetail->bindParam(':bill_id', $billId);
+            $stmtDetail->execute();
 
-        header("Location: index.php?page=list_mixed");
-        exit();
+            $stmtBill = $con->prepare("DELETE FROM bill WHERE bill_id = :bill_id");
+            $stmtBill->bindParam(':bill_id', $billId);
+            $stmtBill->execute();
+
+            $con->commit();
+
+            if ($result['bill_company'] === 'mixed') {
+                header("Location: index.php?page=list_mixed");
+            } else {
+                header("Location: index.php?page=list_fbh");
+            }
+            exit();
+        } else {
+            $con->rollBack();
+            echo "Error: Bill not found.";
+        }
     } catch (PDOException $e) {
-        $con->rollBack();
+        if ($con->inTransaction()) {
+            $con->rollBack();
+        }
         echo "Error: " . $e->getMessage();
     }
 

@@ -11,14 +11,10 @@
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา" aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-warning bg-gradient-purple" type="button">
-              <i class="fas fa-search fa-sm"></i>
-            </button>
-          </div>
+          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
       </form>
+
       <!-- Topbar Navbar -->
       <ul class="navbar-nav ml-auto">
         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -80,24 +76,24 @@
                     foreach ($result as $rs) {
                 ?>
                       <tr>
-                        <th scope="row"><?php echo $rs['bill_id']; ?></th>
-                        <td>
-                          <?php
-                          $timestamp = strtotime($rs['bill_date']);
-                          $thai_month = array(
-                            1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
-                            4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
-                            7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
-                            10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
-                          );
-                          $thai_month_num = date('n', $timestamp);
-                          echo date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . date('Y', $timestamp);
-                          ?>
+                        <th scope="row"><i class="to_file"><?php echo $rs['bill_id']; ?></i></th>
+                        <td><i class="to_file">
+                            <?php
+                            $timestamp = strtotime($rs['bill_date']);
+                            $thai_month = array(
+                              1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
+                              4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
+                              7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
+                              10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
+                            );
+                            $thai_month_num = date('n', $timestamp);
+                            echo date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . date('Y', $timestamp);
+                            ?></i>
                         </td>
-                        <td><?php echo $rs['bill_site']; ?></td>
-                        <td><?php echo number_format($rs['total_amount'], 2); ?></td>
-                        <td><?php echo number_format($rs['vat'], 2); ?></td>
-                        <td><?php echo number_format($rs['grand_total'], 2); ?></td>
+                        <td><i class="to_file"><?php echo $rs['bill_site']; ?></i></td>
+                        <td><i class="to_file"><?php echo number_format($rs['total_amount'], 2); ?></td>
+                        <td><i class="to_file"><?php echo number_format($rs['vat'], 2); ?></i></td>
+                        <td><i class="to_file"><?php echo number_format($rs['grand_total'], 2); ?></i></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" onclick="openEditModal('<?php echo $rs['bill_id']; ?>')">แก้ไข</button>
@@ -374,16 +370,13 @@
                           document.getElementById('project').value = data.bill_project;
                           document.getElementById('auCount').value = data.list_num;
 
-                          // Clear existing AU fields
                           const inputFields = document.querySelector('.row-md-auto');
                           while (inputFields.firstChild) {
                             inputFields.removeChild(inputFields.firstChild);
                           }
 
-                          // Add AU fields
                           addAUFields(data.list_num);
 
-                          // Fill AU fields with data
                           data.details.forEach(function(detail, index) {
                             document.getElementById(`inputField_${index + 1}`).value = detail.au_id;
                             document.getElementById(`selectedData_${index + 1}`).innerText = detail.au_detail;
@@ -460,4 +453,25 @@
       documentModal.style.display = "none";
     }
   }
+
+  $(document).ready(function() {
+    $('#search').keyup(function() {
+      var _f = $(this).val().toLowerCase();
+      $('tbody tr').each(function() {
+        var found = false;
+        $(this).find('.to_folder, .to_file').each(function() {
+          var val = $(this).text().toLowerCase();
+          if (val.includes(_f)) {
+            found = true;
+            return false;
+          }
+        });
+        if (found) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
 </script>

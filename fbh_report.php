@@ -31,34 +31,27 @@
      <?php
       include("connect.php");
 
-      // ดึงลำดับบิลล่าสุดจากฐานข้อมูล
       try {
         $stmt = $con->prepare("SELECT bill_id FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC LIMIT 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
-          // แยกข้อมูลปีและลำดับบิลจาก bill_id ล่าสุด
           $lastBillId = $result['bill_id'];
           preg_match('/(\d{4})\/(\d+)$/', $lastBillId, $matches);
           $lastYear = $matches[1];
           $lastNumber = intval($matches[2]);
         } else {
-          // ถ้าไม่มีบิลในฐานข้อมูล ให้ตั้งค่าเริ่มต้น
-          $lastYear = date('Y') + 543; // ปีพุทธศักราช 4 หลักเต็ม
+          $lastYear = date('Y') + 543;
           $lastNumber = 0;
         }
 
-        // คำนวณปีปัจจุบันและลำดับบิลใหม่
-        $currentYear = date('Y') + 543; // ปีพุทธศักราช 4 หลักเต็ม
+        $currentYear = date('Y') + 543;
         if ($currentYear != $lastYear) {
-          // ถ้าปีเปลี่ยน ให้เริ่มลำดับบิลใหม่
           $newNumber = 1;
         } else {
-          // ถ้าเป็นปีเดียวกัน ให้เพิ่มลำดับบิล
           $newNumber = $lastNumber + 1;
         }
-        // สร้างเลขบิลใหม่ตามรูปแบบที่ต้องการ
         $newBillId = sprintf("PS%04d/%03d", $currentYear, $newNumber);
       } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();

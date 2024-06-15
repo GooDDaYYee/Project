@@ -10,7 +10,6 @@
     $page = isset($_GET['page']) ? $_GET['page'] : 'home';
     $pageFile = $page . '.php';
 
-    // ตรวจสอบว่าไฟล์มีอยู่หรือไม่ หากไม่มีให้ใช้หน้า home
     if (!file_exists($pageFile)) {
         $pageFile = 'home.php';
     }

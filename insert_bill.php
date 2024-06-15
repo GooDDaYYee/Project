@@ -26,10 +26,9 @@ try {
     $stmtInvoice->bindParam(':list_num', $_POST['auCount']);
     $stmtInvoice->bindParam(':bill_company', $_POST['company']);
 
-    // คำนวณ total_amount, vat, และ withholding
     $total = 0;
-    $vat = 0.07; // 7% VAT
-    $withholding = 0.03; // 3% withholding
+    $vat = 0.07;
+    $withholding = 0.03;
 
     $stmtInvoiceItem = $con->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
@@ -37,7 +36,6 @@ try {
     for ($i = 0; $i < $auCount; $i++) {
         $auId = $_POST['inputField'][$i];
 
-        // ดึงราคา au_price จากตาราง au_all
         $stmtPrice = $con->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
         $stmtPrice->bindParam(':au_id', $auId);
         $stmtPrice->execute();
@@ -68,7 +66,6 @@ try {
 
     $con->commit();
 
-    // Redirect to list_mixed.php
     if ($_POST['company'] == "mixed") {
         header("Location: index.php?page=list_mixed");
     } elseif (($_POST['company'] == "FBH")) {

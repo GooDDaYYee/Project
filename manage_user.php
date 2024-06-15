@@ -76,7 +76,7 @@
               </thead>
               <?php
               include('connect.php');
-              $strsql = "SELECT * FROM users ORDER BY user_id ASC"; //คำสั่งให้เลือกข้อมูลจาก TABLE ชื่อ user เรียงลำดับจากมากไปน้อย
+              $strsql = "SELECT * FROM users ORDER BY user_id ASC";
 
               try {
                 $stmt = $con->prepare($strsql);
@@ -86,7 +86,7 @@
 
                 if ($rowcount > 0) {
                   $i = 1;
-                  foreach ($result as $rs) { //สร้างตัวแปร $rs มารับค่าจากการ fetch array
+                  foreach ($result as $rs) {
               ?>
                     <tbody>
                       <tr>
@@ -126,7 +126,6 @@
                 echo "Error: " . $e->getMessage();
               }
 
-              // ปิดการเชื่อมต่อฐานข้อมูล
               $con = null;
               ?>
             </table>
