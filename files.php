@@ -25,13 +25,6 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <i class="fa fa-bars"></i>
       </button>
 
-      <!-- Topbar Search -->
-      <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
-        </div>
-      </form>
-
       <!-- Topbar Navbar -->
       <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -61,6 +54,12 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       <div class="card shadow mb-4">
         <div class="card-header py-3">
           <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการไฟล์
+          <!-- Topbar Search -->
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
+            </div>
+          </form>
         </div>
 
         <div class="container-fluid">
@@ -183,72 +182,73 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
   $('#new_folder').click(function() {
-    uni_modal('', 'manage_folder.php?fid=<?php echo $folder_parent ?>')
-  })
+    uni_modal('', 'manage_folder.php?fid=<?php echo $folder_parent ?>');
+  });
   $('#new_file').click(function() {
-    uni_modal('', 'manage_files.php?fid=<?php echo $folder_parent ?>')
-  })
+    uni_modal('', 'manage_files.php?fid=<?php echo $folder_parent ?>');
+  });
   $('.folder-item').dblclick(function() {
-    location.href = 'index.php?page=files&fid=' + $(this).attr('data-id')
-  })
+    location.href = 'index.php?page=files&fid=' + $(this).attr('data-id');
+  });
   $('.folder-item').bind("contextmenu", function(event) {
     event.preventDefault();
     $("div.custom-menu").hide();
-    var custom = $("<div class='custom-menu'></div>")
-    custom.append($('#menu-folder-clone').html())
-    custom.find('.edit').attr('data-id', $(this).attr('data-id'))
-    custom.find('.delete').attr('data-id', $(this).attr('data-id'))
-    custom.appendTo("body")
+    var custom = $("<div class='custom-menu'></div>");
+    custom.append($('#menu-folder-clone').html());
+    custom.find('.edit').attr('data-id', $(this).attr('data-id'));
+    custom.find('.delete').attr('data-id', $(this).attr('data-id'));
+    custom.appendTo("body");
     custom.css({
       top: event.pageY + "px",
       left: event.pageX + "px"
     });
 
     $("div.custom-menu .edit").click(function(e) {
-      e.preventDefault()
-      uni_modal('Rename Folder', 'manage_folder.php?fid=<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'))
-    })
+      e.preventDefault();
+      uni_modal('Rename Folder', 'manage_folder.php?fid=<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+    });
     $("div.custom-menu .delete").click(function(e) {
-      e.preventDefault()
-      _conf("คุณแน่ใจที่จะลบโฟลเดอร์นี้หรือไม่?", 'delete_folder', [$(this).attr('data-id')])
-    })
-  })
+      e.preventDefault();
+      _conf("คุณแน่ใจที่จะลบโฟลเดอร์นี้หรือไม่?", 'delete_folder', [$(this).attr('data-id')]);
+    });
+  });
 
   $('.file-item').bind("contextmenu", function(event) {
     event.preventDefault();
 
-    $('.file-item').removeClass('active')
-    $(this).addClass('active')
+    $('.file-item').removeClass('active');
+    $(this).addClass('active');
     $("div.custom-menu").hide();
-    var custom = $("<div class='custom-menu file'></div>")
-    custom.append($('#menu-file-clone').html())
-    custom.find('.edit').attr('data-id', $(this).attr('data-id'))
-    custom.find('.delete').attr('data-id', $(this).attr('data-id'))
-    custom.find('.download').attr('data-id', $(this).attr('data-id'))
-    custom.appendTo("body")
+    var custom = $("<div class='custom-menu file'></div>");
+    custom.append($('#menu-file-clone').html());
+    custom.find('.edit').attr('data-id', $(this).attr('data-id'));
+    custom.find('.delete').attr('data-id', $(this).attr('data-id'));
+    custom.find('.download').attr('data-id', $(this).attr('data-id'));
+    custom.appendTo("body");
     custom.css({
       top: event.pageY + "px",
       left: event.pageX + "px"
     });
 
     $("div.file.custom-menu .edit").click(function(e) {
-      e.preventDefault()
-      $('.rename_file[data-id="' + $(this).attr('data-id') + '"]').siblings('large').hide();
-      $('.rename_file[data-id="' + $(this).attr('data-id') + '"]').show();
-    })
+      e.preventDefault();
+      var fileItem = $('.file-item[data-id="' + $(this).attr('data-id') + '"]');
+      fileItem.find('b.to_file').hide();
+      fileItem.find('input.rename_file').show();
+    });
     $("div.file.custom-menu .delete").click(function(e) {
-      e.preventDefault()
-      _conf("คุณแน่ใจหรือว่าจะลบไฟล์นี้?", 'delete_file', [$(this).attr('data-id')])
-    })
+      e.preventDefault();
+      _conf("คุณแน่ใจหรือว่าจะลบไฟล์นี้?", 'delete_file', [$(this).attr('data-id')]);
+    });
     $("div.file.custom-menu .download").click(function(e) {
-      e.preventDefault()
-      window.open('download.php?id=' + $(this).attr('data-id'))
-    })
+      e.preventDefault();
+      window.open('download.php?id=' + $(this).attr('data-id'));
+    });
 
     $('.rename_file').keypress(function(e) {
-      var _this = $(this)
+      var _this = $(this);
       if (e.which == 13) {
-        start_load()
+        start_load();
         $.ajax({
           url: 'ajax.php?action=file_rename',
           method: 'POST',
@@ -259,34 +259,37 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
             folder_id: '<?php echo $folder_parent ?>'
           },
           success: function(resp) {
-            if (typeof resp != undefined) {
+            if (typeof resp != 'undefined') {
               resp = JSON.parse(resp);
               if (resp.status == 1) {
-                _this.siblings('large').find('b').html(resp.new_name);
+                _this.siblings('b.to_file').text(resp.new_name);
+                _this.hide();
+                _this.siblings('b.to_file').show();
                 end_load();
-                _this.hide()
-                _this.siblings('large').show()
               }
             }
+          },
+          error: function() {
+            end_load();
           }
-        })
+        });
       }
-    })
-  })
+    });
+  });
 
   $('.file-item').click(function() {
     if ($(this).find('input.rename_file').is(':visible') == true)
       return false;
-    uni_modal($(this).attr('data-name'), 'manage_files.php?<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'))
-  })
+    uni_modal($(this).attr('data-name'), 'manage_files.php?<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+  });
   $(document).bind("click", function(event) {
     $("div.custom-menu").hide();
-    $('#file-item').removeClass('active')
+    $('#file-item').removeClass('active');
   });
   $(document).keyup(function(e) {
     if (e.keyCode === 27) {
       $("div.custom-menu").hide();
-      $('#file-item').removeClass('active')
+      $('#file-item').removeClass('active');
     }
   });
   $(document).ready(function() {
@@ -320,13 +323,17 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       },
       success: function(resp) {
         if (resp == 1) {
-          alert_toast("Folder successfully deleted.", 'success')
+          alert_toast("Folder successfully deleted.", 'success');
           setTimeout(function() {
-            location.reload()
-          }, 1500)
+            location.reload();
+          }, 1500);
         }
+        end_load();
+      },
+      error: function() {
+        end_load();
       }
-    })
+    });
   }
 
   function delete_file($id) {
@@ -339,12 +346,16 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       },
       success: function(resp) {
         if (resp == 1) {
-          alert_toast("File successfully deleted.", 'success')
+          alert_toast("File successfully deleted.", 'success');
           setTimeout(function() {
-            location.reload()
-          }, 1500)
+            location.reload();
+          }, 1500);
         }
+        end_load();
+      },
+      error: function() {
+        end_load();
       }
-    })
+    });
   }
 </script>

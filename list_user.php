@@ -12,18 +12,6 @@
         <i class="fa fa-bars"></i>
       </button>
 
-      <!-- Topbar Search -->
-      <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-          <input type="text" class="form-control bg-light border-0 small" placeholder="ค้นหา" aria-label="Search" aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-warning bg-gradient-purple" type="button">
-              <i class="fas fa-search fa-sm"></i>
-            </button>
-          </div>
-        </div>
-      </form>
-
       <!-- Topbar Navbar -->
       <ul class="navbar-nav ml-auto">
 
@@ -57,6 +45,11 @@
       <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
           <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการผู้ใช้
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
+            </div>
+          </form>
           <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_parent')">เพิ่มผู้ใช้</button>
         </div>
 
@@ -90,24 +83,24 @@
               ?>
                     <tbody>
                       <tr>
-                        <th scope="row"><?php echo $i; ?></th>
-                        <td><?php echo $rs['username']; ?></td>
-                        <td><?php echo $rs['name']; ?></td>
-                        <td><?php echo $rs['lastname']; ?></td>
-                        <td><?php
-                            if ($rs['lv'] == 0) {
-                              echo "แอดมิน";
-                            } elseif ($rs['lv'] == 1) {
-                              echo "ผู้ใช้";
-                            }
-                            ?></td>
-                        <td><?php
-                            if ($rs['status'] == 0) {
-                              echo "แบน";
-                            } elseif ($rs['status'] == 1) {
-                              echo "ปกติ";
-                            }
-                            ?></td>
+                        <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
+                        <td><i class="to_file"><?php echo $rs['username']; ?></i></td>
+                        <td><i class="to_file"><?php echo $rs['name']; ?></i></td>
+                        <td><i class="to_file"><?php echo $rs['lastname']; ?></i></td>
+                        <td><i class="to_file"><?php
+                                                if ($rs['lv'] == 0) {
+                                                  echo "แอดมิน";
+                                                } elseif ($rs['lv'] == 1) {
+                                                  echo "ผู้ใช้";
+                                                }
+                                                ?></td>
+                        <td><i class="to_file"><?php
+                                                if ($rs['status'] == 0) {
+                                                  echo "แบน";
+                                                } elseif ($rs['status'] == 1) {
+                                                  echo "ปกติ";
+                                                }
+                                                ?></i></td>
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success">แก้ไข</button>
@@ -145,4 +138,25 @@
       window.location.href = 'delete_users.php?username=' + username;
     }
   }
+
+  $(document).ready(function() {
+    $('#search').keyup(function() {
+      var _f = $(this).val().toLowerCase();
+      $('tbody tr').each(function() {
+        var found = false;
+        $(this).find('.to_folder, .to_file').each(function() {
+          var val = $(this).text().toLowerCase();
+          if (val.includes(_f)) {
+            found = true;
+            return false;
+          }
+        });
+        if (found) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+  });
 </script>

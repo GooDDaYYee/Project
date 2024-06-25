@@ -9,14 +9,6 @@
 				<i class="fa fa-bars"></i>
 			</button>
 
-			<!-- Topbar Search -->
-			<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-				<div class="input-group">
-					<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
-				</div>
-			</form>
-
-
 			<!-- Topbar Navbar -->
 			<ul class="navbar-nav ml-auto">
 				<!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -110,6 +102,12 @@
 				<div class="card shadow mb-4">
 					<div class="card-header py-3">
 						<i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;แชร์ไฟล์
+						<!-- Topbar Search -->
+						<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+							<div class="input-group">
+								<input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
+							</div>
+						</form>
 					</div>
 					<div class="row mt-3 ml-3 mr-3">
 						<div class="col-md-12">

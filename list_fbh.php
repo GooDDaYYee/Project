@@ -8,12 +8,6 @@
       <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
         <i class="fa fa-bars"></i>
       </button>
-      <!-- Topbar Search -->
-      <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
-        </div>
-      </form>
 
       <!-- Topbar Navbar -->
       <ul class="navbar-nav ml-auto">
@@ -47,6 +41,12 @@
       <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
           <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการบิลบริษัท FBH
+          <!-- Topbar Search -->
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+              <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
+            </div>
+          </form>
           <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=fbh_report', '_parent')">เพิ่มบิล</button>
         </div>
 
@@ -158,7 +158,7 @@
                 <div class="col-lg">
                   <div class="p-5">
                     <div class="text-center">
-                      <h1 class="h5 text-gray-900 mb-2" style="font-size: 1.5rem;">แก้ไข เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท Mixed</h1>
+                      <h1 class="h5 text-gray-900 mb-2" style="font-size: 1.5rem;">แก้ไข เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
                     </div>
                     <hr class="user">
                     <div class="row mt-md-3">

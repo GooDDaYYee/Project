@@ -228,29 +228,51 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
             <a class="collapse-item " href="index.php?page=home">&nbsp; แชร์ไฟล์</a>
-            <a class="collapse-item " href="index.php?page=files">&nbsp; จัดการไฟล์</a>
+            <?php
+            if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1 || $_SESSION["lv"] == 2) {
+            ?>
+              <a class="collapse-item " href="index.php?page=files">&nbsp; จัดการไฟล์</a>
+            <?php
+            }
+            ?>
           </div>
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-file"></i> ออกเอกสาร</h6>
-            <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท Mixed</a>
-            <a class="collapse-item " href="index.php?page=list_fbh">&nbsp; บริษัท FBH</a>
-          </div>
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
-          </div>
+          <?php
+          if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1 || $_SESSION["lv"] == 2) {
+          ?>
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสารบิล</h6>
+              <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท Mixed</a>
+              <a class="collapse-item " href="index.php?page=list_fbh">&nbsp; บริษัท FBH</a>
+            </div>
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
+              <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
+            </div>
+          <?php
+          }
+          ?>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> รายงาน</h6>
             <a class="collapse-item " href="index.php?page=home">&nbsp; รายงานปฏิบัติงาน</a>
           </div>
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการเงินเดือน</a>
-          </div>
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
-            <a class="collapse-item " href="index.php?page=manage_user">&nbsp; จัดการผู้ใช้</a>
-          </div>
+          <?php
+          if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1) {
+          ?>
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
+              <a class="collapse-item " href="index.php?page=list_employee">&nbsp; จัดการเงินเดือน</a>
+            </div>
+          <?php
+          }
+          if ($_SESSION["lv"] == 0) {
+          ?>
+            <div class="bg-white py-2 collapse-inner rounded">
+              <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
+              <a class="collapse-item " href="index.php?page=list_user">&nbsp; จัดการผู้ใช้</a>
+            </div>
+          <?php
+          }
+          ?>
         </div>
       </li>
 
