@@ -50,13 +50,16 @@ if (isset($_GET['bill_id'])) {
         $auId = $detail['au_id'];
         if ($_GET['au_company'] = 'mixed') {
             $auDetails = fetchDetails($con, $auId, 'mixed');
-        } else {
-            $auDetails = fetchDetails($con, $auId, 'FBH');
+            $detail['au_detail'] = $auDetails['au_detail'];
+            $detail['au_type'] = $auDetails['au_type'];
+            $detail['au_price'] = $auDetails['au_price'];
         }
-
-        $detail['au_detail'] = $auDetails['au_detail'];
-        $detail['au_type'] = $auDetails['au_type'];
-        $detail['au_price'] = $auDetails['au_price'];
+        if ($_GET['au_company'] = 'FBH') {
+            $auDetails = fetchDetails($con, $auId, 'FBH');
+            $detail['au_detail'] = $auDetails['au_detail'];
+            $detail['au_type'] = $auDetails['au_type'];
+            $detail['au_price'] = $auDetails['au_price'];
+        }
     }
 
     $response = [

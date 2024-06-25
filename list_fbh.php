@@ -1,120 +1,81 @@
-<!-- Content Wrapper -->
-<div id="content-wrapper" class="d-flex flex-column">
-  <!-- Main Content -->
-  <div id="content">
-    <!-- Topbar -->
-    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-      <!-- Sidebar Toggle (Topbar) -->
-      <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
-      </button>
-
-      <!-- Topbar Navbar -->
-      <ul class="navbar-nav ml-auto">
-        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-        <li class="nav-item dropdown no-arrow d-sm-none">
-          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-          </a>
-        </li>
-        <!-- Nav Item - User Information -->
-        <li class="nav-item dropdown no-arrow">
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
-            <img class="img-profile rounded-circle" src="img/picture.png">
-          </a>
-          <!-- Dropdown - User Information -->
-          <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-              <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-              Logout
-            </a>
-          </div>
-        </li>
-      </ul>
-    </nav>
-    <!-- End of Topbar -->
-
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-      <!-- List table -->
-      <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center py-3">
-          <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการบิลบริษัท FBH
-          <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-              <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
-            </div>
-          </form>
-          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=fbh_report', '_parent')">เพิ่มบิล</button>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- List table -->
+  <div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center py-3">
+      <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการบิลบริษัท FBH
+      <!-- Topbar Search -->
+      <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
+      </form>
+      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=fbh_report', '_parent')">เพิ่มบิล</button>
+    </div>
 
-        <div class="card-body">
-          <div class="card border h-100">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">เลขที่</th>
-                  <th scope="col">วันที่ออกบิล</th>
-                  <th scope="col">Site</th>
-                  <th scope="col">Final BOQ 100%</th>
-                  <th scope="col">VAT 7%</th>
-                  <th scope="col">GRAND Total</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                include('connect.php');
-                $strsql = "SELECT * FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC";
-                try {
-                  $stmt = $con->prepare($strsql);
-                  $stmt->execute();
-                  $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                  if (count($result) > 0) {
-                    foreach ($result as $rs) {
-                ?>
-                      <tr>
-                        <th scope="row"><i class="to_file"><?php echo $rs['bill_id']; ?></i></th>
-                        <td><i class="to_file">
-                            <?php
-                            $timestamp = strtotime($rs['bill_date']);
-                            $thai_month = array(
-                              1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
-                              4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
-                              7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
-                              10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
-                            );
-                            $thai_month_num = date('n', $timestamp);
-                            echo date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . date('Y', $timestamp);
-                            ?></i>
-                        </td>
-                        <td><i class="to_file"><?php echo $rs['bill_site']; ?></i></td>
-                        <td><i class="to_file"><?php echo number_format($rs['total_amount'], 2); ?></td>
-                        <td><i class="to_file"><?php echo number_format($rs['vat'], 2); ?></i></td>
-                        <td><i class="to_file"><?php echo number_format($rs['grand_total'], 2); ?></i></td>
-                        <td>
-                          <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" onclick="openEditModal('<?php echo $rs['bill_id']; ?>')">แก้ไข</button>
-                            <button type="button" class="btn btn-outline-warning" onclick="openDocumentModal('<?php echo $rs['bill_id']; ?>')">PDF</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['bill_id']; ?>')">ลบ</button>
-                          </div>
-                        </td>
-                      </tr>
-                <?php
-                    }
-                  } else {
-                    echo "<tr><td colspan='7'>ไม่พบข้อมูล</td></tr>";
-                  }
-                } catch (PDOException $e) {
-                  echo "Error in SQL query: " . $e->getMessage();
+    <div class="card-body">
+      <div class="card border h-100">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">เลขที่</th>
+              <th scope="col">วันที่ออกบิล</th>
+              <th scope="col">Site</th>
+              <th scope="col">Final BOQ 100%</th>
+              <th scope="col">VAT 7%</th>
+              <th scope="col">GRAND Total</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            include('connect.php');
+            $strsql = "SELECT * FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC";
+            try {
+              $stmt = $con->prepare($strsql);
+              $stmt->execute();
+              $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+              if (count($result) > 0) {
+                foreach ($result as $rs) {
+            ?>
+                  <tr>
+                    <th scope="row"><i class="to_file"><?php echo $rs['bill_id']; ?></i></th>
+                    <td><i class="to_file">
+                        <?php
+                        $timestamp = strtotime($rs['bill_date']);
+                        $thai_month = array(
+                          1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
+                          4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
+                          7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
+                          10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
+                        );
+                        $thai_month_num = date('n', $timestamp);
+                        echo date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . date('Y', $timestamp);
+                        ?></i>
+                    </td>
+                    <td><i class="to_file"><?php echo $rs['bill_site']; ?></i></td>
+                    <td><i class="to_file"><?php echo number_format($rs['total_amount'], 2); ?></td>
+                    <td><i class="to_file"><?php echo number_format($rs['vat'], 2); ?></i></td>
+                    <td><i class="to_file"><?php echo number_format($rs['grand_total'], 2); ?></i></td>
+                    <td>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" onclick="openEditModal('<?php echo $rs['bill_id']; ?>')">แก้ไข</button>
+                        <button type="button" class="btn btn-outline-warning" onclick="openDocumentModal('<?php echo $rs['bill_id']; ?>')">PDF</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['bill_id']; ?>')">ลบ</button>
+                      </div>
+                    </td>
+                  </tr>
+            <?php
                 }
-                ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
+              } else {
+                echo "<tr><td colspan='7'>ไม่พบข้อมูล</td></tr>";
+              }
+            } catch (PDOException $e) {
+              echo "Error in SQL query: " . $e->getMessage();
+            }
+            ?>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

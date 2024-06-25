@@ -1,43 +1,3 @@
-<!-- Content Wrapper -->
-<div id="content-wrapper" class="d-flex flex-column">
-
-  <!-- Main Content -->
-  <div id="content">
-
-    <!-- Topbar -->
-    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-      <!-- Sidebar Toggle (Topbar) -->
-      <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
-      </button>
-
-      <!-- Topbar Navbar -->
-      <ul class="navbar-nav ml-auto">
-
-        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-        <li class="nav-item dropdown no-arrow d-sm-none">
-          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-          </a>
-        </li>
-        <!-- Nav Item - User Information -->
-        <li class="nav-item dropdown no-arrow">
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
-            <img class="img-profile rounded-circle" src="img/picture.png">
-          </a>
-          <!-- Dropdown - User Information -->
-          <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-              <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-              Logout
-            </a>
-          </div>
-        </li>
-      </ul>
-    </nav>
-    <!-- End of Topbar -->
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
@@ -91,7 +51,13 @@
                                                 if ($rs['lv'] == 0) {
                                                   echo "แอดมิน";
                                                 } elseif ($rs['lv'] == 1) {
-                                                  echo "ผู้ใช้";
+                                                  echo "เจ้าของ";
+                                                } elseif ($rs['lv'] == 2) {
+                                                  echo "พนักงานเอกสาร";
+                                                } elseif ($rs['lv'] == 3) {
+                                                  echo "พนักงานปฏิบัติ";
+                                                } else {
+                                                  echo "ไม่มีข้อมูล";
                                                 }
                                                 ?></td>
                         <td><i class="to_file"><?php
@@ -126,37 +92,31 @@
         </div>
       </div>
     </div>
-
-  </div>
-</div>
-<!-- End of Main Content -->
-</div>
-<!-- End of Content Wrapper -->
-<script>
-  function confirmDelete(username) {
-    if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-      window.location.href = 'delete_users.php?username=' + username;
-    }
-  }
-
-  $(document).ready(function() {
-    $('#search').keyup(function() {
-      var _f = $(this).val().toLowerCase();
-      $('tbody tr').each(function() {
-        var found = false;
-        $(this).find('.to_folder, .to_file').each(function() {
-          var val = $(this).text().toLowerCase();
-          if (val.includes(_f)) {
-            found = true;
-            return false;
-          }
-        });
-        if (found) {
-          $(this).show();
-        } else {
-          $(this).hide();
+    <script>
+      function confirmDelete(username) {
+        if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
+          window.location.href = 'delete_users.php?username=' + username;
         }
+      }
+
+      $(document).ready(function() {
+        $('#search').keyup(function() {
+          var _f = $(this).val().toLowerCase();
+          $('tbody tr').each(function() {
+            var found = false;
+            $(this).find('.to_folder, .to_file').each(function() {
+              var val = $(this).text().toLowerCase();
+              if (val.includes(_f)) {
+                found = true;
+                return false;
+              }
+            });
+            if (found) {
+              $(this).show();
+            } else {
+              $(this).hide();
+            }
+          });
+        });
       });
-    });
-  });
-</script>
+    </script>

@@ -13,172 +13,132 @@ $stmt->execute();
 $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!-- Include HTML and CSS here -->
-<!-- Content Wrapper -->
-<div id="content-wrapper" class="d-flex flex-column">
-  <!-- Main Content -->
-  <div id="content">
-    <!-- Include Topbar -->
-    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-      <!-- Sidebar Toggle (Topbar) -->
-      <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-        <i class="fa fa-bars"></i>
-      </button>
-
-      <!-- Topbar Navbar -->
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown no-arrow d-sm-none">
-          <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-search fa-fw"></i>
-          </a>
-        </li>
-        <li class="nav-item dropdown no-arrow">
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
-            <img class="img-profile rounded-circle" src="img/picture.png">
-          </a>
-          <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-              <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-              Logout
-            </a>
-          </div>
-        </li>
-      </ul>
-    </nav>
-    <!-- End of Topbar -->
-
-    <!-- Begin Page Content -->
-    <div class="container-fluid">
-      <!-- List table -->
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการไฟล์
-          <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-            <div class="input-group">
-              <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
-            </div>
-          </form>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- List table -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการไฟล์
+      <!-- Topbar Search -->
+      <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
+      </form>
+    </div>
 
-        <div class="container-fluid">
-          <div class="col-lg-12 card-body">
-            <div class="row">
-              <div id="paths">
-                <?php
-                $id = $folder_parent;
-                while ($id > 0) {
-                  $path_stmt = $con->prepare("SELECT * FROM folders WHERE id = :id ORDER BY name ASC");
-                  $path_stmt->bindParam(':id', $id, PDO::PARAM_INT);
-                  $path_stmt->execute();
-                  $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
-                  echo '<script>
+    <div class="container-fluid">
+      <div class="col-lg-12 card-body">
+        <div class="row">
+          <div id="paths">
+            <?php
+            $id = $folder_parent;
+            while ($id > 0) {
+              $path_stmt = $con->prepare("SELECT * FROM folders WHERE id = :id ORDER BY name ASC");
+              $path_stmt->bindParam(':id', $id, PDO::PARAM_INT);
+              $path_stmt->execute();
+              $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
+              echo '<script>
                                     $("#paths").prepend("<a href=\"index.php?page=files&fid=' . $path['id'] . '\">' . $path['name'] . '</a>/")
                                 </script>';
-                  $id = $path['parent_id'];
-                }
-                echo '<script>
+              $id = $path['parent_id'];
+            }
+            echo '<script>
                                 $("#paths").prepend("<a href=\"index.php?page=files\">หน้าหลัก</a>/")
                             </script>';
-                ?>
-              </div>
-              <div class="ml-auto">
-                <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> Add โฟลเดอร์</button>
-                <button class="btn btn-primary btn-sm" id="new_file"><i class="fa fa-upload"></i> Add ไฟล์</button>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="card border h-100">
-                  <table width="100%" class="table-striped">
-                    <thead>
-                      <tr>
-                        <th style="padding-top: 10px;" width="40%" scope="col">
-                          <h5>ไฟล์</h5>
-                        </th>
-                        <th style="padding-top: 10px;" width="20%" scope="col">
-                          <h5>วันที่</h5>
-                        </th>
-                        <th style="padding-top: 10px;" width="40%" scope="col">
-                          <h5>รายละเอียด</h5>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php
-                      foreach ($folders as $row) :
-                      ?>
-                        <tr class='folder-item' data-id="<?php echo $row['id'] ?>">
-                          <td style="text-align: left;">
-                            <span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b>
-                          </td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-                      <?php endforeach; ?>
-                      <?php
-                      foreach ($files as $row) :
-                        $name = explode(' ||', $row['name']);
-                        $name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
-                        $img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
-                        $doc_arr = array('doc', 'docx');
-                        $pdf_arr = array('pdf', 'ps', 'eps', 'prn');
-                        $icon = 'fa-file';
-                        if (in_array(strtolower($row['file_type']), $img_arr))
-                          $icon = 'fa-image';
-                        if (in_array(strtolower($row['file_type']), $doc_arr))
-                          $icon = 'fa-file-word';
-                        if (in_array(strtolower($row['file_type']), $pdf_arr))
-                          $icon = 'fa-file-pdf';
-                        if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
-                          $icon = 'fa-file-excel';
-                        if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
-                          $icon = 'fa-file-archive';
-                        if (in_array(strtolower($row['file_type']), ['kmz']))
-                          $icon = 'fa fa-globe';
-                        if (in_array(strtolower($row['file_type']), ['dwg']))
-                          $icon = 'fa fa-cube';
-                        if (in_array(strtolower($row['file_type']), ['psd']))
-                          $icon = 'fa fa-scissors';
-                      ?>
-                        <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
-                          <td style="text-align: left;">
-                            <span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
-                            <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
-                          </td>
-                          <td><i class="to_file"><?php
-                                                  $timestamp = strtotime($row['date_updated']);
-                                                  $year_buddhist = date('Y', $timestamp) + 543;
-                                                  $date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
-                                                  echo $date_buddhist; ?></i></td>
-                          <td><i class="to_file"><?php echo $row['description'] ?></i></td>
-                        </tr>
-                      <?php endforeach; ?>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            ?>
+          </div>
+          <div class="ml-auto">
+            <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> Add โฟลเดอร์</button>
+            <button class="btn btn-primary btn-sm" id="new_file"><i class="fa fa-upload"></i> Add ไฟล์</button>
           </div>
         </div>
-        <div id="menu-folder-clone" style="display: none;">
-          <a href="javascript:void(0)" class="custom-menu-list file-option edit">Rename</a>
-          <a href="javascript:void(0)" class="custom-menu-list file-option delete">Delete</a>
-        </div>
-        <div id="menu-file-clone" style="display: none;">
-          <a href="javascript:void(0)" class="custom-menu-list file-option edit"><span><i class="fa fa-edit"></i> </span>Rename</a>
-          <a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
-          <a href="javascript:void(0)" class="custom-menu-list file-option delete"><span><i class="fa fa-trash"></i> </span>Delete</a>
+        <hr>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card border h-100">
+              <table width="100%" class="table-striped">
+                <thead>
+                  <tr>
+                    <th style="padding-top: 10px;" width="40%" scope="col">
+                      <h5>ไฟล์</h5>
+                    </th>
+                    <th style="padding-top: 10px;" width="20%" scope="col">
+                      <h5>วันที่</h5>
+                    </th>
+                    <th style="padding-top: 10px;" width="40%" scope="col">
+                      <h5>รายละเอียด</h5>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  foreach ($folders as $row) :
+                  ?>
+                    <tr class='folder-item' data-id="<?php echo $row['id'] ?>">
+                      <td style="text-align: left;">
+                        <span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b>
+                      </td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  <?php endforeach; ?>
+                  <?php
+                  foreach ($files as $row) :
+                    $name = explode(' ||', $row['name']);
+                    $name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
+                    $img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
+                    $doc_arr = array('doc', 'docx');
+                    $pdf_arr = array('pdf', 'ps', 'eps', 'prn');
+                    $icon = 'fa-file';
+                    if (in_array(strtolower($row['file_type']), $img_arr))
+                      $icon = 'fa-image';
+                    if (in_array(strtolower($row['file_type']), $doc_arr))
+                      $icon = 'fa-file-word';
+                    if (in_array(strtolower($row['file_type']), $pdf_arr))
+                      $icon = 'fa-file-pdf';
+                    if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
+                      $icon = 'fa-file-excel';
+                    if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
+                      $icon = 'fa-file-archive';
+                    if (in_array(strtolower($row['file_type']), ['kmz']))
+                      $icon = 'fa fa-globe';
+                    if (in_array(strtolower($row['file_type']), ['dwg']))
+                      $icon = 'fa fa-cube';
+                    if (in_array(strtolower($row['file_type']), ['psd']))
+                      $icon = 'fa fa-scissors';
+                  ?>
+                    <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
+                      <td style="text-align: left;">
+                        <span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
+                        <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
+                      </td>
+                      <td><i class="to_file"><?php
+                                              $timestamp = strtotime($row['date_updated']);
+                                              $year_buddhist = date('Y', $timestamp) + 543;
+                                              $date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
+                                              echo $date_buddhist; ?></i></td>
+                      <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                    </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div id="menu-folder-clone" style="display: none;">
+      <a href="javascript:void(0)" class="custom-menu-list file-option edit">Rename</a>
+      <a href="javascript:void(0)" class="custom-menu-list file-option delete">Delete</a>
+    </div>
+    <div id="menu-file-clone" style="display: none;">
+      <a href="javascript:void(0)" class="custom-menu-list file-option edit"><span><i class="fa fa-edit"></i> </span>Rename</a>
+      <a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
+      <a href="javascript:void(0)" class="custom-menu-list file-option delete"><span><i class="fa fa-trash"></i> </span>Delete</a>
+    </div>
   </div>
 </div>
-<!-- End of Main Content -->
-</div>
-<!-- End of Content Wrapper -->
 
 <script>
   $('#new_folder').click(function() {

@@ -31,7 +31,6 @@ if (mysqli_num_rows($result) > 0) {
         $_SESSION['user_id'] = $row["user_id"];
         $_SESSION['name'] = $row["name"];
         $_SESSION["lastname"] = $row["lastname"];
-        $_SESSION["id"] = $row["user_id"];
         $_SESSION["lv"] = $row["lv"];
         header("location: index.php?page=home");
         exit();

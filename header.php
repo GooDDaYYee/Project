@@ -95,7 +95,7 @@
     body {
       font-family: "Mitr";
       font-size: 16px;
-      background-color: #8a2be2;
+      background-color: #F8F9FC;
     }
 
     table {
@@ -213,7 +213,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="warning">P</i>
         </div>
-        <div class="sidebar-brand-text mx-3">psnktelecom<sup class="warning">CP</sup></div>
+        <div class="sidebar-brand-text mx-1">snktelecom<sup class="warning">CP</sup></div>
       </a>
       <!-- Divider -->
       <hr class="sidebar-divider">

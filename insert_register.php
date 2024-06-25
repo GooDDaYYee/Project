@@ -6,8 +6,9 @@ $lastname = $_POST["lastname"];
 $username = $_POST["username"];
 $password = $_POST["passW"];
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+$lv = $_POST['type'];
 
-$sql = "INSERT INTO users(name, lastname, username, passW) VALUES (:name, :lastname, :username, :passW)";
+$sql = "INSERT INTO users(name, lastname, username, passW, lv) VALUES (:name, :lastname, :username, :passW, :lv)";
 
 try {
     $stmt = $con->prepare($sql);
@@ -15,6 +16,7 @@ try {
     $stmt->bindParam(':lastname', $lastname);
     $stmt->bindParam(':username', $username);
     $stmt->bindParam(':passW', $hashed_password);
+    $stmt->bindParam(':lv', $lv);
 
     $result = $stmt->execute();
 
