@@ -151,7 +151,7 @@ if (isset($_POST['billId'])) {
             $stmt->execute([$billId]);
             $bill_details = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $pdf->SetFont('THSarabun', '', 9.4);
+            $pdf->SetFont('THSarabun', '', 8.5);
 
             $x = 0;
             for ($i = 0; $i < $list; $i += 5.25) {
@@ -159,8 +159,8 @@ if (isset($_POST['billId'])) {
                 if (isset($bill_details[$x]['au_detail'])) {
                     $trimmedText = trim(iconv('utf-8', 'cp874', $bill_details[$x]['au_detail']));
                     $textWidth = mb_strwidth($trimmedText);
-                    if ($textWidth > 88) {
-                        $shortenedText = mb_substr($trimmedText, 0, 88);
+                    if ($textWidth > 97) {
+                        $shortenedText = mb_substr($trimmedText, 0, 97);
                     } else {
                         $shortenedText = $trimmedText;
                     }
@@ -171,7 +171,7 @@ if (isset($_POST['billId'])) {
                 $x++;
             }
 
-            $pdf->SetFont('THSarabun', '', 12);
+            $pdf->SetFont('THSarabun', '', 8.5);
             $num = 1;
             $sum = 0;
             $x = 0;
@@ -237,16 +237,18 @@ if (isset($_POST['billId'])) {
                 if ($documentType == "quotation" || $documentType == "invoice") {
                     $pdf->SetXY(192.5, 236.9);
                     $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['grand_total'], 2)), 0, 1, 'R');
+                    $pdf->SetFont('THSarabun', '', 12);
+                    $pdf->SetXY(6.5, 239.5);
+                    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'], 2)), 0, 1, 'C');
                 } elseif ($documentType == "receipt") {
                     $pdf->SetXY(192.5, 225.8);
                     $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['withholding'], 2)), 0, 1, 'R');
                     $pdf->SetXY(192.5, 236.9);
                     $pdf->Cell(13, 8, iconv('utf-8', 'cp874', number_format($bill['grand_total'] - $bill['withholding'], 2)), 0, 1, 'R');
+                    $pdf->SetFont('THSarabun', '', 12);
+                    $pdf->SetXY(6.5, 239.5);
+                    $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'] - $bill['withholding'], 2)), 0, 1, 'C');
                 }
-
-                $pdf->SetFont('THSarabun', '', 12);
-                $pdf->SetXY(6.5, 239.5);
-                $pdf->Cell(142.5, 8, iconv('utf-8', 'cp874', Convert($bill['grand_total'] - $bill['withholding'], 2)), 0, 1, 'C');
             }
 
 

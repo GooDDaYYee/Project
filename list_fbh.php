@@ -112,7 +112,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="editForm" action="update_mixed.php" method="POST">
+        <form id="editForm" action="update_bill.php" method="POST">
           <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
               <div class="row">
@@ -278,7 +278,7 @@
                     });
 
                     function fetchDetails(auId, index) {
-                      fetch('fetch_details_mixed.php?au_id=' + auId)
+                      fetch('fetch_bill_details.php?au_id=' + auId)
                         .then(response => response.json())
                         .then(data => {
                           document.getElementById(`selectedData_${index}`).innerText = data.au_detail;

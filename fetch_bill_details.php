@@ -46,20 +46,14 @@ if (isset($_GET['bill_id'])) {
     $details_stmt->execute();
     $details = $details_stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $auCompany = $bill['bill_company'];
+
     foreach ($details as &$detail) {
         $auId = $detail['au_id'];
-        if ($_GET['au_company'] = 'mixed') {
-            $auDetails = fetchDetails($con, $auId, 'mixed');
-            $detail['au_detail'] = $auDetails['au_detail'];
-            $detail['au_type'] = $auDetails['au_type'];
-            $detail['au_price'] = $auDetails['au_price'];
-        }
-        if ($_GET['au_company'] = 'FBH') {
-            $auDetails = fetchDetails($con, $auId, 'FBH');
-            $detail['au_detail'] = $auDetails['au_detail'];
-            $detail['au_type'] = $auDetails['au_type'];
-            $detail['au_price'] = $auDetails['au_price'];
-        }
+        $auDetails = fetchDetails($con, $auId, $auCompany);
+        $detail['au_detail'] = $auDetails['au_detail'];
+        $detail['au_type'] = $auDetails['au_type'];
+        $detail['au_price'] = $auDetails['au_price'];
     }
 
     $response = [
