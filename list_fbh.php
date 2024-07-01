@@ -24,7 +24,7 @@
               <th scope="col">Final BOQ 100%</th>
               <th scope="col">VAT 7%</th>
               <th scope="col">GRAND Total</th>
-              <th scope="col"></th>
+              <th scope="col"> </th>
             </tr>
           </thead>
           <tbody>
@@ -277,7 +277,7 @@
                       }
                     });
 
-                    function fetchDetails(auId, index) {
+                    function fetchDetails(auId, index, company) {
                       fetch('fetch_bill_details.php?au_id=' + auId)
                         .then(response => response.json())
                         .then(data => {

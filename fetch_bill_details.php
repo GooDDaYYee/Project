@@ -76,14 +76,14 @@ if (isset($_GET['bill_id'])) {
 
 if (isset($_GET['au_id'])) {
     $auId = $_GET['au_id'];
-    $auCompany = isset($_GET['au_company']) ? $_GET['au_company'] : 'mixed';
-
-    if ($auCompany == 'FBH' || $auCompany == 'mixed') {
-        $auDetails = fetchDetails($con, $auId, $auCompany);
-        echo json_encode($auDetails);
-    } else {
-        echo json_encode(array('error' => 'Invalid au_company'));
-    }
+    $strsql2 = "SELECT * FROM au_all WHERE au_id = :au_id";
+    $strsql3 = $con->prepare($strsql2);
+    $strsql3->bindParam(':au_id', $auId);
+    $strsql3->execute();
+    $strsql4 = $strsql3->fetch(PDO::FETCH_ASSOC);
+    $auCompany = $strsql4['au_company'];
+    $auDetails = fetchDetails($con, $auId, $auCompany);
+    echo json_encode($auDetails);
 }
 
 $con = null;

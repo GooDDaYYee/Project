@@ -24,24 +24,24 @@
                   <th scope="col">นามสกุล</th>
                   <th scope="col">ประเภทผู้ใช้</th>
                   <th scope="col">สถานะ</th>
-                  <th scope="col"></th>
+                  <th scope="col"> </th>
                 </tr>
               </thead>
-              <?php
-              include('connect.php');
-              $strsql = "SELECT * FROM users ORDER BY user_id ASC";
+              <tbody>
+                <?php
+                include('connect.php');
+                $strsql = "SELECT * FROM users ORDER BY user_id ASC";
 
-              try {
-                $stmt = $con->prepare($strsql);
-                $stmt->execute();
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                $rowcount = count($result);
+                try {
+                  $stmt = $con->prepare($strsql);
+                  $stmt->execute();
+                  $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                  $rowcount = count($result);
 
-                if ($rowcount > 0) {
-                  $i = 1;
-                  foreach ($result as $rs) {
-              ?>
-                    <tbody>
+                  if ($rowcount > 0) {
+                    $i = 1;
+                    foreach ($result as $rs) {
+                ?>
                       <tr>
                         <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
                         <td><i class="to_file"><?php echo $rs['username']; ?></i></td>
@@ -74,20 +74,19 @@
                           </div>
                         </td>
                       </tr>
-                    </tbody>
-              <?php
-                    $i++;
+                <?php
+                      $i++;
+                    }
+                  } else {
+                    echo "<tr><td colspan='7'>ไม่พบข้อมูล</td></tr>";
                   }
-                } else {
-                  echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
+                } catch (PDOException $e) {
+                  echo "Error: " . $e->getMessage();
                 }
-              } catch (PDOException $e) {
-                echo "Error: " . $e->getMessage();
-              }
 
-              $con = null;
-              ?>
-            </table>
+                $con = null;
+                ?>
+              </tbody>
           </div>
         </div>
       </div>

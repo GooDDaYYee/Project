@@ -197,6 +197,11 @@
       bottom: 0.2em;
       color: #ffffff80;
     }
+
+    .container {
+      justify-content: center;
+      /* ปรับให้ container มีความสูงเต็มหน้าจอ */
+    }
   </style>
 </head>
 
@@ -246,7 +251,8 @@
             </div>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
-              <a class="collapse-item " href="index.php?page=home">&nbsp; จัดการสต๊อก</a>
+              <a class="collapse-item " href="index.php?page=list_stock_cable">&nbsp; จัดการ Cable</a>
+              <a class="collapse-item " href="index.php?page=list_stock_drum">&nbsp; จัดการ Drum</a>
             </div>
           <?php
           }

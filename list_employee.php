@@ -10,7 +10,6 @@
                            <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                        </div>
                    </form>
-                   <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_parent')">เพิ่มผู้ใช้</button>
                </div>
 
                <div class="card-body">
@@ -26,24 +25,24 @@
                                    <th scope="col">เงินเดือน</th>
                                    <th scope="col">อีเมล</th>
                                    <th scope="col">ตำแหน่ง</th>
-                                   <th scope="col"></th>
+                                   <th scope="col"> </th>
                                </tr>
                            </thead>
-                           <?php
-                            include('connect.php');
-                            $strsql = "SELECT * FROM employee ORDER BY employee_id ASC";
+                           <tbody>
+                               <?php
+                                include('connect.php');
+                                $strsql = "SELECT * FROM employee ORDER BY employee_id ASC";
 
-                            try {
-                                $stmt = $con->prepare($strsql);
-                                $stmt->execute();
-                                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                $rowcount = count($result);
+                                try {
+                                    $stmt = $con->prepare($strsql);
+                                    $stmt->execute();
+                                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                    $rowcount = count($result);
 
-                                if ($rowcount > 0) {
-                                    $i = 1;
-                                    foreach ($result as $rs) {
-                            ?>
-                                       <tbody>
+                                    if ($rowcount > 0) {
+                                        $i = 1;
+                                        foreach ($result as $rs) {
+                                ?>
                                            <tr>
                                                <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
                                                <td><i class="to_file"><?php echo $rs['employee_name']; ?></i></td>
@@ -60,20 +59,19 @@
                                                    </div>
                                                </td>
                                            </tr>
-                                       </tbody>
-                           <?php
-                                        $i++;
+                               <?php
+                                            $i++;
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
                                     }
-                                } else {
-                                    echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
+                                } catch (PDOException $e) {
+                                    echo "Error: " . $e->getMessage();
                                 }
-                            } catch (PDOException $e) {
-                                echo "Error: " . $e->getMessage();
-                            }
 
-                            $con = null;
-                            ?>
-                       </table>
+                                $con = null;
+                                ?>
+                           </tbody>
                    </div>
                </div>
            </div>

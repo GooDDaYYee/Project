@@ -24,13 +24,13 @@
                   <th scope="col">Final BOQ 100%</th>
                   <th scope="col">VAT 7%</th>
                   <th scope="col">GRAND Total</th>
-                  <th scope="col"></th>
+                  <th scope="col"> </th>
                 </tr>
               </thead>
               <tbody>
                 <?php
                 include('connect.php');
-                $strsql = "SELECT * FROM bill WHERE bill_company = 'mixed' ORDER BY bill_id DESC";
+                $strsql = "SELECT * FROM bill WHERE bill_company = 'Mixed' ORDER BY bill_id DESC";
                 try {
                   $stmt = $con->prepare($strsql);
                   $stmt->execute();
@@ -184,7 +184,7 @@
                           <div class="col-md-3">
                             <h5>จำนวน AU ที่เพิ่ม</h5>
                             <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
-                            <input type="hidden" name="company" value="mixed">
+                            <input type="hidden" name="company" value="Mixed">
                           </div>
                         </div>
                         <div class="row-md-auto mt-md-3">
@@ -194,7 +194,7 @@
                         </div>
                       </div>
                       <?php
-                      $strsql = "SELECT * FROM au_all WHERE au_company = 'mixed'";
+                      $strsql = "SELECT * FROM au_all WHERE au_company = 'Mixed'";
                       try {
                         $stmt = $con->prepare($strsql);
                         $stmt->execute();

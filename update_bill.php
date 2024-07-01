@@ -83,10 +83,12 @@ try {
 
     $con->commit();
 
-    if ($_POST['company'] == "mixed") {
+    if ($_POST['company'] == "Mixed") {
         header("Location: index.php?page=list_mixed");
     } elseif (($_POST['company'] == "FBH")) {
         header("Location: index.php?page=list_fbh");
+    } else {
+        header("Location: index.php?page=home");
     }
     exit();
 } catch (PDOException $e) {
