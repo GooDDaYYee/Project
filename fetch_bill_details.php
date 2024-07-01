@@ -39,14 +39,13 @@ if (isset($_GET['bill_id'])) {
     $stmt->bindParam(':bill_id', $bill_id);
     $stmt->execute();
     $bill = $stmt->fetch(PDO::FETCH_ASSOC);
+    $auCompany = $bill['bill_company'];
 
     $details_sql = "SELECT * FROM bill_detail WHERE bill_id = :bill_id";
     $details_stmt = $con->prepare($details_sql);
     $details_stmt->bindParam(':bill_id', $bill_id);
     $details_stmt->execute();
     $details = $details_stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $auCompany = $bill['bill_company'];
 
     foreach ($details as &$detail) {
         $auId = $detail['au_id'];
@@ -81,6 +80,7 @@ if (isset($_GET['au_id'])) {
     $strsql3->bindParam(':au_id', $auId);
     $strsql3->execute();
     $strsql4 = $strsql3->fetch(PDO::FETCH_ASSOC);
+
     $auCompany = $strsql4['au_company'];
     $auDetails = fetchDetails($con, $auId, $auCompany);
     echo json_encode($auDetails);
