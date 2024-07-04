@@ -37,7 +37,7 @@
     ?>
 
     <!-- Form HTML -->
-    <form id="myForm" action="insert_bill.php" method="post">
+    <form id="myForm" action="bill/insert_bill.php" method="post">
       <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
           <div class="row">
@@ -203,7 +203,7 @@
                 });
 
                 function fetchDetails(auId, index) {
-                  fetch('fetch_bill_details.php?au_id=' + auId)
+                  fetch('bill/fetch_bill_details.php?au_id=' + auId)
                     .then(response => response.json())
                     .then(data => {
                       document.getElementById(`selectedData_${index}`).innerText = data.au_detail;

@@ -1,9 +1,9 @@
 <?php
-include 'connect.php';
+include dirname(__FILE__) . '/../connect.php';
 $qry = $con->query("SELECT * FROM files where id=" . $_GET['id'])->fetch(PDO::FETCH_ASSOC);
 
 $fname = $qry['file_path'];
-$file = ("uploads/" . $fname);
+$file = ("files/uploads/" . $fname);
 
 header("Content-Type: " . filetype($file));
 header("Content-Length: " . filesize($file));

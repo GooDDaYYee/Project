@@ -159,8 +159,8 @@ if (isset($_POST['billId'])) {
                 if (isset($bill_details[$x]['au_detail'])) {
                     $trimmedText = trim(iconv('utf-8', 'cp874', $bill_details[$x]['au_detail']));
                     $textWidth = mb_strwidth($trimmedText);
-                    if ($textWidth > 97) {
-                        $shortenedText = mb_substr($trimmedText, 0, 97);
+                    if ($textWidth > 88) {
+                        $shortenedText = mb_substr($trimmedText, 0, 88);
                     } else {
                         $shortenedText = $trimmedText;
                     }

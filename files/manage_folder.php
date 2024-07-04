@@ -1,5 +1,5 @@
 <?php
-include('connect.php');
+include dirname(__FILE__) . '/../connect.php';
 if (isset($_GET['id'])) {
 	$qry = $con->query("SELECT * FROM folders where id=" . $_GET['id']);
 	if ($qry->rowCount() > 0) {
@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
 			start_load();
 			$('#msg').html('')
 			$.ajax({
-				url: 'ajax.php?action=save_folder',
+				url: 'files/ajax.php?action=save_folder',
 				method: 'POST',
 				data: $(this).serialize(),
 				success: function(resp) {

@@ -1,5 +1,5 @@
 <?php
-include 'connect.php';
+include dirname(__FILE__) . '/../connect.php';
 $folder_parent = isset($_GET['fid']) ? $_GET['fid'] : 0;
 
 $stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY name ASC");
@@ -39,13 +39,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
               $path_stmt->execute();
               $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
               echo '<script>
-                                    $("#paths").prepend("<a href=\"index.php?page=files&fid=' . $path['id'] . '\">' . $path['name'] . '</a>/")
-                                </script>';
+                      $("#paths").prepend("<a href=\"index.php?page=files/files&fid=' . $path['id'] . '\">' . $path['name'] . '</a>/")
+                    </script>';
               $id = $path['parent_id'];
             }
             echo '<script>
-                                $("#paths").prepend("<a href=\"index.php?page=files\">หน้าหลัก</a>/")
-                            </script>';
+                    $("#paths").prepend("<a href=\"index.php?page=files/files\">หน้าหลัก</a>/")
+                  </script>';
             ?>
           </div>
           <div class="ml-auto">
@@ -142,13 +142,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
   $('#new_folder').click(function() {
-    uni_modal('', 'manage_folder.php?fid=<?php echo $folder_parent ?>');
+    uni_modal('', 'files/manage_folder.php?fid=<?php echo $folder_parent ?>');
   });
   $('#new_file').click(function() {
-    uni_modal('', 'manage_files.php?fid=<?php echo $folder_parent ?>');
+    uni_modal('', 'files/manage_files.php?fid=<?php echo $folder_parent ?>');
   });
   $('.folder-item').dblclick(function() {
-    location.href = 'index.php?page=files&fid=' + $(this).attr('data-id');
+    location.href = 'index.php?page=files/files&fid=' + $(this).attr('data-id');
   });
   $('.folder-item').bind("contextmenu", function(event) {
     event.preventDefault();
@@ -165,7 +165,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $("div.custom-menu .edit").click(function(e) {
       e.preventDefault();
-      uni_modal('Rename Folder', 'manage_folder.php?fid=<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+      uni_modal('Rename Folder', 'files/manage_folder.php?fid=<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
     });
     $("div.custom-menu .delete").click(function(e) {
       e.preventDefault();
@@ -202,7 +202,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
     $("div.file.custom-menu .download").click(function(e) {
       e.preventDefault();
-      window.open('download.php?id=' + $(this).attr('data-id'));
+      window.open('files/download.php?id=' + $(this).attr('data-id'));
     });
 
     $('.rename_file').keypress(function(e) {
@@ -210,7 +210,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       if (e.which == 13) {
         start_load();
         $.ajax({
-          url: 'ajax.php?action=file_rename',
+          url: 'files/ajax.php?action=file_rename',
           method: 'POST',
           data: {
             id: $(this).attr('data-id'),
@@ -240,7 +240,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
   $('.file-item').click(function() {
     if ($(this).find('input.rename_file').is(':visible') == true)
       return false;
-    uni_modal($(this).attr('data-name'), 'manage_files.php?<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+    uni_modal($(this).attr('data-name'), 'files/manage_files.php?<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
   });
   $(document).bind("click", function(event) {
     $("div.custom-menu").hide();
@@ -276,7 +276,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
   function delete_folder($id) {
     start_load();
     $.ajax({
-      url: 'ajax.php?action=delete_folder',
+      url: 'files/ajax.php?action=delete_folder',
       method: 'POST',
       data: {
         id: $id
@@ -299,7 +299,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
   function delete_file($id) {
     start_load();
     $.ajax({
-      url: 'ajax.php?action=delete_file',
+      url: 'files/ajax.php?action=delete_file',
       method: 'POST',
       data: {
         id: $id

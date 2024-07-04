@@ -10,7 +10,7 @@
           <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
       </form>
-      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=fbh_report', '_parent')">เพิ่มบิล</button>
+      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=bill/fbh_report', '_parent')">เพิ่มบิล</button>
     </div>
 
     <div class="card-body">
@@ -112,7 +112,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="editForm" action="update_bill.php" method="POST">
+        <form id="editForm" action="bill/update_bill.php" method="POST">
           <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
               <div class="row">
@@ -278,7 +278,7 @@
                     });
 
                     function fetchDetails(auId, index, company) {
-                      fetch('fetch_bill_details.php?au_id=' + auId)
+                      fetch('bill/fetch_bill_details.php?au_id=' + auId)
                         .then(response => response.json())
                         .then(data => {
                           document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
@@ -316,7 +316,7 @@
                     });
 
                     function openEditModal(bill_Id) {
-                      fetch('fetch_bill_details.php?bill_id=' + bill_Id)
+                      fetch('bill/fetch_bill_details.php?bill_id=' + bill_Id)
                         .then(response => response.json())
                         .then(data => {
                           document.getElementById('bill_Id').value = data.bill_id;
@@ -353,7 +353,7 @@
 
                     function confirmDelete(billId) {
                       if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
-                        window.location.href = 'delete_bill.php?bill_id=' + billId;
+                        window.location.href = 'bill/delete_bill.php?bill_id=' + billId;
                       }
                     }
 
@@ -391,30 +391,6 @@
 </div>
 
 <script>
-  function confirmDelete(billId) {
-    if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
-      window.location.href = 'delete_bill.php?bill_id=' + billId;
-    }
-  }
-
-  var documentModal = document.getElementById("documentModal");
-  var spanDocument = documentModal.getElementsByClassName("close")[0];
-
-  function openDocumentModal(billId) {
-    document.getElementById("billId").value = billId;
-    documentModal.style.display = "block";
-  }
-
-  spanDocument.onclick = function() {
-    documentModal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == documentModal) {
-      documentModal.style.display = "none";
-    }
-  }
-
   $(document).ready(function() {
     $('#search').keyup(function() {
       var _f = $(this).val().toLowerCase();

@@ -4,7 +4,7 @@
            <!-- List table -->
            <div class="card shadow mb-4">
                <div class="card-header d-flex justify-content-between align-items-center py-3">
-                   <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการผู้ใช้
+                   <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการเงินเดือน
                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                        <div class="input-group">
                            <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
@@ -22,9 +22,9 @@
                                    <th scope="col">นามสกุล</th>
                                    <th scope="col">อายุ</th>
                                    <th scope="col">เบอร์โทร</th>
-                                   <th scope="col">เงินเดือน</th>
                                    <th scope="col">อีเมล</th>
                                    <th scope="col">ตำแหน่ง</th>
+                                   <th scope="col">เงินเดือน</th>
                                    <th scope="col"> </th>
                                </tr>
                            </thead>
@@ -49,9 +49,9 @@
                                                <td><i class="to_file"><?php echo $rs['employee_lastname']; ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_age']; ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_phone']; ?></i></td>
-                                               <td><i class="to_file"><?php echo $rs['employee_salary']; ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_email']; ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_position']; ?></i></td>
+                                               <td><i class="to_file"><?php echo $rs['employee_salary']; ?> บาท</i></td>
                                                <td>
                                                    <div class="btn-group" role="group" aria-label="Basic example">
                                                        <button type="button" class="btn btn-outline-success">แก้ไข</button>

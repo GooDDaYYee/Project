@@ -9,7 +9,7 @@
                         <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                     </div>
                 </form>
-                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_parent')">เพิ่มผู้ใช้</button>
+                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock/insert_cable', '_parent')">เพิ่มงาน</button>
             </div>
             <div class="card-body">
                 <div class="card border h-100">
@@ -24,6 +24,7 @@
                                 <th scope="col">Cable To</th>
                                 <th scope="col">Cable Used</th>
                                 <th scope="col">Drum</th>
+                                <th scope="col">ใช้กับบริษัท</th>
                                 <th scope="col"> </th>
                             </tr>
                         </thead>
@@ -51,6 +52,7 @@
                                             <td><i class="to_file"><?php echo $rs['cable_to']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['cable_used']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_no']; ?></i></td>
+                                            <td><i class="to_file"><?php echo $rs['cable_work']; ?></i></td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <button type="button" class="btn btn-outline-success">แก้ไข</button>

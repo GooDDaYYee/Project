@@ -1,5 +1,5 @@
 <?php
-include("connect.php");
+include("../connect.php");
 
 function checkDuplicates($array)
 {
@@ -67,9 +67,9 @@ try {
     $con->commit();
 
     if ($_POST['company'] == "mixed") {
-        header("Location: index.php?page=list_mixed");
+        header("Location: ../index.php?page=bill/list_mixed");
     } elseif (($_POST['company'] == "FBH")) {
-        header("Location: index.php?page=list_fbh");
+        header("Location: ../index.php?page=bill/list_fbh");
     }
 
     exit();

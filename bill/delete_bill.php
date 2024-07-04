@@ -1,5 +1,5 @@
 <?php
-include('connect.php');
+include('../connect.php');
 
 if (isset($_GET['bill_id'])) {
     $billId = $_GET['bill_id'];
@@ -24,10 +24,12 @@ if (isset($_GET['bill_id'])) {
 
             $con->commit();
 
-            if ($result['bill_company'] === 'mixed') {
-                header("Location: index.php?page=list_mixed");
+            if ($result['bill_company'] == 'mixed') {
+                header("Location: ../index.php?page=bill/list_mixed");
+            } elseif (($result['bill_company'] == 'FBH')) {
+                header("Location: ../index.php?page=bill/list_fbh");
             } else {
-                header("Location: index.php?page=list_fbh");
+                header("Location: ../index.php?page=home");
             }
             exit();
         } else {

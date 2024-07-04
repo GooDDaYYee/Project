@@ -1,5 +1,5 @@
 <?php
-include('connect.php');
+include dirname(__FILE__) . '/../connect.php';
 
 if (isset($_GET['id'])) {
 	$qry = $con->query("SELECT * FROM files WHERE id=" . $_GET['id']);
@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
 			start_load();
 			$('#msg').html('')
 			$.ajax({
-				url: 'ajax.php?action=save_files',
+				url: 'files/ajax.php?action=save_files',
 				data: new FormData($(this)[0]),
 				cache: false,
 				contentType: false,

@@ -1,0 +1,6 @@
+<br />
+<b>Warning</b>:  filetype(): Lstat failed for files/uploads/1719299520_ค้างรื้อสายย.kmz in <b>C:\xampp\htdocs\Project\files\download.php</b> on line <b>8</b><br />
+<br />
+<b>Warning</b>:  filesize(): stat failed for files/uploads/1719299520_ค้างรื้อสายย.kmz in <b>C:\xampp\htdocs\Project\files\download.php</b> on line <b>9</b><br />
+<br />
+<b>Warning</b>:  readfile(files/uploads/1719299520_ค้างรื้อสายย.kmz): Failed to open stream: No such file or directory in <b>C:\xampp\htdocs\Project\files\download.php</b> on line <b>12</b><br />

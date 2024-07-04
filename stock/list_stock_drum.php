@@ -3,13 +3,13 @@
         <!-- List table -->
         <div class="card shadow mb-4">
             <div class="card-header d-flex justify-content-between align-items-center py-3">
-                <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;สต๊อกเคเบิ้ล
+                <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;สต๊อกดั้ม
                 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                     </div>
                 </form>
-                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=register', '_parent')">เพิ่มผู้ใช้</button>
+                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock/insert_cable', '_parent')">เพิ่มDrum</button>
             </div>
             <div class="card-body">
                 <div class="card border h-100">
@@ -17,10 +17,13 @@
                         <thead>
                             <tr>
                                 <th scope="col">ลำดับ</th>
+                                <th scope="col">บริษัทผลิตสาย</th>
                                 <th scope="col">Drum Number</th>
                                 <th scope="col">Drum To</th>
-                                <th scope="col">description</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">รับจากบริษัท</th>
                                 <th scope="col">Drum เต็ม</th>
+                                <th scope="col">Drum ใช้ไป</th>
                                 <th scope="col">Drum เหลือ</th>
                                 <th scope="col"> </th>
                             </tr>
@@ -42,10 +45,13 @@
                             ?>
                                         <tr>
                                             <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
+                                            <td><i class="to_file"><?php echo $rs['drum_cable_company']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_no']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_to']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_description']; ?></i></td>
+                                            <td><i class="to_file"><?php echo $rs['drum_company']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_full']; ?> เมตร</i></td>
+                                            <td><i class="to_file"><?php echo $rs['drum_used']; ?> เมตร</i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_amount']; ?> เมตร</i></td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">

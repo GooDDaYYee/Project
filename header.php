@@ -236,7 +236,7 @@
             <?php
             if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1 || $_SESSION["lv"] == 2) {
             ?>
-              <a class="collapse-item " href="index.php?page=files">&nbsp; จัดการไฟล์</a>
+              <a class="collapse-item " href="index.php?page=files/files">&nbsp; จัดการไฟล์</a>
             <?php
             }
             ?>
@@ -246,13 +246,13 @@
           ?>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสารบิล</h6>
-              <a class="collapse-item " href="index.php?page=list_mixed">&nbsp; บริษัท Mixed</a>
-              <a class="collapse-item " href="index.php?page=list_fbh">&nbsp; บริษัท FBH</a>
+              <a class="collapse-item " href="index.php?page=bill/list_mixed">&nbsp; บริษัท Mixed</a>
+              <a class="collapse-item " href="index.php?page=bill/list_fbh">&nbsp; บริษัท FBH</a>
             </div>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
-              <a class="collapse-item " href="index.php?page=list_stock_cable">&nbsp; จัดการ Cable</a>
-              <a class="collapse-item " href="index.php?page=list_stock_drum">&nbsp; จัดการ Drum</a>
+              <a class="collapse-item " href="index.php?page=stock/list_stock_cable">&nbsp; จัดการ Cable</a>
+              <a class="collapse-item " href="index.php?page=stock/list_stock_drum">&nbsp; จัดการ Drum</a>
             </div>
           <?php
           }
@@ -266,7 +266,7 @@
           ?>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
-              <a class="collapse-item " href="index.php?page=list_employee">&nbsp; จัดการเงินเดือน</a>
+              <a class="collapse-item " href="index.php?page=employee/list_employee">&nbsp; จัดการเงินเดือน</a>
             </div>
           <?php
           }
@@ -274,7 +274,7 @@
           ?>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
-              <a class="collapse-item " href="index.php?page=list_user">&nbsp; จัดการผู้ใช้</a>
+              <a class="collapse-item " href="index.php?page=users/list_user">&nbsp; จัดการผู้ใช้</a>
             </div>
           <?php
           }

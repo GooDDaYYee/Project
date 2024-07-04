@@ -162,7 +162,7 @@
 
 		$("div.file.custom-menu .download").click(function(e) {
 			e.preventDefault()
-			window.open('download.php?id=' + $(this).attr('data-id'))
+			window.open('files/download.php?id=' + $(this).attr('data-id'))
 		})
 	})
 
