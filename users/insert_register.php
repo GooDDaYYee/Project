@@ -33,7 +33,7 @@ try {
             </script>
         ';
     }
-    header("Location: index.php?page=manage_user");
+    header("Location: index.php?page=users/list_user");
     exit();
 } catch (PDOException $e) {
     echo '<script>

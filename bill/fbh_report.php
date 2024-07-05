@@ -99,11 +99,11 @@ try {
               </div>
               <div class="col-md-2">
                 <h4>&nbsp;</h4>
-                <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
+                <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-success btn-user btn-block">เพิ่ม AU</button>
               </div>
               <div class="col-md-2">
                 <h4>&nbsp;</h4>
-                <button type="button" id="removeInputFrame" name="removeInputFrame" class="btn btn-danger bg-gradient-red btn-user btn-block">ลบ AU</button>
+                <button type="button" id="removeInputFrame" name="removeInputFrame" class="btn btn-danger btn-user btn-block">ลบ AU</button>
               </div>
               <div class="col-md-2">
                 <h4>จำนวน AU ที่เพิ่ม</h4>
@@ -111,7 +111,7 @@ try {
               </div>
             </div>
             <div class="row-md-auto mt-md-3">
-              <button class='btn btn-warning bg-gradient-purple btn-user btn-block' type='submit' id="submitButton">
+              <button class='btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container' type='submit' id="submitButton">
                 <h5>เพิ่มข้อมูล</h5>
               </button>
             </div>

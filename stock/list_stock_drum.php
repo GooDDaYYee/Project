@@ -9,7 +9,7 @@
                         <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                     </div>
                 </form>
-                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock/insert_cable', '_parent')">เพิ่มDrum</button>
+                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock/insert_drum', '_parent')">เพิ่มDrum</button>
             </div>
             <div class="card-body">
                 <div class="card border h-100">
@@ -31,7 +31,7 @@
                         <tbody>
                             <?php
                             include('connect.php');
-                            $strsql = "SELECT * FROM drum ORDER BY drum_no ASC";
+                            $strsql = "SELECT * FROM drum ORDER BY drum_id asc";
 
                             try {
                                 $stmt = $con->prepare($strsql);
@@ -56,7 +56,7 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <button type="button" class="btn btn-outline-success">แก้ไข</button>
-                                                    <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['drum_no']; ?>')">ลบ</button>
+                                                    <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['drum_id'] ?>','<?php echo $i ?>')">ลบ</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -78,9 +78,9 @@
         </div>
     </div>
     <script>
-        function confirmDelete(username) {
-            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-                window.location.href = 'delete_users.php?username=' + username;
+        function confirmDelete(drum_id, i) {
+            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบดั้มลำดับที่ " + i + " นี้?")) {
+                window.location.href = 'stock/drum_delete.php?drum_id=' + drum_id;
             }
         }
 

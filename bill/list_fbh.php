@@ -175,11 +175,11 @@
                       </div>
                       <div class="col-md-2">
                         <h5>&nbsp;</h5>
-                        <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-warning bg-gradient-purple btn-user btn-block">เพิ่ม AU</button>
+                        <button type="button" id="addInputFrame" name="addInputFrame" class="btn btn-success btn-user btn-block">เพิ่ม AU</button>
                       </div>
                       <div class="col-md-2">
                         <h5>&nbsp;</h5>
-                        <button type="button" id="removeInputFrame" name="removeInputFrame" class="btn btn-danger bg-gradient-red btn-user btn-block">ลบ AU</button>
+                        <button type="button" id="removeInputFrame" name="removeInputFrame" class="btn btn-danger btn-user btn-block">ลบ AU</button>
                       </div>
                       <div class="col-md-3">
                         <h5>จำนวน AU ที่เพิ่ม</h5>
