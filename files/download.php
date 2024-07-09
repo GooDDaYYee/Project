@@ -3,7 +3,7 @@ include dirname(__FILE__) . '/../connect.php';
 $qry = $con->query("SELECT * FROM files where id=" . $_GET['id'])->fetch(PDO::FETCH_ASSOC);
 
 $fname = $qry['file_path'];
-$file = ("files/uploads/" . $fname);
+$file = ("uploads/" . $fname);
 
 header("Content-Type: " . filetype($file));
 header("Content-Length: " . filesize($file));

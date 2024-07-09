@@ -36,45 +36,42 @@
                                 <h4>ใช้กับบริษัท</h4>
                                 <select class="form-control" id="exampleFormControlSelect1">
                                     <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
                                 </select>
                             </div>
                         </div>
                         <div class="text-center">
                             <h1 class="h2 text-gray-900 mb-2">เลือก Drum</h1>
                         </div>
+                        <?php
+                        include("../connect.php");
+
+                        $strsql = "SELECT * FROM drum ORDER BY drum_id asc";
+                        try {
+                            $stmt = $con->prepare($strsql);
+                            $stmt->execute();
+                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            $rowcount = count($result);
+                        } catch (PDOException $e) {
+                            echo "Error: " . $e->getMessage();
+                        }
+                        ?>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <h4>รับจากบริษัท</h4>
                                 <select class="form-control" id="exampleFormControlSelect1">
                                     <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
                                 </select>
                             </div>
                             <div class="col-sm-3">
                                 <h4>บริษัทผลิตสาย</h4>
                                 <select class="form-control" id="exampleFormControlSelect1">
                                     <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <h4>Drum</h4>
                                 <select class="form-control" id="exampleFormControlSelect1">
                                     <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
                                 </select>
                             </div>
                         </div>
