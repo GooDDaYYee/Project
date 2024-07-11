@@ -52,7 +52,7 @@
                                             <td><i class="to_file"><?php echo $rs['drum_company']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_full']; ?> เมตร</i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_used']; ?> เมตร</i></td>
-                                            <td><i class="to_file"><?php echo $rs['drum_amount']; ?> เมตร</i></td>
+                                            <td><i class="to_file"><?php echo $rs['drum_remaining']; ?> เมตร</i></td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <button type="button" class="btn btn-outline-success">แก้ไข</button>

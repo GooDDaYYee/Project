@@ -4,7 +4,7 @@ include("../connect.php");
 try {
     $con->beginTransaction();
 
-    $stmt = $con->prepare("INSERT INTO cable_used (route_name, installed_section, , cable_form, cable_to, cable_used, employee_id , drum_no, cable_work)
+    $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, , cable_form, cable_to, cable_used, employee_id , drum_no, cable_work)
     VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :employee_id , :drum_no, :cable_work)");
 
     $stmt->bindParam(':route_name', $_POST['route']);

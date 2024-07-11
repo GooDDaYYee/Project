@@ -26,12 +26,13 @@
                                 <th scope="col">Drum</th>
                                 <th scope="col">ใช้กับบริษัท</th>
                                 <th scope="col"> </th>
+
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             include('connect.php');
-                            $strsql = "SELECT * FROM cable_used ORDER BY cable_id ASC";
+                            $strsql = "SELECT * FROM cable ORDER BY cable_id ASC";
 
                             try {
                                 $stmt = $con->prepare($strsql);

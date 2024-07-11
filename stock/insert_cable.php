@@ -43,38 +43,48 @@
                             <h1 class="h2 text-gray-900 mb-2">เลือก Drum</h1>
                         </div>
                         <?php
-                        include("../connect.php");
+                        include("connect.php");
 
-                        $strsql = "SELECT * FROM drum ORDER BY drum_id asc";
+                        $strsql = "SELECT * FROM drum";
                         try {
                             $stmt = $con->prepare($strsql);
                             $stmt->execute();
-                            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                            $rowcount = count($result);
+                        ?>
+                            <div class="form-group row">
+                                <div class="col-sm-3">
+                                    <label for="company">
+                                        <h4>รับจากบริษัท</h4>
+                                    </label>
+                                    <select class="form-control" id="company" name="company">
+                                        <option value="">เลือกบริษัท</option>
+                                        <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
+                                            <option value="<?php echo $row['drum_company']; ?>"><?php echo $row['drum_company']; ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="manufacturer">
+                                        <h4>บริษัทผลิตสาย</h4>
+                                    </label>
+                                    <select class="form-control" id="manufacturer" name="manufacturer">
+                                        <option value="">ไม่มีข้อมูล</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label for="drum">
+                                        <h4>Drum</h4>
+                                    </label>
+                                    <select class="form-control" id="drum" name="drum">
+                                        <option value="">ไม่มีข้อมูล</option>
+                                    </select>
+                                </div>
+                            </div>
+                        <?php
                         } catch (PDOException $e) {
                             echo "Error: " . $e->getMessage();
                         }
+                        $con = null;
                         ?>
-                        <div class="form-group row">
-                            <div class="col-sm-3">
-                                <h4>รับจากบริษัท</h4>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>1</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-3">
-                                <h4>บริษัทผลิตสาย</h4>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>1</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-2">
-                                <h4>Drum</h4>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>1</option>
-                                </select>
-                            </div>
-                        </div>
                         <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_drum" type="submit">
                             <h5>เพิ่มข้อมูล</h5>
                         </button>
@@ -84,3 +94,49 @@
         </div>
     </div>
 </form>
+
+<script>
+    $(document).ready(function() {
+        $('#company').change(function() {
+            var company = $(this).val();
+            if (company) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'stock/ajaxData.php',
+                    data: {
+                        'company': company,
+                        'request_type': 'company'
+                    },
+                    success: function(html) {
+                        $('#manufacturer').html(html);
+                        $('#drum').html('<option value="">ไม่มีข้อมูล</option>');
+                    }
+                });
+            } else {
+                $('#manufacturer').html('<option value="">ไม่มีข้อมูล</option>');
+                $('#drum').html('<option value="">ไม่มีข้อมูล</option>');
+            }
+        });
+
+        $('#manufacturer').change(function() {
+            var manufacturer = $(this).val();
+            var company = $('#company').val();
+            if (manufacturer && company) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'stock/ajaxData.php',
+                    data: {
+                        'manufacturer': manufacturer,
+                        'company': company,
+                        'request_type': 'manufacturer'
+                    },
+                    success: function(html) {
+                        $('#drum').html(html);
+                    }
+                });
+            } else {
+                $('#drum').html('<option value="">ไม่มีข้อมูล</option>');
+            }
+        });
+    });
+</script>
