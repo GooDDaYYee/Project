@@ -3,7 +3,7 @@ include("../connect.php");
 
 if (isset($_POST['request_type']) && $_POST['request_type'] == 'company' && isset($_POST["company"])) {
     $company = $_POST["company"];
-    $strsql = "SELECT DISTINCT drum_cable_company FROM drum WHERE drum_company = :company";
+    $strsql = "SELECT * FROM drum WHERE drum_company = :company";
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':company', $company, PDO::PARAM_STR);
     $stmt->execute();
