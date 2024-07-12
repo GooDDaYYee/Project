@@ -1,4 +1,4 @@
-<form action="stock/insert_drum_process.php" id="insert_drum" method="post">
+<form action="stock/insert_drum_process.php" id="insert_cable" method="post">
     <!-- Begin Page Content -->
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
@@ -34,8 +34,9 @@
                             </div>
                             <div class="col-sm-3">
                                 <h4>ใช้กับบริษัท</h4>
-                                <select class="form-control" id="exampleFormControlSelect1">
-                                    <option>1</option>
+                                <select class="form-control" id="cable_work" name="cable_work">
+                                    <option value="Mixed">Mixed</option>
+                                    <option value="FHB">FHB</option>
                                 </select>
                             </div>
                         </div>
@@ -85,7 +86,7 @@
                         }
                         $con = null;
                         ?>
-                        <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_drum" type="submit">
+                        <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_cable" type="submit">
                             <h5>เพิ่มข้อมูล</h5>
                         </button>
                     </div>
