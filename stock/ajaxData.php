@@ -30,7 +30,7 @@ if (isset($_POST['request_type']) && $_POST['request_type'] == 'manufacturer' &&
     if ($stmt->rowCount() > 0) {
         echo '<option value="">เลือกรหัส Drum</option>';
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo '<option value="' . ($row['drum_no']) . '">' . ($row['drum_no']) . '</option>';
+            echo '<option value="' . ($row['drum_id']) . '">' . ($row['drum_no']) . '</option>';
         }
     } else {
         echo '<option value="">ไม่มีข้อมูล</option>';

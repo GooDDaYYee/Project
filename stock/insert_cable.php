@@ -1,4 +1,4 @@
-<form action="stock/insert_drum_process.php" id="insert_cable" method="post">
+<form action="stock/insert_cable_process.php" id="insert_cable" method="post">
     <!-- Begin Page Content -->
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
@@ -72,10 +72,10 @@
                                     </select>
                                 </div>
                                 <div class="col-sm-2">
-                                    <label for="drum">
+                                    <label for="drum_id">
                                         <h4>Drum</h4>
                                     </label>
-                                    <select class="form-control" id="drum" name="drum">
+                                    <select class="form-control" id="drum_id" name="drum_id">
                                         <option value="">ไม่มีข้อมูล</option>
                                     </select>
                                 </div>
@@ -110,12 +110,12 @@
                     },
                     success: function(html) {
                         $('#manufacturer').html(html);
-                        $('#drum').html('<option value="">ไม่มีข้อมูล</option>');
+                        $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
                     }
                 });
             } else {
                 $('#manufacturer').html('<option value="">ไม่มีข้อมูล</option>');
-                $('#drum').html('<option value="">ไม่มีข้อมูล</option>');
+                $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
             }
         });
 
@@ -132,11 +132,11 @@
                         'request_type': 'manufacturer'
                     },
                     success: function(html) {
-                        $('#drum').html(html);
+                        $('#drum_id').html(html);
                     }
                 });
             } else {
-                $('#drum').html('<option value="">ไม่มีข้อมูล</option>');
+                $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
             }
         });
     });
