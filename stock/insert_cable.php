@@ -58,9 +58,10 @@
                                     </label>
                                     <select class="form-control" id="company" name="company">
                                         <option value="">เลือกบริษัท</option>
-                                        <?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) : ?>
-                                            <option value="<?php echo $row['drum_company']; ?>"><?php echo $row['drum_company']; ?></option>
-                                        <?php endwhile; ?>
+                                        <option value="FUTONG">FUTONG</option>
+                                        <option value="FBH">FIBERHOME</option>
+                                        <option value="TICC">TICC</option>
+                                        <option value="TUC">TUC</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -68,7 +69,14 @@
                                         <h4>บริษัทผลิตสาย</h4>
                                     </label>
                                     <select class="form-control" id="manufacturer" name="manufacturer">
-                                        <option value="">ไม่มีข้อมูล</option>
+                                        <option value="">เลือกบริษัท</option>
+                                        <option value="Mixed">Mixed</option>
+                                        <option value="FBH">FIBERHOME</option>
+                                        <option value="CCS">CCS</option>
+                                        <option value="W&W">W&W</option>
+                                        <option value="TKI">TKI</option>
+                                        <option value="MTE">MTE</option>
+                                        <option value="Poonsub">Poonsub</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-2">
@@ -98,29 +106,8 @@
 
 <script>
     $(document).ready(function() {
-        $('#company').change(function() {
-            var company = $(this).val();
-            if (company) {
-                $.ajax({
-                    type: 'POST',
-                    url: 'stock/ajaxData.php',
-                    data: {
-                        'company': company,
-                        'request_type': 'company'
-                    },
-                    success: function(html) {
-                        $('#manufacturer').html(html);
-                        $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
-                    }
-                });
-            } else {
-                $('#manufacturer').html('<option value="">ไม่มีข้อมูล</option>');
-                $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
-            }
-        });
-
-        $('#manufacturer').change(function() {
-            var manufacturer = $(this).val();
+        $('#manufacturer, #company').change(function() {
+            var manufacturer = $('#manufacturer').val();
             var company = $('#company').val();
             if (manufacturer && company) {
                 $.ajax({

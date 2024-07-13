@@ -94,7 +94,7 @@
     <script>
       function confirmDelete(username) {
         if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-          window.location.href = 'delete_users.php?username=' + username;
+          window.location.href = 'users/delete_users.php?username=' + username;
         }
       }
 

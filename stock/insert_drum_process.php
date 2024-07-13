@@ -4,13 +4,14 @@ include("../connect.php");
 try {
     $con->beginTransaction();
 
-    $stmt = $con->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_company, drum_cable_company)
-    VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_company, :drum_cable_company)");
+    $stmt = $con->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company, drum_cable_company)
+    VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_remaining, :drum_company, :drum_cable_company)");
 
     $stmt->bindParam(':drum_no', $_POST['drum_no']);
     $stmt->bindParam(':drum_to', $_POST['drum_to']);
     $stmt->bindParam(':drum_description', $_POST['drum_description']);
     $stmt->bindParam(':drum_full', $_POST['drum_full']);
+    $stmt->bindParam(':drum_remaining', $_POST['drum_full']);
     $stmt->bindParam(':drum_company', $_POST['drum_company']);
     $stmt->bindParam(':drum_cable_company', $_POST['drum_cable_company']);
 
