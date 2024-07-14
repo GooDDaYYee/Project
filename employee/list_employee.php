@@ -55,7 +55,7 @@
                                                <td>
                                                    <div class="btn-group" role="group" aria-label="Basic example">
                                                        <button type="button" class="btn btn-outline-success">แก้ไข</button>
-                                                       <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['employee_name'] . ' ' . $rs['employee_lastname']; ?>')">ลบ</button>
+                                                       <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $i; ?>','<?php echo $rs['employee_id']; ?>')">ลบ</button>
                                                    </div>
                                                </td>
                                            </tr>
@@ -77,9 +77,9 @@
            </div>
        </div>
        <script>
-           function confirmDelete(username) {
-               if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-                   window.location.href = 'delete_users.php?username=' + username;
+           function confirmDelete(i, employee_id) {
+               if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลพนักงานลำดับที่ " + i + " นี้?")) {
+                   window.location.href = 'employee/delete_employee.php?employee_id=' + employee_id;
                }
            }
 

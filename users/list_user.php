@@ -70,7 +70,7 @@
                         <td>
                           <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-outline-success">แก้ไข</button>
-                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['username']; ?>')">ลบ</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['user_id']; ?>','<?php echo $rs['username']; ?>')">ลบ</button>
                           </div>
                         </td>
                       </tr>
@@ -92,9 +92,9 @@
       </div>
     </div>
     <script>
-      function confirmDelete(username) {
+      function confirmDelete(user_id, username) {
         if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-          window.location.href = 'users/delete_users.php?username=' + username;
+          window.location.href = 'users/delete_users.php?user_id=' + user_id;
         }
       }
 
