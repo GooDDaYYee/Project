@@ -25,26 +25,27 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-4">
-                                <h4>บริษัทผลิตสาย</h4>
-                                <select class="form-control" id="drum_company" name="drum_company">
-                                    <option value="">เลือกบริษัท</option>
-                                    <option value="FUTONG">FUTONG</option>
-                                    <option value="FBH">FIBERHOME</option>
-                                    <option value="TICC">TICC</option>
-                                    <option value="TUC">TUC</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-4">
                                 <h4>รับจากบริษัท</h4>
                                 <select class="form-control" id="drum_cable_company" name="drum_cable_company">
                                     <option value="">เลือกบริษัท</option>
                                     <option value="Mixed">Mixed</option>
-                                    <option value="FBH">FIBERHOME</option>
+                                    <option value="FIBERHOME">FIBERHOME</option>
+                                    <option value="FBH">FBH</option>
                                     <option value="CCS">CCS</option>
                                     <option value="W&W">W&W</option>
                                     <option value="TKI">TKI</option>
                                     <option value="MTE">MTE</option>
                                     <option value="Poonsub">Poonsub</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <h4>บริษัทผลิตสาย</h4>
+                                <select class="form-control" id="drum_company" name="drum_company">
+                                    <option value="">เลือกบริษัท</option>
+                                    <option value="FUTONG">FUTONG</option>
+                                    <option value="FIBERHOME">FIBERHOME</option>
+                                    <option value="TICC">TICC</option>
+                                    <option value="TUC">TUC</option>
                                 </select>
                             </div>
                             <div class="col-sm-4">

@@ -58,10 +58,14 @@
                                     </label>
                                     <select class="form-control" id="company" name="company">
                                         <option value="">เลือกบริษัท</option>
-                                        <option value="FUTONG">FUTONG</option>
-                                        <option value="FBH">FIBERHOME</option>
-                                        <option value="TICC">TICC</option>
-                                        <option value="TUC">TUC</option>
+                                        <option value="Mixed">Mixed</option>
+                                        <option value="FIBERHOME">FIBERHOME</option>
+                                        <option value="FBH">FBH</option>
+                                        <option value="CCS">CCS</option>
+                                        <option value="W&W">W&W</option>
+                                        <option value="TKI">TKI</option>
+                                        <option value="MTE">MTE</option>
+                                        <option value="Poonsub">Poonsub</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-3">
@@ -70,13 +74,10 @@
                                     </label>
                                     <select class="form-control" id="manufacturer" name="manufacturer">
                                         <option value="">เลือกบริษัท</option>
-                                        <option value="Mixed">Mixed</option>
-                                        <option value="FBH">FIBERHOME</option>
-                                        <option value="CCS">CCS</option>
-                                        <option value="W&W">W&W</option>
-                                        <option value="TKI">TKI</option>
-                                        <option value="MTE">MTE</option>
-                                        <option value="Poonsub">Poonsub</option>
+                                        <option value="FUTONG">FUTONG</option>
+                                        <option value="FIBERHOME">FIBERHOME</option>
+                                        <option value="TICC">TICC</option>
+                                        <option value="TUC">TUC</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-2">

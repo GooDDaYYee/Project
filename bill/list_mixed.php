@@ -277,8 +277,8 @@
                           }
                         });
 
-                        function fetchDetails(auId, index) {
-                          fetch('fetch_bill_details.php?au_id=' + auId)
+                        function fetchDetails(auId, index, company) {
+                          fetch('bill/fetch_bill_details.php?au_id=' + auId)
                             .then(response => response.json())
                             .then(data => {
                               document.getElementById(`selectedData_${index}`).innerText = data.au_detail;
