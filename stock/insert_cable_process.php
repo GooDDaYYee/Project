@@ -5,8 +5,8 @@ try {
     $con->beginTransaction();
 
     $cable_used = $_POST['cable_form'] - $_POST['cable_to'];
-
     $drum_id = $_POST['drum_id'];
+
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
@@ -36,13 +36,14 @@ try {
     $stmt->bindParam(':cable_work', $_POST['cable_work']);
 
     $stmt->execute();
-    $con->commit();
 
     $sql = "UPDATE drum SET drum_used=:total_cable, drum_remaining=drum_full-:total_cable WHERE drum_id=:drum_id";
     $stmt2 = $con->prepare($sql);
     $stmt2->bindParam(':total_cable', $total_cable, PDO::PARAM_INT);
     $stmt2->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
     $stmt2->execute();
+
+    $con->commit();
 
     header("Location: ../index.php?page=stock/list_stock_cable");
     exit();
@@ -53,28 +54,4 @@ try {
         history.back();
         </script>
     ';
-}
-
-try {
-    $drum_id = $_POST['drum_id'];
-    $strsql = 'SELECT * FROM cable c JOIN durm d WHERE drum_id = :drum_id';
-    $stmt = $con->prepare($strsql);
-    $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $total_cable = 0;
-    foreach ($result as $row) {
-        $total_cable += $row['cable_used'];
-    }
-
-    $sql = "UPDATE drum SET drum_used=:total_cable, drum_remaining=drum_full-:total_cable WHERE drum_id=:drum_id";
-    $stmt2 = $con->prepare($sql);
-    $stmt2->bindParam(':total_cable', $total_cable, PDO::PARAM_INT);
-    $stmt2->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
-    $stmt2->execute();
-
-    header("Location: ../index.php?page=stock/list_stock_cable");
-    exit();
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
 }

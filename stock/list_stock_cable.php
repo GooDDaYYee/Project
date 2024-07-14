@@ -20,9 +20,9 @@
                                 <th scope="col">Route</th>
                                 <th scope="col">Section</th>
                                 <th scope="col">Team</th>
-                                <th scope="col">Cable Form</th>
-                                <th scope="col">Cable To</th>
-                                <th scope="col">Cable Used</th>
+                                <th scope="col">Cable จาก</th>
+                                <th scope="col">Cable ถึง</th>
+                                <th scope="col">Cable ใช้ไป</th>
                                 <th scope="col">Drum</th>
                                 <th scope="col">ใช้กับบริษัท</th>
                                 <th scope="col"> </th>
@@ -52,9 +52,9 @@
                                             <td><i class="to_file"><?php echo $rs['route_name']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['installed_section']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['placing_team']; ?></i></td>
-                                            <td><i class="to_file"><?php echo $rs['cable_form']; ?></i></td>
-                                            <td><i class="to_file"><?php echo $rs['cable_to']; ?></i></td>
-                                            <td><i class="to_file"><?php echo $rs['cable_used']; ?></i></td>
+                                            <td><i class="to_file">ML <?php echo $rs['cable_form']; ?></i></td>
+                                            <td><i class="to_file">ML <?php echo $rs['cable_to']; ?></i></td>
+                                            <td><i class="to_file"><?php echo $rs['cable_used']; ?> เมตร</i></td>
                                             <td><i class="to_file"><?php echo $rs['drum_no']; ?></i></td>
                                             <td><i class="to_file"><?php echo $rs['cable_work']; ?></i></td>
                                             <td>
