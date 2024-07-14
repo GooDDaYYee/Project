@@ -19,7 +19,11 @@ if (isset($_GET['cable_id'])) {
     }
 
     try {
-        $strsql = 'SELECT c.drum_id, SUM(c.cable_used) as total_cable FROM cable c JOIN drum d ON c.drum_id = d.drum_id GROUP BY c.drum_id';
+
+        $strsql = 'SELECT d.drum_id, COALESCE(SUM(c.cable_used), 0) as total_cable 
+                   FROM drum d 
+                   LEFT JOIN cable c ON d.drum_id = c.drum_id 
+                   GROUP BY d.drum_id';
         $stmt = $con->prepare($strsql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +44,6 @@ if (isset($_GET['cable_id'])) {
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-
 
     $con = null;
 } else {
