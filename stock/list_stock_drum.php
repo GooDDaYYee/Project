@@ -64,7 +64,7 @@
                                         $i++;
                                     }
                                 } else {
-                                    echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
+                                    echo "<tr><td colspan='10'>ไม่พบข้อมูล</td></tr>";
                                 }
                             } catch (PDOException $e) {
                                 echo "Error: " . $e->getMessage();
