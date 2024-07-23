@@ -1,4 +1,4 @@
-             <form action="insert_register.php" id="insert_users" method="post">
+             <form action="users/insert_register.php" id="insert_users" method="post">
                  <!-- Begin Page Content -->
                  <div class="card o-hidden border-0 shadow-lg my-5">
                      <div class="card-body p-0">

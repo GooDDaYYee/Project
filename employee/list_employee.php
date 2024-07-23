@@ -50,7 +50,19 @@
                                                <td><i class="to_file"><?php echo $rs['employee_age']; ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_phone']; ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_email']; ?></i></td>
-                                               <td><i class="to_file"><?php echo $rs['employee_position']; ?></i></td>
+                                               <td><i class="to_file"><?php
+                                                                        if ($rs['employee_position'] == 0) {
+                                                                            echo "แอดมิน";
+                                                                        } elseif ($rs['employee_position'] == 1) {
+                                                                            echo "เจ้าของ";
+                                                                        } elseif ($rs['employee_position'] == 2) {
+                                                                            echo "พนักงานเอกสาร";
+                                                                        } elseif ($rs['employee_position'] == 3) {
+                                                                            echo "พนักงานปฏิบัติ";
+                                                                        } else {
+                                                                            echo "ไม่มีข้อมูล";
+                                                                        }
+                                                                        ?></i></td>
                                                <td><i class="to_file"><?php echo $rs['employee_salary']; ?> บาท</i></td>
                                                <td>
                                                    <div class="btn-group" role="group" aria-label="Basic example">

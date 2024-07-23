@@ -20,8 +20,6 @@
                 <tr>
                   <th scope="col">ลำดับ</th>
                   <th scope="col">ชื่อผู้ใช้</th>
-                  <th scope="col">ชื่อ</th>
-                  <th scope="col">นามสกุล</th>
                   <th scope="col">ประเภทผู้ใช้</th>
                   <th scope="col">สถานะ</th>
                   <th scope="col"> </th>
@@ -45,8 +43,6 @@
                       <tr>
                         <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
                         <td><i class="to_file"><?php echo $rs['username']; ?></i></td>
-                        <td><i class="to_file"><?php echo $rs['name']; ?></i></td>
-                        <td><i class="to_file"><?php echo $rs['lastname']; ?></i></td>
                         <td><i class="to_file"><?php
                                                 if ($rs['lv'] == 0) {
                                                   echo "แอดมิน";
@@ -78,7 +74,7 @@
                       $i++;
                     }
                   } else {
-                    echo "<tr><td colspan='7'>ไม่พบข้อมูล</td></tr>";
+                    echo "<tr><td colspan='5'>ไม่พบข้อมูล</td></tr>";
                   }
                 } catch (PDOException $e) {
                   echo "Error: " . $e->getMessage();
