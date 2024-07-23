@@ -2,6 +2,32 @@
 include("../connect.php");
 
 try {
+    $drum_no = $_POST['drum_no'];
+    $drum_company = $_POST['drum_company'];
+    $drum_cable_company = $_POST['drum_cable_company'];
+    $strsql = "SELECT * FROM drum WHERE drum_no=:drum_no";
+    $stmt = $con->prepare($strsql);
+    $stmt->bindParam(':drum_no', $drum_no);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result && ($drum_company == $result['drum_company'] && $drum_cable_company == $result['drum_cable_company'])) {
+        echo '<script>
+        alert("มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่");
+        history.back();
+        </script>';
+        exit();
+    }
+} catch (PDOException $e) {
+    echo '<script>
+        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
+        history.back();
+        </script>';
+    exit();
+}
+
+
+try {
     $con->beginTransaction();
 
     $stmt = $con->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company, drum_cable_company)
