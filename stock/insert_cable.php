@@ -80,7 +80,7 @@
                                         <option value="TUC">TUC</option>
                                     </select>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-3">
                                     <label for="drum_id">
                                         <h4>Drum No</h4>
                                     </label>

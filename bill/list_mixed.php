@@ -331,16 +331,13 @@
                               document.getElementById('project').value = data.bill_project;
                               document.getElementById('auCount').value = data.list_num;
 
-                              // Clear existing AU fields
                               const inputFields = document.querySelector('.row-md-auto');
                               while (inputFields.firstChild) {
                                 inputFields.removeChild(inputFields.firstChild);
                               }
 
-                              // Add AU fields
                               addAUFields(data.list_num);
 
-                              // Fill AU fields with data
                               data.details.forEach(function(detail, index) {
                                 document.getElementById(`inputField_${index + 1}`).value = detail.au_id;
                                 document.getElementById(`selectedData_${index + 1}`).innerText = detail.au_detail;
