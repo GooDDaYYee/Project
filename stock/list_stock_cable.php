@@ -1,87 +1,3 @@
-<!-- Modal for Editing Cable -->
-<div class="modal fade" id="editCableModal" tabindex="-1" role="dialog" aria-labelledby="editCableModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editCableModalLabel">แก้ไขงาน</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editCableForm" action="stock/update_cable.php" method="post">
-                    <input type="hidden" id="editCableId" name="cable_id">
-                    <div class="form-group row">
-                        <div class="col-sm-4">
-                            <label for="editRoute">Route</label>
-                            <input type="text" id="editRoute" name="route" class="form-control" required>
-                        </div>
-                        <div class="col-sm-4">
-                            <label for="editSection">Section</label>
-                            <input type="text" id="editSection" name="section" class="form-control" required>
-                        </div>
-                        <div class="col-sm-4">
-                            <label for="editTeam">Team</label>
-                            <input type="text" id="editTeam" name="team" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-2">
-                            <label for="editCableFrom">Cable From</label>
-                            <input type="number" id="editCableFrom" name="cable_form" class="form-control" required>
-                        </div>
-                        <div class="col-sm-2">
-                            <label for="editCableTo">Cable To</label>
-                            <input type="number" id="editCableTo" name="cable_to" class="form-control" required>
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="editCableWork">ใช้กับบริษัท</label>
-                            <select class="form-control" id="editCableWork" name="cable_work">
-                                <option value="Mixed">Mixed</option>
-                                <option value="FHB">FHB</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-3">
-                            <label for="company">รับจากบริษัท</label>
-                            <select class="form-control" id="company" name="company">
-                                <option value="">เลือกบริษัท</option>
-                                <option value="Mixed">Mixed</option>
-                                <option value="FIBERHOME">FIBERHOME</option>
-                                <option value="FBH">FBH</option>
-                                <option value="CCS">CCS</option>
-                                <option value="W&W">W&W</option>
-                                <option value="TKI">TKI</option>
-                                <option value="MTE">MTE</option>
-                                <option value="Poonsub">Poonsub</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="manufacturer">บริษัทผลิตสาย</label>
-                            <select class="form-control" id="manufacturer" name="manufacturer">
-                                <option value="">เลือกบริษัท</option>
-                                <option value="FUTONG">FUTONG</option>
-                                <option value="FIBERHOME">FIBERHOME</option>
-                                <option value="TICC">TICC</option>
-                                <option value="TUC">TUC</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <label for="drum_id">Drum No</label>
-                            </label>
-                            <select class="form-control" id="drum_id" name="drum_id">
-                                <option value="">ไม่มีข้อมูล</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Existing HTML for displaying cable data -->
 <div class="container-fluid">
     <!-- List table -->
@@ -161,6 +77,92 @@
         </div>
     </div>
 </div>
+
+<!-- Modal for Editing Cable -->
+<div class="modal" id="editCableModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="editCableModalLabel">แก้ไขงาน</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="editCableForm" action="stock/update_cable.php" method="post">
+                <input type="hidden" id="editCableId" name="cable_id">
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <label for="editRoute">Route</label>
+                        <input type="text" id="editRoute" name="route" class="form-control" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="editSection">Section</label>
+                        <input type="text" id="editSection" name="section" class="form-control" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="editTeam">Team</label>
+                        <input type="text" id="editTeam" name="team" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <label for="editCableFrom">Cable From</label>
+                        <input type="number" id="editCableFrom" name="cable_form" class="form-control" required>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="editCableTo">Cable To</label>
+                        <input type="number" id="editCableTo" name="cable_to" class="form-control" required>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="editCableWork">ใช้กับบริษัท</label>
+                        <select class="form-control" id="editCableWork" name="cable_work">
+                            <option value="Mixed">Mixed</option>
+                            <option value="FHB">FHB</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label for="company">รับจากบริษัท</label>
+                        <select class="form-control" id="company" name="company">
+                            <option value="">เลือกบริษัท</option>
+                            <option value="Mixed">Mixed</option>
+                            <option value="FIBERHOME">FIBERHOME</option>
+                            <option value="FBH">FBH</option>
+                            <option value="CCS">CCS</option>
+                            <option value="W&W">W&W</option>
+                            <option value="TKI">TKI</option>
+                            <option value="MTE">MTE</option>
+                            <option value="Poonsub">Poonsub</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="manufacturer">บริษัทผลิตสาย</label>
+                        <select class="form-control" id="manufacturer" name="manufacturer">
+                            <option value="">เลือกบริษัท</option>
+                            <option value="FUTONG">FUTONG</option>
+                            <option value="FIBERHOME">FIBERHOME</option>
+                            <option value="TICC">TICC</option>
+                            <option value="TUC">TUC</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="drum_id">Drum No</label>
+                        </label>
+                        <select class="form-control" id="drum_id" name="drum_id">
+                            <option value="">ไม่มีข้อมูล</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script>
     $(document).ready(function() {

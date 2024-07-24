@@ -120,6 +120,10 @@
       background-color: rgba(0, 0, 0, 0.4);
     }
 
+    #editModal {
+      background-color: transparent;
+    }
+
     .modal-content {
       background-color: #fefefe;
       margin: 5% auto;

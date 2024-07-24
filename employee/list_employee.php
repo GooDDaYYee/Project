@@ -90,58 +90,56 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <form id="editForm" action="employee/update_employee.php" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลพนักงาน</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <form id="editForm" action="employee/update_employee.php" method="POST">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลพนักงาน</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-employee-id" name="employee_id">
+                <div class="form-group">
+                    <label for="edit-employee-name">ชื่อ</label>
+                    <input type="text" class="form-control" id="edit-employee-name" name="employee_name">
                 </div>
-                <div class="modal-body">
-                    <input type="hidden" id="edit-employee-id" name="employee_id">
-                    <div class="form-group">
-                        <label for="edit-employee-name">ชื่อ</label>
-                        <input type="text" class="form-control" id="edit-employee-name" name="employee_name">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-employee-lastname">นามสกุล</label>
-                        <input type="text" class="form-control" id="edit-employee-lastname" name="employee_lastname">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-employee-age">อายุ</label>
-                        <input type="number" class="form-control" id="edit-employee-age" name="employee_age">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-employee-phone">เบอร์โทร</label>
-                        <input type="text" class="form-control" id="edit-employee-phone" name="employee_phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-employee-email">อีเมล</label>
-                        <input type="email" class="form-control" id="edit-employee-email" name="employee_email">
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-employee-position">ตำแหน่ง</label>
-                        <select class="form-control" id="edit-employee-position" name="employee_position">
-                            <option value="0">แอดมิน</option>
-                            <option value="1">เจ้าของ</option>
-                            <option value="2">พนักงานเอกสาร</option>
-                            <option value="3">พนักงานปฏิบัติ</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="edit-employee-salary">เงินเดือน</label>
-                        <input type="number" class="form-control" id="edit-employee-salary" name="employee_salary">
-                    </div>
+                <div class="form-group">
+                    <label for="edit-employee-lastname">นามสกุล</label>
+                    <input type="text" class="form-control" id="edit-employee-lastname" name="employee_lastname">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-                    <button type="submit" class="btn btn-primary">บันทึก</button>
+                <div class="form-group">
+                    <label for="edit-employee-age">อายุ</label>
+                    <input type="number" class="form-control" id="edit-employee-age" name="employee_age">
                 </div>
-            </form>
-        </div>
+                <div class="form-group">
+                    <label for="edit-employee-phone">เบอร์โทร</label>
+                    <input type="text" class="form-control" id="edit-employee-phone" name="employee_phone">
+                </div>
+                <div class="form-group">
+                    <label for="edit-employee-email">อีเมล</label>
+                    <input type="email" class="form-control" id="edit-employee-email" name="employee_email">
+                </div>
+                <div class="form-group">
+                    <label for="edit-employee-position">ตำแหน่ง</label>
+                    <select class="form-control" id="edit-employee-position" name="employee_position">
+                        <option value="0">แอดมิน</option>
+                        <option value="1">เจ้าของ</option>
+                        <option value="2">พนักงานเอกสาร</option>
+                        <option value="3">พนักงานปฏิบัติ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-employee-salary">เงินเดือน</label>
+                    <input type="number" class="form-control" id="edit-employee-salary" name="employee_salary">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                <button type="submit" class="btn btn-primary">บันทึก</button>
+            </div>
+        </form>
     </div>
 </div>
 

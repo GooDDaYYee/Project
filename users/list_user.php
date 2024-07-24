@@ -90,45 +90,43 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <form id="editForm" action="users/update_users.php" method="POST">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลผู้ใช้</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <form id="editForm" action="users/update_users.php" method="POST">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลผู้ใช้</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-user-id" name="user_id">
+        <div class="form-group">
+          <label for="edit-username">ชื่อผู้ใช้</label>
+          <input type="text" class="form-control" id="edit-username" name="username">
         </div>
-        <div class="modal-body">
-          <input type="hidden" id="edit-user-id" name="user_id">
-          <div class="form-group">
-            <label for="edit-username">ชื่อผู้ใช้</label>
-            <input type="text" class="form-control" id="edit-username" name="username">
-          </div>
-          <div class="form-group">
-            <label for="edit-lv">ประเภทผู้ใช้</label>
-            <select class="form-control" id="edit-lv" name="lv">
-              <option value="0">แอดมิน</option>
-              <option value="1">เจ้าของ</option>
-              <option value="2">พนักงานเอกสาร</option>
-              <option value="3">พนักงานปฏิบัติ</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="edit-status">สถานะ</label>
-            <select class="form-control" id="edit-status" name="status">
-              <option value="0">แบน</option>
-              <option value="1">ปกติ</option>
-            </select>
-          </div>
+        <div class="form-group">
+          <label for="edit-lv">ประเภทผู้ใช้</label>
+          <select class="form-control" id="edit-lv" name="lv">
+            <option value="0">แอดมิน</option>
+            <option value="1">เจ้าของ</option>
+            <option value="2">พนักงานเอกสาร</option>
+            <option value="3">พนักงานปฏิบัติ</option>
+          </select>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-          <button type="submit" class="btn btn-primary">บันทึก</button>
+        <div class="form-group">
+          <label for="edit-status">สถานะ</label>
+          <select class="form-control" id="edit-status" name="status">
+            <option value="0">แบน</option>
+            <option value="1">ปกติ</option>
+          </select>
         </div>
-      </form>
-    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+        <button type="submit" class="btn btn-primary">บันทึก</button>
+      </div>
+    </form>
   </div>
 </div>
 
