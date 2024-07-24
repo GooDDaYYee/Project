@@ -73,7 +73,7 @@ session_start();
     <div class="container">
 
         <!-- Outer Row -->
-        <form class="form-signin container" name="form_login" id="form_login" method="post" action="login_process.php">
+        <form class="form-signin container" name="form_login" id="form_login" method="post" action="forgetpass.php">
             <div>
                 <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
             </div>

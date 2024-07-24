@@ -11,7 +11,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login</title>
+    <title>เข้าสู่ระบบ</title>
 
     <!-- Custom fonts for this template-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" type="text/css">
@@ -102,7 +102,7 @@ session_start();
                                                         <input type="checkbox" class="custom-control-input" id="customCheck" name="customCheck" <?php if (isset($_COOKIE['username'])) echo "checked"; ?>> <!-- เพิ่มโค้ดเพื่อให้ถูกติ้กถ้ามีการตรวจสอบ cookie ชื่อ username -->
                                                         <label class="custom-control-label" for="customCheck">จำรหัสผ่าน</label>
                                                     </div>
-                                                    <a href="forgot_pass.php">ลืมรหัสผ่าน</a>
+                                                    <a href="confpass.php">ลืมรหัสผ่าน</a>
                                                 </div>
                                             </div>
                                             <div class="row justify-content-center align-items-center">
