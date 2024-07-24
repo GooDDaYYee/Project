@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <label for="drum_id">
-                                        <h4>Drum</h4>
+                                        <h4>Drum No</h4>
                                     </label>
                                     <select class="form-control" id="drum_id" name="drum_id">
                                         <option value="">ไม่มีข้อมูล</option>

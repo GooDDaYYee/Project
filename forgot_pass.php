@@ -72,6 +72,7 @@ session_start();
 
     <div class="container">
 
+        <!-- Outer Row -->
         <form class="form-signin container" name="form_login" id="form_login" method="post" action="login_process.php">
             <div>
                 <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
@@ -80,35 +81,24 @@ session_start();
                 <div class="col-xl-10 col-lg-12 col-md-9">
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
-
+                            <!-- Nested Row within Card Body -->
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h2 class="h4 text-gray-900 mb-4">เข้าสู่ระบบ</h2>
+                                            <h2 class="h4 text-gray-900 mb-4">ลืมรหัสผ่าน</h2>
                                         </div>
                                         <form class="user">
                                             <div class="form-group">
-
-                                                <input type="username" id="input_username" name="input_username" class="form-control form-control-user" placeholder="Username" required="" autofocus="" <?php if (isset($_COOKIE['username'])) echo "value='" . $_COOKIE['username'] . "'"; ?>>
+                                                <input type="text" id="input_username" name="input_username" class="form-control form-control-user" placeholder="บัญชีผู้ใช้" required="" autofocus="">
                                             </div>
                                             <div class="form-group">
-
-                                                <input type="password" id="input_password" name="input_password" class="form-control form-control-user" placeholder="Password" required="" <?php if (isset($_COOKIE['password'])) echo "value='" . $_COOKIE['password'] . "'"; ?>>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="custom-control custom-checkbox small d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <input type="checkbox" class="custom-control-input" id="customCheck" name="customCheck" <?php if (isset($_COOKIE['username'])) echo "checked"; ?>> <!-- เพิ่มโค้ดเพื่อให้ถูกติ้กถ้ามีการตรวจสอบ cookie ชื่อ username -->
-                                                        <label class="custom-control-label" for="customCheck">จำรหัสผ่าน</label>
-                                                    </div>
-                                                    <a href="forgot_pass.php">ลืมรหัสผ่าน</a>
-                                                </div>
+                                                <input type="phone" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทรศัพท์" required="">
                                             </div>
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-4">
                                                     <button href="index.php?page=home" class="btn btn-warning bg-gradient-purple col" type="submit">
-                                                        <h5>เข้าสู่ระบบ</h5>
+                                                        <h5>รีเซ็ตรหัสผ่าน</h5>
                                                     </button>
                                                 </div>
                                             </div>
@@ -121,11 +111,14 @@ session_start();
                 </div>
             </div>
         </form>
+        <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+        <!-- Core plugin JavaScript-->
         <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
+        <!-- Custom scripts for all pages-->
         <script src="js/sb-admin-2.min.js"></script>
 
         <script>
