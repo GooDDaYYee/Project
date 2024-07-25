@@ -76,6 +76,10 @@
       }
     }
 
+    #editModal {
+      background-color: transparent;
+    }
+
     /* สิ้นสุดส่วนโหลด */
 
     .btn-warning {
@@ -118,10 +122,6 @@
       overflow: auto;
       background-color: rgb(0, 0, 0);
       background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    #editModal {
-      background-color: transparent;
     }
 
     .modal-content {

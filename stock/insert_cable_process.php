@@ -4,8 +4,15 @@ include("../connect.php");
 try {
     $con->beginTransaction();
 
-    $cable_used = $_POST['cable_form'] - $_POST['cable_to'];
+    $cable_id = $_POST['cable_id'];
+    $route = $_POST['route'];
+    $section = $_POST['section'];
+    $team = $_POST['team'];
+    $cable_form = $_POST['cable_form'];
+    $cable_to = $_POST['cable_to'];
+    $cable_work = $_POST['cable_work'];
     $drum_id = $_POST['drum_id'];
+    $cable_used = $cable_form - $cable_to;
 
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
@@ -26,14 +33,14 @@ try {
     $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work)
     VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work)");
 
-    $stmt->bindParam(':route_name', $_POST['route']);
-    $stmt->bindParam(':installed_section', $_POST['section']);
-    $stmt->bindParam(':placing_team', $_POST['team']);
-    $stmt->bindParam(':cable_form', $_POST['cable_form']);
-    $stmt->bindParam(':cable_to', $_POST['cable_to']);
+    $stmt->bindParam(':route_name', $route);
+    $stmt->bindParam(':installed_section', $section);
+    $stmt->bindParam(':placing_team', $team);
+    $stmt->bindParam(':cable_form', $cable_form);
+    $stmt->bindParam(':cable_to', $cable_to);
     $stmt->bindParam(':cable_used', $cable_used);
-    $stmt->bindParam(':drum_id', $_POST['drum_id']);
-    $stmt->bindParam(':cable_work', $_POST['cable_work']);
+    $stmt->bindParam(':drum_id', $drum_id);
+    $stmt->bindParam(':cable_work', $cable_work);
 
     $stmt->execute();
 

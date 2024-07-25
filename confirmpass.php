@@ -111,38 +111,6 @@ session_start();
                 </div>
             </div>
         </form>
-        <!-- Bootstrap core JavaScript-->
-        <script src="vendor/jquery/jquery.min.js"></script>
-        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Core plugin JavaScript-->
-        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
-        <!-- Custom scripts for all pages-->
-        <script src="js/sb-admin-2.min.js"></script>
-
-        <script>
-            // ตรวจสอบว่ามีการเลือก checkbox Remember หรือไม่
-            if (document.getElementById("customCheck").checked) {
-                // เก็บค่า username และ password ใน localStorage
-                localStorage.setItem("username", document.getElementById("input_username").value);
-                localStorage.setItem("password", document.getElementById("input_password").value);
-            }
-
-            // เมื่อมีการส่งแบบฟอร์ม
-            document.getElementById("form_login").addEventListener("submit", function() {
-                // ตรวจสอบว่ามีการเลือก checkbox Remember หรือไม่
-                if (document.getElementById("customCheck").checked) {
-                    // เก็บค่า username และ password ใน cookie และกำหนดอายุของ cookie เป็น 30 วัน
-                    document.cookie = "username=" + document.getElementById("input_username").value + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-                    document.cookie = "password=" + document.getElementById("input_password").value + "; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-                } else {
-                    // ลบ cookie ชื่อ username และ password ถ้า checkbox Remember ไม่ถูกติ้ก
-                    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                    document.cookie = "password=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-                }
-            });
-        </script>
 </body>
 
 </html>

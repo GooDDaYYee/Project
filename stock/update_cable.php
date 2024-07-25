@@ -49,7 +49,7 @@ try {
     $stmt->bindParam(':cable_used', $cable_used);
     $stmt->bindParam(':drum_id', $drum_id);
     $stmt->bindParam(':cable_work', $cable_work);
-    $stmt->bindParam(':cable_id', $cable_id, PDO::PARAM_INT);
+    $stmt->bindParam(':cable_id', $cable_id);
 
     $stmt->execute();
 

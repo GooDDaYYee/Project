@@ -102,7 +102,7 @@ session_start();
                                                         <input type="checkbox" class="custom-control-input" id="customCheck" name="customCheck" <?php if (isset($_COOKIE['username'])) echo "checked"; ?>> <!-- เพิ่มโค้ดเพื่อให้ถูกติ้กถ้ามีการตรวจสอบ cookie ชื่อ username -->
                                                         <label class="custom-control-label" for="customCheck">จำรหัสผ่าน</label>
                                                     </div>
-                                                    <a href="confpass.php">ลืมรหัสผ่าน</a>
+                                                    <a href="confirmpass.php">ลืมรหัสผ่าน</a>
                                                 </div>
                                             </div>
                                             <div class="row justify-content-center align-items-center">
@@ -123,9 +123,7 @@ session_start();
         </form>
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
         <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
         <script src="js/sb-admin-2.min.js"></script>
 
         <script>
