@@ -18,6 +18,6 @@
     include $pageFile;
 
     ?>
-    <!-- End of Topbar -->
+    <!-- ปิก tag จากไฟล์ footer.php -->
     </div>
     </div>
