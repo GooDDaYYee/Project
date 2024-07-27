@@ -73,7 +73,7 @@ session_start();
     <div class="container">
 
         <!-- Outer Row -->
-        <form class="form-signin container" name="form_login" method="post" action="process_confirmpass.php">
+        <form class="form-signin container" name="form_login" id="form_login" method="post" action="forgetpass.php">
             <div>
                 <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
             </div>
@@ -97,7 +97,7 @@ session_start();
                                             </div>
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-4">
-                                                    <button href="chpss.php" class="btn btn-warning bg-gradient-purple col" type="submit">
+                                                    <button href="index.php?page=home" class="btn btn-warning bg-gradient-purple col" type="submit">
                                                         <h5>รีเซ็ตรหัสผ่าน</h5>
                                                     </button>
                                                 </div>
