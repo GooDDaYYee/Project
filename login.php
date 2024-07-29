@@ -80,7 +80,6 @@ session_start();
                 <div class="col-xl-10 col-lg-12 col-md-9">
                     <div class="card o-hidden border-0 shadow-lg my-5">
                         <div class="card-body p-0">
-
                             <div class="row">
                                 <div class="col-lg">
                                     <div class="p-5">
@@ -102,7 +101,7 @@ session_start();
                                                         <input type="checkbox" class="custom-control-input" id="customCheck" name="customCheck" <?php if (isset($_COOKIE['username'])) echo "checked"; ?>> <!-- เพิ่มโค้ดเพื่อให้ถูกติ้กถ้ามีการตรวจสอบ cookie ชื่อ username -->
                                                         <label class="custom-control-label" for="customCheck">จำรหัสผ่าน</label>
                                                     </div>
-                                                    <a href="confirmpass.php">ลืมรหัสผ่าน</a>
+                                                    <a href="otp_send.php">ลืมรหัสผ่าน</a>
                                                 </div>
                                             </div>
                                             <div class="row justify-content-center align-items-center">

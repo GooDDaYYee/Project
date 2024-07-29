@@ -93,7 +93,7 @@ session_start();
                                                 <input type="text" id="input_username" name="input_username" class="form-control form-control-user" placeholder="บัญชีผู้ใช้" required="" autofocus="">
                                             </div>
                                             <div class="form-group">
-                                                <input type="phone" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทรศัพท์" required="">
+                                                <input type="text" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทรศัพท์" required="">
                                             </div>
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-4">
