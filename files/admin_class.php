@@ -27,7 +27,7 @@ class Action
 
 			$check = $this->db->query("SELECT * FROM folders where user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "'")->rowCount();
 			if ($check > 0) {
-				return json_encode(array('status' => 2, 'msg' => 'Folder name already exist'));
+				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำ'));
 			} else {
 				$save = $this->db->query("INSERT INTO folders set " . $data);
 				if ($save) return json_encode(array('status' => 1));
@@ -35,7 +35,7 @@ class Action
 		} else {
 			$check = $this->db->query("SELECT * FROM folders where user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "' and id !=" . $id)->rowCount();
 			if ($check > 0) {
-				return json_encode(array('status' => 2, 'msg' => 'Folder name already exist'));
+				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำ'));
 			} else {
 				$save = $this->db->query("UPDATE folders set " . $data . " where id =" . $id);
 				if ($save) return json_encode(array('status' => 1));

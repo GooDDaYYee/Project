@@ -12,8 +12,7 @@ include_once("header.php");
     .content-container {
         max-height: calc(90vh);
         overflow-y: auto;
-        padding-bottom: 20px;
-        /* ถ้ามี */
+        padding-bottom: 10px;
     }
 </style>
 <div id="content-wrapper" class="d-flex flex-column">

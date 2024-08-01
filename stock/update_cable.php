@@ -12,14 +12,21 @@ try {
     $cable_to = $_POST['cable_to'];
     $cable_work = $_POST['cable_work'];
     $drum_id = $_POST['drum_id'];
-    $cable_used = $cable_form - $cable_to;
+    $new_cable_used = $cable_form - $cable_to;
+
+    $strsql2 = 'SELECT cable_used FROM cable WHERE cable_id = :cable_id';
+    $stmt = $con->prepare($strsql2);
+    $stmt->bindParam(':cable_id', $cable_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $result2 = $stmt->fetch(PDO::FETCH_ASSOC);
+    $old_cable_used = $result2['cable_used'];
 
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    $total_cable = $result['total_cable'] + $cable_used;
+    $total_cable = ($result['total_cable'] - $old_cable_used) + $new_cable_used;
 
     if ($total_cable > 4000) {
         echo '<script>
@@ -46,14 +53,14 @@ try {
     $stmt->bindParam(':placing_team', $team);
     $stmt->bindParam(':cable_form', $cable_form);
     $stmt->bindParam(':cable_to', $cable_to);
-    $stmt->bindParam(':cable_used', $cable_used);
+    $stmt->bindParam(':cable_used', $new_cable_used);
     $stmt->bindParam(':drum_id', $drum_id);
     $stmt->bindParam(':cable_work', $cable_work);
     $stmt->bindParam(':cable_id', $cable_id);
 
     $stmt->execute();
 
-    $sql = "UPDATE drum SET drum_used = :total_cable, drum_remaining = drum_full - :total_cable WHERE drum_id = :drum_id";
+    $sql = "UPDATE drum SET drum_used=:total_cable, drum_remaining=drum_full-:total_cable WHERE drum_id=:drum_id";
     $stmt2 = $con->prepare($sql);
     $stmt2->bindParam(':total_cable', $total_cable, PDO::PARAM_INT);
     $stmt2->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);

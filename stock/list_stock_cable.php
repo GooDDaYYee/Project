@@ -120,39 +120,7 @@
                             <option value="FHB">FHB</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-3">
-                        <label for="company">รับจากบริษัท</label>
-                        <select class="form-control" id="company" name="company">
-                            <option value="">เลือกบริษัท</option>
-                            <option value="Mixed">Mixed</option>
-                            <option value="FIBERHOME">FIBERHOME</option>
-                            <option value="FBH">FBH</option>
-                            <option value="CCS">CCS</option>
-                            <option value="W&W">W&W</option>
-                            <option value="TKI">TKI</option>
-                            <option value="MTE">MTE</option>
-                            <option value="Poonsub">Poonsub</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-3">
-                        <label for="manufacturer">บริษัทผลิตสาย</label>
-                        <select class="form-control" id="manufacturer" name="manufacturer">
-                            <option value="">เลือกบริษัท</option>
-                            <option value="FUTONG">FUTONG</option>
-                            <option value="FIBERHOME">FIBERHOME</option>
-                            <option value="TICC">TICC</option>
-                            <option value="TUC">TUC</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-3">
-                        <label for="drum_id">Drum No</label>
-                        </label>
-                        <select class="form-control" id="drum_id" name="drum_id">
-                            <option value="">ไม่มีข้อมูล</option>
-                        </select>
-                    </div>
+                    <input type="hidden" name="drum_id" value="<?php echo $rs['drum_id']; ?>">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>

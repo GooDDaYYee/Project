@@ -11,27 +11,19 @@ if (isset($_GET['employee_id'])) {
 
         $con->beginTransaction();
 
-        $stmtFindUser = $con->prepare("SELECT user_id FROM employee WHERE employee_id = :employee_id");
-        $stmtFindUser->bindParam(':employee_id', $employee_id);
-        $stmtFindUser->execute();
-        $user_id = $stmtFindUser->fetchColumn();
+        $stmtEmployee = $con->prepare("DELETE FROM employee WHERE employee_id = :employee_id");
+        $stmtEmployee->bindParam(':employee_id', $employee_id);
+        $stmtEmployee->execute();
 
-        $stmtDeleteEmployee = $con->prepare("DELETE FROM employee WHERE employee_id = :employee_id");
-        $stmtDeleteEmployee->bindParam(':employee_id', $employee_id);
-        $stmtDeleteEmployee->execute();
-
-        if ($user_id) {
-            $stmtDeleteUser = $con->prepare("DELETE FROM users WHERE user_id = :user_id");
-            $stmtDeleteUser->bindParam(':user_id', $user_id);
-            $stmtDeleteUser->execute();
-        }
+        $stmtUser = $con->prepare("DELETE FROM users WHERE employee_id = :employee_id");
+        $stmtUser->bindParam(':employee_id', $employee_id);
+        $stmtUser->execute();
 
         $con->commit();
 
-        header("Location: ../index.php?page=employee/list_employee");
+        header("Location: ../index.php?page=employee\list_employee");
         exit();
     } catch (PDOException $e) {
-
         $con->rollBack();
         echo '<script>
         alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
