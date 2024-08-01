@@ -18,60 +18,27 @@ session_start();
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <link href='https://fonts.googleapis.com/css?family=Mitr' rel='stylesheet'>
-
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
     <!-- Bootstrap CSS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
-
-    <style>
-        .btn-warning {
-            border: 1px solid #8A2BE2;
-        }
-
-        .bg-gradient-purple {
-            background-color: #8A2BE2;
-        }
-
-        body {
-            font-family: 'Mitr';
-            font-size: 22px;
-            background-image: url("img/background-login.jpg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        table {
-            text-align: center;
-        }
-
-        .warning {
-            color: #ffc404;
-        }
-
-        h1 {
-            font-size: 100px;
-            color: #ffffff;
-            text-align: center;
-        }
-
-        .container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
-
+    <link href="css\css_login.css" rel="stylesheet">
 </head>
 
+<style>
+    body {
+        font-family: "Mitr";
+        font-size: 22px;
+        background-image: url("img/background-login.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+</style>
+
 <body>
-
     <div class="container">
-
         <form class="form-signin container" name="form_login" id="form_login" method="post" action="login_process.php">
             <div>
                 <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
@@ -88,11 +55,9 @@ session_start();
                                         </div>
                                         <form class="user">
                                             <div class="form-group">
-
                                                 <input type="username" id="input_username" name="input_username" class="form-control form-control-user" placeholder="Username" required="" autofocus="" <?php if (isset($_COOKIE['username'])) echo "value='" . $_COOKIE['username'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">
-
                                                 <input type="password" id="input_password" name="input_password" class="form-control form-control-user" placeholder="Password" required="" <?php if (isset($_COOKIE['password'])) echo "value='" . $_COOKIE['password'] . "'"; ?>>
                                             </div>
                                             <div class="form-group">

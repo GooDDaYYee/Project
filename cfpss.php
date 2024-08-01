@@ -25,48 +25,19 @@ session_start();
     <!-- Bootstrap CSS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
-
-    <style>
-        .btn-warning {
-            border: 1px solid #8A2BE2;
-        }
-
-        .bg-gradient-purple {
-            background-color: #8A2BE2;
-        }
-
-        body {
-            font-family: 'Mitr';
-            font-size: 22px;
-            background-image: url("img/background-login.jpg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        table {
-            text-align: center;
-        }
-
-        .warning {
-            color: #ffc404;
-        }
-
-        h1 {
-            font-size: 100px;
-            color: #ffffff;
-            text-align: center;
-        }
-
-        .container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
-
+    <link href="css\css_login.css" rel="stylesheet">
 </head>
+
+<style>
+    body {
+        font-family: "Mitr";
+        font-size: 22px;
+        background-image: url("img/background-login.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+</style>
 
 <body>
 

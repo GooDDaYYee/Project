@@ -1,0 +1,28 @@
+.btn-warning {
+  border: 1px solid #8a2be2;
+}
+
+.bg-gradient-purple {
+  background-color: #8a2be2;
+}
+
+table {
+  text-align: center;
+}
+
+.warning {
+  color: #ffc404;
+}
+
+h1 {
+  font-size: 100px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
