@@ -124,7 +124,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-                    <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                    <button type="submit" class="btn btn-warning bg-gradient-purple">บันทึกการเปลี่ยนแปลง</button>
                 </div>
             </form>
         </div>

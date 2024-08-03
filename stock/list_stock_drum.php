@@ -55,8 +55,8 @@
                                             <td><i class="to_file"><?php echo $rs['drum_remaining']; ?> เมตร</i></td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn btn-outline-success">แก้ไข</button>
-                                                    <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['drum_id'] ?>','<?php echo $i ?>')">ลบ</button>
+                                                    <button type="button" class="btn btn-outline-success" onclick="editCable('<?php echo $rs['drum_id']; ?>', '<?php echo $rs['drum_no']; ?>', '<?php echo $rs['drum_to']; ?>', '<?php echo $rs['drum_description']; ?>', '<?php echo $rs['drum_company']; ?>', '<?php echo $rs['drum_cable_company']; ?>', '<?php echo $rs['drum_full']; ?>', '<?php echo $rs['drum_used']; ?>')">แก้ไข</button>
+                                                    <button type=" button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['drum_id'] ?>','<?php echo $i ?>')">ลบ</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -77,12 +77,104 @@
             </div>
         </div>
     </div>
+
+    <!-- Edit Drum Modal -->
+    <div class="modal" id="editDrumModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCableModalLabel">แก้ไขงาน</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="edit_drum_no">Drum Number</label>
+                    <input type="text" id="edit_drum_no" name="drum_no" class="form-control" required="">
+                    <p id="edit_drum_no_notice" style="display: none; color: red;"></p> <!-- ข้อความแจ้งเตือน -->
+                </div>
+                <div class="form-group">
+                    <label for="edit_drum_to">Drum To</label>
+                    <input type="text" id="edit_drum_to" name="drum_to" class="form-control" required="">
+                </div>
+                <div class="form-group">
+                    <label for="edit_drum_description">Description</label>
+                    <input type="text" id="edit_drum_description" name="drum_description" class="form-control" required="">
+                </div>
+                <div class="form-group">
+                    <label for="edit_drum_company">รับจากบริษัท</label>
+                    <select class="form-control" id="edit_drum_company" name="drum_company">
+                        <option value="">เลือกบริษัท</option>
+                        <option value="Mixed">Mixed</option>
+                        <option value="FIBERHOME">FIBERHOME</option>
+                        <option value="FBH">FBH</option>
+                        <option value="CCS">CCS</option>
+                        <option value="W&W">W&W</option>
+                        <option value="TKI">TKI</option>
+                        <option value="MTE">MTE</option>
+                        <option value="Poonsub">Poonsub</option>
+                    </select>
+                    <p id="edit_drum_company_notice" style="display: none; color: red;"></p> <!-- ข้อความแจ้งเตือน -->
+                </div>
+                <div class="form-group">
+                    <label for="edit_drum_cable_company">บริษัทผลิตสาย</label>
+                    <select class="form-control" id="edit_drum_cable_company" name="drum_cable_company">
+                        <option value="">เลือกบริษัท</option>
+                        <option value="FUTONG">FUTONG</option>
+                        <option value="FIBERHOME">FIBERHOME</option>
+                        <option value="TICC">TICC</option>
+                        <option value="TUC">TUC</option>
+                    </select>
+                    <p id="edit_drum_cable_company_notice" style="display: none; color: red;"></p> <!-- ข้อความแจ้งเตือน -->
+                </div>
+                <div class="form-group">
+                    <label for="edit_drum_full">Drum เต็ม</label>
+                    <input type="number" id="edit_drum_full" name="drum_full" class="form-control" required="">
+                    <p id="edit_drum_full_notice" style="display: none; color: red;"></p> <!-- ข้อความแจ้งเตือน -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="submit" class="btn btn-warning bg-gradient-purple">บันทึกการแก้ไข</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
     <script>
-        function confirmDelete(drum_id, i) {
-            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบดั้มลำดับที่ " + i + " นี้?")) {
-                window.location.href = 'stock/drum_delete.php?drum_id=' + drum_id;
+        function editCable(drum_id, drum_no, drum_to, drum_description, drum_company, drum_cable_company, drum_full, drum_used) {
+            $('#edit_drum_id').val(drum_id);
+            $('#edit_drum_no').val(drum_no);
+            $('#edit_drum_to').val(drum_to);
+            $('#edit_drum_description').val(drum_description);
+            $('#edit_drum_full').val(drum_full);
+
+            if (drum_used > 0) {
+                $('#edit_drum_no').val(drum_no).prop('disabled', true);
+                $('#edit_drum_company').val(drum_company).prop('disabled', true);
+                $('#edit_drum_cable_company').val(drum_cable_company).prop('disabled', true);
+                $('#edit_drum_full').val(drum_full).prop('disabled', true);
+                $('#edit_drum_no_notice').text('มีการเรียกใช้ดั้มอยู่').show(); // แสดงข้อความ
+                $('#edit_drum_company_notice').text('มีการเรียกใช้ดั้มอยู่').show(); // แสดงข้อความ
+                $('#edit_drum_cable_company_notice').text('มีการเรียกใช้ดั้มอยู่').show(); // แสดงข้อความ
+                $('#edit_drum_full_notice').text('มีการเรียกใช้ดั้มอยู่').show(); // แสดงข้อความ
+            } else {
+                $('#edit_drum_no').val(drum_no).prop('disabled', false);
+                $('#edit_drum_company').val(drum_company).prop('disabled', false);
+                $('#edit_drum_cable_company').val(drum_cable_company).prop('disabled', false);
+                $('#edit_drum_full').val(drum_full).prop('disabled', false);
+                $('#edit_drum_no_notice').hide(); // ซ่อนข้อความ
+                $('#edit_drum_company_notice').hide(); // ซ่อนข้อความ
+                $('#edit_drum_cable_company_notice').hide(); // ซ่อนข้อความ
+                $('#edit_drum_full_notice').hide(); // ซ่อนข้อความ
             }
+            $('#editDrumModal').modal('show');
         }
+
+
+
+
 
         $(document).ready(function() {
             $('#search').keyup(function() {
