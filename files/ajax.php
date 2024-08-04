@@ -1,4 +1,3 @@
-
 <?php
 ob_start();
 $action = $_GET['action'];

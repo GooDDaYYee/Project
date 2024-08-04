@@ -1,5 +1,6 @@
 <?php
 include("../connect.php");
+session_start(); // Start session to access session variables
 
 try {
     $con->beginTransaction();
@@ -14,6 +15,7 @@ try {
     $drum_id = $_POST['drum_id'];
     $new_cable_used = $cable_form - $cable_to;
 
+    // Fetch the old cable_used value
     $strsql2 = 'SELECT cable_used FROM cable WHERE cable_id = :cable_id';
     $stmt = $con->prepare($strsql2);
     $stmt->bindParam(':cable_id', $cable_id, PDO::PARAM_INT);
@@ -21,6 +23,7 @@ try {
     $result2 = $stmt->fetch(PDO::FETCH_ASSOC);
     $old_cable_used = $result2['cable_used'];
 
+    // Calculate the total cable used after the update
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
@@ -32,11 +35,11 @@ try {
         echo '<script>
             alert("ไม่สามารถเพิ่มข้อมูลได้: ปริมาณสายเคเบิลทั้งหมดเกิน 4000");
             history.back();
-            </script>
-        ';
+            </script>';
         exit();
     }
 
+    // Update the cable record
     $stmt = $con->prepare("UPDATE cable SET 
         route_name = :route_name, 
         installed_section = :installed_section, 
@@ -60,11 +63,22 @@ try {
 
     $stmt->execute();
 
+    // Update the drum record
     $sql = "UPDATE drum SET drum_used=:total_cable, drum_remaining=drum_full-:total_cable WHERE drum_id=:drum_id";
     $stmt2 = $con->prepare($sql);
     $stmt2->bindParam(':total_cable', $total_cable, PDO::PARAM_INT);
     $stmt2->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
     $stmt2->execute();
+
+    // Log the cable update
+    $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
+    $logStatus = 'Cable Updated';
+    $logDetail = 'Cable ID: ' . $cable_id . ', Route: ' . $route . ', Section: ' . $section . ', Used: ' . $new_cable_used;
+    $user_id = $_SESSION['user_id']; // Use user_id from session
+    $stmtLog->bindParam(':log_status', $logStatus);
+    $stmtLog->bindParam(':log_detail', $logDetail);
+    $stmtLog->bindParam(':user_id', $user_id);
+    $stmtLog->execute();
 
     $con->commit();
 
@@ -75,6 +89,7 @@ try {
     echo '<script>
         alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
         history.back();
-        </script>
-    ';
+        </script>';
 }
+
+$con = null;

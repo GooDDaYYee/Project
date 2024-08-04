@@ -1,16 +1,16 @@
 <?php
 include dirname(__FILE__) . '/../connect.php';
 
-if (isset($_GET['id'])) {
-	$qry = $con->query("SELECT * FROM files WHERE id=" . $_GET['id']);
+if (isset($_GET['files_id'])) {
+	$qry = $con->query("SELECT * FROM files WHERE files_id=" . $_GET['files_id']);
 	$meta = $qry->fetch(PDO::FETCH_ASSOC);
 }
 ?>
 <div class="container-fluid">
 	<form action="" id="manage-files">
-		<input type="hidden" name="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
+		<input type="hidden" name="files_id" value="<?php echo isset($_GET['files_id']) ? $_GET['files_id'] : '' ?>">
 		<input type="hidden" name="folder_id" value="<?php echo isset($_GET['fid']) ? $_GET['fid'] : '' ?>">
-		<?php if (!isset($_GET['id']) || empty($_GET['id'])) : ?>
+		<?php if (!isset($_GET['files_id']) || empty($_GET['files_id'])) : ?>
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">Upload</span>

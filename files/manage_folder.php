@@ -1,7 +1,7 @@
 <?php
 include dirname(__FILE__) . '/../connect.php';
-if (isset($_GET['id'])) {
-	$qry = $con->query("SELECT * FROM folders where id=" . $_GET['id']);
+if (isset($_GET['folders_id'])) {
+	$qry = $con->query("SELECT * FROM folders WHERE folders_id=" . $_GET['folders_id']);
 	if ($qry->rowCount() > 0) {
 		$meta = $qry->fetch(PDO::FETCH_ASSOC);
 	}
@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
 ?>
 <div class="container-fluid">
 	<form action="" id="manage-folder">
-		<input type="hidden" name="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>">
+		<input type="hidden" name="folders_id" value="<?php echo isset($_GET['folders_id']) ? $_GET['folders_id'] : '' ?>">
 		<input type="hidden" name="parent_id" value="<?php echo isset($_GET['fid']) ? $_GET['fid'] : '' ?>">
 		<div class="form-group">
 			<label for="name" class="control-label">

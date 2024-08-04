@@ -1,16 +1,10 @@
 <?php
 session_start();
-
+include('connect.php');
 $users = $_POST['input_username'];
 $pass = $_POST['input_password'];
 
-$servername = "localhost";
-$serverusername = "root";
-$serverpassword = "";
-$dbname = "psnktelecom";
-
 try {
-    $con = new PDO("mysql:host=$servername;dbname=$dbname", $serverusername, $serverpassword);
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $sql = "SELECT * FROM users WHERE status='1' AND username=:username";
@@ -25,8 +19,6 @@ try {
         if (password_verify($pass, $stored_password)) {
             $_SESSION['login'] = 'yes';
             $_SESSION['user_id'] = $row["user_id"];
-            $_SESSION['name'] = $row["name"];
-            $_SESSION["lastname"] = $row["lastname"];
             $_SESSION["lv"] = $row["lv"];
             $_SESSION["employee_id"] = $row["employee_id"];
             header("location: index.php?page=home");

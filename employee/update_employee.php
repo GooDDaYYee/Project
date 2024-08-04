@@ -1,5 +1,6 @@
 <?php
 include('../connect.php');
+session_start(); // Start session to access session variables
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_id = $_POST['employee_id'];
@@ -34,13 +35,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         $stmt->execute();
+
+        // Log the update action
+        $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
+        $logStatus = 'Employee Updated';
+        $logDetail = "Updated employee ID: $employee_id, Name: $employee_name $employee_lastname";
+        $user_id = $_SESSION['user_id']; // Get user ID from session
+        $stmtLog->bindParam(':log_status', $logStatus);
+        $stmtLog->bindParam(':log_detail', $logDetail);
+        $stmtLog->bindParam(':user_id', $user_id);
+        $stmtLog->execute();
+
         echo "ข้อมูลพนักงานถูกอัปเดตเรียบร้อยแล้ว";
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
+
+    $con = null;
+    header("Location: ../index.php?page=employee/list_employee");
+    exit();
 }
-
-$con = null;
-
-header("Location: ../index.php?page=employee/list_employee");
-exit();

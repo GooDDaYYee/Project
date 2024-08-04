@@ -2,7 +2,12 @@
 <div class="container-fluid">
 	<div class="containe-fluid">
 		<?php include('connect.php');
-		$files = $con->query("SELECT f.*,u.name as uname FROM files f inner join users u on u.user_id = f.user_id where  f.is_public = 1 order by date(f.date_updated) desc");
+		$files = $con->query("SELECT f.*, e.employee_name as uname 
+                      FROM files f 
+                      INNER JOIN users u ON u.user_id = f.user_id 
+                      INNER JOIN employee e ON e.employee_id = u.employee_id 
+                      WHERE f.is_public = 1 
+                      ORDER BY DATE(f.date_updated) DESC");
 		?>
 		<div class="row">
 			<div class="col-lg-12">
@@ -116,11 +121,11 @@
 								if (in_array(strtolower($row['file_type']), ['psd']))
 									$icon = 'fa fa-scissors';
 							?>
-								<tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
+								<tr class='file-item' data-id="<?php echo $row['files_id'] ?>" data-name="<?php echo $name ?>">
 									<td><i class="to_file"><?php echo ucwords($row['uname']) ?></i></td>
 									<td>
 										<span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
-										<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
+										<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
 									</td>
 									<td><i class="to_file"><?php
 															$timestamp = strtotime($row['date_updated']);

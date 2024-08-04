@@ -32,16 +32,16 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="row">
           <div id="paths">
             <?php
-            $id = $folder_parent;
-            while ($id > 0) {
-              $path_stmt = $con->prepare("SELECT * FROM folders WHERE id = :id ORDER BY name ASC");
-              $path_stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $folders_id = $folder_parent;
+            while ($folders_id > 0) {
+              $path_stmt = $con->prepare("SELECT * FROM folders WHERE folders_id = :folders_id ORDER BY name ASC");
+              $path_stmt->bindParam(':folders_id', $folders_id, PDO::PARAM_INT);
               $path_stmt->execute();
               $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
               echo '<script>
-                      $("#paths").prepend("<a href=\"index.php?page=files/files&fid=' . $path['id'] . '\">' . $path['name'] . '</a>/")
+                      $("#paths").prepend("<a href=\"index.php?page=files/files&fid=' . $path['folders_id'] . '\">' . $path['name'] . '</a>/")
                     </script>';
-              $id = $path['parent_id'];
+              $folders_id = $path['parent_id'];
             }
             echo '<script>
                     $("#paths").prepend("<a href=\"index.php?page=files/files\">หน้าหลัก</a>/")
@@ -75,7 +75,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <?php
                   foreach ($folders as $row) :
                   ?>
-                    <tr class='folder-item' data-id="<?php echo $row['id'] ?>">
+                    <tr class='folder-item' data-id="<?php echo $row['folders_id'] ?>">
                       <td style="text-align: left;">
                         <span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b>
                       </td>
@@ -108,10 +108,10 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     if (in_array(strtolower($row['file_type']), ['psd']))
                       $icon = 'fa fa-scissors';
                   ?>
-                    <tr class='file-item' data-id="<?php echo $row['id'] ?>" data-name="<?php echo $name ?>">
+                    <tr class='file-item' data-id="<?php echo $row['files_id'] ?>" data-name="<?php echo $name ?>">
                       <td style="text-align: left;">
                         <span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
-                        <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
+                        <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
                       </td>
                       <td><i class="to_file"><?php
                                               $timestamp = strtotime($row['date_updated']);
@@ -201,7 +201,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $("div.custom-menu .edit").click(function(e) {
       e.preventDefault();
-      uni_modal('Rename Folder', 'files/manage_folder.php?fid=<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+      uni_modal('Rename Folder', 'files/manage_folder.php?fid=<?php echo $folder_parent ?>&folders_id=' + $(this).attr('data-id'));
     });
     $("div.custom-menu .delete").click(function(e) {
       e.preventDefault();
@@ -249,7 +249,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
           url: 'files/ajax.php?action=file_rename',
           method: 'POST',
           data: {
-            id: $(this).attr('data-id'),
+            files_id: $(this).attr('data-id'),
             name: $(this).val(),
             type: $(this).attr('data-type'),
             folder_id: '<?php echo $folder_parent ?>'
@@ -276,7 +276,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
   $('.file-item').click(function() {
     if ($(this).find('input.rename_file').is(':visible') == true)
       return false;
-    uni_modal($(this).attr('data-name'), 'files/manage_files.php?<?php echo $folder_parent ?>&id=' + $(this).attr('data-id'));
+    uni_modal($(this).attr('data-name'), 'files/manage_files.php?<?php echo $folder_parent ?>&files_id=' + $(this).attr('data-id'));
   });
   $(document).bind("click", function(event) {
     $("div.custom-menu").hide();
@@ -309,13 +309,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
   });
 
-  function delete_folder($id) {
+  function delete_folder($folders_id) {
     start_load();
     $.ajax({
       url: 'files/ajax.php?action=delete_folder',
       method: 'POST',
       data: {
-        id: $id
+        folders_id: $folders_id
       },
       success: function(resp) {
         if (resp == 1) {
@@ -332,13 +332,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
   }
 
-  function delete_file($id) {
+  function delete_file($files_id) {
     start_load();
     $.ajax({
       url: 'files/ajax.php?action=delete_file',
       method: 'POST',
       data: {
-        id: $id
+        files_id: $files_id
       },
       success: function(resp) {
         if (resp == 1) {

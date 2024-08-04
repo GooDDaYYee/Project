@@ -1,5 +1,6 @@
 <?php
 include('../connect.php');
+session_start(); // Start session to access session variables
 
 if (isset($_GET['cable_id'])) {
     $cable_id = $_GET['cable_id'];
@@ -8,9 +9,20 @@ if (isset($_GET['cable_id'])) {
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $con->beginTransaction();
 
+        // Delete the cable record
         $stmtDetail = $con->prepare("DELETE FROM cable WHERE cable_id = :cable_id");
         $stmtDetail->bindParam(':cable_id', $cable_id);
         $stmtDetail->execute();
+
+        // Log the deletion
+        $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
+        $logStatus = 'Cable Deleted';
+        $logDetail = 'Cable ID: ' . $cable_id;
+        $user_id = $_SESSION['user_id']; // Get user ID from session
+        $stmtLog->bindParam(':log_status', $logStatus);
+        $stmtLog->bindParam(':log_detail', $logDetail);
+        $stmtLog->bindParam(':user_id', $user_id);
+        $stmtLog->execute();
 
         $con->commit();
     } catch (PDOException $e) {
@@ -19,7 +31,7 @@ if (isset($_GET['cable_id'])) {
     }
 
     try {
-
+        // Update drum data based on the cable changes
         $strsql = 'SELECT d.drum_id, COALESCE(SUM(c.cable_used), 0) as total_cable 
                    FROM drum d 
                    LEFT JOIN cable c ON d.drum_id = c.drum_id 

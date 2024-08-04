@@ -94,7 +94,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
               <a class="collapse-item " href="index.php?page=users/list_user">&nbsp; จัดการผู้ใช้</a>
-              <a class="collapse-item " href="index.php?page=users/list_user">&nbsp; log</a>
+              <a class="collapse-item " href="index.php?page=log/log">&nbsp; log</a>
             </div>
           <?php
           }

@@ -1,3 +1,24 @@
+<?php
+include("connect.php");
+
+$users_id = $_SESSION['user_id'];
+
+try {
+  $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+  $sql = "SELECT users.*, employee.employee_name, employee.employee_lastname 
+        FROM users 
+        INNER JOIN employee ON users.employee_id = employee.employee_id 
+        WHERE users.user_id = :user_id";
+
+  $stmt = $con->prepare($sql);
+  $stmt->bindParam(':user_id', $users_id, PDO::PARAM_INT);
+  $stmt->execute();
+
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  die("Could not connect to the database $dbname :" . $e->getMessage());
+}
+?>
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
   <!-- Sidebar Toggle (Topbar) -->
   <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -16,7 +37,7 @@
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $_SESSION['name'] . ' ' . $_SESSION['lastname']; ?></span>
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small "><?php echo $row['employee_name'] . ' ' . $row['employee_lastname']; ?></span>
         <img class="img-profile rounded-circle" src="img/picture.png">
       </a>
       <!-- Dropdown - User Information -->

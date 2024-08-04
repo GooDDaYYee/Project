@@ -1,7 +1,7 @@
 <?php
 include("../connect.php");
 session_start();
-$employee_id = $_SESSION['employee_id'];
+$user_id = $_SESSION['user_id'];
 
 function checkDuplicates($array)
 {
@@ -66,6 +66,15 @@ try {
     $stmtInvoice->bindParam(':grand_total', $grand_total);
 
     $stmtInvoice->execute();
+
+    // Logging the action
+    $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
+    $logStatus = 'Bill Created';
+    $logDetail = 'Bill ID: ' . $_POST['number'] . ', Total Amount: ' . $total;
+    $stmtLog->bindParam(':log_status', $logStatus);
+    $stmtLog->bindParam(':log_detail', $logDetail);
+    $stmtLog->bindParam(':user_id', $user_id);
+    $stmtLog->execute();
 
     $con->commit();
 
