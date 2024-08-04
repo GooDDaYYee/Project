@@ -33,7 +33,7 @@
     <ul class="navbar-nav bg-gradient-purple sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?page=home">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php?page=<?= base64_encode('home') ?>">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="warning">P</i>
         </div>
@@ -51,11 +51,11 @@
         <div id="collapseTwo" class="collapse show bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; แชร์ไฟล์</a>
+            <a class="collapse-item " href="index.php?page=<?= base64_encode('home') ?>">&nbsp; แชร์ไฟล์</a>
             <?php
             if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1 || $_SESSION["lv"] == 2) {
             ?>
-              <a class="collapse-item " href="index.php?page=files/files">&nbsp; จัดการไฟล์</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('files/files') ?>">&nbsp; จัดการไฟล์</a>
             <?php
             }
             ?>
@@ -65,27 +65,27 @@
           ?>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-file"></i> เอกสารบิล</h6>
-              <a class="collapse-item " href="index.php?page=bill/list_mixed">&nbsp; บริษัท Mixed</a>
-              <a class="collapse-item " href="index.php?page=bill/list_fbh">&nbsp; บริษัท FBH</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('bill/list_mixed') ?>">&nbsp; บริษัท Mixed</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('bill/list_fbh') ?>">&nbsp; บริษัท FBH</a>
             </div>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> สต๊อก</h6>
-              <a class="collapse-item " href="index.php?page=stock/list_stock_cable">&nbsp; จัดการ Cable</a>
-              <a class="collapse-item " href="index.php?page=stock/list_stock_drum">&nbsp; จัดการ Drum</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('stock/list_stock_cable') ?>">&nbsp; จัดการ Cable</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('stock/list_stock_drum') ?>">&nbsp; จัดการ Drum</a>
             </div>
           <?php
           }
           ?>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> รายงาน</h6>
-            <a class="collapse-item " href="index.php?page=home">&nbsp; รายงานปฏิบัติงาน</a>
+            <a class="collapse-item " href="index.php?page=<?= base64_encode('home') ?>">&nbsp; รายงานปฏิบัติงาน</a>
           </div>
           <?php
           if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1) {
           ?>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-user"></i> พนักงาน</h6>
-              <a class="collapse-item " href="index.php?page=employee/list_employee">&nbsp; จัดการเงินเดือน</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('employee/list_employee') ?>">&nbsp; จัดการเงินเดือน</a>
             </div>
           <?php
           }
@@ -93,8 +93,8 @@
           ?>
             <div class="bg-white py-2 collapse-inner rounded">
               <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
-              <a class="collapse-item " href="index.php?page=users/list_user">&nbsp; จัดการผู้ใช้</a>
-              <a class="collapse-item " href="index.php?page=log/log">&nbsp; Log</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('users/list_user') ?>">&nbsp; จัดการผู้ใช้</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('log/log') ?>">&nbsp; Log</a>
             </div>
           <?php
           }

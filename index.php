@@ -13,13 +13,12 @@ include_once("header.php");
         include_once("footer.php");
         ?>
         <?php
-        $page = isset($_GET['page']) ? $_GET['page'] : 'home';
+        $page = isset($_GET['page']) ? base64_decode($_GET['page']) : 'home';
         $pageFile = $page . '.php';
 
         if (!file_exists($pageFile)) {
             $pageFile = 'home.php';
         }
-
         include $pageFile;
         ?>
     </div>

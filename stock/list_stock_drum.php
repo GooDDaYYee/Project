@@ -9,7 +9,7 @@
                         <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                     </div>
                 </form>
-                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock/insert_drum', '_parent')">เพิ่มDrum</button>
+                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('stock/insert_drum') ?>', '_parent')">เพิ่มDrum</button>
             </div>
             <div class="card-body">
                 <div class="card border h-100">
@@ -200,30 +200,50 @@
             var rowsPerPage = 10;
             var totalRows = $('tbody tr').length;
             var totalPages = Math.ceil(totalRows / rowsPerPage);
+            var maxVisiblePages = 5;
 
-            if (totalRows > rowsPerPage) {
-                for (var i = 1; i <= totalPages; i++) {
-                    $('.pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
+            function renderPagination(currentPage) {
+                var startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+                var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+                if (endPage - startPage < maxVisiblePages - 1) {
+                    startPage = Math.max(1, endPage - maxVisiblePages + 1);
                 }
 
-                $('tbody tr').hide();
-                $('tbody tr').slice(0, rowsPerPage).show();
-                $('.pagination li:first-child').addClass('active');
-            } else {
-                $('tbody tr').show();
+                $('.pagination').empty();
+                if (startPage > 1) {
+                    $('.pagination').append('<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>');
+                    $('.pagination').append('<li class="page-item"><a class="page-link" href="#" data-page="' + (startPage - 1) + '">&lsaquo;</a></li>');
+                }
+                for (var i = startPage; i <= endPage; i++) {
+                    $('.pagination').append('<li class="page-item ' + (i === currentPage ? 'active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
+                }
+                if (endPage < totalPages) {
+                    $('.pagination').append('<li class="page-item"><a class="page-link" href="#" data-page="' + (endPage + 1) + '">&rsaquo;</a></li>');
+                    $('.pagination').append('<li class="page-item"><a class="page-link" href="#" data-page="' + totalPages + '">หน้าสุดท้าย &raquo;</a></li>');
+                }
             }
 
-            $('.pagination li').on('click', function(e) {
-                e.preventDefault();
-                var currentPage = $(this).index() + 1;
-                var startRow = (currentPage - 1) * rowsPerPage;
+            function showPage(pageNumber) {
+                var startRow = (pageNumber - 1) * rowsPerPage;
                 var endRow = startRow + rowsPerPage;
 
                 $('tbody tr').hide();
                 $('tbody tr').slice(startRow, endRow).show();
+            }
 
-                $('.pagination li').removeClass('active');
-                $(this).addClass('active');
+            if (totalRows > rowsPerPage) {
+                renderPagination(1);
+                showPage(1);
+            } else {
+                $('tbody tr').show();
+            }
+
+            $('.pagination').on('click', 'li a', function(e) {
+                e.preventDefault();
+                var currentPage = parseInt($(this).attr('data-page'));
+                renderPagination(currentPage);
+                showPage(currentPage);
             });
 
             $('#search').keyup(function() {
