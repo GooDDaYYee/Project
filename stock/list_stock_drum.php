@@ -56,7 +56,7 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <button type="button" class="btn btn-outline-success" onclick="editDrum('<?php echo $rs['drum_id']; ?>', '<?php echo $rs['drum_no']; ?>', '<?php echo $rs['drum_to']; ?>', '<?php echo $rs['drum_description']; ?>', '<?php echo $rs['drum_company']; ?>', '<?php echo $rs['drum_cable_company']; ?>', '<?php echo $rs['drum_full']; ?>', '<?php echo $rs['drum_used']; ?>')">แก้ไข</button>
-                                                    <button type=" button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['drum_id'] ?>','<?php echo $i ?>')">ลบ</button>
+                                                    <button type=" button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $i ?>','<?php echo $rs['drum_id'] ?>')">ลบ</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -182,7 +182,11 @@
             $('#editDrumModal').modal('show');
         }
 
-
+        function confirmDelete(i, drum_id) {
+            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลงานลำดับที่' " + i + " นี้?")) {
+                window.location.href = 'stock/drum_delete.php?drum_id=' + drum_id;
+            }
+        }
 
         $(document).ready(function() {
             $('#search').keyup(function() {

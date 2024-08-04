@@ -1,10 +1,15 @@
 <?php
 include("../connect.php");
+session_start();
 
 try {
     $drum_no = $_POST['drum_no'];
+    $drum_to = $_POST['drum_to'];
+    $drum_description = $_POST['drum_description'];
+    $drum_full = $_POST['drum_full'];
     $drum_company = $_POST['drum_company'];
     $drum_cable_company = $_POST['drum_cable_company'];
+    $employee_id = $_SESSION['employee_id'];
 
     // ตรวจสอบว่ามี drum อยู่แล้วหรือไม่
     $strsql = "SELECT * FROM drum WHERE drum_no=:drum_no";
@@ -21,20 +26,19 @@ try {
         exit();
     }
 
-    // เริ่มทำรายการ transaction
     $con->beginTransaction();
 
-    // เพิ่มข้อมูล drum
-    $stmt = $con->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company, drum_cable_company)
-    VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_remaining, :drum_company, :drum_cable_company)");
+    $stmt = $con->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company, drum_cable_company, employee_id)
+    VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_remaining, :drum_company, :drum_cable_company, :employee_id)");
 
-    $stmt->bindParam(':drum_no', $_POST['drum_no']);
-    $stmt->bindParam(':drum_to', $_POST['drum_to']);
-    $stmt->bindParam(':drum_description', $_POST['drum_description']);
-    $stmt->bindParam(':drum_full', $_POST['drum_full']);
-    $stmt->bindParam(':drum_remaining', $_POST['drum_full']);
-    $stmt->bindParam(':drum_company', $_POST['drum_company']);
-    $stmt->bindParam(':drum_cable_company', $_POST['drum_cable_company']);
+    $stmt->bindParam(':drum_no', $drum_no);
+    $stmt->bindParam(':drum_to', $drum_to);
+    $stmt->bindParam(':drum_description', $drum_description);
+    $stmt->bindParam(':drum_full', $drum_full);
+    $stmt->bindParam(':drum_remaining', $drum_full);
+    $stmt->bindParam(':drum_company', $drum_company);
+    $stmt->bindParam(':drum_cable_company', $drum_cable_company);
+    $stmt->bindParam(':employee_id', $employee_id);
 
     $result = $stmt->execute();
 
@@ -52,12 +56,10 @@ try {
         ';
     }
 
-    // ยืนยันการทำรายการ
     $con->commit();
     header("Location: ../index.php?page=stock/list_stock_drum");
     exit();
 } catch (PDOException $e) {
-    // ยกเลิกการทำรายการในกรณีที่เกิดข้อผิดพลาด
     $con->rollBack();
     echo '<script>
         alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");

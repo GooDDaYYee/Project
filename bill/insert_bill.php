@@ -1,5 +1,7 @@
 <?php
 include("../connect.php");
+session_start();
+$employee_id = $_SESSION['employee_id'];
 
 function checkDuplicates($array)
 {
@@ -10,8 +12,8 @@ try {
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $con->beginTransaction();
 
-    $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company) 
-                                    VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company)");
+    $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
+                                    VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
 
     $stmtInvoice->bindParam(':bill_id', $_POST['number']);
     $stmtInvoice->bindParam(':bill_date', $_POST['thai_date']);
@@ -25,6 +27,7 @@ try {
     $stmtInvoice->bindParam(':bill_project', $_POST['project']);
     $stmtInvoice->bindParam(':list_num', $_POST['auCount']);
     $stmtInvoice->bindParam(':bill_company', $_POST['company']);
+    $stmtInvoice->bindParam(':employee_id', $employee_id); // Bind employee_id
 
     $total = 0;
     $vat = 0.07;

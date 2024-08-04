@@ -1,6 +1,6 @@
 <?php
 include("../connect.php");
-
+session_start();
 try {
     $con->beginTransaction();
 
@@ -13,6 +13,7 @@ try {
     $cable_work = $_POST['cable_work'];
     $drum_id = $_POST['drum_id'];
     $cable_used = $cable_form - $cable_to;
+    $employee_id = $_SESSION['employee_id'];
 
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
@@ -30,8 +31,8 @@ try {
         exit();
     }
 
-    $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work)
-    VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work)");
+    $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work, employee_id)
+    VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work, :employee_id)");
 
     $stmt->bindParam(':route_name', $route);
     $stmt->bindParam(':installed_section', $section);
@@ -41,6 +42,7 @@ try {
     $stmt->bindParam(':cable_used', $cable_used);
     $stmt->bindParam(':drum_id', $drum_id);
     $stmt->bindParam(':cable_work', $cable_work);
+    $stmt->bindParam(':employee_id', $employee_id);
 
     $stmt->execute();
 

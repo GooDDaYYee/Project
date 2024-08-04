@@ -28,6 +28,7 @@ try {
             $_SESSION['name'] = $row["name"];
             $_SESSION["lastname"] = $row["lastname"];
             $_SESSION["lv"] = $row["lv"];
+            $_SESSION["employee_id"] = $row["employee_id"];
             header("location: index.php?page=home");
             exit();
         } else {

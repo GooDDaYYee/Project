@@ -12,11 +12,19 @@ try {
 
     $con->beginTransaction();
 
-    $strsql = "SELECT * FROM drum WHERE drum_id = :drum_id";
+    $strsql = "SELECT * FROM drum WHERE drum_no = :drum_no";
     $stmt = $con->prepare($strsql);
-    $stmt->bindParam(':drum_id', $drum_id);
+    $stmt->bindParam(':drum_no', $drum_no);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result && ($drum_company == $result['drum_company'] && $drum_cable_company == $result['drum_cable_company'])) {
+        echo '<script>
+        alert("มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่");
+        history.back();
+        </script>';
+        exit();
+    }
 
     if ($result) {
         $updateSQL = "UPDATE drum 
