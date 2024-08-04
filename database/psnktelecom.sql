@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2024 at 11:47 AM
+-- Generation Time: Aug 04, 2024 at 04:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -391,7 +391,8 @@ INSERT INTO `bill` (`bill_id`, `bill_date`, `bill_date_product`, `bill_payment`,
 ('PS2567/002', '2567-06-14', '2567-06-14', 'N/A', '2567-06-14', '-', '', '', '', '', 2, 268.92, 18.82, 8.07, 250.10, 'FBH', 0),
 ('PS2567/003', '2567-07-04', '2567-07-04', 'N/A', '2567-07-04', '-', 'LPG3182', '', '', '', 5, 319.42, 22.36, 9.58, 297.06, 'FBH', 0),
 ('PSNK/MIXED/67/001', '2567-06-04', '2567-06-04', 'N/A', '2567-06-04', '-', 'LPG3182', '', '', '', 16, 16763.20, 1173.42, 502.90, 15589.78, 'Mixed', 0),
-('PSNK/MIXED/67/002', '2567-07-04', '2567-07-16', 'N/A', '2567-07-17', '-', '', '', '', '', 4, 273.60, 19.15, 8.21, 254.45, 'mixed', 0);
+('PSNK/MIXED/67/002', '2567-07-04', '2567-07-16', 'N/A', '2567-07-17', '-', '', '', '', '', 4, 273.60, 19.15, 8.21, 254.45, 'mixed', 0),
+('PSNK/MIXED/67/003', '2567-08-04', '2567-08-04', 'N/A', '2567-08-04', '-', 'LPG3182', '123', '2', 'asd', 1, 10.00, 0.70, 0.30, 9.30, 'mixed', 1);
 
 -- --------------------------------------------------------
 
@@ -439,7 +440,8 @@ INSERT INTO `bill_detail` (`bill_id`, `au_id`, `unit`, `price`) VALUES
 ('PSNK/MIXED/67/002', 'Mix-TD-17.85', 10, 50.00),
 ('PSNK/MIXED/67/002', 'TPCHDMX005C', 30, 151.20),
 ('PSNK/MIXED/67/002', 'TPCHDMX008C', 10, 22.00),
-('PSNK/MIXED/67/002', 'TPCHDMX009C', 10, 50.40);
+('PSNK/MIXED/67/002', 'TPCHDMX009C', 10, 50.40),
+('PSNK/MIXED/67/003', 'Mix-TD-17.85', 2, 10.00);
 
 -- --------------------------------------------------------
 
@@ -455,7 +457,7 @@ CREATE TABLE `cable` (
   `cable_form` int(4) NOT NULL,
   `cable_to` int(4) NOT NULL,
   `cable_used` int(4) NOT NULL,
-  `cable_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `cable_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `employee_id` int(4) NOT NULL,
   `drum_id` int(4) NOT NULL,
   `cable_work` varchar(100) NOT NULL
@@ -466,7 +468,8 @@ CREATE TABLE `cable` (
 --
 
 INSERT INTO `cable` (`cable_id`, `route_name`, `installed_section`, `placing_team`, `cable_form`, `cable_to`, `cable_used`, `cable_date`, `employee_id`, `drum_id`, `cable_work`) VALUES
-(69, 'U2211148 เชียงใหม่', 'CMI01X39ECQ - L2 NEW', 'ดุ่ย', 120, 20, 100, '2024-08-04 09:20:03', 1, 1, 'Mixed');
+(69, 'U2211148 เชียงใหม่', 'CMI01X39ECQ - L2 NEW', 'ดุ่ย', 120, 20, 100, '2024-08-04 16:20:03', 1, 1, 'Mixed'),
+(70, 'U2211148 เชียงใหม่', 'CMI01X39ECQ - L2 NEW', 'ดุ่ย', 1000, 100, 900, '2024-08-04 20:40:52', 1, 1, 'Mixed');
 
 -- --------------------------------------------------------
 
@@ -484,7 +487,7 @@ CREATE TABLE `drum` (
   `drum_company` varchar(100) NOT NULL,
   `drum_cable_company` varchar(100) NOT NULL,
   `drum_used` int(4) NOT NULL,
-  `drum_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `drum_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `employee_id` int(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -493,8 +496,8 @@ CREATE TABLE `drum` (
 --
 
 INSERT INTO `drum` (`drum_id`, `drum_no`, `drum_to`, `drum_description`, `drum_full`, `drum_remaining`, `drum_company`, `drum_cable_company`, `drum_used`, `drum_date`, `employee_id`) VALUES
-(1, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 3900, 'FBH', 'FUTONG', 100, '2024-08-04 09:20:03', 0),
-(2, '0012', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 4000, 'FBH', 'FIBERHOME', 0, '2024-08-04 09:02:10', 0);
+(1, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 4000, 'FBH', 'FUTONG', 1000, '2024-08-04 21:21:48', 0),
+(2, '0012', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 4000, 'FBH', 'FIBERHOME', 0, '2024-08-04 17:49:00', 0);
 
 -- --------------------------------------------------------
 
@@ -511,7 +514,7 @@ CREATE TABLE `employee` (
   `employee_salary` double(8,2) NOT NULL,
   `employee_email` varchar(100) NOT NULL,
   `employee_position` int(1) NOT NULL,
-  `employee_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `employee_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -519,8 +522,8 @@ CREATE TABLE `employee` (
 --
 
 INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_lastname`, `employee_age`, `employee_phone`, `employee_salary`, `employee_email`, `employee_position`, `employee_date`) VALUES
-(1, 'นุ๊ก', 'นุ๊ก', 30, '0999999999', 20000.00, 'Thanakon@gmail.com', 2, '2024-07-24 08:27:24'),
-(13, 'Oakkharaphon', 'Kanthiya', 20, '0927131610', 12000.00, 'bollboll41@gmail.com', 0, '2024-08-01 13:55:23');
+(1, 'นุ๊ก', 'นุ๊ก', 30, '0999999999', 20000.00, 'Thanakon@gmail.com', 2, '2024-07-24 15:27:24'),
+(13, 'Oakkharaphon', 'Kanthiya', 20, '0927131610', 12000.00, 'bollboll41@gmail.com', 0, '2024-08-01 20:55:23');
 
 -- --------------------------------------------------------
 
@@ -537,17 +540,16 @@ CREATE TABLE `files` (
   `file_type` varchar(50) NOT NULL,
   `file_path` text NOT NULL,
   `is_public` tinyint(1) DEFAULT 0,
-  `date_updated` datetime NOT NULL DEFAULT current_timestamp()
+  `files_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `files`
 --
 
-INSERT INTO `files` (`files_id`, `name`, `description`, `user_id`, `folder_id`, `file_type`, `file_path`, `is_public`, `date_updated`) VALUES
+INSERT INTO `files` (`files_id`, `name`, `description`, `user_id`, `folder_id`, `file_type`, `file_path`, `is_public`, `files_date`) VALUES
 (79, 'FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', '', 2, 0, 'pdf', '1720880280_FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา.pdf', 1, '2024-07-13 21:18:19'),
-(86, 'ประเทศฟิลิปปินส์-1 (1)', '', 2, 49, 'docx', '1722757560_ประเทศฟิลิปปินส์-1 (1).docx', 0, '2024-08-04 14:46:54'),
-(88, 'maxresdefault (2)', '', 2, 0, 'jpg', '1722764400_maxresdefault (2).jpg', 1, '2024-08-04 16:40:31');
+(86, 'ประเทศฟิลิปปินส์-1 (1)', '', 2, 49, 'docx', '1722757560_ประเทศฟิลิปปินส์-1 (1).docx', 0, '2024-08-04 14:46:54');
 
 -- --------------------------------------------------------
 
@@ -559,43 +561,43 @@ CREATE TABLE `folders` (
   `folders_id` int(5) NOT NULL,
   `user_id` int(4) NOT NULL,
   `name` varchar(200) NOT NULL,
-  `parent_id` int(5) NOT NULL DEFAULT 0
+  `parent_id` int(5) NOT NULL DEFAULT 0,
+  `folder_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `folders`
 --
 
-INSERT INTO `folders` (`folders_id`, `user_id`, `name`, `parent_id`) VALUES
-(28, 2, 'PSNK+++++++', 0),
-(29, 2, 'เอกสาร บปช', 0),
-(32, 2, 'เอกสาร PSNK', 0),
-(41, 2, 'asdas', 0),
-(42, 2, 'asdasd', 0),
-(43, 2, 'asdasdsaddsa', 0),
-(44, 2, 'asdasddd', 0),
-(45, 2, 'asdasdsa', 0),
-(46, 2, 'asdasdasd', 0),
-(47, 2, 'asdasdasaaaad', 0),
-(50, 2, 'sssssssssssss', 0),
-(51, 2, 'dddddddddddd', 0),
-(52, 2, 'wwwwwwwwwwwww', 0),
-(54, 2, 'sssssssss', 0),
-(55, 2, 'fffffffff', 0),
-(56, 2, 'ffffffffffffffff', 0),
-(58, 2, 'ffff', 0),
-(59, 2, 'fff', 0),
-(60, 2, 'ss', 0),
-(61, 2, 'ddd', 0),
-(62, 2, 'sssssss', 0),
-(63, 2, 'Oakkharaphons', 0),
-(64, 2, 'dddaa', 0),
-(65, 2, 'sdasd', 0),
-(66, 2, 'daaa', 0),
-(67, 2, 'asdasdddd', 0),
-(68, 2, 'dddd', 0),
-(69, 2, 'asdsd', 0),
-(70, 2, 'sdddsa', 0);
+INSERT INTO `folders` (`folders_id`, `user_id`, `name`, `parent_id`, `folder_date`) VALUES
+(28, 2, 'PSNK+++++++', 0, '2024-08-04 17:12:24'),
+(29, 2, 'เอกสาร บปช', 0, '2024-08-04 17:12:24'),
+(32, 2, 'เอกสาร PSNK', 0, '2024-08-04 17:12:24'),
+(42, 2, 'asdasd', 0, '2024-08-04 17:12:24'),
+(43, 2, 'asdasdsaddsa', 0, '2024-08-04 17:12:24'),
+(44, 2, 'asdasddd', 0, '2024-08-04 17:12:24'),
+(45, 2, 'asdasdsa', 0, '2024-08-04 17:12:24'),
+(46, 2, 'asdasdasd', 0, '2024-08-04 17:12:24'),
+(47, 2, 'asdasdasaaaad', 0, '2024-08-04 17:12:24'),
+(50, 2, 'sssssssssssss', 0, '2024-08-04 17:12:24'),
+(51, 2, 'dddddddddddd', 0, '2024-08-04 17:12:24'),
+(52, 2, 'wwwwwwwwwwwww', 0, '2024-08-04 17:12:24'),
+(54, 2, 'sssssssss', 0, '2024-08-04 17:12:24'),
+(55, 2, 'fffffffff', 0, '2024-08-04 17:12:24'),
+(56, 2, 'ffffffffffffffff', 0, '2024-08-04 17:12:24'),
+(58, 2, 'ffff', 0, '2024-08-04 17:12:24'),
+(59, 2, 'fff', 0, '2024-08-04 17:12:24'),
+(60, 2, 'ss', 0, '2024-08-04 17:12:24'),
+(61, 2, 'ddd', 0, '2024-08-04 17:12:24'),
+(62, 2, 'sssssss', 0, '2024-08-04 17:12:24'),
+(63, 2, 'Oakkharaphons', 0, '2024-08-04 17:12:24'),
+(64, 2, 'dddaa', 0, '2024-08-04 17:12:24'),
+(65, 2, 'sdasd', 0, '2024-08-04 17:12:24'),
+(66, 2, 'daaa', 0, '2024-08-04 17:12:24'),
+(67, 2, 'asdasdddd', 0, '2024-08-04 17:12:24'),
+(68, 2, 'dddd', 0, '2024-08-04 17:12:24'),
+(69, 2, 'asdsd', 0, '2024-08-04 17:12:24'),
+(70, 2, 'sdddsa', 0, '2024-08-04 17:12:24');
 
 -- --------------------------------------------------------
 
@@ -608,7 +610,7 @@ CREATE TABLE `log` (
   `log_status` varchar(50) NOT NULL,
   `log_detail` text NOT NULL,
   `user_id` int(4) NOT NULL,
-  `log_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `log_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -616,25 +618,100 @@ CREATE TABLE `log` (
 --
 
 INSERT INTO `log` (`log_id`, `log_status`, `log_detail`, `user_id`, `log_date`) VALUES
-(1, 'Folder Deleted', 'Folder name: aaaaaaaaaaaaaaaaaa', 2, '2024-08-04 08:21:32'),
-(2, 'Folder Created', 'Folder name: Oakkharaphon', 2, '2024-08-04 08:21:32'),
-(3, 'Folder Deleted', 'Folder name: Oakkharaphon', 2, '2024-08-04 08:21:32'),
-(4, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 08:34:56'),
-(5, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 14.4', 2, '2024-08-04 08:34:58'),
-(6, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-04 08:34:59'),
-(7, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 08:26:32'),
-(8, 'Folder Deleted', 'Folder name: f', 2, '2024-08-04 08:45:17'),
-(10, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 09:08:12'),
-(11, 'Cable Deleted', 'Cable ID: 66, Route: , Section: , Used: ', 2, '2024-08-04 09:09:06'),
-(12, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 09:11:04'),
-(13, 'Cable Deleted', 'Cable ID: 62, Route: , Section: , Used: ', 2, '2024-08-04 09:11:17'),
-(14, 'Cable Deleted', 'Cable ID: 67, Route: , Section: , Used: ', 2, '2024-08-04 09:11:55'),
-(15, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 5', 2, '2024-08-04 09:16:00'),
-(16, 'Cable Deleted', 'Cable ID: 68, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 5', 2, '2024-08-04 09:17:28'),
-(17, 'Cable Inserted', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 09:20:03'),
-(18, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 09:20:32'),
-(19, 'File Updated', 'File ID: 79', 2, '2024-08-04 09:39:04'),
-(20, 'File Uploaded', 'File name: maxresdefault (2)', 2, '2024-08-04 09:40:31');
+(1, 'Folder Deleted', 'Folder name: aaaaaaaaaaaaaaaaaa', 2, '2024-08-04 15:21:32'),
+(2, 'Folder Created', 'Folder name: Oakkharaphon', 2, '2024-08-04 15:21:32'),
+(3, 'Folder Deleted', 'Folder name: Oakkharaphon', 2, '2024-08-04 15:21:32'),
+(4, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 15:34:56'),
+(5, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 14.4', 2, '2024-08-04 15:34:58'),
+(6, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-04 15:34:59'),
+(7, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 15:26:32'),
+(8, 'Folder Deleted', 'Folder name: f', 2, '2024-08-04 15:45:17'),
+(10, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 16:08:12'),
+(11, 'Cable Deleted', 'Cable ID: 66, Route: , Section: , Used: ', 2, '2024-08-04 16:09:06'),
+(12, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 16:11:04'),
+(13, 'Cable Deleted', 'Cable ID: 62, Route: , Section: , Used: ', 2, '2024-08-04 16:11:17'),
+(14, 'Cable Deleted', 'Cable ID: 67, Route: , Section: , Used: ', 2, '2024-08-04 16:11:55'),
+(15, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 5', 2, '2024-08-04 16:16:00'),
+(16, 'Cable Deleted', 'Cable ID: 68, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 5', 2, '2024-08-04 16:17:28'),
+(17, 'Cable Inserted', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 16:20:03'),
+(18, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 16:20:32'),
+(19, 'File Updated', 'File ID: 79', 2, '2024-08-04 16:39:04'),
+(20, 'File Uploaded', 'File name: maxresdefault (2)', 2, '2024-08-04 16:40:31'),
+(21, 'File Deleted', 'File name: maxresdefault (2)', 2, '2024-08-04 16:54:43'),
+(22, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 17:19:41'),
+(23, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:41:58'),
+(24, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:43:40'),
+(25, 'Drum Updated', 'Drum ID: 2, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:43:59'),
+(26, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:44:13'),
+(27, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:45:30'),
+(28, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:45:58'),
+(29, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:48:40'),
+(30, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:48:42'),
+(31, 'Drum Updated', 'Drum ID: 2, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:48:50'),
+(32, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:49:00'),
+(33, 'Folder Deleted', 'Folder name: asdas', 2, '2024-08-04 17:50:58'),
+(34, 'Folder Deleted', 'Folder name: ', 2, '2024-08-04 17:50:59'),
+(35, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 20:10:15'),
+(36, 'Drum Inserted', 'Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:13:22'),
+(37, 'Drum Updated', 'Drum ID: 29, Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:13:53'),
+(38, 'Drum Deleted', 'Drum No: , Company: , Cable Company: ', 2, '2024-08-04 20:15:03'),
+(39, 'Drum Inserted', 'Drum ID: Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:15:18'),
+(40, 'Drum Deleted', 'Drum No: , Company: , Cable Company: ', 2, '2024-08-04 20:16:19'),
+(41, 'Drum Inserted', 'Drum ID: 31Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:16:26'),
+(42, 'Drum Deleted', 'Drum ID: 31, Drum No: , Company: , Cable Company: ', 2, '2024-08-04 20:20:04'),
+(43, 'Drum Inserted', 'Drum ID: 32, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:23:39'),
+(44, 'Drum Deleted', 'Drum ID: 32, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:23:47'),
+(45, 'User Created', 'Username: admin3, Employee Name: Oakkharaphon Kanthiya, Position: 0', 2, '2024-08-04 20:32:10'),
+(46, 'User Updated', 'User ID: 20, Username: admin3, Level: 0, Status: 1', 2, '2024-08-04 20:32:38'),
+(47, 'User Deleted', 'User ID: 20, Employee ID: 16', 2, '2024-08-04 20:32:54'),
+(48, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 20:38:32'),
+(49, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 20:39:59'),
+(50, 'Bill Updated', 'Bill ID: PS2567/003, Total Amount: 319.42', 2, '2024-08-04 20:40:07'),
+(51, 'Cable Inserted', 'Cable ID: 70, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-04 20:40:52'),
+(52, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 20:41:00'),
+(53, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-04 20:41:09'),
+(54, 'File Uploaded', 'File name: 0383', 2, '2024-08-04 20:42:27'),
+(55, 'File Deleted', 'File name: 0383', 2, '2024-08-04 20:45:32'),
+(56, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:24'),
+(57, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:24'),
+(58, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:25'),
+(59, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:26'),
+(60, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:26'),
+(61, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:27'),
+(62, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:28'),
+(63, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:29'),
+(64, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:30'),
+(65, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 21:21:47'),
+(66, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:48'),
+(67, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:49'),
+(68, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:50'),
+(69, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:51'),
+(70, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:52'),
+(71, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:53'),
+(72, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:54'),
+(73, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:55'),
+(74, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:56'),
+(75, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:57'),
+(76, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:58'),
+(77, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:59'),
+(78, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:22:01'),
+(79, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:14'),
+(80, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:15'),
+(81, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:16'),
+(82, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:17'),
+(83, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:18'),
+(84, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:19'),
+(85, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:20'),
+(86, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:20'),
+(87, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:21'),
+(88, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:22'),
+(89, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:28'),
+(90, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:29'),
+(91, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:29'),
+(92, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:30'),
+(93, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:27:36'),
+(94, 'File Uploaded', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:32'),
+(95, 'File Deleted', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:35');
 
 -- --------------------------------------------------------
 
@@ -648,7 +725,7 @@ CREATE TABLE `users` (
   `passW` varchar(100) DEFAULT NULL,
   `lv` char(1) NOT NULL DEFAULT '1' COMMENT '0=admin,1=เจ้าของ,2=พนักงานเอกสาร,3=พนักงานปฏิบัติงาน',
   `status` char(1) NOT NULL DEFAULT '1' COMMENT '1=ใช้งาน,0=แบน',
-  `users_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `users_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `employee_id` int(4) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -657,8 +734,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `passW`, `lv`, `status`, `users_date`, `employee_id`) VALUES
-(2, 'admin', '$2y$10$c8vj27z4jfmAEJFl76foR.NWV7ev8Is0zjjeZnVp8VI527nISuh3W', '0', '1', '2024-08-01 14:17:31', 1),
-(19, 'admin2', '$2y$10$NDs84uj5euES7iwBfS4D7.PFahhPIoyXgQRObEAmKZfXSvuuXXT4O', '2', '1', '2024-08-04 06:16:32', 13);
+(2, 'admin', '$2y$10$c8vj27z4jfmAEJFl76foR.NWV7ev8Is0zjjeZnVp8VI527nISuh3W', '0', '1', '2024-08-01 21:17:31', 1),
+(19, 'admin2', '$2y$10$NDs84uj5euES7iwBfS4D7.PFahhPIoyXgQRObEAmKZfXSvuuXXT4O', '2', '1', '2024-08-04 13:16:32', 13);
 
 --
 -- Indexes for dumped tables
@@ -732,25 +809,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cable`
 --
 ALTER TABLE `cable`
-  MODIFY `cable_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `cable_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `drum`
 --
 ALTER TABLE `drum`
-  MODIFY `drum_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `drum_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `employee_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `employee_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `files_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `files_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `folders`
@@ -762,13 +839,13 @@ ALTER TABLE `folders`
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `log_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `log_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
