@@ -13,21 +13,33 @@ try {
 
     $con->beginTransaction();
 
-    $strsql = "SELECT * FROM drum WHERE drum_no = :drum_no";
+    // ตรวจสอบข้อมูลที่มีอยู่แล้ว
+    $strsql = "SELECT * FROM drum WHERE drum_id = :drum_id";
     $stmt = $con->prepare($strsql);
-    $stmt->bindParam(':drum_no', $drum_no);
+    $stmt->bindParam(':drum_id', $drum_id);
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($result && ($drum_company == $result['drum_company'] && $drum_cable_company == $result['drum_cable_company'])) {
-        echo '<script>
-        alert("มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่");
-        history.back();
-        </script>';
-        exit();
-    }
-
     if ($result) {
+        // ตรวจสอบข้อมูลซ้ำกันในการอัปเดต
+        $checkDupSQL = "SELECT * FROM drum WHERE drum_no = :drum_no AND drum_company = :drum_company AND drum_cable_company = :drum_cable_company AND drum_id != :drum_id";
+        $checkDupStmt = $con->prepare($checkDupSQL);
+        $checkDupStmt->bindParam(':drum_no', $drum_no);
+        $checkDupStmt->bindParam(':drum_company', $drum_company);
+        $checkDupStmt->bindParam(':drum_cable_company', $drum_cable_company);
+        $checkDupStmt->bindParam(':drum_id', $drum_id);
+        $checkDupStmt->execute();
+        $dupResult = $checkDupStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($dupResult) {
+            echo '<script>
+            alert("มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่");
+            history.back();
+            </script>';
+            exit();
+        }
+
+        // อัปเดตข้อมูล
         $updateSQL = "UPDATE drum 
                       SET drum_no = :drum_no, drum_to = :drum_to, drum_description = :drum_description, 
                           drum_full = :drum_full, drum_remaining = :drum_full, 
