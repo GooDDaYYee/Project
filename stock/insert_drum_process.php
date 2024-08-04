@@ -5,6 +5,8 @@ try {
     $drum_no = $_POST['drum_no'];
     $drum_company = $_POST['drum_company'];
     $drum_cable_company = $_POST['drum_cable_company'];
+
+    // ตรวจสอบว่ามี drum อยู่แล้วหรือไม่
     $strsql = "SELECT * FROM drum WHERE drum_no=:drum_no";
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_no', $drum_no);
@@ -18,18 +20,11 @@ try {
         </script>';
         exit();
     }
-} catch (PDOException $e) {
-    echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
-    exit();
-}
 
-
-try {
+    // เริ่มทำรายการ transaction
     $con->beginTransaction();
 
+    // เพิ่มข้อมูล drum
     $stmt = $con->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company, drum_cable_company)
     VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_remaining, :drum_company, :drum_cable_company)");
 
@@ -42,6 +37,7 @@ try {
     $stmt->bindParam(':drum_cable_company', $_POST['drum_cable_company']);
 
     $result = $stmt->execute();
+
     if ($result) {
         echo '<script>
             alert("เพิ่มข้อมูลสำเร็จ");
@@ -55,10 +51,13 @@ try {
             </script>
         ';
     }
+
+    // ยืนยันการทำรายการ
     $con->commit();
     header("Location: ../index.php?page=stock/list_stock_drum");
     exit();
 } catch (PDOException $e) {
+    // ยกเลิกการทำรายการในกรณีที่เกิดข้อผิดพลาด
     $con->rollBack();
     echo '<script>
         alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");

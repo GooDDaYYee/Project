@@ -380,7 +380,7 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
-      <button type="submit" class="btn btn-warning bg-gradient-purple" form="editForm">อัพเดตข้อมูล</button>
+      <button type="submit" class="btn btn-warning bg-gradient-purple" form="editForm">บันทึกการแก้ไข</button>
     </div>
   </div>
 </div>
