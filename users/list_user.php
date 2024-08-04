@@ -84,6 +84,7 @@
             ?>
           </tbody>
         </table>
+        &nbsp;
         <div class="pagination-container">
           <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
@@ -144,41 +145,48 @@
   }
 
   $(document).ready(function() {
-    var rowsPerPage = 10;
-    var totalRows = $('tbody tr').length;
-    var totalPages = Math.ceil(totalRows / rowsPerPage);
+    $(document).ready(function() {
+      var rowsPerPage = 10;
+      var totalRows = $('tbody tr').length;
+      var totalPages = Math.ceil(totalRows / rowsPerPage);
 
-    for (var i = 1; i <= totalPages; i++) {
-      $('.pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
-    }
-
-    $('tbody tr').hide();
-    $('tbody tr').slice(0, rowsPerPage).show();
-    $('.pagination li:first-child').addClass('active');
-
-    $('.pagination li').on('click', function(e) {
-      e.preventDefault();
-      var currentPage = $(this).index() + 1;
-      var startRow = (currentPage - 1) * rowsPerPage;
-      var endRow = startRow + rowsPerPage;
-
-      $('tbody tr').hide();
-      $('tbody tr').slice(startRow, endRow).show();
-
-      $('.pagination li').removeClass('active');
-      $(this).addClass('active');
-    });
-
-    $('#search').keyup(function() {
-      var searchTerm = $(this).val().toLowerCase();
-      $('tbody tr').hide();
-      $('tbody tr').each(function() {
-        var rowText = $(this).text().toLowerCase();
-        if (rowText.includes(searchTerm)) {
-          $(this).show();
+      if (totalRows > rowsPerPage) {
+        for (var i = 1; i <= totalPages; i++) {
+          $('.pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
         }
+
+        $('tbody tr').hide();
+        $('tbody tr').slice(0, rowsPerPage).show();
+        $('.pagination li:first-child').addClass('active');
+      } else {
+        $('tbody tr').show();
+      }
+
+      $('.pagination li').on('click', function(e) {
+        e.preventDefault();
+        var currentPage = $(this).index() + 1;
+        var startRow = (currentPage - 1) * rowsPerPage;
+        var endRow = startRow + rowsPerPage;
+
+        $('tbody tr').hide();
+        $('tbody tr').slice(startRow, endRow).show();
+
+        $('.pagination li').removeClass('active');
+        $(this).addClass('active');
+      });
+
+      $('#search').keyup(function() {
+        var searchTerm = $(this).val().toLowerCase();
+        $('tbody tr').hide();
+        $('tbody tr').each(function() {
+          var rowText = $(this).text().toLowerCase();
+          if (rowText.includes(searchTerm)) {
+            $(this).show();
+          }
+        });
       });
     });
+
 
     $('#editModal').on('show.bs.modal', function(event) {
       var button = $(event.relatedTarget);
