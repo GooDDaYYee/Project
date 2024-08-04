@@ -9,7 +9,7 @@ if (isset($_GET['drum_id'])) {
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $con->beginTransaction();
 
-        $stmtCheck = $con->prepare("SELECT drum_used FROM drum WHERE drum_id = :drum_id");
+        $stmtCheck = $con->prepare("SELECT drum_used, drum_no, drum_company, drum_cable_company FROM drum WHERE drum_id = :drum_id");
         $stmtCheck->bindParam(':drum_id', $drum_id);
         $stmtCheck->execute();
         $result = $stmtCheck->fetch(PDO::FETCH_ASSOC);
@@ -22,7 +22,7 @@ if (isset($_GET['drum_id'])) {
 
             $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
             $logStatus = 'Drum Deleted';
-            $logDetail = 'Drum No: ' . $drum_no . ', Company: ' . $drum_company . ', Cable Company: ' . $drum_cable_company;
+            $logDetail = 'Drum ID: ' . $drum_id . ', Drum No: ' . $result['drum_no'] . ', Company: ' . $result['drum_company'] . ', Cable Company: ' . $result['drum_cable_company'];
             $user_id = $_SESSION['user_id'];
             $stmtLog->bindParam(':log_status', $logStatus);
             $stmtLog->bindParam(':log_detail', $logDetail);

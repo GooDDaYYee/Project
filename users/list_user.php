@@ -10,7 +10,7 @@
           <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
       </form>
-      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=users/register', '_parent')">เพิ่มผู้ใช้</button>
+      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=users/insert_users', '_parent')">เพิ่มผู้ใช้</button>
     </div>
 
     <div class="card-body">
@@ -28,7 +28,7 @@
           <tbody>
             <?php
             include('connect.php');
-            $strsql = "SELECT * FROM users ORDER BY user_id ASC";
+            $strsql = "SELECT * FROM users ORDER BY users_date ASC";
 
             try {
               $stmt = $con->prepare($strsql);

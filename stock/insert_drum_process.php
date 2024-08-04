@@ -40,11 +40,12 @@ try {
     $stmt->bindParam(':employee_id', $employee_id);
 
     $result = $stmt->execute();
+    $drum_id = $con->lastInsertId();
 
     if ($result) {
         $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
         $logStatus = 'Drum Inserted';
-        $logDetail = 'Drum No: ' . $drum_no . ', Company: ' . $drum_company . ', Cable Company: ' . $drum_cable_company;
+        $logDetail = 'Drum ID: ' . $drum_id . ', Drum No: ' . $drum_no . ', Company: ' . $drum_company . ', Cable Company: ' . $drum_cable_company;
         $user_id = $_SESSION['user_id'];
         $stmtLog->bindParam(':log_status', $logStatus);
         $stmtLog->bindParam(':log_detail', $logDetail);

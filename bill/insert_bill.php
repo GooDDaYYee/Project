@@ -12,6 +12,11 @@ try {
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $con->beginTransaction();
 
+    $stmtEmployee = $con->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
+    $stmtEmployee->bindParam(':user_id', $user_id);
+    $stmtEmployee->execute();
+    $employee_id = $stmtEmployee->fetchColumn();
+
     $stmtInvoice = $con->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
                                     VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
 

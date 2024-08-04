@@ -31,7 +31,7 @@
                     <tbody>
                         <?php
                         include('connect.php');
-                        $strsql = "SELECT * FROM cable c JOIN drum d ON d.drum_id = c.drum_id ORDER BY cable_id ASC";
+                        $strsql = "SELECT * FROM cable c JOIN drum d ON d.drum_id = c.drum_id ORDER BY cable_date ASC";
 
                         try {
                             $stmt = $con->prepare($strsql);

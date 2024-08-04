@@ -31,7 +31,7 @@
                     <tbody>
                         <?php
                         include('connect.php');
-                        $strsql = "SELECT * FROM employee ORDER BY employee_id ASC";
+                        $strsql = "SELECT * FROM employee ORDER BY employee_date ASC";
 
                         try {
                             $stmt = $con->prepare($strsql);

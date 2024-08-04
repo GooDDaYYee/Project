@@ -34,13 +34,11 @@ try {
 
     $employee_id = $con->lastInsertId();
 
-    $sql = "INSERT INTO users(username, passW, name, lastname, lv, employee_id) 
-            VALUES (:username, :passW, :name, :lastname, :lv, :employee_id)";
+    $sql = "INSERT INTO users(username, passW, lv, employee_id) 
+            VALUES (:username, :passW, :lv, :employee_id)";
     $stmt = $con->prepare($sql);
     $stmt->bindParam(':username', $username);
     $stmt->bindParam(':passW', $hashed_password);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':lastname', $lastname);
     $stmt->bindParam(':lv', $lv);
     $stmt->bindParam(':employee_id', $employee_id);
     $stmt->execute();
@@ -67,5 +65,4 @@ try {
         history.back();
         </script>';
 }
-
 $con = null;

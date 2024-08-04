@@ -2,12 +2,12 @@
 include dirname(__FILE__) . '/../connect.php';
 $folder_parent = isset($_GET['fid']) ? $_GET['fid'] : 0;
 
-$stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY name ASC");
+$stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY folder_date ASC");
 $stmt->bindParam(':parent_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
 $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $con->prepare("SELECT * FROM files WHERE folder_id = :folder_id ORDER BY name ASC");
+$stmt = $con->prepare("SELECT * FROM files WHERE folder_id = :folder_id ORDER BY files_date ASC");
 $stmt->bindParam(':folder_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
 $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -34,7 +34,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php
             $folders_id = $folder_parent;
             while ($folders_id > 0) {
-              $path_stmt = $con->prepare("SELECT * FROM folders WHERE folders_id = :folders_id ORDER BY name ASC");
+              $path_stmt = $con->prepare("SELECT * FROM folders WHERE folders_id = :folders_id ORDER BY folder_date ASC");
               $path_stmt->bindParam(':folders_id', $folders_id, PDO::PARAM_INT);
               $path_stmt->execute();
               $path = $path_stmt->fetch(PDO::FETCH_ASSOC);

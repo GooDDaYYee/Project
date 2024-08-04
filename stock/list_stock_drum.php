@@ -31,7 +31,7 @@
                         <tbody>
                             <?php
                             include('connect.php');
-                            $strsql = "SELECT * FROM drum ORDER BY drum_id asc";
+                            $strsql = "SELECT * FROM drum ORDER BY drum_date asc";
 
                             try {
                                 $stmt = $con->prepare($strsql);
