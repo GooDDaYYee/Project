@@ -1,6 +1,4 @@
-<!-- Begin Page Content -->
 <div class="container-fluid">
-    <!-- List table -->
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
             <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Log
@@ -62,28 +60,55 @@
                         ?>
                     </tbody>
                 </table>
+                <div class="pagination-container">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <!-- Pagination items will be dynamically generated here -->
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <script>
-    $('#search').keyup(function() {
-        var _f = $(this).val().toLowerCase();
-        $('tbody tr').each(function() {
-            var found = false;
-            $(this).find('.to_folder, .to_file').each(function() {
-                var val = $(this).text().toLowerCase();
-                if (val.includes(_f)) {
-                    found = true;
-                    return false;
+    $(document).ready(function() {
+        var rowsPerPage = 10;
+        var totalRows = $('tbody tr').length;
+        var totalPages = Math.ceil(totalRows / rowsPerPage);
+
+        for (var i = 1; i <= totalPages; i++) {
+            $('.pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
+        }
+
+        $('tbody tr').hide();
+        $('tbody tr').slice(0, rowsPerPage).show();
+        $('.pagination li:first-child').addClass('active');
+
+        $('.pagination li').on('click', function(e) {
+            e.preventDefault();
+            var currentPage = $(this).index() + 1;
+            var startRow = (currentPage - 1) * rowsPerPage;
+            var endRow = startRow + rowsPerPage;
+
+            $('tbody tr').hide();
+            $('tbody tr').slice(startRow, endRow).show();
+
+            $('.pagination li').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $('#search').keyup(function() {
+            var searchTerm = $(this).val().toLowerCase();
+            $('tbody tr').hide();
+            $('tbody tr').each(function() {
+                var rowText = $(this).text().toLowerCase();
+                if (rowText.includes(searchTerm)) {
+                    $(this).show();
                 }
             });
-            if (found) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
         });
     });
 </script>

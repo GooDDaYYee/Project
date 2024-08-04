@@ -114,7 +114,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
                       </td>
                       <td><i class="to_file"><?php
-                                              $timestamp = strtotime($row['date_updated']);
+                                              $timestamp = strtotime($row['files_date']);
                                               $year_buddhist = date('Y', $timestamp) + 543;
                                               $date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
                                               echo $date_buddhist; ?></i></td>
@@ -123,6 +123,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <?php endforeach; ?>
                 </tbody>
               </table>
+              <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center">
+                    <!-- Pagination items will be dynamically generated here -->
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>
@@ -354,6 +361,44 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       }
     });
   }
+
+  $(document).ready(function() {
+    var rowsPerPage = 20;
+    var totalRows = $('tbody tr').length;
+    var totalPages = Math.ceil(totalRows / rowsPerPage);
+
+    for (var i = 1; i <= totalPages; i++) {
+      $('.pagination').append('<li class="page-item"><a class="page-link" href="#">' + i + '</a></li>');
+    }
+
+    $('tbody tr').hide();
+    $('tbody tr').slice(0, rowsPerPage).show();
+    $('.pagination li:first-child').addClass('active');
+
+    $('.pagination li').on('click', function(e) {
+      e.preventDefault();
+      var currentPage = $(this).index() + 1;
+      var startRow = (currentPage - 1) * rowsPerPage;
+      var endRow = startRow + rowsPerPage;
+
+      $('tbody tr').hide();
+      $('tbody tr').slice(startRow, endRow).show();
+
+      $('.pagination li').removeClass('active');
+      $(this).addClass('active');
+    });
+
+    $('#search').keyup(function() {
+      var searchTerm = $(this).val().toLowerCase();
+      $('tbody tr').hide();
+      $('tbody tr').each(function() {
+        var rowText = $(this).text().toLowerCase();
+        if (rowText.includes(searchTerm)) {
+          $(this).show();
+        }
+      });
+    });
+  });
 
   //modal*************************************************************************************************************************
   window.start_load = function() {

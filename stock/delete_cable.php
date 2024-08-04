@@ -9,18 +9,23 @@ if (isset($_GET['cable_id'])) {
         $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $con->beginTransaction();
 
-        $stmtDetail = $con->prepare("DELETE FROM cable WHERE cable_id = :cable_id");
+        $stmtDetail = $con->prepare('SELECT * FROM cable WHERE cable_id = :cable_id');
         $stmtDetail->bindParam(':cable_id', $cable_id);
         $stmtDetail->execute();
+        $result = $stmtDetail->fetch(PDO::FETCH_ASSOC);
 
         $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
         $logStatus = 'Cable Deleted';
-        $logDetail = 'Cable ID: ' . $cable_id;
+        $logDetail = 'Cable ID: ' . $cable_id . ', Route: ' . $result['route_name'] . ', Section: ' . $result['installed_section'] . ', Used: ' . $result['cable_used'];
         $user_id = $_SESSION['user_id'];
         $stmtLog->bindParam(':log_status', $logStatus);
         $stmtLog->bindParam(':log_detail', $logDetail);
         $stmtLog->bindParam(':user_id', $user_id);
         $stmtLog->execute();
+
+        $stmtDetail = $con->prepare("DELETE FROM cable WHERE cable_id = :cable_id");
+        $stmtDetail->bindParam(':cable_id', $cable_id);
+        $stmtDetail->execute();
 
         $con->commit();
     } catch (PDOException $e) {
@@ -29,6 +34,7 @@ if (isset($_GET['cable_id'])) {
     }
 
     try {
+
         $strsql = 'SELECT d.drum_id, COALESCE(SUM(c.cable_used), 0) as total_cable 
                    FROM drum d 
                    LEFT JOIN cable c ON d.drum_id = c.drum_id 

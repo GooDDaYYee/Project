@@ -5,7 +5,6 @@ session_start();
 try {
     $con->beginTransaction();
 
-    $cable_id = $_POST['cable_id'];
     $route = $_POST['route'];
     $section = $_POST['section'];
     $team = $_POST['team'];
@@ -16,6 +15,7 @@ try {
     $cable_used = $cable_form - $cable_to;
     $employee_id = $_SESSION['employee_id'];
 
+    // Calculate total cable used
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
@@ -23,6 +23,7 @@ try {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total_cable = $result['total_cable'] + $cable_used;
 
+    // Check if total cable used exceeds the limit
     if ($total_cable > 4000) {
         echo '<script>
             alert("ไม่สามารถเพิ่มข้อมูลได้: ปริมาณสายเคเบิลทั้งหมดเกิน 4000");
@@ -31,6 +32,7 @@ try {
         exit();
     }
 
+    // Insert cable record
     $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work, employee_id)
     VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work, :employee_id)");
 
@@ -43,8 +45,9 @@ try {
     $stmt->bindParam(':drum_id', $drum_id);
     $stmt->bindParam(':cable_work', $cable_work);
     $stmt->bindParam(':employee_id', $employee_id);
-
     $stmt->execute();
+
+    $cable_id = $con->lastInsertId();
 
     $sql = "UPDATE drum SET drum_used=:total_cable, drum_remaining=drum_full-:total_cable WHERE drum_id=:drum_id";
     $stmt2 = $con->prepare($sql);
@@ -66,6 +69,7 @@ try {
     header("Location: ../index.php?page=stock/list_stock_cable");
     exit();
 } catch (PDOException $e) {
+
     $con->rollBack();
     echo '<script>
         alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
