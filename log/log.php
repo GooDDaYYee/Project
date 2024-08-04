@@ -44,11 +44,11 @@
                                     $employee_name = $rs['employee_name'] ? $rs['employee_name'] : 'ไม่พบข้อมูลพนักงาน';
                         ?>
                                     <tr>
-                                        <th scope="row"><?php echo $i; ?></th>
-                                        <td><?php echo htmlspecialchars($rs['log_status']); ?></td>
-                                        <td><?php echo htmlspecialchars($rs['log_detail']); ?></td>
-                                        <td><?php echo htmlspecialchars($employee_name); ?></td>
-                                        <td><?php echo htmlspecialchars($rs['log_date']); ?></td>
+                                        <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
+                                        <td><i class="to_file"><?php echo $rs['log_status']; ?></i></td>
+                                        <td><i class="to_file"><?php echo $rs['log_detail']; ?></i></td>
+                                        <td><i class="to_file"><?php echo $employee_name; ?></i></td>
+                                        <td><i class="to_file"><?php echo $rs['log_date']; ?></i></td>
                                     </tr>
                         <?php
                                     $i++;
@@ -66,3 +66,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('#search').keyup(function() {
+        var _f = $(this).val().toLowerCase();
+        $('tbody tr').each(function() {
+            var found = false;
+            $(this).find('.to_folder, .to_file').each(function() {
+                var val = $(this).text().toLowerCase();
+                if (val.includes(_f)) {
+                    found = true;
+                    return false;
+                }
+            });
+            if (found) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+</script>
