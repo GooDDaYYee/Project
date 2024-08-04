@@ -17,7 +17,6 @@ class Action
 		ob_end_flush();
 	}
 
-	// New function to log actions
 	private function add_log($log_status, $log_detail, $user_id)
 	{
 		$stmt = $this->db->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
@@ -33,7 +32,7 @@ class Action
 		$data = " name ='" . $name . "' ";
 		$data .= ", parent_id ='" . $parent_id . "' ";
 		if (empty($folders_id)) {
-			$data .= ", user_id ='" . $_SESSION['user_id'] . "' "; // Use user_id from session
+			$data .= ", user_id ='" . $_SESSION['user_id'] . "' ";
 
 			$check = $this->db->query("SELECT * FROM folders WHERE user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "'")->rowCount();
 			if ($check > 0) {
@@ -100,7 +99,7 @@ class Action
 					$data = " name = '" . $file[0] . "' ";
 					$data .= ", folder_id = '" . $folder_id . "' ";
 					$data .= ", description = '" . $description . "' ";
-					$data .= ", user_id = '" . $_SESSION['user_id'] . "' "; // Use user_id from session
+					$data .= ", user_id = '" . $_SESSION['user_id'] . "' ";
 					$data .= ", file_type = '" . $file[1] . "' ";
 					$data .= ", file_path = '" . $fname . "' ";
 					$data .= ", is_public = " . (isset($is_public) && $is_public == 'on' ? 1 : 0);

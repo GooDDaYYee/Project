@@ -27,7 +27,7 @@ try {
     $stmtInvoice->bindParam(':bill_project', $_POST['project']);
     $stmtInvoice->bindParam(':list_num', $_POST['auCount']);
     $stmtInvoice->bindParam(':bill_company', $_POST['company']);
-    $stmtInvoice->bindParam(':employee_id', $employee_id); // Bind employee_id
+    $stmtInvoice->bindParam(':employee_id', $employee_id);
 
     $total = 0;
     $vat = 0.07;
@@ -67,7 +67,6 @@ try {
 
     $stmtInvoice->execute();
 
-    // Logging the action
     $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
     $logStatus = 'Bill Created';
     $logDetail = 'Bill ID: ' . $_POST['number'] . ', Total Amount: ' . $total;

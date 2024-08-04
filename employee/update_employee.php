@@ -1,6 +1,6 @@
 <?php
 include('../connect.php');
-session_start(); // Start session to access session variables
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_id = $_POST['employee_id'];
@@ -36,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $stmt->execute();
 
-        // Log the update action
         $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
         $logStatus = 'Employee Updated';
         $logDetail = "Updated employee ID: $employee_id, Name: $employee_name $employee_lastname";

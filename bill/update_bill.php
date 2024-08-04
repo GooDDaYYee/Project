@@ -1,6 +1,6 @@
 <?php
 include("../connect.php");
-session_start(); // Make sure the session is started to get user information
+session_start();
 
 function checkDuplicates($array)
 {
@@ -82,11 +82,10 @@ try {
 
     $stmtUpdateBill->execute();
 
-    // Logging the action
     $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
     $logStatus = 'Bill Updated';
     $logDetail = 'Bill ID: ' . $_POST['bill_Id'] . ', Total Amount: ' . $total;
-    $user_id = $_SESSION['user_id']; // Get user ID from session
+    $user_id = $_SESSION['user_id'];
     $stmtLog->bindParam(':log_status', $logStatus);
     $stmtLog->bindParam(':log_detail', $logDetail);
     $stmtLog->bindParam(':user_id', $user_id);

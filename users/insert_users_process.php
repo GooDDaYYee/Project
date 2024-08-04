@@ -1,6 +1,6 @@
 <?php
 include "../connect.php";
-session_start(); // Start session to access session variables
+session_start();
 
 $name = $_POST["name"];
 $lastname = $_POST["lastname"];
@@ -20,7 +20,6 @@ try {
     $employee_email = $_POST["email"];
     $employee_position = $_POST["type"];
 
-    // Insert new employee record
     $sql = "INSERT INTO employee(employee_name, employee_lastname, employee_age, employee_phone, employee_salary, employee_email, employee_position) 
             VALUES (:employee_name, :employee_lastname, :employee_age, :employee_phone, :employee_salary, :employee_email, :employee_position)";
     $stmt = $con->prepare($sql);
@@ -33,9 +32,8 @@ try {
     $stmt->bindParam(':employee_position', $employee_position);
     $stmt->execute();
 
-    $employee_id = $con->lastInsertId(); // Get the last inserted ID for employee
+    $employee_id = $con->lastInsertId();
 
-    // Insert new user record
     $sql = "INSERT INTO users(username, passW, name, lastname, lv, employee_id) 
             VALUES (:username, :passW, :name, :lastname, :lv, :employee_id)";
     $stmt = $con->prepare($sql);
@@ -47,11 +45,10 @@ try {
     $stmt->bindParam(':employee_id', $employee_id);
     $stmt->execute();
 
-    // Log the new user and employee creation
     $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
     $logStatus = 'User Created';
     $logDetail = 'Username: ' . $username . ', Employee Name: ' . $employee_name . ' ' . $employee_lastname . ', Position: ' . $employee_position;
-    $admin_user_id = $_SESSION['user_id']; // Use user_id from session to log who performed the action
+    $admin_user_id = $_SESSION['user_id'];
     $stmtLog->bindParam(':log_status', $logStatus);
     $stmtLog->bindParam(':log_detail', $logDetail);
     $stmtLog->bindParam(':user_id', $admin_user_id);

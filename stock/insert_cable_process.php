@@ -1,6 +1,6 @@
 <?php
 include("../connect.php");
-session_start(); // Start session to access session variables
+session_start();
 
 try {
     $con->beginTransaction();
@@ -14,9 +14,8 @@ try {
     $cable_work = $_POST['cable_work'];
     $drum_id = $_POST['drum_id'];
     $cable_used = $cable_form - $cable_to;
-    $employee_id = $_SESSION['employee_id']; // Get employee ID from session
+    $employee_id = $_SESSION['employee_id'];
 
-    // Calculate the total cable used
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
@@ -32,7 +31,6 @@ try {
         exit();
     }
 
-    // Insert new cable record
     $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work, employee_id)
     VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work, :employee_id)");
 
@@ -48,18 +46,16 @@ try {
 
     $stmt->execute();
 
-    // Update drum data
     $sql = "UPDATE drum SET drum_used=:total_cable, drum_remaining=drum_full-:total_cable WHERE drum_id=:drum_id";
     $stmt2 = $con->prepare($sql);
     $stmt2->bindParam(':total_cable', $total_cable, PDO::PARAM_INT);
     $stmt2->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
     $stmt2->execute();
 
-    // Log the cable insertion
     $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
     $logStatus = 'Cable Inserted';
     $logDetail = 'Cable ID: ' . $cable_id . ', Route: ' . $route . ', Section: ' . $section . ', Used: ' . $cable_used;
-    $user_id = $_SESSION['user_id']; // Use user_id from session
+    $user_id = $_SESSION['user_id'];
     $stmtLog->bindParam(':log_status', $logStatus);
     $stmtLog->bindParam(':log_detail', $logDetail);
     $stmtLog->bindParam(':user_id', $user_id);

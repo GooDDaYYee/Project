@@ -1,6 +1,6 @@
 <?php
 include('../connect.php');
-session_start(); // Start session to access session variables
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_POST['user_id'];
@@ -24,11 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $stmt->execute();
 
-        // Log the user update
         $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
         $logStatus = 'User Updated';
         $logDetail = 'User ID: ' . $user_id . ', Username: ' . $username . ', Level: ' . $lv . ', Status: ' . $status;
-        $admin_user_id = $_SESSION['user_id']; // Use user_id from session to log who performed the action
+        $admin_user_id = $_SESSION['user_id'];
         $stmtLog->bindParam(':log_status', $logStatus);
         $stmtLog->bindParam(':log_detail', $logDetail);
         $stmtLog->bindParam(':user_id', $admin_user_id);
