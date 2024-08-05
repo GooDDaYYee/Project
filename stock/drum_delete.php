@@ -31,7 +31,7 @@ if (isset($_GET['drum_id'])) {
 
             $con->commit();
 
-            header("Location: index.php?page=" . base64_encode('stock/list_stock_drum'));
+            header("Location: ../index.php?page=" . base64_encode('stock/list_stock_drum'));
             exit();
         } else {
             $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");

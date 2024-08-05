@@ -52,6 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $con = null;
 
-    header("Location: index.php?page=" . base64_encode('employee/list_employee'));
+    header("Location: ../index.php?page=" . base64_encode('employee/list_employee'));
     exit();
 }

@@ -77,7 +77,7 @@ try {
 
     $con->commit();
 
-    header("Location: index.php?page=" . base64_encode('stock/list_stock_cable'));
+    header("Location: ../index.php?page=" . base64_encode('stock/list_stock_cable'));
     exit();
 } catch (PDOException $e) {
     $con->rollBack();

@@ -69,7 +69,7 @@ try {
 
             $con->commit();
 
-            header("Location: index.php?page=" . base64_encode('stock/list_stock_drum'));
+            header("Location: ../index.php?page=" . base64_encode('stock/list_stock_drum'));
             exit();
         } else {
             echo '<script>

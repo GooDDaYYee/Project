@@ -94,11 +94,11 @@ try {
     $con->commit();
 
     if ($_POST['company'] == "Mixed") {
-        header("Location: index.php?page=" . base64_encode('bill/list_mixed'));
+        header("Location: ../index.php?page=" . base64_encode('bill/list_mixed'));
     } elseif (($_POST['company'] == "FBH")) {
-        header("Location: index.php?page=" . base64_encode('bill/list_fbh'));
+        header("Location: ../index.php?page=" . base64_encode('bill/list_fbh'));
     } else {
-        header("Location: index.php?page=" . base64_encode('home'));
+        header("Location: ../index.php?page=" . base64_encode('home'));
     }
     exit();
 } catch (PDOException $e) {

@@ -83,9 +83,9 @@ try {
     $con->commit();
 
     if ($_POST['company'] == "mixed") {
-        header("Location: index.php?page=" . base64_encode('bill/list_mixed'));
+        header("Location: ../index.php?page=" . base64_encode('bill/list_mixed'));
     } elseif (($_POST['company'] == "FBH")) {
-        header("Location: index.php?page=" . base64_encode('bill/list_fbh'));
+        header("Location: ../index.php?page=" . base64_encode('bill/list_fbh'));
     }
 
     exit();
