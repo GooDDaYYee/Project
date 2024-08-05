@@ -36,11 +36,11 @@ if (isset($_GET['bill_id'])) {
             $con->commit();
 
             if ($result['bill_company'] == 'mixed') {
-                header("Location: ../index.php?page=bill/list_mixed");
+                header("Location: index.php?page=" . base64_encode('bill/list_mixed'));
             } elseif ($result['bill_company'] == 'FBH') {
-                header("Location: ../index.php?page=bill/list_fbh");
+                header("Location: index.php?page=" . base64_encode('bill/list_fbh'));
             } else {
-                header("Location: ../index.php?page=home");
+                header("Location: index.php?page=" . base64_encode('home'));
             }
             exit();
         } else {

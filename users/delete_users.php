@@ -34,7 +34,7 @@ if (isset($_GET['user_id'])) {
 
         $con->commit();
 
-        header("Location: ../index.php?page=users/list_user");
+        header("Location: index.php?page=" . base64_encode('users/list_user'));
         exit();
     } catch (PDOException $e) {
         $con->rollBack();

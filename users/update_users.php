@@ -41,5 +41,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $con = null;
 
-header("Location: ../index.php?page=users/list_user");
+header("Location: index.php?page=" . base64_encode('users/list_user'));
 exit();

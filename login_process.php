@@ -21,7 +21,7 @@ try {
             $_SESSION['user_id'] = $row["user_id"];
             $_SESSION["lv"] = $row["lv"];
             $_SESSION["employee_id"] = $row["employee_id"];
-            header("location: index.php?page=home");
+            header("Location: index.php?page=" . base64_encode('home'));
             exit();
         } else {
             echo '<script>alert("รหัสผิด");window.location="login.php";</script>';

@@ -31,7 +31,7 @@ if (isset($_GET['drum_id'])) {
 
             $con->commit();
 
-            header("Location: ../index.php?page=stock/list_stock_drum");
+            header("Location: index.php?page=" . base64_encode('stock/list_stock_drum'));
             exit();
         } else {
             $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
@@ -44,7 +44,7 @@ if (isset($_GET['drum_id'])) {
             $stmtLog->execute();
 
             $con->rollBack();
-            echo "<script type='text/javascript'>alert('ไม่สามารถลบข้อมูลได้ยังมีงานที่ใช้ drum นี้อยู่');window.location.href='../index.php?page=stock/list_stock_drum';</script>";
+            echo "<script type='text/javascript'>alert('ไม่สามารถลบข้อมูลได้ยังมีงานที่ใช้ drum นี้อยู่');window.location.href='../index.php?page=" . base64_encode('stock/list_stock_drum') . "';</script>";
         }
     } catch (PDOException $e) {
         if ($con->inTransaction()) {
