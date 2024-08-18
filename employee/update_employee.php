@@ -8,7 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_lastname = $_POST['employee_lastname'];
     $employee_age = $_POST['employee_age'];
     $employee_phone = $_POST['employee_phone'];
-    $employee_salary = $_POST['employee_salary'];
     $employee_email = $_POST['employee_email'];
     $employee_position = $_POST['employee_position'];
 
@@ -17,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 employee_lastname = :employee_lastname, 
                 employee_age = :employee_age, 
                 employee_phone = :employee_phone, 
-                employee_salary = :employee_salary, 
                 employee_email = :employee_email, 
                 employee_position = :employee_position 
             WHERE employee_id = :employee_id";
@@ -28,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':employee_lastname', $employee_lastname);
     $stmt->bindParam(':employee_age', $employee_age);
     $stmt->bindParam(':employee_phone', $employee_phone);
-    $stmt->bindParam(':employee_salary', $employee_salary);
     $stmt->bindParam(':employee_email', $employee_email);
     $stmt->bindParam(':employee_position', $employee_position);
     $stmt->bindParam(':employee_id', $employee_id);

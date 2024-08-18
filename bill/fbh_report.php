@@ -38,7 +38,6 @@ try {
             <div class="text-center">
               <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
             </div>
-            <hr class="user">
             <div class="row mt-md-3">
               <div class="col">
                 <h4>เลขที่</h4>

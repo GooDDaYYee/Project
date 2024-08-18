@@ -16,7 +16,7 @@ if (isset($_GET['files_id'])) {
 					<span class="input-group-text">Upload</span>
 				</div>
 				<div class="custom-file">
-					<input type="file" class="custom-file-input" name="upload" id="upload" onchange="displayname(this,$(this))">
+					<input type="file" class="custom-file-input" name="upload[]" id="upload" onchange="displayname(this,$(this))" multiple accept="*/*">
 					<label class="custom-file-label" for="upload">เลือกไฟล์</label>
 				</div>
 			</div>
@@ -66,12 +66,12 @@ if (isset($_GET['files_id'])) {
 	})
 
 	function displayname(input, _this) {
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				_this.siblings('label').html(input.files[0]['name'])
+		if (input.files && input.files.length > 0) {
+			var filenames = [];
+			for (var i = 0; i < input.files.length; i++) {
+				filenames.push(input.files[i].name);
 			}
-			reader.readAsDataURL(input.files[0]);
+			_this.siblings('label').html(filenames.join(', '));
 		}
 	}
 </script>

@@ -10,6 +10,26 @@
                     <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                 </div>
             </form>
+            <div class="row-sm-2">
+                <select name="month" class="form-control" id="month">
+                    <option value=" ">เดือน</option>
+                    <?PHP $month = array("มกราคม ", "กุมภาพันธ์ ", "มีนาคม ", "เมษายน ", "พฤษภาคม ", "มิถุนายน ", "กรกฎาคม ", "สิงหาคม ", "กันยายน ", "ตุลาคม ", "พฤศจิกายน ", "ธันวาคม "); ?>
+                    <?PHP for ($i = 0; $i < sizeof($month); $i++) { ?>
+                        <option value="<?PHP echo $month[$i] ?>">
+                            <?PHP echo $month[$i] ?></option>
+                    <?PHP } ?>
+                </select>
+            </div>
+            &nbsp;
+            <div class="row-sm-2">
+                <select name="year" class="form-control" id="year">
+                    <option value=" ">ปี</option>
+                    <?PHP for ($i = 0; $i <= 50; $i++) { ?>
+                        <option value="1"><?PHP echo date("Y") - $i + 543 ?></option>
+                    <?PHP } ?>
+                    23.
+                </select>
+            </div>
         </div>
 
         <div class="card-body">
@@ -65,7 +85,7 @@
                                                                 ?></i></td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" data-id="<?php echo $rs['employee_id']; ?>" data-name="<?php echo $rs['employee_name']; ?>" data-lastname="<?php echo $rs['employee_lastname']; ?>" data-age="<?php echo $rs['employee_age']; ?>" data-phone="<?php echo $rs['employee_phone']; ?>" data-email="<?php echo $rs['employee_email']; ?>" data-position="<?php echo $rs['employee_position']; ?>">แก้ไข</button>
+                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" data-id="<?php echo $rs['employee_id']; ?>" data-name="<?php echo $rs['employee_name']; ?>" data-lastname="<?php echo $rs['employee_lastname']; ?>" data-age="<?php echo $rs['employee_age']; ?>" data-phone="<?php echo $rs['employee_phone']; ?>" data-email="<?php echo $rs['employee_email']; ?>" data-position="<?php echo $rs['employee_position']; ?>" data-salary="<?php echo $rs['employee_salary']; ?>">แก้ไข</button>
                                                 <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $i; ?>','<?php echo $rs['employee_id']; ?>')">ลบ</button>
                                             </div>
                                         </td>
@@ -74,7 +94,7 @@
                                     $i++;
                                 }
                             } else {
-                                echo "<tr><td colspan='9'>ไม่พบข้อมูล</td></tr>";
+                                echo "<tr><td colspan=''>ไม่พบข้อมูล</td></tr>";
                             }
                         } catch (PDOException $e) {
                             echo "Error: " . $e->getMessage();
@@ -137,6 +157,10 @@
                         <option value="2">พนักงานเอกสาร</option>
                         <option value="3">พนักงานปฏิบัติ</option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-employee-salary">เงินเดือน</label>
+                    <input type="number" class="form-control" id="edit-employee-salary" name="employee_salary">
                 </div>
             </div>
             <div class="modal-footer">
@@ -224,6 +248,7 @@
             var phone = button.data('phone');
             var email = button.data('email');
             var position = button.data('position');
+            var salary = button.data('salary');
 
             var modal = $(this);
             modal.find('#edit-employee-id').val(id);
@@ -233,6 +258,7 @@
             modal.find('#edit-employee-phone').val(phone);
             modal.find('#edit-employee-email').val(email);
             modal.find('#edit-employee-position').val(position);
+            modal.find('#edit-employee-salary').val(salary);
         });
     });
 </script>

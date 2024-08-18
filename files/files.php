@@ -1,6 +1,9 @@
 <?php
 include dirname(__FILE__) . '/../connect.php';
-$folder_parent = isset($_GET['fid']) ? $_GET['fid'] : 0;
+$folder_parent = isset($_GET['fid']) ? base64_decode($_GET['fid']) : 0;
+if (!is_numeric($folder_parent)) {
+  $folder_parent = 0;
+}
 
 $stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY folder_date ASC");
 $stmt->bindParam(':parent_id', $folder_parent, PDO::PARAM_INT);
@@ -39,13 +42,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
               $path_stmt->execute();
               $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
               echo '<script>
-                      $("#paths").prepend("<a href=\"index.php?page=files/files&fid=' . $path['folders_id'] . '\">' . $path['name'] . '</a>/")
-                    </script>';
+              $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('files/files&fid=' . $path['folders_id']) . '\">' . $path['name'] . '</a>/")
+              </script>';
               $folders_id = $path['parent_id'];
             }
             echo '<script>
-                    $("#paths").prepend("<a href=\"index.php?page=files/files\">หน้าหลัก</a>/")
-                  </script>';
+              $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('files/files') . '\">หน้าหลัก</a>/")
+              </script>';
             ?>
           </div>
           <div class="ml-auto">
@@ -192,8 +195,11 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     uni_modal('', 'files/manage_files.php?fid=<?php echo $folder_parent ?>');
   });
   $('.folder-item').dblclick(function() {
-    location.href = 'index.php?page=files/files&fid=' + $(this).attr('data-id');
+    var encodedPage = btoa('files/files');
+    var encodedFid = btoa($(this).attr('data-id'));
+    location.href = 'index.php?page=' + encodedPage + '&fid=' + encodedFid;
   });
+
   $('.folder-item').bind("contextmenu", function(event) {
     event.preventDefault();
     $("div.custom-menu").hide();
@@ -327,7 +333,6 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       },
       success: function(resp) {
         if (resp == 1) {
-          alert_toast("Folder successfully deleted.", 'success');
           setTimeout(function() {
             location.reload();
           }, 1500);
@@ -350,7 +355,6 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       },
       success: function(resp) {
         if (resp == 1) {
-          alert_toast("File successfully deleted.", 'success');
           setTimeout(function() {
             location.reload();
           }, 1500);
