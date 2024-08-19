@@ -27,8 +27,11 @@
                     <?PHP for ($i = 0; $i <= 50; $i++) { ?>
                         <option value="1"><?PHP echo date("Y") - $i + 543 ?></option>
                     <?PHP } ?>
-                    23.
                 </select>
+            </div>
+            &nbsp;
+            <div class="row-sm-2">
+                <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('employee\add_salary') ?>', '_parent')">เพิ่มเงินเดือน</button>
             </div>
         </div>
 
@@ -40,18 +43,17 @@
                             <th scope="col">ลำดับ</th>
                             <th scope="col">ชื่อ</th>
                             <th scope="col">นามสกุล</th>
-                            <th scope="col">อายุ</th>
-                            <th scope="col">เบอร์โทร</th>
-                            <th scope="col">อีเมล</th>
-                            <th scope="col">ตำแหน่ง</th>
+                            <th scope="col">สถานะ</th>
                             <th scope="col">เงินเดือน</th>
+                            <th scope="col">OT</th>
+                            <th scope="col">อื่นๆ</th>
                             <th scope="col"> </th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         include('connect.php');
-                        $strsql = "SELECT * FROM employee ORDER BY employee_date ASC";
+                        $strsql = "SELECT * FROM salary_detail ORDER BY salary_detail_id ASC";
 
                         try {
                             $stmt = $con->prepare($strsql);
@@ -67,34 +69,26 @@
                                         <th scope="row"><i class="to_file"><?php echo $i; ?></i></th>
                                         <td><i class="to_file"><?php echo $rs['employee_name']; ?></i></td>
                                         <td><i class="to_file"><?php echo $rs['employee_lastname']; ?></i></td>
-                                        <td><i class="to_file"><?php echo $rs['employee_age']; ?></i></td>
-                                        <td><i class="to_file"><?php echo $rs['employee_phone']; ?></i></td>
-                                        <td><i class="to_file"><?php echo $rs['employee_email']; ?></i></td>
                                         <td><i class="to_file"><?php
-                                                                if ($rs['employee_position'] == 0) {
-                                                                    echo "แอดมิน";
-                                                                } elseif ($rs['employee_position'] == 1) {
-                                                                    echo "เจ้าของ";
-                                                                } elseif ($rs['employee_position'] == 2) {
-                                                                    echo "พนักงานเอกสาร";
-                                                                } elseif ($rs['employee_position'] == 3) {
-                                                                    echo "พนักงานปฏิบัติ";
+                                                                if ($rs['employee_id'] == 0) {
+                                                                    echo "ลาออก";
                                                                 } else {
-                                                                    echo "ไม่มีข้อมูล";
+                                                                    echo "ทำงานอยู่";
                                                                 }
                                                                 ?></i></td>
                                         <td>
-                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" data-id="<?php echo $rs['employee_id']; ?>" data-name="<?php echo $rs['employee_name']; ?>" data-lastname="<?php echo $rs['employee_lastname']; ?>" data-age="<?php echo $rs['employee_age']; ?>" data-phone="<?php echo $rs['employee_phone']; ?>" data-email="<?php echo $rs['employee_email']; ?>" data-position="<?php echo $rs['employee_position']; ?>" data-salary="<?php echo $rs['employee_salary']; ?>">แก้ไข</button>
-                                                <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $i; ?>','<?php echo $rs['employee_id']; ?>')">ลบ</button>
-                                            </div>
+                                        <td><i class="to_file"><?php echo $rs['employee_lastname']; ?></i></td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                            <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal">แก้ไข</button>
+                                            <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $i; ?>','<?php echo $rs['employee_id']; ?>')">ลบ</button>
+                                        </div>
                                         </td>
                                     </tr>
                         <?php
                                     $i++;
                                 }
                             } else {
-                                echo "<tr><td colspan=''>ไม่พบข้อมูล</td></tr>";
+                                echo "<tr><td colspan='8'>ไม่พบข้อมูล</td></tr>";
                             }
                         } catch (PDOException $e) {
                             echo "Error: " . $e->getMessage();

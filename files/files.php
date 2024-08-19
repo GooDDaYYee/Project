@@ -42,8 +42,8 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
               $path_stmt->execute();
               $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
               echo '<script>
-              $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('files/files&fid=' . $path['folders_id']) . '\">' . $path['name'] . '</a>/")
-              </script>';
+              $("#paths").prepend("<a href=\"index.php?page=" + btoa("files/files") + "&fid=" + btoa(\'' . $path['folders_id'] . '\') + "\">' . $path['name'] . '</a>/");
+          </script>';
               $folders_id = $path['parent_id'];
             }
             echo '<script>
