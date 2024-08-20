@@ -35,6 +35,7 @@
                                          <div class="col-sm-4">
                                              <h4>เงินเดือน</h4>
                                              <input type="number" id="salary" name="salary" class="form-control form-control-user" placeholder="เงินเดือน" required="">
+                                             <input type="hidden" id="status" name="status" value="1">
                                          </div>
                                          <div class="col-sm-2">
                                              <h4>อายุ</h4>

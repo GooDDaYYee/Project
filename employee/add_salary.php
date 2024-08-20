@@ -9,17 +9,6 @@
                         <div class="text-center">
                             <h1 class="h2 text-gray-900 mb-2">เพิ่มเงินเดือน</h1>
                         </div>
-                        <hr class="user">
-                        <div class="form-group row">
-                            <div class="col-sm-6">
-                                <h4>บัญชี</h4>
-                                <input type="text" id="username" name="username" class="form-control form-control-user" placeholder="Username" required="" autofocus="">
-                            </div>
-                            <div class="col-sm-6">
-                                <h4>รหัสผ่าน</h4>
-                                <input type="password" id="password" name="passW" class="form-control form-control-user" placeholder="Password" required="">
-                            </div>
-                        </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <h4>ชื่อ</h4>

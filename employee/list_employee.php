@@ -24,7 +24,7 @@
                             <th scope="col">เบอร์โทร</th>
                             <th scope="col">อีเมล</th>
                             <th scope="col">ตำแหน่ง</th>
-                            <th scope="col">เงินเดือน</th>
+                            <th scope="col">สถานะ</th>
                             <th scope="col"> </th>
                         </tr>
                     </thead>
@@ -63,9 +63,20 @@
                                                                     echo "ไม่มีข้อมูล";
                                                                 }
                                                                 ?></i></td>
+                                        <td><i class="to_file"><?php
+                                                                if ($rs['employee_status'] == 0) {
+                                                                    echo "ลาออก";
+                                                                } elseif ($rs['employee_status'] == 1) {
+                                                                    echo "ทำงานอยู่";
+                                                                } else {
+                                                                    echo "ไม่มีข้อมูล";
+                                                                }
+                                                                ?></i></td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" data-id="<?php echo $rs['employee_id']; ?>" data-name="<?php echo $rs['employee_name']; ?>" data-lastname="<?php echo $rs['employee_lastname']; ?>" data-age="<?php echo $rs['employee_age']; ?>" data-phone="<?php echo $rs['employee_phone']; ?>" data-email="<?php echo $rs['employee_email']; ?>" data-position="<?php echo $rs['employee_position']; ?>">แก้ไข</button>
+                                                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" data-id="<?php echo $rs['employee_id']; ?>" data-name="<?php echo $rs['employee_name']; ?>"
+                                                    data-lastname="<?php echo $rs['employee_lastname']; ?>" data-age="<?php echo $rs['employee_age']; ?>" data-phone="<?php echo $rs['employee_phone']; ?>" data-email="<?php echo $rs['employee_email']; ?>"
+                                                    data-position="<?php echo $rs['employee_position']; ?>" data-status="<?php echo $rs['employee_status']; ?>">แก้ไข</button>
                                                 <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $i; ?>','<?php echo $rs['employee_id']; ?>')">ลบ</button>
                                             </div>
                                         </td>
@@ -136,6 +147,13 @@
                         <option value="1">เจ้าของ</option>
                         <option value="2">พนักงานเอกสาร</option>
                         <option value="3">พนักงานปฏิบัติ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-employee-status">สถานะการทำงาน</label>
+                    <select class="form-control" id="edit-employee-status" name="employee_status">
+                        <option value="1">ทำงานอยู่</option>
+                        <option value="0">ลาออก</option>
                     </select>
                 </div>
             </div>
@@ -224,6 +242,7 @@
             var phone = button.data('phone');
             var email = button.data('email');
             var position = button.data('position');
+            var status = button.data('status');
 
             var modal = $(this);
             modal.find('#edit-employee-id').val(id);
@@ -233,6 +252,7 @@
             modal.find('#edit-employee-phone').val(phone);
             modal.find('#edit-employee-email').val(email);
             modal.find('#edit-employee-position').val(position);
+            modal.find('#edit-employee-status').val(status);
         });
     });
 </script>

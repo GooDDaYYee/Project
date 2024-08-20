@@ -2,8 +2,6 @@
 include "../connect.php";
 session_start();
 
-$name = $_POST["name"];
-$lastname = $_POST["lastname"];
 $username = $_POST["username"];
 $password = $_POST["passW"];
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -19,9 +17,10 @@ try {
     $employee_salary = $_POST["salary"];
     $employee_email = $_POST["email"];
     $employee_position = $_POST["type"];
+    $employee_status = $_POST["status"];
 
-    $sql = "INSERT INTO employee(employee_name, employee_lastname, employee_age, employee_phone, employee_salary, employee_email, employee_position) 
-            VALUES (:employee_name, :employee_lastname, :employee_age, :employee_phone, :employee_salary, :employee_email, :employee_position)";
+    $sql = "INSERT INTO employee(employee_name, employee_lastname, employee_age, employee_phone, employee_salary, employee_email, employee_position,employee_status) 
+            VALUES (:employee_name, :employee_lastname, :employee_age, :employee_phone, :employee_salary, :employee_email, :employee_position, :employee_status)";
     $stmt = $con->prepare($sql);
     $stmt->bindParam(':employee_name', $employee_name);
     $stmt->bindParam(':employee_lastname', $employee_lastname);
@@ -30,6 +29,7 @@ try {
     $stmt->bindParam(':employee_salary', $employee_salary);
     $stmt->bindParam(':employee_email', $employee_email);
     $stmt->bindParam(':employee_position', $employee_position);
+    $stmt->bindParam(':employee_status', $employee_status);
     $stmt->execute();
 
     $employee_id = $con->lastInsertId();
@@ -51,6 +51,18 @@ try {
     $stmtLog->bindParam(':log_detail', $logDetail);
     $stmtLog->bindParam(':user_id', $admin_user_id);
     $stmtLog->execute();
+
+    $sql = "INSERT INTO employee(employee_name, employee_lastname, employee_age, employee_phone, employee_salary, employee_email, employee_position) 
+    VALUES (:employee_name, :employee_lastname, :employee_age, :employee_phone, :employee_salary, :employee_email, :employee_position)";
+    $stmt = $con->prepare($sql);
+    $stmt->bindParam(':employee_name', $employee_name);
+    $stmt->bindParam(':employee_lastname', $employee_lastname);
+    $stmt->bindParam(':employee_age', $employee_age);
+    $stmt->bindParam(':employee_phone', $employee_phone);
+    $stmt->bindParam(':employee_salary', $employee_salary);
+    $stmt->bindParam(':employee_email', $employee_email);
+    $stmt->bindParam(':employee_position', $employee_position);
+    $stmt->execute();
 
     $con->commit();
 
