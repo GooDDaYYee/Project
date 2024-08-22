@@ -9,7 +9,7 @@ try {
     $rowcount = count($result);
 ?>
 
-    <form action="users/insert_users_process.php" id="insert_users" method="post">
+    <form action="employee/add_salary_process.php" id="insert_users" method="post">
         <!-- Begin Page Content -->
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
@@ -35,15 +35,19 @@ try {
                                 </select>
                             </div>
                             <div class="form-group row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <h4>เงินเดือน</h4>
                                     <input type="number" id="salary" name="salary" class="form-control form-control-user" placeholder="เงินเดือน" required="">
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <h4>OT</h4>
                                     <input type="number" id="ot" name="ot" class="form-control form-control-user" placeholder="OT" required="">
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
+                                    <h4>ประกันสังคม</h4>
+                                    <input type="number" id="social_security" name="social_security" class="form-control form-control-user" placeholder="ประกันสังคม" required="">
+                                </div>
+                                <div class="col-sm-3">
                                     <h4>อื่นๆ</h4>
                                     <input type="number" id="other" name="other" class="form-control form-control-user" placeholder="อื่นๆ" required="">
                                 </div>

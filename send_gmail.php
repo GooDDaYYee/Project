@@ -65,30 +65,45 @@ try {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';  // ตั้งค่า SMTP server
             $mail->SMTPAuth = true;
-            $mail->Username = 'gooddayyee@gmail.com'; // Gmail username
-            $mail->Password = 'rurq vzxi ubnr kqes'; // Gmail password
+            $mail->Username = 'psnktelecom@gmail.com'; // Gmail username
+            $mail->Password = 'jkps zqdm hljb zyzc'; // Gmail password
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
             // ตั้งค่าผู้ส่งและผู้รับ
-            $mail->setFrom('yourgmail@gmail.com', 'PSNKTelecom');
+            $mail->setFrom('psnktelecom@gmail.com', 'PSNK TELECOM CO., LTD.');
             $mail->addAddress($email);
 
             // ตั้งค่าหัวเรื่องและเนื้อหาอีเมล
             $mail->isHTML(true);
             $mail->Subject = 'New Password';
-            $mail->Body    = "Hello,<br><br>Your new login details:<br>Password: $newPassword<br><br>Best regards,<br>PSNKTelecom";
+            $mail->Body    = "Hello,<br><br>Your new login details:<br>Password: $newPassword<br><br>Best regards,<br>PSNK TELECOM CO., LTD.";
             // $mail->Body    = "Hello,<br><br>Your new login details:<br>Username: $username<br>Password: $newPassword<br><br>Best regards,<br>PSNKTelecom";
+
+
+            $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
+            $logStatus = 'Reset Password';
+            $logDetail = 'User : ' . $username;
+            $stmtLog->bindParam(':log_status', $logStatus);
+            $stmtLog->bindParam(':log_detail', $logDetail);
+            $stmtLog->bindParam(':user_id', $user['user_id']);
+            $stmtLog->execute();
 
             // ส่งอีเมล
             $mail->send();
-            echo "ส่งอีเมลเรียบร้อยแล้ว";
+            echo '<script>
+            alert("ได้ทำการส่งรหัสผ่านใหม่ไปที่ Gmail ของคุณแล้ว");
+            window.location.href = "login.php";
+            </script>';
         } catch (Exception $e) {
             echo "การส่งอีเมลล้มเหลว: {$mail->ErrorInfo}";
+            exit;
         }
     } else {
         echo "มีบางอย่างผิดพลาด กรุณาลองอีกครั้ง.";
+        exit;
     }
 } catch (PDOException $e) {
     echo "การเชื่อมต่อฐานข้อมูลล้มเหลว: " . $e->getMessage();
+    exit;
 }
