@@ -5,12 +5,12 @@ if (!is_numeric($folder_parent)) {
   $folder_parent = 0;
 }
 
-$stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY folder_date ASC");
+$stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id AND user_id = '" . $_SESSION['user_id'] . "' ORDER BY folder_date ASC");
 $stmt->bindParam(':parent_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
 $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $con->prepare("SELECT * FROM files WHERE folder_id = :folder_id ORDER BY files_date ASC");
+$stmt = $con->prepare("SELECT * FROM files WHERE folder_id = :folder_id AND user_id = '" . $_SESSION['user_id'] . "' ORDER BY files_date ASC");
 $stmt->bindParam(':folder_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
 $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <!-- List table -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการไฟล์
+      <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp; รายการปฏิบัติงาน
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
@@ -50,10 +50,6 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
               $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('files/files') . '\">หน้าหลัก</a>/")
               </script>';
             ?>
-          </div>
-          <div class="ml-auto">
-            <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> Add โฟลเดอร์</button>
-            <button class="btn btn-primary btn-sm" id="new_file"><i class="fa fa-upload"></i> Add ไฟล์</button>
           </div>
         </div>
         <hr>

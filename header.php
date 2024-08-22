@@ -78,7 +78,8 @@
           ?>
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header"><i class="fa-solid fa-layer-group"></i> รายงาน</h6>
-            <a class="collapse-item " href="index.php?page=<?= base64_encode('report_work') ?>">&nbsp; รายงานปฏิบัติงาน</a>
+            <a class="collapse-item " href="index.php?page=<?= base64_encode('report_work/list_report') ?>">&nbsp; รายการปฏิบัติงาน</a>
+            <a class="collapse-item " href="index.php?page=<?= base64_encode('report_work/report_work') ?>">&nbsp; รายงานปฏิบัติงาน</a>
           </div>
           <?php
           if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1) {

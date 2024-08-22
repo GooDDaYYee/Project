@@ -47,7 +47,7 @@ session_start();
     <div class="container">
 
         <!-- Outer Row -->
-        <form class="form-signin container" name="form_login" method="post" action="process_confirmpass.php">
+        <form class="form-signin container" name="form_login" method="post" action="send_gmail.php">
             <div>
                 <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
             </div>
@@ -64,14 +64,14 @@ session_start();
                                         </div>
                                         <form class="user">
                                             <div class="form-group">
-                                                <input type="text" id="input_username" name="input_username" class="form-control form-control-user" placeholder="บัญชีผู้ใช้" required="" autofocus="">
+                                                <input type="email" id="email" name="email" class="form-control form-control-user" placeholder="Email" required="" autofocus="">
                                             </div>
                                             <div class="form-group">
                                                 <input type="text" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทรศัพท์" required="">
                                             </div>
                                             <div class="row justify-content-center align-items-center">
                                                 <div class="col-4">
-                                                    <button href="chpss.php" class="btn btn-warning bg-gradient-purple col" type="submit">
+                                                    <button class="btn btn-warning bg-gradient-purple col" type="submit">
                                                         <h5>รีเซ็ตรหัสผ่าน</h5>
                                                     </button>
                                                 </div>

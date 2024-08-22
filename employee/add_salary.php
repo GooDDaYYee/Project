@@ -1,58 +1,91 @@
-<form action="users/insert_users_process.php" id="insert_users" method="post">
-    <!-- Begin Page Content -->
-    <div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card-body p-0">
-            <!-- Nested Row within Card Body -->
-            <div class="row">
-                <div class="col-lg">
-                    <div class="p-5">
-                        <div class="text-center">
-                            <h1 class="h2 text-gray-900 mb-2">เพิ่มเงินเดือน</h1>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <h4>ชื่อ</h4>
-                                <input type="text" id="name" name="name" class="form-control form-control-user" placeholder="ชื่อ" required="">
-                            </div>
-                            <div class="col-sm-6">
-                                <h4>นามสกุล</h4>
-                                <input type="text" id="lastname" name="lastname" class="form-control form-control-user" placeholder="นามสกุล" required="">
-                            </div>
-                        </div>
+<?php
+include('connect.php');
+$strsql = "SELECT * FROM employee WHERE employee_status=1";
 
-                        <div class="form-group row">
-                            <div class="col-sm-4">
-                                <h4>เงินเดือน</h4>
-                                <input type="number" id="salary" name="salary" class="form-control form-control-user" placeholder="เงินเดือน" required="">
+try {
+    $stmt = $con->prepare($strsql);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $rowcount = count($result);
+?>
+
+    <form action="users/insert_users_process.php" id="insert_users" method="post">
+        <!-- Begin Page Content -->
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h2 text-gray-900 mb-2">เพิ่มเงินเดือน</h1>
                             </div>
-                            <div class="col-sm-2">
-                                <h4>อายุ</h4>
-                                <input type="number" id="age" name="age" class="form-control form-control-user" placeholder="อายุ" required="">
+                            <div class="form-group">
+                                <h4>เลือกพนักงาน</h4>
+                                <select class="form-control col-3" id="name" name="name">
+                                    <?php
+                                    if ($rowcount > 0) {
+                                        foreach ($result as $rs) {
+                                    ?>
+                                            <option value="<?php echo $rs['employee_name']; ?>"><?php echo $rs['employee_name']; ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
                             </div>
-                            <div class="col-sm-3">
-                                <h4>อีเมล</h4>
-                                <input type="email" id="email" name="email" class="form-control form-control-user" placeholder="อีแมล" required="">
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <h4>เงินเดือน</h4>
+                                    <input type="number" id="salary" name="salary" class="form-control form-control-user" placeholder="เงินเดือน" required="">
+                                </div>
+                                <div class="col-sm-4">
+                                    <h4>OT</h4>
+                                    <input type="number" id="ot" name="ot" class="form-control form-control-user" placeholder="OT" required="">
+                                </div>
+                                <div class="col-sm-4">
+                                    <h4>อื่นๆ</h4>
+                                    <input type="number" id="other" name="other" class="form-control form-control-user" placeholder="อื่นๆ" required="">
+                                </div>
                             </div>
-                            <div class="col-sm-3">
-                                <h4>เบอร์โทร</h4>
-                                <input type="text" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทร" required="">
+                            <div class="form-group row">
+                                <div class="col-sm-2">
+                                    <h4>เดือน</h4>
+                                    <select name="month" class="form-control" id="month">
+                                        <option value=" ">เดือน</option>
+                                        <?PHP $month = array("มกราคม ", "กุมภาพันธ์ ", "มีนาคม ", "เมษายน ", "พฤษภาคม ", "มิถุนายน ", "กรกฎาคม ", "สิงหาคม ", "กันยายน ", "ตุลาคม ", "พฤศจิกายน ", "ธันวาคม "); ?>
+                                        <?PHP for ($i = 0; $i < sizeof($month); $i++) { ?>
+                                            <option value="<?PHP echo $month[$i] ?>">
+                                                <?PHP echo $month[$i] ?></option>
+                                        <?PHP } ?>
+                                    </select>
+                                </div>
+                                &nbsp;
+                                <div class="col-sm-2">
+                                    <h4>ปี</h4>
+                                    <select name="year" class="form-control" id="year">
+                                        <option value=" ">ปี</option>
+                                        <?PHP for ($i = 0; $i <= 50; $i++) { ?>
+                                            <option value="1"><?PHP echo date("Y") - $i + 543 ?></option>
+                                        <?PHP } ?>
+                                    </select>
+                                </div>
                             </div>
+                            <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_users" type="submit">
+                                <h5>เพิ่มข้อมูล</h5>
+                            </button>
+
                         </div>
-                        <div class="form-group">
-                            <h4>เลือกตำแหน่ง</h4>
-                            <select class="form-control col-3" id="type" name="type">
-                                <option value="0">แอดมิน</option>
-                                <option value="1">เจ้าของบริษัท</option>
-                                <option value="2">พนักงานเอกสาร</option>
-                                <option value="3">พนักงานปฏิบัติงาน</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_users" type="submit">
-                            <h5>เพิ่มข้อมูล</h5>
-                        </button>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</form>
+    </form>
+
+<?php
+
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+$con = null;
+?>

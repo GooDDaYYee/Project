@@ -66,7 +66,7 @@ session_start();
                                                         <input type="checkbox" class="custom-control-input" id="customCheck" name="customCheck" <?php if (isset($_COOKIE['username'])) echo "checked"; ?>> <!-- เพิ่มโค้ดเพื่อให้ถูกติ้กถ้ามีการตรวจสอบ cookie ชื่อ username -->
                                                         <label class="custom-control-label" for="customCheck">จำรหัสผ่าน</label>
                                                     </div>
-                                                    <a href="otp_send.php">ลืมรหัสผ่าน</a>
+                                                    <a href="forget_pass.php">ลืมรหัสผ่าน</a>
                                                 </div>
                                             </div>
                                             <div class="row justify-content-center align-items-center">
