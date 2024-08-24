@@ -19,7 +19,6 @@ include_once("header.php");
         if (!file_exists($pageFile)) {
             $pageFile = 'home.php';
         }
-
         include $pageFile;
         ?>
     </div>

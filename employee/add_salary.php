@@ -27,7 +27,7 @@ try {
                                     if ($rowcount > 0) {
                                         foreach ($result as $rs) {
                                     ?>
-                                            <option value="<?php echo $rs['employee_name']; ?>"><?php echo $rs['employee_name']; ?></option>
+                                            <option value="<?php echo $rs['employee_id']; ?>"><?php echo $rs['employee_name']; ?></option>
                                     <?php
                                         }
                                     }
@@ -70,7 +70,7 @@ try {
                                     <select name="year" class="form-control" id="year">
                                         <option value=" ">ปี</option>
                                         <?PHP for ($i = 0; $i <= 50; $i++) { ?>
-                                            <option value="1"><?PHP echo date("Y") - $i + 543 ?></option>
+                                            <option value="<?PHP echo date("Y") - $i + 543 ?>"><?PHP echo date("Y") - $i + 543 ?></option>
                                         <?PHP } ?>
                                     </select>
                                 </div>
