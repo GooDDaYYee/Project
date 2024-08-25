@@ -22,7 +22,7 @@ try {
                             </div>
                             <div class="form-group">
                                 <h4>เลือกพนักงาน</h4>
-                                <select class="form-control col-3" id="name" name="name">
+                                <select class="form-control col-3" id="employee_id" name="employee_id">
                                     <?php
                                     if ($rowcount > 0) {
                                         foreach ($result as $rs) {
