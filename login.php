@@ -24,6 +24,9 @@ session_start();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-mGkxnLkTdHU8zntjw9pCiNQRlPXEYGwk/TPpC9enTHZ9xE2eKGqBRGLjtvq5mcyVX" crossorigin="anonymous"></script>
     <link href="css\css_login.css" rel="stylesheet">
+
+    <!-- sweetalert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 </head>
 
 <style>
@@ -39,7 +42,7 @@ session_start();
 
 <body>
     <div class="container">
-        <form class="form-signin container" name="form_login" id="form_login" method="post" action="login_process.php">
+        <form class="form-signin container" name="form_login" id="form_login" method="post">
             <div>
                 <h1>PSNK Telecom<sup class="warning">CP</sup></h1>
             </div>
@@ -89,6 +92,8 @@ session_start();
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
         <script src="js/sb-admin-2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.all.min.js"></script>
 
         <script>
             // ตรวจสอบว่ามีการเลือก checkbox Remember หรือไม่
@@ -110,6 +115,35 @@ session_start();
                     document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                     document.cookie = "password=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 }
+            });
+
+            $(function() {
+                $('#form_login').on('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        url: "login_process.php",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            console.log("Success:", response);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'สำเร็จ',
+                                text: 'เข้าสู่ระบบสำเร็จ',
+                            }).then(function() {
+                                window.location.href = "index.php?page=" + btoa('home');
+                            });
+                        },
+                        error: function() {
+                            console.log("Error occurred");
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ไม่สำเร็จ',
+                                text: 'เข้าสู่ระบบไม่สำเร็จ โปรดตรวจสอบ Username และ Password',
+                            });
+                        }
+                    });
+                });
             });
         </script>
 </body>

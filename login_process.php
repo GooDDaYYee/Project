@@ -21,14 +21,17 @@ try {
             $_SESSION['user_id'] = $row["user_id"];
             $_SESSION["lv"] = $row["lv"];
             $_SESSION["employee_id"] = $row["employee_id"];
-            header("Location: index.php?page=" . base64_encode('home'));
+
+            echo json_encode(['success' => true]);
             exit();
         } else {
-            echo '<script>alert("รหัสผิด");window.location="login.php";</script>';
+            http_response_code(400);
+            echo json_encode(['success' => false]);
             exit();
         }
     } else {
-        echo '<script>alert("ไม่พบผู้ใช้");window.location="login.php";</script>';
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ไม่พบผู้ใช้']);
         exit();
     }
 } catch (PDOException $e) {

@@ -91,13 +91,12 @@ try {
 
             // ส่งอีเมล
             $mail->send();
-            echo '<script>
-            alert("ได้ทำการส่งรหัสผ่านใหม่ไปที่ Gmail ของคุณแล้ว");
-            window.location.href = "login.php";
-            </script>';
+            echo json_encode(['success' => true]);
+            exit();
         } catch (Exception $e) {
-            echo "การส่งอีเมลล้มเหลว: {$mail->ErrorInfo}";
-            exit;
+            http_response_code(400);
+            echo json_encode(['success' => false]);
+            exit();
         }
     } else {
         echo "มีบางอย่างผิดพลาด กรุณาลองอีกครั้ง.";
