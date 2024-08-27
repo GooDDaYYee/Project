@@ -96,7 +96,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="editdrum" action="stock/update_drum.php" method="post">
+                <form id="editdrum" method="post">
                     <input type="hidden" id="edit_drum_id" name="edit_drum_id">
                     <div class="form-group">
                         <label for="edit_drum_no">Drum Number</label>
@@ -153,6 +153,43 @@
     </div>
 
     <script>
+        // sweetalert delete stock drum
+        function confirmDelete(i, drum_id) {
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณต้องการลบข้อมูล Drum ลำดับที่ " + i + " หรือไม่?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        url: "stock/drum_delete.php?drum_id=" + drum_id,
+                        success: function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ลบสำเร็จ',
+                                text: 'ลบข้อมูล Drum ลำดับที่ ' + i + ' เรียบร้อยแล้ว!',
+                            }).then(function() {
+                                window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
+                            });
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ไม่สำเร็จ',
+                                text: 'ลบข้อมูล Drum ลำดับที่ ' + i + ' ไม่สำเร็จ!',
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
         $(document).ready(function() {
             $('#editdrum').on('submit', function(e) {
                 // เปิดใช้งานฟิลด์ที่ถูกปิดใช้งานก่อนส่งฟอร์ม
@@ -188,12 +225,44 @@
             }
 
             $('#editDrumModal').modal('show');
-        }
 
-        function confirmDelete(i, drum_id) {
-            if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลงานลำดับที่' " + i + " นี้?")) {
-                window.location.href = 'stock/drum_delete.php?drum_id=' + drum_id;
-            }
+            // sweetalert editForm
+            $(function() {
+                $('#editdrum').on('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: "POST",
+                        url: "stock/update_drum.php",
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            const data = JSON.parse(response);
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'สำเร็จ',
+                                    text: 'แก้ไขข้อ Drum สำเร็จ',
+                                }).then(function() {
+                                    window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไม่สำเร็จ',
+                                    text: data.message,
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            const data = JSON.parse(xhr.responseText);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ไม่สำเร็จ',
+                                text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                            });
+                        }
+                    });
+                });
+            });
         }
 
         $(document).ready(function() {

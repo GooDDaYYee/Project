@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2024 at 04:54 PM
+-- Generation Time: Aug 26, 2024 at 04:55 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -391,8 +391,7 @@ INSERT INTO `bill` (`bill_id`, `bill_date`, `bill_date_product`, `bill_payment`,
 ('PS2567/002', '2567-06-14', '2567-06-14', 'N/A', '2567-06-14', '-', '', '', '', '', 2, 268.92, 18.82, 8.07, 250.10, 'FBH', 0),
 ('PS2567/003', '2567-07-04', '2567-07-04', 'N/A', '2567-07-04', '-', 'LPG3182', '', '', '', 5, 319.42, 22.36, 9.58, 297.06, 'FBH', 0),
 ('PSNK/MIXED/67/001', '2567-06-04', '2567-06-04', 'N/A', '2567-06-04', '-', 'LPG3182', '', '', '', 16, 16763.20, 1173.42, 502.90, 15589.78, 'Mixed', 0),
-('PSNK/MIXED/67/002', '2567-07-04', '2567-07-16', 'N/A', '2567-07-17', '-', '', '', '', '', 4, 273.60, 19.15, 8.21, 254.45, 'mixed', 0),
-('PSNK/MIXED/67/003', '2567-08-04', '2567-08-04', 'N/A', '2567-08-04', '-', 'LPG3182', '123', '2', 'asd', 1, 10.00, 0.70, 0.30, 9.30, 'mixed', 1);
+('PSNK/MIXED/67/002', '2567-07-04', '2567-07-16', 'N/A', '2567-07-17', '-', '', '', '', '', 4, 273.60, 19.15, 8.21, 254.45, 'mixed', 0);
 
 -- --------------------------------------------------------
 
@@ -440,8 +439,7 @@ INSERT INTO `bill_detail` (`bill_id`, `au_id`, `unit`, `price`) VALUES
 ('PSNK/MIXED/67/002', 'Mix-TD-17.85', 10, 50.00),
 ('PSNK/MIXED/67/002', 'TPCHDMX005C', 30, 151.20),
 ('PSNK/MIXED/67/002', 'TPCHDMX008C', 10, 22.00),
-('PSNK/MIXED/67/002', 'TPCHDMX009C', 10, 50.40),
-('PSNK/MIXED/67/003', 'Mix-TD-17.85', 2, 10.00);
+('PSNK/MIXED/67/002', 'TPCHDMX009C', 10, 50.40);
 
 -- --------------------------------------------------------
 
@@ -496,7 +494,7 @@ CREATE TABLE `drum` (
 --
 
 INSERT INTO `drum` (`drum_id`, `drum_no`, `drum_to`, `drum_description`, `drum_full`, `drum_remaining`, `drum_company`, `drum_cable_company`, `drum_used`, `drum_date`, `employee_id`) VALUES
-(1, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 4000, 'FBH', 'FUTONG', 1000, '2024-08-04 21:21:48', 0),
+(1, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 3000, 'FBH', 'FUTONG', 1000, '2024-08-05 10:45:36', 0),
 (2, '0012', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 4000, 'FBH', 'FIBERHOME', 0, '2024-08-04 17:49:00', 0);
 
 -- --------------------------------------------------------
@@ -511,19 +509,19 @@ CREATE TABLE `employee` (
   `employee_lastname` varchar(100) NOT NULL,
   `employee_age` int(2) NOT NULL,
   `employee_phone` varchar(10) NOT NULL,
-  `employee_salary` double(8,2) NOT NULL,
   `employee_email` varchar(100) NOT NULL,
   `employee_position` int(1) NOT NULL,
-  `employee_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `employee_status` int(1) NOT NULL,
+  `employee_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_lastname`, `employee_age`, `employee_phone`, `employee_salary`, `employee_email`, `employee_position`, `employee_date`) VALUES
-(1, 'นุ๊ก', 'นุ๊ก', 30, '0999999999', 20000.00, 'Thanakon@gmail.com', 2, '2024-07-24 15:27:24'),
-(13, 'Oakkharaphon', 'Kanthiya', 20, '0927131610', 12000.00, 'bollboll41@gmail.com', 0, '2024-08-01 20:55:23');
+INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_lastname`, `employee_age`, `employee_phone`, `employee_email`, `employee_position`, `employee_status`, `employee_date`) VALUES
+(1, 'นุ๊ก', 'นุ๊ก', 30, '0999999999', 'Thanakon@gmail.com', 2, 1, '2024-07-24 15:27:24'),
+(13, 'Oakkharaphon', 'Kanthiya', 20, '0927131610', 'bollboll41@gmail.com', 0, 1, '2024-08-01 20:55:23');
 
 -- --------------------------------------------------------
 
@@ -548,8 +546,9 @@ CREATE TABLE `files` (
 --
 
 INSERT INTO `files` (`files_id`, `name`, `description`, `user_id`, `folder_id`, `file_type`, `file_path`, `is_public`, `files_date`) VALUES
-(79, 'FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', '', 2, 0, 'pdf', '1720880280_FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา.pdf', 1, '2024-07-13 21:18:19'),
-(86, 'ประเทศฟิลิปปินส์-1 (1)', '', 2, 49, 'docx', '1722757560_ประเทศฟิลิปปินส์-1 (1).docx', 0, '2024-08-04 14:46:54');
+(79, 'FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 'หฟกฟหกasd', 2, 0, 'pdf', '1720880280_FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา.pdf', 1, '2024-07-13 21:18:19'),
+(86, 'ประเทศฟิลิปปินส์-1 (1)', '', 2, 49, 'docx', '1722757560_ประเทศฟิลิปปินส์-1 (1).docx', 0, '2024-08-04 14:46:54'),
+(106, 'checkuser1', '', 2, 65, 'php', '1724658300_checkuser.php', 0, '2024-08-26 14:45:51');
 
 -- --------------------------------------------------------
 
@@ -570,7 +569,7 @@ CREATE TABLE `folders` (
 --
 
 INSERT INTO `folders` (`folders_id`, `user_id`, `name`, `parent_id`, `folder_date`) VALUES
-(28, 2, 'PSNK+++++++', 0, '2024-08-04 17:12:24'),
+(28, 2, 'PSNK+++++', 0, '2024-08-18 14:24:36'),
 (29, 2, 'เอกสาร บปช', 0, '2024-08-04 17:12:24'),
 (32, 2, 'เอกสาร PSNK', 0, '2024-08-04 17:12:24'),
 (42, 2, 'asdasd', 0, '2024-08-04 17:12:24'),
@@ -579,25 +578,17 @@ INSERT INTO `folders` (`folders_id`, `user_id`, `name`, `parent_id`, `folder_dat
 (45, 2, 'asdasdsa', 0, '2024-08-04 17:12:24'),
 (46, 2, 'asdasdasd', 0, '2024-08-04 17:12:24'),
 (47, 2, 'asdasdasaaaad', 0, '2024-08-04 17:12:24'),
-(50, 2, 'sssssssssssss', 0, '2024-08-04 17:12:24'),
-(51, 2, 'dddddddddddd', 0, '2024-08-04 17:12:24'),
-(52, 2, 'wwwwwwwwwwwww', 0, '2024-08-04 17:12:24'),
+(50, 2, 'ssssssssssssssssssssssssssssssssssssssssssssaaaaa', 0, '2024-08-20 14:47:30'),
 (54, 2, 'sssssssss', 0, '2024-08-04 17:12:24'),
-(55, 2, 'fffffffff', 0, '2024-08-04 17:12:24'),
-(56, 2, 'ffffffffffffffff', 0, '2024-08-04 17:12:24'),
-(58, 2, 'ffff', 0, '2024-08-04 17:12:24'),
-(59, 2, 'fff', 0, '2024-08-04 17:12:24'),
-(60, 2, 'ss', 0, '2024-08-04 17:12:24'),
 (61, 2, 'ddd', 0, '2024-08-04 17:12:24'),
-(62, 2, 'sssssss', 0, '2024-08-04 17:12:24'),
 (63, 2, 'Oakkharaphons', 0, '2024-08-04 17:12:24'),
-(64, 2, 'dddaa', 0, '2024-08-04 17:12:24'),
 (65, 2, 'sdasd', 0, '2024-08-04 17:12:24'),
 (66, 2, 'daaa', 0, '2024-08-04 17:12:24'),
-(67, 2, 'asdasdddd', 0, '2024-08-04 17:12:24'),
-(68, 2, 'dddd', 0, '2024-08-04 17:12:24'),
-(69, 2, 'asdsd', 0, '2024-08-04 17:12:24'),
-(70, 2, 'sdddsa', 0, '2024-08-04 17:12:24');
+(74, 2, 'ฟหกฟหกหฟก', 0, '2024-08-18 15:04:37'),
+(75, 2, 'ฟหฟฟฟฟฟ', 0, '2024-08-18 15:04:41'),
+(76, 2, 'ไไไไไไไsdsd', 0, '2024-08-20 14:47:15'),
+(79, 2, '12222', 0, '2024-08-26 17:21:39'),
+(80, 2, 'า่า่าส', 0, '2024-08-26 17:21:46');
 
 -- --------------------------------------------------------
 
@@ -711,7 +702,184 @@ INSERT INTO `log` (`log_id`, `log_status`, `log_detail`, `user_id`, `log_date`) 
 (92, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:30'),
 (93, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:27:36'),
 (94, 'File Uploaded', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:32'),
-(95, 'File Deleted', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:35');
+(95, 'File Deleted', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:35'),
+(96, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-05 10:43:19'),
+(97, 'Cable Inserted', 'Cable ID: 71, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 120', 2, '2024-08-05 10:43:47'),
+(98, 'Cable Deleted', 'Cable ID: 71, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 120', 2, '2024-08-05 10:45:36'),
+(99, 'File Uploaded', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-05 14:24:07'),
+(100, 'File Uploaded', 'File name: checkuser', 2, '2024-08-15 18:14:00'),
+(101, 'File Uploaded', 'File name: login', 2, '2024-08-15 18:14:00'),
+(102, 'File Deleted', 'File name: checkuser', 2, '2024-08-15 18:14:08'),
+(103, 'File Deleted', 'File name: login', 2, '2024-08-15 18:14:12'),
+(104, 'File Uploaded', 'File name: 1721901011194', 2, '2024-08-15 18:14:27'),
+(105, 'File Uploaded', 'File name: 20240719061503_page-0001', 2, '2024-08-15 18:14:27'),
+(106, 'File Uploaded', 'File name: checkuser', 2, '2024-08-15 18:14:44'),
+(107, 'File Uploaded', 'File name: login', 2, '2024-08-15 18:14:44'),
+(108, 'File Deleted', 'File name: checkuser', 2, '2024-08-15 18:14:52'),
+(109, 'File Deleted', 'File name: login', 2, '2024-08-15 18:14:58'),
+(110, 'File Deleted', 'File name: 20240719061503_page-0001', 2, '2024-08-15 19:36:43'),
+(111, 'File Deleted', 'File name: 1721901011194', 2, '2024-08-15 19:36:50'),
+(112, 'File Updated', 'File ID: 79', 2, '2024-08-15 20:00:28'),
+(113, 'File Uploaded', 'File name: checkuser', 2, '2024-08-15 20:00:40'),
+(114, 'File Uploaded', 'File name: login', 2, '2024-08-15 20:00:40'),
+(115, 'File Updated', 'File ID: 98', 2, '2024-08-15 20:00:58'),
+(116, 'File Deleted', 'File name: checkuser', 2, '2024-08-15 20:01:04'),
+(117, 'File Deleted', 'File name: ', 2, '2024-08-15 20:01:05'),
+(118, 'File Deleted', 'File name: login', 2, '2024-08-15 20:01:11'),
+(119, 'File Deleted', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-15 20:43:18'),
+(120, 'Folder Created', 'Folder name: Oakkharaphon', 2, '2024-08-15 20:52:12'),
+(121, 'Folder Deleted', 'Folder name: Oakkharaphon', 2, '2024-08-15 20:52:16'),
+(122, 'Folder Deleted', 'Folder name: ffff', 2, '2024-08-18 14:10:49'),
+(123, 'File Updated', 'File ID: 79', 2, '2024-08-18 14:23:14'),
+(124, 'Folder Updated', 'Folder name: ssss', 2, '2024-08-18 14:24:07'),
+(125, 'Folder Updated', 'Folder name: PSNK++++++', 2, '2024-08-18 14:24:22'),
+(126, 'Folder Updated', 'Folder name: PSNK+++++', 2, '2024-08-18 14:24:36'),
+(127, 'Folder Deleted', 'Folder name: fff', 2, '2024-08-18 15:00:24'),
+(128, 'Folder Deleted', 'Folder name: ffffffffffffffff', 2, '2024-08-18 15:00:28'),
+(129, 'Folder Deleted', 'Folder name: fffffffff', 2, '2024-08-18 15:00:32'),
+(130, 'Folder Deleted', 'Folder name: sdddsa', 2, '2024-08-18 15:00:36'),
+(131, 'Folder Updated', 'Folder name: asdsdกกกก', 2, '2024-08-18 15:00:44'),
+(132, 'File Uploaded', 'File name: 20240719061503_page-0001', 2, '2024-08-18 15:02:02'),
+(133, 'File Deleted', 'File name: 20240719061503_page-0001', 2, '2024-08-18 15:02:16'),
+(134, 'Folder Deleted', 'Folder name: asdsdกกกก', 2, '2024-08-18 15:02:50'),
+(135, 'Folder Deleted', 'Folder name: ssss', 2, '2024-08-18 15:02:59'),
+(136, 'Folder Deleted', 'Folder name: sssssss', 2, '2024-08-18 15:03:13'),
+(137, 'Folder Deleted', 'Folder name: wwwwwwwwwwwww', 2, '2024-08-18 15:03:27'),
+(138, 'Folder Deleted', 'Folder name: asdasdddd', 2, '2024-08-18 15:03:57'),
+(139, 'Folder Deleted', 'Folder name: dddd', 2, '2024-08-18 15:04:27'),
+(140, 'Folder Created', 'Folder name: ฟหกฟหกหฟก', 2, '2024-08-18 15:04:37'),
+(141, 'Folder Created', 'Folder name: ฟหฟฟฟฟฟ', 2, '2024-08-18 15:04:41'),
+(142, 'Folder Created', 'Folder name: ไไไไไไไ', 2, '2024-08-18 15:04:45'),
+(143, 'File Renamed', 'New name: FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 2, '2024-08-18 16:29:52'),
+(144, 'File Renamed', 'New name: FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 2, '2024-08-18 16:31:09'),
+(145, 'Folder Deleted', 'Folder name: dddddddddddd', 2, '2024-08-19 20:38:42'),
+(146, 'Folder Updated', 'Folder name: ไไไไไไไsdsd', 2, '2024-08-20 14:47:15'),
+(147, 'File Renamed', 'New name: FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 2, '2024-08-20 14:47:22'),
+(148, 'Folder Updated', 'Folder name: ssssssssssssssssssssssssssssssssssssssssssssaaaaa', 2, '2024-08-20 14:47:30'),
+(149, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:43:34'),
+(150, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:50:55'),
+(151, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:51:02'),
+(152, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:51:11'),
+(153, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:51:17'),
+(154, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:54:30'),
+(155, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:54:33'),
+(156, 'Folder Created', 'Folder name: ฟฟฟฟฟ', 2, '2024-08-20 16:56:24'),
+(157, 'File Uploaded', 'File name: 20240719061503_page-0001', 2, '2024-08-20 16:56:38'),
+(158, 'File Updated', 'File ID: 101', 2, '2024-08-20 16:56:51'),
+(159, 'File Deleted', 'File name: 20240719061503_page-0001', 2, '2024-08-20 16:57:00'),
+(160, 'Folder Deleted', 'Folder name: ฟฟฟฟฟ', 2, '2024-08-20 16:57:02'),
+(161, 'Folder Created', 'Folder name: Oakkharaphon', 19, '2024-08-20 18:35:37'),
+(162, 'Folder Deleted', 'Folder name: Oakkharaphon', 19, '2024-08-20 18:35:44'),
+(163, 'File Uploaded', 'File name: asdaaa', 19, '2024-08-20 18:35:57'),
+(164, 'File Uploaded', 'File name: asdasd', 19, '2024-08-20 18:35:57'),
+(165, 'File Uploaded', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:35:57'),
+(166, 'File Uploaded', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:35:57'),
+(167, 'File Deleted', 'File name: asdaaa', 19, '2024-08-20 18:35:59'),
+(168, 'File Deleted', 'File name: asdasd', 19, '2024-08-20 18:36:01'),
+(169, 'File Deleted', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:36:12'),
+(170, 'File Deleted', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:36:14'),
+(171, 'Folder Deleted', 'Folder name: dddaa', 2, '2024-08-22 09:33:20'),
+(172, 'Reset Password', 'User : admin2', 19, '2024-08-22 20:58:39'),
+(173, 'User Updated', 'User ID: 19, Username: admin2, Level: , Status: 0', 2, '2024-08-22 21:41:50'),
+(174, 'User Updated', 'User ID: 19, Username: admin2, Level: , Status: 1', 2, '2024-08-22 21:42:15'),
+(175, 'Reset Password', 'User : admin2', 19, '2024-08-22 21:42:55'),
+(176, 'Salary Created', 'User ID: , Employee ID: 1', 2, '2024-08-23 19:42:23'),
+(177, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 17', 2, '2024-08-24 15:26:47'),
+(178, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-24 15:27:11'),
+(179, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1512', 2, '2024-08-24 20:46:51'),
+(180, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-24 20:47:01'),
+(181, 'Salary Deleted', 'Salary ID: 12', 2, '2024-08-24 21:49:02'),
+(182, 'Salary Created', 'User ID: , Employee ID: 1', 2, '2024-08-24 22:38:31'),
+(183, 'Salary Updated', 'User ID: 1', 2, '2024-08-25 11:04:41'),
+(184, 'Salary Updated', 'User ID: 1', 2, '2024-08-25 11:04:51'),
+(185, 'Salary Created', 'Salary ID: 14', 2, '2024-08-25 11:07:16'),
+(186, 'Salary Created', 'Salary ID: 15', 2, '2024-08-25 11:07:23'),
+(187, 'Salary Deleted', 'Salary ID: 15', 2, '2024-08-25 11:08:21'),
+(188, 'Reset Password', 'User : admin2', 19, '2024-08-26 14:29:14'),
+(189, 'Salary Created', 'Salary ID: 16', 2, '2024-08-26 14:31:29'),
+(190, 'File Uploaded', 'File name: checkuser', 2, '2024-08-26 14:45:51'),
+(191, 'File Renamed', 'New name: checkuser1', 2, '2024-08-26 14:46:05'),
+(192, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:06:28'),
+(193, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:11:04'),
+(194, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:51:00'),
+(195, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:53:20'),
+(196, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:54:20'),
+(197, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:57:14'),
+(198, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:57:17'),
+(199, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:57:51'),
+(200, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:58:19'),
+(201, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:04:01'),
+(202, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:13:37'),
+(203, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:13:49'),
+(204, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:13:59'),
+(205, 'Folder Created', 'Folder name: 12222', 2, '2024-08-26 17:21:39'),
+(206, 'Folder Created', 'Folder name: า่า่าส', 2, '2024-08-26 17:21:46'),
+(207, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:16:01'),
+(208, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:16:05'),
+(209, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:16:06'),
+(210, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:17:18'),
+(211, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:17:22'),
+(212, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:17:22'),
+(214, 'User Deleted', 'User ID: 21, Employee ID: 17', 2, '2024-08-26 18:30:46'),
+(216, 'User Deleted', 'User ID: 22, Employee ID: 18', 2, '2024-08-26 18:31:06'),
+(218, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 18:34:14'),
+(219, 'User Deleted', 'User ID: 24, Employee ID: 20', 2, '2024-08-26 18:35:26'),
+(220, 'Employee Deleted', 'Employee ID: 21', 2, '2024-08-26 18:35:37'),
+(221, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 18:38:55'),
+(222, 'User Deleted', 'User ID: 25, Employee ID: 22', 2, '2024-08-26 21:01:12'),
+(223, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 21:01:25'),
+(224, 'User Deleted', 'User ID: 26, Employee ID: 23', 2, '2024-08-26 21:01:34'),
+(225, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-26 21:02:33'),
+(226, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 21:03:21'),
+(227, 'User Deleted', 'User ID: 27, Employee ID: 24', 2, '2024-08-26 21:03:26'),
+(228, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-26 21:04:57'),
+(229, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 1', 2, '2024-08-26 21:05:00'),
+(230, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 0', 2, '2024-08-26 21:05:05'),
+(231, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 0', 2, '2024-08-26 21:05:07'),
+(232, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 1', 2, '2024-08-26 21:05:11'),
+(233, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 1', 2, '2024-08-26 21:05:32'),
+(234, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-26 21:07:50'),
+(235, 'Salary Deleted', 'Salary ID: 14', 2, '2024-08-26 21:20:38'),
+(236, 'Salary Created', 'Salary ID: 17', 2, '2024-08-26 21:25:11'),
+(246, 'Salary Created', 'Salary ID: 27', 2, '2024-08-26 21:38:11'),
+(247, 'Salary Deleted', 'Salary ID: 27', 2, '2024-08-26 21:38:58'),
+(248, 'Salary Created', 'Salary ID: 28', 2, '2024-08-26 21:39:18'),
+(249, 'Salary Created', 'Salary ID: 29', 2, '2024-08-26 21:44:22'),
+(250, 'Salary Created', 'Salary ID: 30', 2, '2024-08-26 21:44:39'),
+(251, 'Salary Created', 'Salary ID: 31', 2, '2024-08-26 21:46:54'),
+(252, 'Salary Created', 'Salary ID: 32', 2, '2024-08-26 21:47:34'),
+(253, 'Salary Created', 'Salary ID: 33', 2, '2024-08-26 21:50:01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salary`
+--
+
+CREATE TABLE `salary` (
+  `salary_id` int(4) NOT NULL,
+  `salary` double(8,2) NOT NULL,
+  `ot` double(8,2) NOT NULL,
+  `social_security` double(8,2) NOT NULL,
+  `other` double(8,2) NOT NULL,
+  `total_salary` double(8,2) NOT NULL,
+  `salary_date` date NOT NULL,
+  `employee_id` int(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `salary`
+--
+
+INSERT INTO `salary` (`salary_id`, `salary`, `ot`, `social_security`, `other`, `total_salary`, `salary_date`, `employee_id`) VALUES
+(9, 1.00, 1.00, 1.00, 1.00, 4.00, '2567-02-01', 1),
+(10, 1.00, 1.00, 1.00, 1.00, 4.00, '2552-01-01', 13),
+(13, 25000.00, 750.00, 750.00, 100.00, 26600.00, '2567-01-01', 1),
+(16, 20000.00, 700.00, 150.00, 200.00, 21050.00, '2566-01-01', 1),
+(17, 1.00, 1.00, 1.00, 1.00, 4.00, '2567-01-01', 13),
+(28, 1.00, 1.00, 1.00, 1.00, 4.00, '2563-01-01', 1),
+(29, 1.00, 1.00, 1.00, 1.00, 4.00, '2564-01-01', 1),
+(33, 11.00, 11.00, 11.00, 11.00, 44.00, '2562-01-01', 1);
 
 -- --------------------------------------------------------
 
@@ -735,7 +903,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `username`, `passW`, `lv`, `status`, `users_date`, `employee_id`) VALUES
 (2, 'admin', '$2y$10$c8vj27z4jfmAEJFl76foR.NWV7ev8Is0zjjeZnVp8VI527nISuh3W', '0', '1', '2024-08-01 21:17:31', 1),
-(19, 'admin2', '$2y$10$NDs84uj5euES7iwBfS4D7.PFahhPIoyXgQRObEAmKZfXSvuuXXT4O', '2', '1', '2024-08-04 13:16:32', 13);
+(19, 'admin2', '$2y$10$liIUq.MhzSgsKxLCBZhtJug81ehqhz8JOlASMs8KDKFFteHwYnpyG', '2', '1', '2024-08-26 21:05:11', 13);
 
 --
 -- Indexes for dumped tables
@@ -796,6 +964,12 @@ ALTER TABLE `log`
   ADD PRIMARY KEY (`log_id`);
 
 --
+-- Indexes for table `salary`
+--
+ALTER TABLE `salary`
+  ADD PRIMARY KEY (`salary_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -809,7 +983,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cable`
 --
 ALTER TABLE `cable`
-  MODIFY `cable_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `cable_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `drum`
@@ -821,31 +995,37 @@ ALTER TABLE `drum`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `employee_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `employee_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `files`
 --
 ALTER TABLE `files`
-  MODIFY `files_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `files_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- AUTO_INCREMENT for table `folders`
 --
 ALTER TABLE `folders`
-  MODIFY `folders_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `folders_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `log_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `log_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
+
+--
+-- AUTO_INCREMENT for table `salary`
+--
+ALTER TABLE `salary`
+  MODIFY `salary_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -27,17 +27,14 @@ if (isset($_GET['employee_id'])) {
         $stmtLog->execute();
 
         $con->commit();
-
-        header("Location: ../index.php?page=" . base64_encode('employee/list_employee'));
+        echo json_encode(['success' => true]);
         exit();
     } catch (PDOException $e) {
         $con->rollBack();
-        echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
+        exit();
     }
-
     $con = null;
 } else {
     echo "Invalid request.";

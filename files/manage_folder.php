@@ -23,9 +23,9 @@ if (isset($_GET['folders_id'])) {
 <script>
 	$(document).ready(function() {
 		$('#manage-folder').submit(function(e) {
-			e.preventDefault()
 			start_load();
-			$('#msg').html('')
+			e.preventDefault();
+			$('#msg').html('');
 			$.ajax({
 				url: 'files/ajax.php?action=save_folder',
 				method: 'POST',
@@ -34,17 +34,22 @@ if (isset($_GET['folders_id'])) {
 					if (typeof resp != undefined) {
 						resp = JSON.parse(resp);
 						if (resp.status == 1) {
-							alert_toast("New Folder successfully added.", 'success')
-							setTimeout(function() {
-								location.reload()
-							}, 1500)
+							Swal.fire({
+								icon: 'success',
+								title: 'Success',
+								text: 'New Folder successfully added.',
+								timer: 1500,
+								showConfirmButton: false
+							}).then(function() {
+								location.reload();
+							});
 						} else {
-							$('#msg').html('<div class="alert alert-danger">' + resp.msg + '</div>')
-							end_load()
+							$('#msg').html('<div class="alert alert-danger">' + resp.msg + '</div>');
+							end_load();
 						}
 					}
 				}
-			})
-		})
-	})
+			});
+		});
+	});
 </script>

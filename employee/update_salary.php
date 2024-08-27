@@ -39,19 +39,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmtLog->bindParam(':log_detail', $logDetail);
             $stmtLog->bindParam(':user_id', $admin_user_id);
             $stmtLog->execute();
+
+            $con->commit();
+            echo json_encode(['success' => true]);
+            exit();
         } else {
-            echo "ไม่พบบันทึกสำหรับรหัสเงินเดือนที่ระบุ";
             $con->rollBack();
+            http_response_code(400);
+            echo json_encode(['success' => false]);
             exit();
         }
-
-        $con->commit();
-
-        header("Location: ../index.php?page=" . base64_encode('employee/list_employee_salary'));
-        exit();
     } catch (PDOException $e) {
         $con->rollBack();
-        echo "Error: " . $e->getMessage();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
+        exit();
     }
 }
 

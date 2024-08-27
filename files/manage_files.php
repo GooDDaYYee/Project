@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include dirname(__FILE__) . '/../connect.php';
 
 if (isset($_GET['files_id'])) {
@@ -9,7 +13,7 @@ if (isset($_GET['files_id'])) {
 <div class="container-fluid">
 	<form action="" id="manage-files">
 		<input type="hidden" name="files_id" value="<?php echo isset($_GET['files_id']) ? $_GET['files_id'] : '' ?>">
-		<input type="hidden" name="folder_id" value="<?php echo isset($_GET['fid']) ? $_GET['fid'] : '' ?>">
+		<input type="hidden" name="folders_id" value="<?php echo isset($_GET['fid']) ? $_GET['fid'] : '' ?>">
 		<?php if (!isset($_GET['files_id']) || empty($_GET['files_id'])) : ?>
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
@@ -36,9 +40,8 @@ if (isset($_GET['files_id'])) {
 <script>
 	$(document).ready(function() {
 		$('#manage-files').submit(function(e) {
-			e.preventDefault()
-			start_load();
-			$('#msg').html('')
+			e.preventDefault();
+			$('#msg').html('');
 			$.ajax({
 				url: 'files/ajax.php?action=save_files',
 				data: new FormData($(this)[0]),
@@ -51,19 +54,25 @@ if (isset($_GET['files_id'])) {
 					if (typeof resp != undefined) {
 						resp = JSON.parse(resp);
 						if (resp.status == 1) {
-							alert_toast("New File successfully added.", 'success')
-							setTimeout(function() {
-								location.reload()
-							}, 1500)
+							Swal.fire({
+								icon: 'success',
+								title: 'Success',
+								text: 'New File successfully added.',
+								timer: 1500,
+								showConfirmButton: false
+							}).then(function() {
+								location.reload();
+							});
 						} else {
-							$('#msg').html('<div class="alert alert-danger">' + resp.msg + '</div>')
-							end_load()
+							$('#msg').html('<div class="alert alert-danger">' + resp.msg + '</div>');
+							end_load();
 						}
 					}
 				}
-			})
-		})
-	})
+			});
+		});
+	});
+
 
 	function displayname(input, _this) {
 		if (input.files && input.files.length > 0) {

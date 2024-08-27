@@ -4,25 +4,26 @@ if ($_SESSION["lv"] == 0) {
     session_start();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $user_id = $_POST['user_id'];
-        $username = $_POST['username'];
-        $lv = $_POST['lv'];
-        $status = $_POST['status'];
+        try {
+            $user_id = $_POST['user_id'];
+            $username = $_POST['username'];
+            $lv = $_POST['lv'];
+            $status = $_POST['status'];
 
-        $sql = "UPDATE users 
+            $sql = "UPDATE users 
             SET username = :username, 
                 lv = :lv, 
                 status = :status
             WHERE user_id = :user_id";
 
-        $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);
 
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':lv', $lv);
-        $stmt->bindParam(':status', $status);
-        $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':lv', $lv);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':user_id', $user_id);
 
-        try {
+
             $stmt->execute();
 
             $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
@@ -34,16 +35,18 @@ if ($_SESSION["lv"] == 0) {
             $stmtLog->bindParam(':user_id', $admin_user_id);
             $stmtLog->execute();
 
-            echo "ข้อมูลผู้ใช้ถูกอัปเดตเรียบร้อยแล้ว";
+            $con->commit();
+            echo json_encode(['success' => true]);
+            exit();
         } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            $con->rollBack();
+            http_response_code(400);
+            echo json_encode(['success' => false]);
+            exit();
         }
     }
 
     $con = null;
-
-    header("Location: ../index.php?page=" . base64_encode('users/list_user'));
-    exit();
 } else {
     echo '<script>
     window.location.href = "index.php?page=' . base64_encode('home') . '";

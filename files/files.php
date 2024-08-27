@@ -5,13 +5,15 @@ if (!is_numeric($folder_parent)) {
   $folder_parent = 0;
 }
 
+// Fetch folders
 $stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY folder_date ASC");
 $stmt->bindParam(':parent_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
 $folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $con->prepare("SELECT * FROM files WHERE folder_id = :folder_id ORDER BY files_date ASC");
-$stmt->bindParam(':folder_id', $folder_parent, PDO::PARAM_INT);
+// Fetch files including those with NULL folders_id
+$stmt = $con->prepare("SELECT * FROM files WHERE folders_id = :folders_id OR folders_id IS NULL ORDER BY files_date ASC");
+$stmt->bindParam(':folders_id', $folder_parent, PDO::PARAM_INT);
 $stmt->execute();
 $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -42,13 +44,13 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
               $path_stmt->execute();
               $path = $path_stmt->fetch(PDO::FETCH_ASSOC);
               echo '<script>
-              $("#paths").prepend("<a href=\"index.php?page=" + btoa("files/files") + "&fid=" + btoa(\'' . $path['folders_id'] . '\') + "\">' . $path['name'] . '</a>/");
-          </script>';
+                            $("#paths").prepend("<a href=\"index.php?page=" + btoa("files/files") + "&fid=" + btoa(\'' . $path['folders_id'] . '\') + "\">' . $path['name'] . '</a>/");
+                        </script>';
               $folders_id = $path['parent_id'];
             }
             echo '<script>
-              $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('files/files') . '\">หน้าหลัก</a>/")
-              </script>';
+                            $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('files/files') . '\">หน้าหลัก</a>/")
+                            </script>';
             ?>
           </div>
           <div class="ml-auto">
@@ -75,55 +77,65 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   </tr>
                 </thead>
                 <tbody>
-                  <?php
-                  foreach ($folders as $row) :
-                  ?>
-                    <tr class='folder-item' data-id="<?php echo $row['folders_id'] ?>">
-                      <td style="text-align: left;">
-                        <span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b>
-                      </td>
-                      <td></td>
-                      <td></td>
+                  <?php if (empty($folders) && empty($files)) : ?>
+                    <tr>
+                      <td colspan="3" class="text-center">ไม่พบข้อมูล</td>
                     </tr>
-                  <?php endforeach; ?>
-                  <?php
-                  foreach ($files as $row) :
-                    $name = explode(' ||', $row['name']);
-                    $name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
-                    $img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
-                    $doc_arr = array('doc', 'docx');
-                    $pdf_arr = array('pdf', 'ps', 'eps', 'prn');
-                    $icon = 'fa-file';
-                    if (in_array(strtolower($row['file_type']), $img_arr))
-                      $icon = 'fa-image';
-                    if (in_array(strtolower($row['file_type']), $doc_arr))
-                      $icon = 'fa-file-word';
-                    if (in_array(strtolower($row['file_type']), $pdf_arr))
-                      $icon = 'fa-file-pdf';
-                    if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
-                      $icon = 'fa-file-excel';
-                    if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
-                      $icon = 'fa-file-archive';
-                    if (in_array(strtolower($row['file_type']), ['kmz']))
-                      $icon = 'fa fa-globe';
-                    if (in_array(strtolower($row['file_type']), ['dwg']))
-                      $icon = 'fa fa-cube';
-                    if (in_array(strtolower($row['file_type']), ['psd']))
-                      $icon = 'fa fa-scissors';
-                  ?>
-                    <tr class='file-item' data-id="<?php echo $row['files_id'] ?>" data-name="<?php echo $name ?>">
-                      <td style="text-align: left;">
-                        <span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
-                        <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
-                      </td>
-                      <td><i class="to_file"><?php
-                                              $timestamp = strtotime($row['files_date']);
-                                              $year_buddhist = date('Y', $timestamp) + 543;
-                                              $date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
-                                              echo $date_buddhist; ?></i></td>
-                      <td><i class="to_file"><?php echo $row['description'] ?></i></td>
-                    </tr>
-                  <?php endforeach; ?>
+                  <?php else : ?>
+                    <?php
+                    foreach ($folders as $row) :
+                    ?>
+                      <tr class='folder-item' data-id="<?php echo $row['folders_id'] ?>">
+                        <td style="text-align: left;">
+                          <span><i class="fa fa-folder"></i></span><b class="to_folder"> <?php echo $row['name'] ?></b>
+                        </td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    <?php endforeach; ?>
+                    <?php
+                    foreach ($files as $row) :
+                      $name = explode(' ||', $row['name']);
+                      $name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
+
+                      // Determine the correct icon for the file type
+                      $img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
+                      $doc_arr = array('doc', 'docx');
+                      $pdf_arr = array('pdf', 'ps', 'eps', 'prn');
+                      $icon = 'fa-file';
+                      if (in_array(strtolower($row['file_type']), $img_arr))
+                        $icon = 'fa-image';
+                      if (in_array(strtolower($row['file_type']), $doc_arr))
+                        $icon = 'fa-file-word';
+                      if (in_array(strtolower($row['file_type']), $pdf_arr))
+                        $icon = 'fa-file-pdf';
+                      if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
+                        $icon = 'fa-file-excel';
+                      if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
+                        $icon = 'fa-file-archive';
+                      if (in_array(strtolower($row['file_type']), ['kmz']))
+                        $icon = 'fa fa-globe';
+                      if (in_array(strtolower($row['file_type']), ['dwg']))
+                        $icon = 'fa fa-cube';
+                      if (in_array(strtolower($row['file_type']), ['psd']))
+                        $icon = 'fa fa-scissors';
+
+                      // Render the file item
+                    ?>
+                      <tr class='file-item' data-id="<?php echo $row['files_id'] ?>" data-name="<?php echo $name ?>">
+                        <td style="text-align: left;">
+                          <span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
+                          <input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
+                        </td>
+                        <td><i class="to_file"><?php
+                                                $timestamp = strtotime($row['files_date']);
+                                                $year_buddhist = date('Y', $timestamp) + 543;
+                                                $date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
+                                                echo $date_buddhist; ?></i></td>
+                        <td><i class="to_file"><?php echo $row['description'] ?></i></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
                 </tbody>
               </table>
               &nbsp;
@@ -219,7 +231,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
     });
     $("div.custom-menu .delete").click(function(e) {
       e.preventDefault();
-      _conf("คุณแน่ใจที่จะลบโฟลเดอร์นี้หรือไม่?", 'delete_folder', [$(this).attr('data-id')]);
+      _conf("ไฟล์ทั้งหมด และโฟลเดอร์ทั้งหมดก็จะถูกลบไปด้วย คุณแน่ใจที่จะลบโฟลเดอร์นี้หรือไม่?", 'delete_folder', [$(this).attr('data-id')]);
     });
   });
 
@@ -257,8 +269,8 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $('.rename_file').keypress(function(e) {
       var _this = $(this);
-      if (e.which == 13) {
-        start_load();
+      if (e.which == 13) { // ตรวจสอบว่ากด Enter
+        start_load(); // เรียก start_load() เมื่อกด Enter เท่านั้น
         $.ajax({
           url: 'files/ajax.php?action=file_rename',
           method: 'POST',
@@ -266,7 +278,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
             files_id: $(this).attr('data-id'),
             name: $(this).val(),
             type: $(this).attr('data-type'),
-            folder_id: '<?php echo $folder_parent ?>'
+            folders_id: '<?php echo $folder_parent ?>'
           },
           success: function(resp) {
             if (typeof resp != 'undefined') {
@@ -275,16 +287,17 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 _this.siblings('b.to_file').text(resp.new_name);
                 _this.hide();
                 _this.siblings('b.to_file').show();
-                end_load();
               }
             }
+            location.reload(); // รีเฟรชหน้าหลังจากเปลี่ยนชื่อสำเร็จ
           },
           error: function() {
-            end_load();
+            end_load(); // เรียก end_load เมื่อเกิดข้อผิดพลาด
           }
         });
       }
     });
+
   });
 
   $('.file-item').click(function() {

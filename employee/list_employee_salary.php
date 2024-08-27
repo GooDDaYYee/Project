@@ -85,7 +85,7 @@ include('connect.php');
 <!-- Edit Modal -->
 <div class="modal" id="editModal">
     <div class="modal-content">
-        <form id="editForm" action="employee/update_salary.php" method="POST">
+        <form id="editForm" method="POST">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลเงินเดือน</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -120,10 +120,41 @@ include('connect.php');
 </div>
 
 <script>
+    // sweetalert delete salary
     function confirmDelete(i, salary_id) {
-        if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลเงินเดือนพนักงานลำดับที่ " + i + " นี้?")) {
-            window.location.href = 'employee/delete_employee_salary.php?salary_id=' + salary_id;
-        }
+        Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            text: "คุณต้องการลบเงินเดือนลำดับที่ " + i + " หรือไม่?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "employee/delete_employee_salary.php?salary_id=" + salary_id,
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ลบสำเร็จ',
+                            text: 'ลบเงินเดือนลำดับที่ ' + i + ' เรียบร้อยแล้ว!',
+                        }).then(function() {
+                            window.location.href = "index.php?page=" + btoa('employee/list_employee_salary');
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: 'ลบเงินเดือนลำดับที่ ' + i + ' ไม่สำเร็จ!',
+                        });
+                    }
+                });
+            }
+        });
     }
 
     function filterResults() {
@@ -146,8 +177,6 @@ include('connect.php');
         });
     }
 
-
-
     $(document).ready(function() {
         filterResults();
 
@@ -158,6 +187,34 @@ include('connect.php');
                 var rowText = $(this).text().toLowerCase();
                 if (rowText.includes(searchTerm)) {
                     $(this).show();
+                }
+            });
+        });
+
+        // sweetalert editForm
+        $('#editModal').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ',
+                        text: 'แก้ไขข้อมูลเงินเดือนสำเร็จสำเร็จ',
+                    }).then(function() {
+                        window.location.href = "index.php?page=" + btoa('employee/list_employee_salary');
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: 'การแก้ไขข้อมูลเงินเดือนไม่สำเร็จสำเร็จ!',
+                    });
                 }
             });
         });
@@ -181,11 +238,11 @@ include('connect.php');
 </script>
 
 <?php
+// edit salary
 if (isset($_GET['month']) && isset($_GET['year'])) {
     $month = $_GET['month'];
     $year = $_GET['year'];
 
-    // Convert Buddhist year to Gregorian year
     $gregorian_year = $year + 543;
 
     $sql_filter = " WHERE MONTH(s.salary_date) = :month AND YEAR(s.salary_date) = :year AND DAY(s.salary_date) = 1";

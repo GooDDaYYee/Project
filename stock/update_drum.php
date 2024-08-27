@@ -32,10 +32,9 @@ try {
         $dupResult = $checkDupStmt->fetch(PDO::FETCH_ASSOC);
 
         if ($dupResult) {
-            echo '<script>
-            alert("มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่");
-            history.back();
-            </script>';
+            $con->rollBack();
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่']);
             exit();
         }
 
@@ -68,27 +67,25 @@ try {
             $stmtLog->execute();
 
             $con->commit();
-
-            header("Location: ../index.php?page=" . base64_encode('stock/list_stock_drum'));
+            echo json_encode(['success' => true]);
             exit();
         } else {
-            echo '<script>
-            alert("อัปเดตข้อมูลไม่สำเร็จ");
-            history.back();
-            </script>';
+            $con->rollBack();
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'อัปเดตข้อมูลไม่สำเร็จ']);
+            exit();
         }
     } else {
-        echo '<script>
-        alert("ไม่พบข้อมูล drum ที่ระบุ");
-        history.back();
-        </script>';
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ไม่พบข้อมูล drum ที่ระบุ']);
+        exit();
     }
 } catch (Exception $e) {
     $con->rollBack();
-    echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
+    http_response_code(400);
+    echo json_encode(['success' => false]);
+    exit();
 }
 
 $con = null;

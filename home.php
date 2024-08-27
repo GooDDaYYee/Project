@@ -96,45 +96,53 @@
 									</th>
 								</tr>
 							</thead>
-							<?php
-							while ($row = $files->fetch(PDO::FETCH_ASSOC)) :
-								$name = explode(' ||', $row['name']);
-								$name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
-								$img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
-								$doc_arr = array('doc', 'docx');
-								$pdf_arr = array('pdf', 'ps', 'eps', 'prn');
-								$icon = 'fa-file';
-								if (in_array(strtolower($row['file_type']), $img_arr))
-									$icon = 'fa-image';
-								if (in_array(strtolower($row['file_type']), $doc_arr))
-									$icon = 'fa-file-word';
-								if (in_array(strtolower($row['file_type']), $pdf_arr))
-									$icon = 'fa-file-pdf';
-								if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
-									$icon = 'fa-file-excel';
-								if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
-									$icon = 'fa-file-archive';
-								if (in_array(strtolower($row['file_type']), ['kmz']))
-									$icon = 'fa fa-globe';
-								if (in_array(strtolower($row['file_type']), ['dwg']))
-									$icon = 'fa fa-cube';
-								if (in_array(strtolower($row['file_type']), ['psd']))
-									$icon = 'fa fa-scissors';
-							?>
-								<tr class='file-item' data-id="<?php echo $row['files_id'] ?>" data-name="<?php echo $name ?>">
-									<td><i class="to_file"><?php echo ucwords($row['uname']) ?></i></td>
-									<td>
-										<span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
-										<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
-									</td>
-									<td><i class="to_file"><?php
-															$timestamp = strtotime($row['files_date']);
-															$year_buddhist = date('Y', $timestamp) + 543;
-															$date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
-															echo $date_buddhist; ?></i></td>
-									<td><i class="to_file"><?php echo $row['description'] ?></i></td>
-								</tr>
-							<?php endwhile; ?>
+							<tbody>
+								<?php if ($files->rowCount() > 0): ?>
+									<?php
+									while ($row = $files->fetch(PDO::FETCH_ASSOC)) :
+										$name = explode(' ||', $row['name']);
+										$name = isset($name[1]) ? $name[0] . " (" . $name[1] . ")." . $row['file_type'] : $name[0] . "." . $row['file_type'];
+										$img_arr = array('png', 'jpg', 'jpeg', 'gif', 'psd', 'tif');
+										$doc_arr = array('doc', 'docx');
+										$pdf_arr = array('pdf', 'ps', 'eps', 'prn');
+										$icon = 'fa-file';
+										if (in_array(strtolower($row['file_type']), $img_arr))
+											$icon = 'fa-image';
+										if (in_array(strtolower($row['file_type']), $doc_arr))
+											$icon = 'fa-file-word';
+										if (in_array(strtolower($row['file_type']), $pdf_arr))
+											$icon = 'fa-file-pdf';
+										if (in_array(strtolower($row['file_type']), ['xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr']))
+											$icon = 'fa-file-excel';
+										if (in_array(strtolower($row['file_type']), ['zip', 'rar', 'tar']))
+											$icon = 'fa-file-archive';
+										if (in_array(strtolower($row['file_type']), ['kmz']))
+											$icon = 'fa fa-globe';
+										if (in_array(strtolower($row['file_type']), ['dwg']))
+											$icon = 'fa fa-cube';
+										if (in_array(strtolower($row['file_type']), ['psd']))
+											$icon = 'fa fa-scissors';
+									?>
+										<tr class='file-item' data-id="<?php echo $row['files_id'] ?>" data-name="<?php echo $name ?>">
+											<td><i class="to_file"><?php echo ucwords($row['uname']) ?></i></td>
+											<td>
+												<span><i class="fa <?php echo $icon ?>"></i></span><b class="to_file"> <?php echo $name ?></b>
+												<input type="text" class="rename_file" value="<?php echo $row['name'] ?>" data-id="<?php echo $row['files_id'] ?>" data-type="<?php echo $row['file_type'] ?>" style="display: none">
+											</td>
+											<td><i class="to_file"><?php
+																	$timestamp = strtotime($row['files_date']);
+																	$year_buddhist = date('Y', $timestamp) + 543;
+																	$date_buddhist = date('d/m/', $timestamp) . $year_buddhist . date(' h:i A', $timestamp);
+																	echo $date_buddhist; ?></i></td>
+											<td><i class="to_file"><?php echo $row['description'] ?></i></td>
+										</tr>
+									<?php endwhile; ?>
+								<?php else: ?>
+									<tr>
+										<td colspan="4" class="text-center">ไม่พบข้อมูล</td>
+									</tr>
+								<?php endif; ?>
+							</tbody>
 						</table>
 						&nbsp;
 						<div class="pagination-container">

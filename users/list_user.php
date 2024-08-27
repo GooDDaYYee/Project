@@ -69,7 +69,7 @@ if ($_SESSION["lv"] == 0) {
                       <td>
                         <div class="btn-group" role="group" aria-label="Basic example">
                           <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#editModal" data-id="<?php echo $rs['user_id']; ?>" data-username="<?php echo $rs['username']; ?>" data-lv="<?php echo $rs['lv']; ?>" data-status="<?php echo $rs['status']; ?>">แก้ไข</button>
-                          <button type="button" class="btn btn-outline-danger" onclick="confirmDelete('<?php echo $rs['user_id']; ?>','<?php echo $rs['username']; ?>')">ลบ</button>
+                          <button type="button" class="btn btn-outline-danger" id="delete_users" onclick="confirmDelete('<?php echo $rs['user_id']; ?>','<?php echo $rs['username']; ?>')">ลบ</button>
                         </div>
                       </td>
                     </tr>
@@ -141,10 +141,41 @@ if ($_SESSION["lv"] == 0) {
   </div>
 
   <script>
+    // sweetalert delete users
     function confirmDelete(user_id, username) {
-      if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลชื่อผู้ใช้ " + username + " นี้?")) {
-        window.location.href = 'users/delete_users.php?user_id=' + user_id;
-      }
+      Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        html: "คุณต้องการลบผู้ใช้ " + username + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลผู้ใช้ ข้อมูลพนักงานจะหายไปด้วย !!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "users/delete_users.php?user_id=" + user_id,
+            success: function(response) {
+              Swal.fire({
+                icon: 'success',
+                title: 'ลบสำเร็จ',
+                text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
+              }).then(function() {
+                window.location.href = "index.php?page=" + btoa('users/list_user');
+              });
+            },
+            error: function() {
+              Swal.fire({
+                icon: 'error',
+                title: 'ไม่สำเร็จ',
+                text: 'การลบผู้ใช้ ' + username + ' ไม่สำเร็จ!',
+              });
+            }
+          });
+        }
+      });
     }
 
     $(document).ready(function() {
@@ -208,6 +239,35 @@ if ($_SESSION["lv"] == 0) {
         });
       });
 
+      // sweetalert editForm
+      $('#editForm').on('submit', function(e) {
+        e.preventDefault();
+        var form = $(this);
+
+        $.ajax({
+          type: "POST",
+          url: form.attr('action'),
+          data: form.serialize(),
+          success: function(response) {
+            Swal.fire({
+              icon: 'success',
+              title: 'สำเร็จ',
+              text: 'แก้ไขข้อมูลผู้ใช้สำเร็จ',
+            }).then(function() {
+              window.location.href = "index.php?page=" + btoa('users/list_user');
+            });
+          },
+          error: function() {
+            Swal.fire({
+              icon: 'error',
+              title: 'ไม่สำเร็จ',
+              text: 'การแก้ไขข้อมูลผู้ใช้ไม่สำเร็จ!',
+            });
+          }
+        });
+      });
+
+      // editForm users
       $('#editModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var id = button.data('id');

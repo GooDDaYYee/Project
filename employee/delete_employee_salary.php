@@ -23,9 +23,6 @@ if (isset($_GET['salary_id'])) {
         $stmtLog->execute();
 
         $con->commit();
-
-        header("Location: ../index.php?page=" . base64_encode('employee/list_employee_salary'));
-        exit();
     } catch (PDOException $e) {
         $con->rollBack();
         echo '<script>

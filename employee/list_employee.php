@@ -111,7 +111,7 @@
 <!-- Edit Modal -->
 <div class="modal" id="editModal">
     <div class="modal-content">
-        <form id="editForm" action="employee/update_employee.php" method="POST">
+        <form id="editForm" method="POST">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลพนักงาน</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -166,10 +166,41 @@
 </div>
 
 <script>
+    // sweetalert delete salary
     function confirmDelete(i, employee_id) {
-        if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลพนักงานลำดับที่ " + i + " นี้?")) {
-            window.location.href = 'employee/delete_employee.php?employee_id=' + employee_id;
-        }
+        Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            html: "คุณต้องการลบข้อมูลพนักงานลำดับที่ " + i + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลพนักงานจะลบทั้งข้อมูลผู้ใช้ด้วย !!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "employee/delete_employee.php?employee_id=" + employee_id,
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ลบสำเร็จ',
+                            text: 'ลบเงินเดือนลำดับที่ ' + i + ' เรียบร้อยแล้ว!',
+                        }).then(function() {
+                            window.location.href = "index.php?page=" + btoa('employee/list_employee');
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: 'ลบเงินเดือนลำดับที่ ' + i + ' ไม่สำเร็จ!',
+                        });
+                    }
+                });
+            }
+        });
     }
 
     $(document).ready(function() {
@@ -232,6 +263,35 @@
                 }
             });
         });
+
+        // sweetalert editForm
+        $('#editForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: form.serialize(),
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ',
+                        text: 'แก้ไขข้อมูลพนักงานสำเร็จ',
+                    }).then(function() {
+                        window.location.href = "index.php?page=" + btoa('employee/list_employee');
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: 'แก้ไขข้อมูลพนักงานไม่สำเร็จ!',
+                    });
+                }
+            });
+        });
+
 
         $('#editModal').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);

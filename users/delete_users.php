@@ -34,9 +34,6 @@ if ($_SESSION["lv"] == 0) {
             $stmtLog->execute();
 
             $con->commit();
-
-            header("Location: ../index.php?page=" . base64_encode('users/list_user'));
-            exit();
         } catch (PDOException $e) {
             $con->rollBack();
             echo '<script>

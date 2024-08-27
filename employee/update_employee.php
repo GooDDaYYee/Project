@@ -12,7 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_position = $_POST['employee_position'];
     $employee_status = $_POST['employee_status'];
 
-    $sql = "UPDATE employee 
+    try {
+        $sql = "UPDATE employee 
             SET employee_name = :employee_name, 
                 employee_lastname = :employee_lastname, 
                 employee_age = :employee_age, 
@@ -22,18 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 employee_status = :employee_status
             WHERE employee_id = :employee_id";
 
-    $stmt = $con->prepare($sql);
-    $stmt->bindParam(':employee_id', $employee_id);
-    $stmt->bindParam(':employee_name', $employee_name);
-    $stmt->bindParam(':employee_lastname', $employee_lastname);
-    $stmt->bindParam(':employee_age', $employee_age);
-    $stmt->bindParam(':employee_phone', $employee_phone);
-    $stmt->bindParam(':employee_email', $employee_email);
-    $stmt->bindParam(':employee_position', $employee_position);
-    $stmt->bindParam(':employee_status', $employee_status);
-    $stmt->execute();
+        $stmt = $con->prepare($sql);
+        $stmt->bindParam(':employee_id', $employee_id);
+        $stmt->bindParam(':employee_name', $employee_name);
+        $stmt->bindParam(':employee_lastname', $employee_lastname);
+        $stmt->bindParam(':employee_age', $employee_age);
+        $stmt->bindParam(':employee_phone', $employee_phone);
+        $stmt->bindParam(':employee_email', $employee_email);
+        $stmt->bindParam(':employee_position', $employee_position);
+        $stmt->bindParam(':employee_status', $employee_status);
+        $stmt->execute();
 
-    try {
+
         $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
         $logStatus = 'Employee Updated';
         $logDetail = "Updated employee ID: $employee_id, Name: $employee_name $employee_lastname";
@@ -43,9 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmtLog->bindParam(':user_id', $user_id);
         $stmtLog->execute();
 
-        echo "ข้อมูลพนักงานถูกอัปเดตเรียบร้อยแล้ว";
+        $con->commit();
+        echo json_encode(['success' => true]);
+        exit();
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
+        exit();
     }
 
     $con = null;

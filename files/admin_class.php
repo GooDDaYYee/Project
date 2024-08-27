@@ -1,12 +1,13 @@
 <?php
 session_start();
+
 class Action
 {
 	private $db;
 
 	public function __construct()
 	{
-		ob_start();
+
 		include dirname(__FILE__) . '/../connect.php';
 		$this->db = $con;
 	}
@@ -14,7 +15,6 @@ class Action
 	function __destruct()
 	{
 		$this->db = null;
-		ob_end_flush();
 	}
 
 	private function add_log($log_status, $log_detail, $user_id)
@@ -31,26 +31,33 @@ class Action
 		extract($_POST);
 		$data = " name ='" . $name . "' ";
 		$data .= ", parent_id ='" . $parent_id . "' ";
+
 		if (empty($folders_id)) {
 			$data .= ", user_id ='" . $_SESSION['user_id'] . "' ";
 
-			$check = $this->db->query("SELECT * FROM folders WHERE user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "'")->rowCount();
+			// Check for folder name uniqueness within the same level
+			$check = $this->db->query("SELECT * FROM folders WHERE user_id ='" . $_SESSION['user_id'] . "' and name ='" . $name . "' and parent_id ='" . $parent_id . "'")->rowCount();
 			if ($check > 0) {
-				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำ'));
+				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำในระดับเดียวกัน'));
 			} else {
 				$save = $this->db->query("INSERT INTO folders SET " . $data);
 				if ($save) {
+					$new_folder_id = $this->db->lastInsertId();
+					$folder_path = $this->get_folder_path($parent_id) . '/' . $name;
+					mkdir('uploads/' . $folder_path, 0755, true);
 					$this->add_log('Folder Created', 'Folder name: ' . $name, $_SESSION['user_id']);
 					return json_encode(array('status' => 1));
 				}
 			}
 		} else {
-			$check = $this->db->query("SELECT * FROM folders WHERE user_id ='" . $_SESSION['user_id'] . "' and name  ='" . $name . "' and folders_id !=" . $folders_id)->rowCount();
+			$check = $this->db->query("SELECT * FROM folders WHERE user_id ='" . $_SESSION['user_id'] . "' and name ='" . $name . "' and folders_id !=" . $folders_id . " and parent_id ='" . $parent_id . "'")->rowCount();
 			if ($check > 0) {
-				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำ'));
+				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำในระดับเดียวกัน'));
 			} else {
 				$save = $this->db->query("UPDATE folders SET " . $data . " WHERE folders_id =" . $folders_id);
 				if ($save) {
+					$folder_path = $this->get_folder_path($parent_id) . '/' . $name;
+					rename('uploads/' . $this->get_folder_path($parent_id, true), 'uploads/' . $folder_path);
 					$this->add_log('Folder Updated', 'Folder name: ' . $name, $_SESSION['user_id']);
 					return json_encode(array('status' => 1));
 				}
@@ -58,10 +65,76 @@ class Action
 		}
 	}
 
+	private function get_folder_path($parent_id, $include_last_folder = false)
+	{
+		$path = '';
+		while ($parent_id != 0) {
+			$folder = $this->db->query("SELECT name, parent_id FROM folders WHERE folders_id = " . $parent_id)->fetch(PDO::FETCH_ASSOC);
+			$path = $folder['name'] . '/' . $path;
+			$parent_id = $folder['parent_id'];
+		}
+		return $include_last_folder ? $path : rtrim($path, '/');
+	}
+
+	private function delete_folder_recursively($folder_path)
+	{
+		// Delete all files in the folder
+		$files = glob($folder_path . '/*');
+		foreach ($files as $file) {
+			if (is_dir($file)) {
+				// Recursively delete sub-folders
+				$this->delete_folder_recursively($file);
+			} else {
+				unlink($file);
+			}
+		}
+		// Remove the folder itself
+		rmdir($folder_path);
+	}
+
+	private function delete_child_folders($parent_id)
+	{
+		// Fetch all child folders
+		$child_folders = $this->db->query("SELECT folders_id, name FROM folders WHERE parent_id=" . $parent_id);
+		while ($child_folder = $child_folders->fetch(PDO::FETCH_ASSOC)) {
+			$child_folder_id = $child_folder['folders_id'];
+			$child_folder_path = 'uploads/' . $this->get_folder_path($child_folder_id);
+
+			// Delete files related to the child folder
+			$this->db->query("DELETE FROM files WHERE folders_id=" . $child_folder_id);
+
+			// Recursively delete child folders and their contents
+			$this->delete_child_folders($child_folder_id);
+			if (is_dir($child_folder_path)) {
+				$this->delete_folder_recursively($child_folder_path);
+			}
+			// Delete the child folder from the database
+			$this->db->query("DELETE FROM folders WHERE folders_id=" . $child_folder_id);
+		}
+	}
+
 	function delete_folder()
 	{
 		extract($_POST);
-		$folder_name = $this->db->query("SELECT name FROM folders WHERE folders_id=" . $folders_id)->fetch(PDO::FETCH_ASSOC)['name'];
+
+		// Fetch folder details
+		$folder = $this->db->query("SELECT name, parent_id FROM folders WHERE folders_id=" . $folders_id)->fetch(PDO::FETCH_ASSOC);
+		$folder_name = $folder['name'];
+		$parent_id = $folder['parent_id'];
+		$folder_path = 'uploads/' . $this->get_folder_path($folders_id); // Path to the folder in uploads
+
+		// Delete files related to the folder
+		$this->db->query("DELETE FROM files WHERE folders_id=" . $folders_id);
+
+		// Delete all child folders and their contents recursively
+		$this->delete_child_folders($folders_id);
+
+		// Delete the folder itself
+		if (is_dir($folder_path)) {
+			$this->delete_folder_recursively($folder_path);
+		}
+
+		// Delete the folder from the database
 		$delete = $this->db->query("DELETE FROM folders WHERE folders_id =" . $folders_id);
 		if ($delete) {
 			$this->add_log('Folder Deleted', 'Folder name: ' . $folder_name, $_SESSION['user_id']);
@@ -75,7 +148,10 @@ class Action
 		$file_details = $this->db->query("SELECT name, file_path FROM files WHERE files_id=" . $files_id)->fetch(PDO::FETCH_ASSOC);
 		$delete = $this->db->query("DELETE FROM files WHERE files_id =" . $files_id);
 		if ($delete) {
-			unlink('uploads/' . $file_details['file_path']);
+			$file_path = 'uploads/' . $file_details['file_path'];
+			if (file_exists($file_path)) {
+				unlink($file_path);
+			}
 			$this->add_log('File Deleted', 'File name: ' . $file_details['name'], $_SESSION['user_id']);
 			return 1;
 		}
@@ -84,21 +160,26 @@ class Action
 	function save_files()
 	{
 		extract($_POST);
+		$folders_id = !empty($folders_id) ? $folders_id : NULL; // Use NULL if folders_id is empty or 0
+
 		if (empty($files_id)) {
 			if (!empty($_FILES['upload']['tmp_name'][0])) {
 				foreach ($_FILES['upload']['tmp_name'] as $key => $tmp_name) {
 					$fname = strtotime(date("y-m-d H:i")) . '_' . $_FILES['upload']['name'][$key];
-					$move = move_uploaded_file($tmp_name, 'uploads/' . $fname);
+					$folder_path = $folders_id ? $this->get_folder_path($folders_id) : ''; // Handle no folder case
+					$file_path = 'uploads/' . ($folder_path ? $folder_path . '/' : '') . $fname;
+
+					$move = move_uploaded_file($tmp_name, $file_path);
 
 					if ($move) {
 						$file = $_FILES['upload']['name'][$key];
 						$file = explode('.', $file);
-						$chk = $this->db->query("SELECT * FROM files WHERE SUBSTRING_INDEX(name,' ||',1) = '" . $file[0] . "' and folder_id = '" . $folder_id . "' and file_type='" . $file[1] . "' ");
+						$chk = $this->db->query("SELECT * FROM files WHERE SUBSTRING_INDEX(name,' ||',1) = '" . $file[0] . "' and (folders_id = '" . $folders_id . "' OR folders_id IS NULL) and file_type='" . $file[1] . "' ");
 						if ($chk->rowCount() > 0) {
 							$file[0] = $file[0] . ' ||' . ($chk->rowCount());
 						}
 						$data = " name = '" . $file[0] . "' ";
-						$data .= ", folder_id = '" . $folder_id . "' ";
+						$data .= ", folders_id = " . ($folders_id !== NULL ? "'" . $folders_id . "'" : "NULL") . " ";
 						$data .= ", description = '" . $description . "' ";
 						$data .= ", user_id = '" . $_SESSION['user_id'] . "' ";
 						$data .= ", file_type = '" . $file[1] . "' ";
@@ -128,16 +209,25 @@ class Action
 	function file_rename()
 	{
 		extract($_POST);
-		$file[0] = $name;
-		$file[1] = $type;
-		$chk = $this->db->query("SELECT * FROM files WHERE SUBSTRING_INDEX(name,' ||',1) = '" . $file[0] . "' and folder_id = '" . $folder_id . "' and file_type='" . $file[1] . "' and files_id != " . $files_id);
+		$file_name = $name; // Store the original name
+		$file_type = $type;
+
+		// Check for files with the same name (excluding the current file)
+		$chk = $this->db->query("SELECT * FROM files WHERE SUBSTRING_INDEX(name, ' ||', 1) = '" . $file_name . "' AND folders_id = '" . $folders_id . "' AND file_type = '" . $file_type . "' AND files_id != " . $files_id);
+
+		// If duplicates exist, append a counter to the filename
 		if ($chk->rowCount() > 0) {
-			$file[0] = $file[0] . ' ||' . ($chk->rowCount());
+			$count = $chk->rowCount();
+			$file_name = $file_name . ' ||' . $count;
 		}
-		$save = $this->db->query("UPDATE files SET name = '" . $file[0] . "' WHERE files_id=" . $files_id);
-		if ($save) {
-			$this->add_log('File Renamed', 'New name: ' . $file[0], $_SESSION['user_id']);
-			return json_encode(array('status' => 1, 'new_name' => $file[0] . '.' . $file[1]));
+
+		// Update the file name in the database
+		$update = $this->db->query("UPDATE files SET name = '" . $file_name . "' WHERE files_id = " . $files_id);
+
+		if ($update) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

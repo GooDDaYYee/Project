@@ -11,6 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $month = $_POST['month'];
     $year = $_POST['year'];
 
+    // ตรวจสอบค่าว่าง ของเดือน และ ค่าที่ส่งมาเป็น 0
+    if ($month == '0' || $year == '0' || $month == ' ' || $year == ' ') {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'กรุณาเลือกเดือนและปี']);
+        exit();
+    }
+
     $salary_date = $year . '-' . sprintf('%02d', array_search($month, ["มกราคม ", "กุมภาพันธ์ ", "มีนาคม ", "เมษายน ", "พฤษภาคม ", "มิถุนายน ", "กรกฎาคม ", "สิงหาคม ", "กันยายน ", "ตุลาคม ", "พฤศจิกายน ", "ธันวาคม "]) + 1) . '-01';
 
     try {
@@ -29,10 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $existing_salary = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
             if ($existing_salary) {
-                echo '<script>
-                alert("ข้อมูลเงินเดือนมีอยู่แล้ว กรุณาตรวจสอบ เดือน และปี อีกครั้ง");
-                history.back();
-                </script>';
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'มีข้อมูลเงินเดือนของพนักงานมีอยู่แล้ว']);
                 exit();
             } else {
 
@@ -59,20 +64,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmtLog->bindParam(':user_id', $admin_user_id);
                 $stmtLog->execute();
             }
+            $con->commit();
+            echo json_encode(['success' => true]);
+            exit();
         } else {
-
-            $con->rollBack();
-            echo "ข้อผิดพลาด: ไม่มีพนักงานหรือไม่ได้ใช้งานอยู่";
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'เพิ่มข้อมูลไม่ทำเสร็จ']);
             exit();
         }
-
-        $con->commit();
-
-        header("Location: ../index.php?page=" . base64_encode('employee/list_employee_salary'));
-        exit();
     } catch (PDOException $e) {
         $con->rollBack();
-        echo "Error: " . $e->getMessage();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
+        exit();
     }
 }
 $con = null;
