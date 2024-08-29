@@ -58,7 +58,7 @@
             <?php
             if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1 || $_SESSION["lv"] == 2) {
             ?>
-              <a class="collapse-item " href="index.php?page=<?= base64_encode('files/files') ?>">&nbsp; จัดการไฟล์</a>
+              <a class="collapse-item " href="index.php?page=<?= base64_encode('export_pdf/test') ?>">&nbsp; จัดการไฟล์</a>
             <?php
             }
             ?>

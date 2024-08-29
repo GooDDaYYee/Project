@@ -170,19 +170,29 @@
                         type: "POST",
                         url: "stock/drum_delete.php?drum_id=" + drum_id,
                         success: function(response) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'ลบสำเร็จ',
-                                text: 'ลบข้อมูล Drum ลำดับที่ ' + i + ' เรียบร้อยแล้ว!',
-                            }).then(function() {
-                                window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
-                            });
+                            const data = JSON.parse(response);
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'ลบสำเร็จ',
+                                    text: 'ลบข้อมูล Drum ลำดับที่ ' + i + ' เรียบร้อยแล้ว!',
+                                }).then(function() {
+                                    window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไม่สำเร็จ',
+                                    text: data.message,
+                                });
+                            }
                         },
-                        error: function() {
+                        error: function(xhr) {
+                            const data = JSON.parse(xhr.responseText);
                             Swal.fire({
                                 icon: 'error',
                                 title: 'ไม่สำเร็จ',
-                                text: 'ลบข้อมูล Drum ลำดับที่ ' + i + ' ไม่สำเร็จ!',
+                                text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
                             });
                         }
                     });
@@ -225,45 +235,45 @@
             }
 
             $('#editDrumModal').modal('show');
+        }
 
-            // sweetalert editForm
-            $(function() {
-                $('#editdrum').on('submit', function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        type: "POST",
-                        url: "stock/update_drum.php",
-                        data: $(this).serialize(),
-                        success: function(response) {
-                            const data = JSON.parse(response);
-                            if (data.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'สำเร็จ',
-                                    text: 'แก้ไขข้อ Drum สำเร็จ',
-                                }).then(function() {
-                                    window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'ไม่สำเร็จ',
-                                    text: data.message,
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            const data = JSON.parse(xhr.responseText);
+        // sweetalert editForm
+        $(function() {
+            $('#editdrum').on('submit', function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "stock/update_drum.php",
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        const data = JSON.parse(response);
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'สำเร็จ',
+                                text: 'แก้ไขข้อ Drum สำเร็จ',
+                            }).then(function() {
+                                window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
+                            });
+                        } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'ไม่สำเร็จ',
-                                text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                                text: data.message,
                             });
                         }
-                    });
+                    },
+                    error: function(xhr) {
+                        const data = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                        });
+                    }
                 });
             });
-        }
+        });
 
         $(document).ready(function() {
             var rowsPerPage = 10;

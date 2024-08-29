@@ -1,4 +1,4 @@
-<form action="stock/insert_drum_process.php" id="insert_drum" method="post">
+<form id="insert_drum" method="post">
     <!-- Begin Page Content -->
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
@@ -62,3 +62,43 @@
         </div>
     </div>
 </form>
+
+<script>
+    // sweetalert editForm
+    $(function() {
+        $('#insert_drum').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "stock/insert_drum_process.php",
+                data: $(this).serialize(),
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'เพิ่มข้อมูล Drum สำเร็จ',
+                        }).then(function() {
+                            window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: data.message,
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    const data = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                    });
+                }
+            });
+        });
+    });
+</script>

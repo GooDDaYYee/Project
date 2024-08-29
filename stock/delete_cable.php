@@ -30,7 +30,9 @@ if (isset($_GET['cable_id'])) {
         $con->commit();
     } catch (PDOException $e) {
         $con->rollBack();
-        echo "Error: " . $e->getMessage();
+        http_response_code(400);
+        echo json_encode(['success' => false]);
+        exit();
     }
 
     try {
@@ -54,10 +56,14 @@ if (isset($_GET['cable_id'])) {
             $stmt2->execute();
         }
 
-        header("Location: ../index.php?page=" . base64_encode('stock/list_stock_cable'));
+        $con->commit();
+        echo json_encode(['success' => true]);
         exit();
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false]);
+        exit();
     }
 
     $con = null;

@@ -15,7 +15,6 @@ try {
     $cable_used = $cable_form - $cable_to;
     $employee_id = $_SESSION['employee_id'];
 
-    // Calculate total cable used
     $strsql = 'SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id';
     $stmt = $con->prepare($strsql);
     $stmt->bindParam(':drum_id', $drum_id, PDO::PARAM_INT);
@@ -23,16 +22,13 @@ try {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $total_cable = $result['total_cable'] + $cable_used;
 
-    // Check if total cable used exceeds the limit
     if ($total_cable > 4000) {
-        echo '<script>
-            alert("ไม่สามารถเพิ่มข้อมูลได้: ปริมาณสายเคเบิลทั้งหมดเกิน 4000");
-            history.back();
-            </script>';
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ไม่สามารถเพิ่มข้อมูลได้ จำนวนเคลเบิลเกิน 4000 เมตร']);
         exit();
     }
 
-    // Insert cable record
     $stmt = $con->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work, employee_id)
     VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work, :employee_id)");
 
@@ -65,16 +61,13 @@ try {
     $stmtLog->execute();
 
     $con->commit();
-
-    header("Location: ../index.php?page=" . base64_encode('stock/list_stock_cable'));
+    echo json_encode(['success' => true]);
     exit();
 } catch (PDOException $e) {
-
     $con->rollBack();
-    echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด']);
+    exit();
 }
 
 $con = null;

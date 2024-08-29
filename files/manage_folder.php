@@ -33,23 +33,20 @@ if (isset($_GET['folders_id'])) {
 				success: function(resp) {
 					if (typeof resp != undefined) {
 						resp = JSON.parse(resp);
-						if (resp.status == 1) {
-							Swal.fire({
-								icon: 'success',
-								title: 'Success',
-								text: 'New Folder successfully added.',
-								timer: 1500,
-								showConfirmButton: false
-							}).then(function() {
-								location.reload();
-							});
-						} else {
-							$('#msg').html('<div class="alert alert-danger">' + resp.msg + '</div>');
-							end_load();
-						}
 					}
+				},
+				complete: function() {
+					setTimeout(function() {
+						end_load();
+						location.reload();
+					}, 1000); // 5000 milliseconds = 5 seconds
 				}
 			});
+			setTimeout(function() {
+				end_load();
+				location.reload();
+			}, 1000); // 5000 milliseconds = 5 seconds
+
 		});
 	});
 </script>

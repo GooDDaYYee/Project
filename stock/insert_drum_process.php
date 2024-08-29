@@ -18,10 +18,9 @@ try {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result && ($drum_company == $result['drum_company'] && $drum_cable_company == $result['drum_cable_company'])) {
-        echo '<script>
-        alert("มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่");
-        history.back();
-        </script>';
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่']);
         exit();
     }
 
@@ -51,28 +50,21 @@ try {
         $stmtLog->bindParam(':log_detail', $logDetail);
         $stmtLog->bindParam(':user_id', $user_id);
         $stmtLog->execute();
-
-        $con->commit();
-
-        echo '<script>
-            alert("เพิ่มข้อมูลสำเร็จ");
-            history.back();
-            </script>';
     } else {
-        echo '<script>
-            alert("เพิ่มข้อมูลไม่สำเร็จ");
-            history.back();
-            </script>';
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เพิ่มข้อมูล Drum ไม่สำเร็จ!']);
+        exit();
     }
 
-    header("Location: ../index.php?page=" . base64_encode('stock/list_stock_drum'));
+    $con->commit();
+    echo json_encode(['success' => true]);
     exit();
 } catch (PDOException $e) {
     $con->rollBack();
-    echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด']);
+    exit();
 }
 
 $con = null;

@@ -227,7 +227,7 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $("div.custom-menu .edit").click(function(e) {
       e.preventDefault();
-      uni_modal('Rename Folder', 'files/manage_folder.php?fid=<?php echo $folder_parent ?>&folders_id=' + $(this).attr('data-id'));
+      uni_modal('เปลี่ยนชื่อโฟลเดอร์', 'files/manage_folder.php?fid=<?php echo $folder_parent ?>&folders_id=' + $(this).attr('data-id'));
     });
     $("div.custom-menu .delete").click(function(e) {
       e.preventDefault();
@@ -269,8 +269,8 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $('.rename_file').keypress(function(e) {
       var _this = $(this);
-      if (e.which == 13) { // ตรวจสอบว่ากด Enter
-        start_load(); // เรียก start_load() เมื่อกด Enter เท่านั้น
+      if (e.which == 13) {
+        start_load();
         $.ajax({
           url: 'files/ajax.php?action=file_rename',
           method: 'POST',
@@ -289,15 +289,16 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 _this.siblings('b.to_file').show();
               }
             }
-            location.reload(); // รีเฟรชหน้าหลังจากเปลี่ยนชื่อสำเร็จ
+            setTimeout(function() {
+              location.reload();
+            }, 1000);
           },
           error: function() {
-            end_load(); // เรียก end_load เมื่อเกิดข้อผิดพลาด
+            end_load();
           }
         });
       }
     });
-
   });
 
   $('.file-item').click(function() {

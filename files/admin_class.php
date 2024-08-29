@@ -35,7 +35,6 @@ class Action
 		if (empty($folders_id)) {
 			$data .= ", user_id ='" . $_SESSION['user_id'] . "' ";
 
-			// Check for folder name uniqueness within the same level
 			$check = $this->db->query("SELECT * FROM folders WHERE user_id ='" . $_SESSION['user_id'] . "' and name ='" . $name . "' and parent_id ='" . $parent_id . "'")->rowCount();
 			if ($check > 0) {
 				return json_encode(array('status' => 2, 'msg' => 'ชื่อโฟลเดอร์ซ้ำในระดับเดียวกัน'));
@@ -78,37 +77,32 @@ class Action
 
 	private function delete_folder_recursively($folder_path)
 	{
-		// Delete all files in the folder
 		$files = glob($folder_path . '/*');
 		foreach ($files as $file) {
 			if (is_dir($file)) {
-				// Recursively delete sub-folders
+
 				$this->delete_folder_recursively($file);
 			} else {
 				unlink($file);
 			}
 		}
-		// Remove the folder itself
+
 		rmdir($folder_path);
 	}
 
 	private function delete_child_folders($parent_id)
 	{
-		// Fetch all child folders
 		$child_folders = $this->db->query("SELECT folders_id, name FROM folders WHERE parent_id=" . $parent_id);
 		while ($child_folder = $child_folders->fetch(PDO::FETCH_ASSOC)) {
 			$child_folder_id = $child_folder['folders_id'];
 			$child_folder_path = 'uploads/' . $this->get_folder_path($child_folder_id);
 
-			// Delete files related to the child folder
 			$this->db->query("DELETE FROM files WHERE folders_id=" . $child_folder_id);
 
-			// Recursively delete child folders and their contents
 			$this->delete_child_folders($child_folder_id);
 			if (is_dir($child_folder_path)) {
 				$this->delete_folder_recursively($child_folder_path);
 			}
-			// Delete the child folder from the database
 			$this->db->query("DELETE FROM folders WHERE folders_id=" . $child_folder_id);
 		}
 	}
@@ -117,24 +111,19 @@ class Action
 	{
 		extract($_POST);
 
-		// Fetch folder details
 		$folder = $this->db->query("SELECT name, parent_id FROM folders WHERE folders_id=" . $folders_id)->fetch(PDO::FETCH_ASSOC);
 		$folder_name = $folder['name'];
 		$parent_id = $folder['parent_id'];
 		$folder_path = 'uploads/' . $this->get_folder_path($folders_id); // Path to the folder in uploads
 
-		// Delete files related to the folder
 		$this->db->query("DELETE FROM files WHERE folders_id=" . $folders_id);
 
-		// Delete all child folders and their contents recursively
 		$this->delete_child_folders($folders_id);
 
-		// Delete the folder itself
 		if (is_dir($folder_path)) {
 			$this->delete_folder_recursively($folder_path);
 		}
 
-		// Delete the folder from the database
 		$delete = $this->db->query("DELETE FROM folders WHERE folders_id =" . $folders_id);
 		if ($delete) {
 			$this->add_log('Folder Deleted', 'Folder name: ' . $folder_name, $_SESSION['user_id']);
@@ -160,13 +149,13 @@ class Action
 	function save_files()
 	{
 		extract($_POST);
-		$folders_id = !empty($folders_id) ? $folders_id : NULL; // Use NULL if folders_id is empty or 0
+		$folders_id = !empty($folders_id) ? $folders_id : NULL;
 
 		if (empty($files_id)) {
 			if (!empty($_FILES['upload']['tmp_name'][0])) {
 				foreach ($_FILES['upload']['tmp_name'] as $key => $tmp_name) {
 					$fname = strtotime(date("y-m-d H:i")) . '_' . $_FILES['upload']['name'][$key];
-					$folder_path = $folders_id ? $this->get_folder_path($folders_id) : ''; // Handle no folder case
+					$folder_path = $folders_id ? $this->get_folder_path($folders_id) : '';
 					$file_path = 'uploads/' . ($folder_path ? $folder_path . '/' : '') . $fname;
 
 					$move = move_uploaded_file($tmp_name, $file_path);
@@ -209,19 +198,16 @@ class Action
 	function file_rename()
 	{
 		extract($_POST);
-		$file_name = $name; // Store the original name
+		$file_name = $name;
 		$file_type = $type;
 
-		// Check for files with the same name (excluding the current file)
 		$chk = $this->db->query("SELECT * FROM files WHERE SUBSTRING_INDEX(name, ' ||', 1) = '" . $file_name . "' AND folders_id = '" . $folders_id . "' AND file_type = '" . $file_type . "' AND files_id != " . $files_id);
 
-		// If duplicates exist, append a counter to the filename
 		if ($chk->rowCount() > 0) {
 			$count = $chk->rowCount();
 			$file_name = $file_name . ' ||' . $count;
 		}
 
-		// Update the file name in the database
 		$update = $this->db->query("UPDATE files SET name = '" . $file_name . "' WHERE files_id = " . $files_id);
 
 		if ($update) {

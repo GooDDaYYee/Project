@@ -30,30 +30,25 @@ if (isset($_GET['drum_id'])) {
             $stmtLog->execute();
 
             $con->commit();
-
-            header("Location: ../index.php?page=" . base64_encode('stock/list_stock_drum'));
+            echo json_encode(['success' => true]);
             exit();
         } else {
-            $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
-            $logStatus = 'Drum Deletion Failed';
-            $logDetail = 'Attempted to delete Drum ID: ' . $drum_id . ' but it is currently in use.';
-            $user_id = $_SESSION['user_id'];
-            $stmtLog->bindParam(':log_status', $logStatus);
-            $stmtLog->bindParam(':log_detail', $logDetail);
-            $stmtLog->bindParam(':user_id', $user_id);
-            $stmtLog->execute();
-
             $con->rollBack();
-            echo "<script type='text/javascript'>alert('ไม่สามารถลบข้อมูลได้ยังมีงานที่ใช้ drum นี้อยู่');window.location.href='../index.php?page=" . base64_encode('stock/list_stock_drum') . "';</script>";
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => 'ไม่สามารถลยข้อมูล Drumได้ มีการเรียกใช้จำนวนเคเบิลอยู่!']);
+            exit();
         }
     } catch (PDOException $e) {
-        if ($con->inTransaction()) {
-            $con->rollBack();
-        }
-        echo "Error: " . $e->getMessage();
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาด!']);
+        exit();
     }
 
     $con = null;
 } else {
-    echo "Invalid request.";
+    $con->rollBack();
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'ไม่สามารถส่งข้อมูลได้!']);
+    exit();
 }

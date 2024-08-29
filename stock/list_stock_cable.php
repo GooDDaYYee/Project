@@ -243,4 +243,42 @@
             });
         });
     });
+
+
+    // sweetalert delete stock drum
+    function confirmDelete(i, cable_id) {
+        Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            text: "คุณต้องการลบข้อมูล สต๊อกเคเบิ้ล ลำดับที่ " + i + " หรือไม่?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "stock/delete_cable.php?cable_id=" + cable_id,
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'ลบสำเร็จ',
+                            text: 'ลบข้อมูล สต๊อกเคเบิ้ล ลำดับที่ ' + i + ' เรียบร้อยแล้ว!',
+                        }).then(function() {
+                            window.location.href = "index.php?page=" + btoa('stock/list_stock_cable');
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: 'ลบข้อมูล สต๊อกเคเบิ้ล ลำดับที่ ' + i + ' ไม่สำเร็จ!',
+                        });
+                    }
+                });
+            }
+        });
+    }
 </script>
