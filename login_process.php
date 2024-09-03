@@ -25,7 +25,7 @@ try {
             echo json_encode(['success' => true]);
             exit();
         } else {
-            http_response_code(400);
+            http_response_code(401);
             echo json_encode(['success' => false]);
             exit();
         }
