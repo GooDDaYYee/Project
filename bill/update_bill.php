@@ -92,18 +92,13 @@ try {
     $stmtLog->execute();
 
     $con->commit();
-
-    if ($_POST['company'] == "Mixed") {
-        header("Location: ../index.php?page=" . base64_encode('bill/list_mixed'));
-    } elseif (($_POST['company'] == "FBH")) {
-        header("Location: ../index.php?page=" . base64_encode('bill/list_fbh'));
-    } else {
-        header("Location: ../index.php?page=" . base64_encode('home'));
-    }
+    echo json_encode(['success' => true]);
     exit();
 } catch (PDOException $e) {
     $con->rollBack();
-    echo "Error: " . $e->getMessage();
+    http_response_code(401);
+    echo json_encode(['success' => false]);
+    exit();
 }
 
 $con = null;

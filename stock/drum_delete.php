@@ -35,7 +35,7 @@ if (isset($_GET['drum_id'])) {
         } else {
             $con->rollBack();
             http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'ไม่สามารถลยข้อมูล Drumได้ มีการเรียกใช้จำนวนเคเบิลอยู่!']);
+            echo json_encode(['success' => false, 'message' => 'ไม่สามารถลบข้อมูล Drum ได้ มีการเรียกใช้เคเบิลอยู่!']);
             exit();
         }
     } catch (PDOException $e) {

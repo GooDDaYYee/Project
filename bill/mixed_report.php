@@ -37,7 +37,7 @@
     ?>
 
     <!-- Form HTML -->
-    <form id="myForm" action="bill/insert_bill.php" method="post">
+    <form id="myForm" method="post">
       <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
           <div class="row">
@@ -134,6 +134,44 @@
               }
               ?>
               <script>
+                // sweetalert myForm
+                $(function() {
+                  $('#myForm').on('submit', function(e) {
+                    e.preventDefault();
+                    $.ajax({
+                      type: "POST",
+                      url: "bill/insert_bill.php",
+                      data: $(this).serialize(),
+                      success: function(response) {
+                        const data = JSON.parse(response);
+                        if (data.success) {
+                          Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'เพิ่มข้อมูล Bill สำเร็จ',
+                          }).then(function() {
+                            window.location.href = "index.php?page=" + btoa('bill/list_mixed');
+                          });
+                        } else {
+                          Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: data.message,
+                          });
+                        }
+                      },
+                      error: function(xhr) {
+                        const data = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                          icon: 'warning',
+                          title: 'ไม่สำเร็จ',
+                          text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                        });
+                      }
+                    });
+                  });
+                });
+
                 document.getElementById("addInputFrame").addEventListener("click", function() {
                   var numAU = parseInt(document.getElementById("numAU").value);
                   if (numAU > 0) {
@@ -232,12 +270,6 @@
                   }
                   return false;
                 }
-
-                document.getElementById("myForm").addEventListener("submit", function(event) {
-                  if (checkDuplicates()) {
-                    event.preventDefault();
-                  }
-                });
               </script>
             </div>
           </div>

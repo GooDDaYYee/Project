@@ -10,7 +10,41 @@
               <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
             </div>
           </form>
-          <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('bill/mixed_report') ?>', '_parent')">เพิ่มบิล</button>
+          <form method="GET" action="" id="filterForm">
+            <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
+            <div class="row">
+              <div class="col-sm-6">
+                <select name="month" class="form-control" id="month" onchange="document.getElementById('filterForm').submit()">
+                  <option value="1">เดือน</option>
+                  <?php
+                  $months = array("มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
+                  for ($i = 0; $i < sizeof($months); $i++) {
+                  ?>
+                    <option value="<?php echo $i + 1 ?>" <?php echo isset($_GET['month']) && $_GET['month'] == $i + 1 ? 'selected' : '' ?>>
+                      <?php echo $months[$i] ?>
+                    </option>
+                  <?php } ?>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <select name="year" class="form-control" id="year" onchange="document.getElementById('filterForm').submit()">
+                  <option value="1">ปี</option>
+                  <?php for ($i = 0; $i <= 50; $i++) { ?>
+                    <option value="<?php echo date("Y") - $i ?>" <?php echo isset($_GET['year']) && $_GET['year'] == date("Y") - $i ? 'selected' : '' ?>>
+                      <?php echo date("Y") - $i + 543 ?>
+                    </option>
+                  <?php } ?>
+                </select>
+              </div>
+            </div>
+          </form>
+          &nbsp;
+          &nbsp;
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('bill/mixed_report') ?>', '_parent')">เพิ่มบิล</button>
+            </div>
+          </div>
         </div>
 
         <div class="card-body">
@@ -44,10 +78,18 @@
                             <?php
                             $timestamp = strtotime($rs['bill_date']);
                             $thai_month = array(
-                              1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
-                              4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
-                              7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
-                              10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
+                              1 => "มกราคม",
+                              2 => "กุมภาพันธ์",
+                              3 => "มีนาคม",
+                              4 => "เมษายน",
+                              5 => "พฤษภาคม",
+                              6 => "มิถุนายน",
+                              7 => "กรกฎาคม",
+                              8 => "สิงหาคม",
+                              9 => "กันยายน",
+                              10 => "ตุลาคม",
+                              11 => "พฤศจิกายน",
+                              12 => "ธันวาคม"
                             );
                             $thai_month_num = date('n', $timestamp);
                             echo date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . date('Y', $timestamp);
@@ -359,11 +401,69 @@
                   });
               }
 
+              // sweetalert delete salary
               function confirmDelete(billId) {
-                if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
-                  window.location.href = 'bill/delete_bill.php?bill_id=' + billId;
-                }
+                Swal.fire({
+                  title: 'คุณแน่ใจหรือไม่?',
+                  html: "คุณต้องการลบข้อมูลบิล " + billId,
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#d33',
+                  cancelButtonColor: '#3085d6',
+                  confirmButtonText: 'ใช่',
+                  cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $.ajax({
+                      type: "POST",
+                      url: "bill/delete_bill.php?bill_id=" + billId,
+                      success: function(response) {
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'ลบสำเร็จ',
+                          text: 'ลบเงินเดือนลำดับที่ ' + billId + ' เรียบร้อยแล้ว!',
+                        }).then(function() {
+                          window.location.href = "index.php?page=" + btoa('bill/list_mixed');
+                        });
+                      },
+                      error: function() {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'ไม่สำเร็จ',
+                          text: 'ลบเงินเดือนลำดับที่ ' + billId + ' ไม่สำเร็จ!',
+                        });
+                      }
+                    });
+                  }
+                });
               }
+
+              // sweetalert editForm
+              $('#editForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                  type: "POST",
+                  url: form.attr('action'),
+                  data: form.serialize(),
+                  success: function(response) {
+                    Swal.fire({
+                      icon: 'success',
+                      title: 'สำเร็จ',
+                      text: 'แก้ไขข้อมูล Bill สำเร็จ',
+                    }).then(function() {
+                      window.location.href = "index.php?page=" + btoa('bill/list_mixed');
+                    });
+                  },
+                  error: function() {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'ไม่สำเร็จ',
+                      text: 'แก้ไขข้อมูล Bill ไม่สำเร็จ!',
+                    });
+                  }
+                });
+              });
 
               var documentModal = document.getElementById("documentModal");
               var spanDocument = documentModal.getElementsByClassName("close")[0];

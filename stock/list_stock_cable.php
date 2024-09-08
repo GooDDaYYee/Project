@@ -281,4 +281,42 @@
             }
         });
     }
+
+    // sweetalert editCableForm
+    $(function() {
+        $('#editCableForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "stock/update_cable.php",
+                data: $(this).serialize(),
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'แก้ไขข้อ Drum สำเร็จ',
+                        }).then(function() {
+                            window.location.href = "index.php?page=" + btoa('stock/list_stock_cable');
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: data.message,
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    const data = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                    });
+                }
+            });
+        });
+    });
 </script>

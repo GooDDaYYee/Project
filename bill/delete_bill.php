@@ -34,27 +34,25 @@ if (isset($_GET['bill_id'])) {
             $stmtLog->execute();
 
             $con->commit();
-
-            if ($result['bill_company'] == 'mixed') {
-                header("Location: ../index.php?page=" . base64_encode('bill/list_mixed'));
-            } elseif ($result['bill_company'] == 'FBH') {
-                header("Location: ../index.php?page=" . base64_encode('bill/list_fbh'));
-            } else {
-                header("Location: ../index.php?page=" . base64_encode('home'));
-            }
+            echo json_encode(['success' => true]);
             exit();
         } else {
             $con->rollBack();
-            echo "Error: Bill not found.";
+            http_response_code(404);
+            echo json_encode(['success' => false, 'message' => 'ไม่มีข้อมูลบิลนี้']);
+            exit();
         }
     } catch (PDOException $e) {
-        if ($con->inTransaction()) {
-            $con->rollBack();
-        }
-        echo "Error: " . $e->getMessage();
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
+        exit();
     }
 
     $con = null;
 } else {
-    echo "Invalid request.";
+    $con->rollBack();
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'ไม่สามารถส่งข้อมูลเพื่อลบได้']);
+    exit();
 }

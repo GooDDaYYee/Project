@@ -243,7 +243,6 @@ if ($_SESSION["lv"] == 0) {
       $('#editForm').on('submit', function(e) {
         e.preventDefault();
         var form = $(this);
-
         $.ajax({
           type: "POST",
           url: form.attr('action'),

@@ -1,4 +1,4 @@
-<form action="show.php" method="post" enctype="multipart/form-data">
+<form id="report_work" method="post" enctype="multipart/form-data">
     <!-- Begin Page Content -->
     <div class="card o-hidden border-0 shadow-lg my-5 align-items-center">
         <div class="card-body p-0">
@@ -10,10 +10,6 @@
                             <h1 class="h2 text-gray-900 mb-2">รายงานการปฏิบัติงาน</h1>
                         </div>
                         <div class="form-group row">
-                            <div class="col">
-                                <label for="name" class="form-label">ชื่อ:</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                            </div>
                             <div class="col">
                                 <label for="jobname" class="form-label">ชื่องาน:</label>
                                 <input type="text" class="form-control" id="jobname" name="jobname">
@@ -34,3 +30,44 @@
         </div>
     </div>
 </form>
+<script>
+    $(document).ready(function() {
+        $('#report_work').submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this); // ใช้ FormData เพื่อรองรับไฟล์
+
+            $.ajax({
+                url: 'report_work/report_process.php',
+                method: 'POST',
+                data: formData,
+                contentType: false, // ต้องระบุ false เพื่อป้องกันการแปลงค่า FormData
+                processData: false,
+                success: function(resp) {
+                    if (typeof resp != undefined) {
+                        resp = JSON.parse(resp);
+                        if (resp.status == 1) {
+                            Swal.fire({
+                                title: 'สำเร็จ!',
+                                text: resp.msg,
+                                icon: 'success',
+                                confirmButtonText: 'ตกลง'
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'ข้อผิดพลาด!',
+                                text: resp.msg,
+                                icon: 'error',
+                                confirmButtonText: 'ตกลง'
+                            });
+                        }
+                    }
+                },
+                complete: function() {
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+    });
+</script>

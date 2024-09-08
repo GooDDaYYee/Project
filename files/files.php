@@ -1,21 +1,32 @@
 <?php
 include dirname(__FILE__) . '/../connect.php';
 $folder_parent = isset($_GET['fid']) ? base64_decode($_GET['fid']) : 0;
-if (!is_numeric($folder_parent)) {
-  $folder_parent = 0;
+$folder_parent = is_numeric($folder_parent) ? $folder_parent : 0;
+
+function fetch_folders($con, $parent_id)
+{
+  $stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id AND folders_type = 1 ORDER BY folder_date ASC");
+  $stmt->execute([':parent_id' => $parent_id]);
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Fetch folders
-$stmt = $con->prepare("SELECT * FROM folders WHERE parent_id = :parent_id ORDER BY folder_date ASC");
-$stmt->bindParam(':parent_id', $folder_parent, PDO::PARAM_INT);
-$stmt->execute();
-$folders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+function fetch_files($con, $folder_parent)
+{
+  if ($folder_parent == 0) {
+    $stmt = $con->prepare("SELECT * FROM files WHERE folders_id IS NULL ORDER BY files_date ASC");
+  } else {
+    $stmt = $con->prepare("SELECT * FROM files WHERE folders_id = :folders_id ORDER BY files_date ASC");
+    $stmt->bindParam(':folders_id', $folder_parent, PDO::PARAM_INT);
+  }
+  $stmt->execute();
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-// Fetch files including those with NULL folders_id
-$stmt = $con->prepare("SELECT * FROM files WHERE folders_id = :folders_id OR folders_id IS NULL ORDER BY files_date ASC");
-$stmt->bindParam(':folders_id', $folder_parent, PDO::PARAM_INT);
-$stmt->execute();
-$files = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$folders = fetch_folders($con, $folder_parent);
+$files = fetch_files($con, $folder_parent);
+
+// ... (HTML and JavaScript code remains mostly unchanged)
+
 ?>
 
 <!-- Begin Page Content -->
@@ -498,4 +509,88 @@ $files = $stmt->fetchAll(PDO::FETCH_ASSOC);
       $(this).remove();
     })
   })
+
+  $('#manage-files').submit(function(e) {
+    e.preventDefault();
+    start_load();
+    $.ajax({
+      url: 'files/ajax.php?action=save_files',
+      data: new FormData($(this)[0]),
+      cache: false,
+      contentType: false,
+      processData: false,
+      method: 'POST',
+      type: 'POST',
+      success: function(resp) {
+        if (typeof resp != undefined) {
+          resp = JSON.parse(resp);
+          if (resp.status == 1) {
+            alert_toast("Files uploaded successfully", 'success');
+            setTimeout(function() {
+              location.reload();
+            }, 1500);
+          } else {
+            alert_toast(resp.msg, 'error');
+            end_load();
+          }
+        }
+      }
+    });
+  });
+
+  $('#manage-folder').submit(function(e) {
+    e.preventDefault();
+    start_load();
+    $.ajax({
+      url: 'files/ajax.php?action=save_folder',
+      method: 'POST',
+      data: $(this).serialize(),
+      success: function(resp) {
+        if (typeof resp != undefined) {
+          resp = JSON.parse(resp);
+          if (resp.status == 1) {
+            alert_toast(resp.msg, 'success');
+            setTimeout(function() {
+              location.reload();
+            }, 1500);
+          } else {
+            alert_toast(resp.msg, 'error');
+            end_load();
+          }
+        }
+      }
+    });
+  });
+
+  $('.rename_file').keypress(function(e) {
+    var _this = $(this);
+    if (e.which == 13) {
+      start_load();
+      $.ajax({
+        url: 'files/ajax.php?action=file_rename',
+        method: 'POST',
+        data: {
+          files_id: $(this).attr('data-id'),
+          name: $(this).val(),
+          type: $(this).attr('data-type'),
+          folders_id: '<?php echo $folder_parent ?>'
+        },
+        success: function(resp) {
+          if (typeof resp != undefined) {
+            resp = JSON.parse(resp);
+            if (resp.status == 1) {
+              alert_toast(resp.msg, 'success');
+              _this.siblings('b.to_file').text(resp.new_name);
+              _this.hide();
+              _this.siblings('b.to_file').show();
+              end_load();
+            } else {
+              alert_toast(resp.msg, 'error');
+              end_load();
+            }
+          }
+        }
+      });
+    }
+  });
 </script>

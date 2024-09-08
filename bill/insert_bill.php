@@ -89,17 +89,13 @@ try {
     $stmtLog->execute();
 
     $con->commit();
-
-    if ($_POST['company'] == "mixed") {
-        header("Location: ../index.php?page=" . base64_encode('bill/list_mixed'));
-    } elseif ($_POST['company'] == "FBH") {
-        header("Location: ../index.php?page=" . base64_encode('bill/list_fbh'));
-    }
-
+    echo json_encode(['success' => true]);
     exit();
 } catch (PDOException $e) {
     $con->rollBack();
-    echo "Error: " . $e->getMessage();
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'ไม่สามารถเพิ่ม Bill ได้กรุณาตรวจสอบข้อมูลให้ถูกต้อง']);
+    exit();
 }
 
 $con = null;

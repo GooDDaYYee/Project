@@ -30,10 +30,9 @@ try {
     $total_cable = ($result['total_cable'] - $old_cable_used) + $new_cable_used;
 
     if ($total_cable > 4000) {
-        echo '<script>
-            alert("ไม่สามารถเพิ่มข้อมูลได้: ปริมาณสายเคเบิลทั้งหมดเกิน 4000");
-            history.back();
-            </script>';
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'จำนวนสายเคเบิลทั้งหมดเกิน 4000']);
         exit();
     }
 
@@ -76,15 +75,13 @@ try {
     $stmtLog->execute();
 
     $con->commit();
-
-    header("Location: ../index.php?page=" . base64_encode('stock/list_stock_cable'));
+    echo json_encode(['success' => true]);
     exit();
 } catch (PDOException $e) {
     $con->rollBack();
-    echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
+    http_response_code(400);
+    echo json_encode(['success' => false, 'message' => 'อัปเดตข้อมูลไม่สำเร็จ']);
+    exit();
 }
 
 $con = null;

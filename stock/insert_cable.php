@@ -145,7 +145,7 @@
                             title: 'สำเร็จ',
                             text: 'เพิ่มข้อมูล Drum สำเร็จ',
                         }).then(function() {
-                            window.location.href = "index.php?page=" + btoa('stock/list_stock_drum');
+                            window.location.href = "index.php?page=" + btoa('stock/list_stock_cable');
                         });
                     } else {
                         Swal.fire({
