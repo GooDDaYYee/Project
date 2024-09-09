@@ -35,7 +35,7 @@ if (isset($_GET['folders_id'])) {
 						if (resp.status == 1) {
 							Swal.fire({
 								icon: 'success',
-								title: 'Success',
+								title: 'สำเร็จ',
 								text: resp.msg,
 								timer: 1500,
 								showConfirmButton: false

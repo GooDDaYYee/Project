@@ -58,8 +58,8 @@ if (isset($_GET['files_id'])) {
 						if (resp.status == 1) {
 							Swal.fire({
 								icon: 'success',
-								title: 'Success',
-								text: 'New File successfully added.',
+								title: 'สำเร็จ',
+								text: 'เพิ่มไฟล์ใหม่สำเร็จแล้ว',
 								timer: 1500,
 								showConfirmButton: false
 							}).then(function() {

@@ -70,9 +70,9 @@ class Action
 
 			if (rename($old_path, $new_path)) {
 				$this->add_log('Folder Updated', 'Folder name: ' . $name, $_SESSION['user_id']);
-				return json_encode(['status' => 1, 'msg' => 'Folder updated successfully']);
+				return json_encode(['status' => 1, 'msg' => 'อัปเดตโฟลเดอร์เรียบร้อยแล้ว']);
 			} else {
-				return json_encode(['status' => 2, 'msg' => 'Failed to rename folder in filesystem']);
+				return json_encode(['status' => 2, 'msg' => 'ไม่สามารถเปลี่ยนชื่อโฟลเดอร์ในระบบไฟล์ได้']);
 			}
 		}
 	}
@@ -150,15 +150,43 @@ class Action
 	function delete_file()
 	{
 		extract($_POST);
-		$file_details = $this->db->query("SELECT name, file_path FROM files WHERE files_id=" . $files_id)->fetch(PDO::FETCH_ASSOC);
-		$delete = $this->db->query("DELETE FROM files WHERE files_id =" . $files_id);
+
+		// Fetch file details including file_path
+		$stmt = $this->db->prepare("SELECT name, file_path FROM files WHERE files_id = :files_id");
+		$stmt->bindParam(':files_id', $files_id);
+		$stmt->execute();
+		$file_details = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		if (!$file_details) {
+			return json_encode(['status' => 0, 'msg' => 'File not found in database']);
+		}
+
+		// Construct the full file path
+		$full_file_path = 'uploads/' . $file_details['file_path'];
+
+		// Delete the file from the database
+		$delete_stmt = $this->db->prepare("DELETE FROM files WHERE files_id = :files_id");
+		$delete_stmt->bindParam(':files_id', $files_id);
+		$delete = $delete_stmt->execute();
+
 		if ($delete) {
-			$file_path = 'uploads/' . $file_details['file_path'];
-			if (file_exists($file_path)) {
-				unlink($file_path);
+			// If database deletion is successful, attempt to delete the file from the server
+			if (file_exists($full_file_path)) {
+				if (unlink($full_file_path)) {
+					$this->add_log('File Deleted', 'File name: ' . $file_details['name'], $_SESSION['user_id']);
+					return json_encode(['status' => 1, 'msg' => 'ลบไฟล์เรียบร้อยแล้ว']);
+				} else {
+					// File couldn't be deleted from the server
+					return json_encode(['status' => 2, 'msg' => 'ไฟล์ถูกลบออกจากฐานข้อมูล แต่ไม่สามารถลบออกจากเซิร์ฟเวอร์ได้']);
+				}
+			} else {
+				// File doesn't exist on server, but was removed from database
+				$this->add_log('File Deleted (DB only)', 'File name: ' . $file_details['name'], $_SESSION['user_id']);
+				return json_encode(['status' => 3, 'msg' => 'ไฟล์ถูกลบออกจากฐานข้อมูล แต่ไม่พบบนเซิร์ฟเวอร์']);
 			}
-			$this->add_log('File Deleted', 'File name: ' . $file_details['name'], $_SESSION['user_id']);
-			return 1;
+		} else {
+			// Database deletion failed
+			return json_encode(['status' => 0, 'msg' => 'ไม่สามารถลบไฟล์ออกจากฐานข้อมูล']);
 		}
 	}
 
@@ -178,17 +206,17 @@ class Action
 					$file_type = $_FILES['upload']['type'][$key];
 					$file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-					$extensions = array("jpeg", "jpg", "png", "gif", "pdf", "doc", "docx", "xls", "xlsx", "txt");
+					$extensions = array("jpeg", "jpg", "png", "gif", "pdf", "doc", "docx", "xls", "xlsx", "txt", 'xlsx', 'xls', 'xlsm', 'xlsb', 'xltm', 'xlt', 'xla', 'xlr', 'zip', 'rar', 'tar', 'kmz', 'dwg', 'psd', 'pdf', 'ps', 'eps', 'prn');
 
 					if (!in_array($file_ext, $extensions)) {
-						$upload_errors[] = "Extension not allowed: $file_name";
+						$upload_errors[] = "ไม่อนุญาตให้ขยายเวลา $file_name";
 						continue;
 					}
 
-					if ($file_size > 5242880) { // 5 MB file size limit
-						$upload_errors[] = "File size must be less than 5 MB: $file_name";
-						continue;
-					}
+					// if ($file_size > 5242880) { // 5 MB file size limit
+					// 	$upload_errors[] = "ขนาดไฟล์ต้องน้อยกว่า 5 MB $file_name";
+					// 	continue;
+					// }
 
 					$fname = strtotime(date("y-m-d H:i")) . '_' . $file_name;
 					$folder_path = $folders_id ? $this->get_folder_path($folders_id) : '';
@@ -207,19 +235,20 @@ class Action
 						$data .= ", description = '" . $description . "' ";
 						$data .= ", user_id = '" . $_SESSION['user_id'] . "' ";
 						$data .= ", file_type = '" . $file[1] . "' ";
-						$data .= ", file_path = '" . $fname . "' ";
+						// Store the full path (including folder path) or just the filename if not in a folder
+						$data .= ", file_path = '" . ($folder_path ? $folder_path . '/' : '') . $fname . "' ";
 						$data .= ", is_public = " . (isset($is_public) && $is_public == 'on' ? 1 : 0);
 
 						$save = $this->db->query("INSERT INTO files SET " . $data);
 						if ($save) {
-							$this->add_log('File Uploaded', 'File name: ' . $file[0], $_SESSION['user_id']);
+							$this->add_log('อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ ' . $file[0], $_SESSION['user_id']);
 						}
 					} else {
-						$upload_errors[] = "Failed to upload file: $file_name";
+						$upload_errors[] = "ล้มเหลวในการอัปโหลดไฟล์ $file_name";
 					}
 				}
 				if (empty($upload_errors)) {
-					return json_encode(array('status' => 1, 'msg' => 'Files uploaded successfully'));
+					return json_encode(array('status' => 1, 'msg' => 'อัปโหลดไฟล์เรียบร้อยแล้ว'));
 				} else {
 					return json_encode(array('status' => 2, 'msg' => implode("<br>", $upload_errors)));
 				}
@@ -264,36 +293,39 @@ class Action
 		$old_file = $old_file_query->fetch(PDO::FETCH_ASSOC);
 		$old_name = $old_file['name'];
 		$old_folders_id = $old_file['folders_id'];
+		$old_file_path = $old_file['file_path'];
 
 		// Get the folder path
 		$folder_path = $old_folders_id ? $this->get_folder_path($old_folders_id) : '';
-		$old_path = 'uploads/' . ($folder_path ? $folder_path . '/' : '') . $old_file['file_path'];
 
-		$new_file_name = $file_name . '.' . $file_type;
-		$new_path = 'uploads/' . ($folder_path ? $folder_path . '/' : '') . $new_file_name;
+		// Construct the full old and new file paths
+		$old_full_path = 'uploads/' . $old_file_path;
+		$new_file_name = strtotime(date("y-m-d H:i")) . '_' . $file_name . '.' . $file_type;
+		$new_file_path = ($folder_path ? $folder_path . '/' : '') . $new_file_name;
+		$new_full_path = 'uploads/' . $new_file_path;
 
 		// Attempt to rename the file in the filesystem
-		if (file_exists($old_path) && rename($old_path, $new_path)) {
+		if (file_exists($old_full_path) && rename($old_full_path, $new_full_path)) {
 			// Update the database with the new file name and path
 			$update = $this->db->prepare("UPDATE files SET name = :file_name, file_path = :file_path WHERE files_id = :files_id");
 			$update->bindParam(':file_name', $file_name);
-			$update->bindParam(':file_path', $new_file_name);
+			$update->bindParam(':file_path', $new_file_path);
 			$update->bindParam(':files_id', $files_id);
 
 			if ($update->execute()) {
 				$this->add_log('File Renamed', 'Old name: ' . $old_name . ', New name: ' . $file_name, $_SESSION['user_id']);
-				return json_encode(array('status' => 1, 'msg' => 'File renamed successfully', 'new_name' => $new_file_name));
+				return json_encode(array('status' => 1, 'msg' => 'เปลี่ยนชื่อไฟล์เรียบร้อยแล้ว', 'new_name' => $file_name . '.' . $file_type));
 			} else {
 				// Revert the file rename if database update fails
-				rename($new_path, $old_path);
-				return json_encode(array('status' => 2, 'msg' => 'Failed to update file name in database'));
+				rename($new_full_path, $old_full_path);
+				return json_encode(array('status' => 2, 'msg' => 'ไม่สามารถอัปเดตชื่อไฟล์ในฐานข้อมูลได้'));
 			}
 		} else {
 			// If the file doesn't exist or rename fails
-			if (!file_exists($old_path)) {
-				return json_encode(array('status' => 2, 'msg' => 'Old file does not exist'));
+			if (!file_exists($old_full_path)) {
+				return json_encode(array('status' => 2, 'msg' => 'ไฟล์เก่าไม่มีอยู่'));
 			} else {
-				return json_encode(array('status' => 2, 'msg' => 'Failed to rename file in filesystem'));
+				return json_encode(array('status' => 2, 'msg' => 'ไม่สามารถเปลี่ยนชื่อไฟล์ในระบบไฟล์'));
 			}
 		}
 	}

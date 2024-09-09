@@ -47,7 +47,6 @@ include('connect.php');
                     <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('employee\add_salary') ?>', '_parent')">เพิ่มเงินเดือน</button>
                 </div>
             </div>
-
         </div>
 
         <div class="card-body">

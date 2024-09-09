@@ -51,6 +51,8 @@
                                 text: resp.msg,
                                 icon: 'success',
                                 confirmButtonText: 'ตกลง'
+                            }).then(function() {
+                                window.location.href = "index.php?page=" + btoa('report_work/list_report');
                             });
                         } else {
                             Swal.fire({

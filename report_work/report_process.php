@@ -83,12 +83,7 @@ class ReportWork
                 $extensions = array("jpeg", "jpg", "png", "gif", "pdf", "doc", "docx", "xls", "xlsx", "txt");
 
                 if (!in_array($file_ext, $extensions)) {
-                    $upload_errors[] = "Extension not allowed: $file_name";
-                    continue;
-                }
-
-                if ($file_size > 5242880) { // 5 MB file size limit
-                    $upload_errors[] = "File size must be less than 5 MB: $file_name";
+                    $upload_errors[] = "ไม่อนุญาตให้ขยายเวลา $file_name";
                     continue;
                 }
 
@@ -110,12 +105,12 @@ class ReportWork
                         $this->add_log('File Uploaded', 'File name: ' . $file[0], $_SESSION['user_id']);
                     }
                 } else {
-                    $upload_errors[] = "Failed to upload file: $file_name";
+                    $upload_errors[] = "ไม่สามารถอัปโหลดไฟล์ $file_name";
                 }
             }
 
             if (empty($upload_errors)) {
-                return json_encode(['status' => 1, 'msg' => 'Files uploaded successfully']);
+                return json_encode(['status' => 1, 'msg' => 'อัปโหลดไฟล์เรียบร้อยแล้ว']);
             } else {
                 return json_encode(['status' => 2, 'msg' => implode("<br>", $upload_errors)]);
             }

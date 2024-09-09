@@ -25,8 +25,6 @@ function fetch_files($con, $folder_parent)
 $folders = fetch_folders($con, $folder_parent);
 $files = fetch_files($con, $folder_parent);
 
-// ... (HTML and JavaScript code remains mostly unchanged)
-
 ?>
 
 <!-- Begin Page Content -->
@@ -168,31 +166,14 @@ $files = fetch_files($con, $folder_parent);
     </div>
     <div id="menu-file-clone" style="display: none;">
       <a href="javascript:void(0)" class="custom-menu-list file-option edit"><span><i class="fa fa-edit"></i> </span>Rename</a>
+      <a href="javascript:void(0)" class="custom-menu-list file-option view"><span><i class="fa fa-eye"></i> </span>View</a>
       <a href="javascript:void(0)" class="custom-menu-list file-option download"><span><i class="fa fa-download"></i> </span>Download</a>
       <a href="javascript:void(0)" class="custom-menu-list file-option delete"><span><i class="fa fa-trash"></i> </span>Delete</a>
     </div>
   </div>
 </div>
 
-<!-- <div id="preloader"></div> -->
 <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
-
-<div class="modal fade" id="confirm_modal" role='dialog'>
-  <div class="modal-dialog modal-md" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">ยืนยัน</h5>
-      </div>
-      <div class="modal-body">
-        <div id="delete_content"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id='confirm' onclick="">ตกลง</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="modal fade" id="uni_modal" role='dialog'>
   <div class="modal-dialog modal-md" role="document">
@@ -225,11 +206,15 @@ $files = fetch_files($con, $folder_parent);
 
   $('.folder-item').bind("contextmenu", function(event) {
     event.preventDefault();
+    $('.file-item').removeClass('active');
+    $(this).addClass('active');
     $("div.custom-menu").hide();
-    var custom = $("<div class='custom-menu'></div>");
-    custom.append($('#menu-folder-clone').html());
+    var custom = $("<div class='custom-menu file'></div>");
+    custom.append($('#menu-file-clone').html());
     custom.find('.edit').attr('data-id', $(this).attr('data-id'));
+    custom.find('.view').attr('data-id', $(this).attr('data-id'));
     custom.find('.delete').attr('data-id', $(this).attr('data-id'));
+    custom.find('.download').attr('data-id', $(this).attr('data-id'));
     custom.appendTo("body");
     custom.css({
       top: event.pageY + "px",
@@ -242,7 +227,22 @@ $files = fetch_files($con, $folder_parent);
     });
     $("div.custom-menu .delete").click(function(e) {
       e.preventDefault();
-      _conf("ไฟล์ทั้งหมด และโฟลเดอร์ทั้งหมดก็จะถูกลบไปด้วย คุณแน่ใจที่จะลบโฟลเดอร์นี้หรือไม่?", 'delete_folder', [$(this).attr('data-id')]);
+      var folderId = $(this).attr('data-id');
+      var folderName = $('.folder-item[data-id="' + folderId + '"] .to_folder').text().trim();
+
+      Swal.fire({
+        title: 'คุณแน่ใจไหม?',
+        html: "คุณกำลังจะลบโฟลเดอร์ " + folderName + "<br>!! ไฟล์และโฟลเดอร์ย่อยทั้งหมดจะถูกลบด้วย !!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่ ต้องการลบ!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          delete_folder(folderId);
+        }
+      });
     });
   });
 
@@ -255,6 +255,7 @@ $files = fetch_files($con, $folder_parent);
     var custom = $("<div class='custom-menu file'></div>");
     custom.append($('#menu-file-clone').html());
     custom.find('.edit').attr('data-id', $(this).attr('data-id'));
+    custom.find('.view').attr('data-id', $(this).attr('data-id'));
     custom.find('.delete').attr('data-id', $(this).attr('data-id'));
     custom.find('.download').attr('data-id', $(this).attr('data-id'));
     custom.appendTo("body");
@@ -269,45 +270,66 @@ $files = fetch_files($con, $folder_parent);
       fileItem.find('b.to_file').hide();
       fileItem.find('input.rename_file').show();
     });
+
     $("div.file.custom-menu .delete").click(function(e) {
       e.preventDefault();
-      _conf("คุณแน่ใจหรือว่าจะลบไฟล์นี้?", 'delete_file', [$(this).attr('data-id')]);
+      var fileId = $(this).attr('data-id');
+      var fileName = $('.file-item[data-id="' + fileId + '"]').attr('data-name');
+
+      Swal.fire({
+        title: 'คุณแน่ใจไหม?',
+        text: "คุณกำลังจะลบไฟล์ " + fileName,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่ ต้องการลบ!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          delete_file(fileId);
+        }
+      });
     });
+
     $("div.file.custom-menu .download").click(function(e) {
       e.preventDefault();
       window.open('files/download.php?id=' + $(this).attr('data-id'));
     });
 
-    $('.rename_file').keypress(function(e) {
-      var _this = $(this);
-      if (e.which == 13) {
-        start_load();
-        $.ajax({
-          url: 'files/ajax.php?action=file_rename',
-          method: 'POST',
-          data: {
-            files_id: $(this).attr('data-id'),
-            name: $(this).val(),
-            type: $(this).attr('data-type'),
-            folders_id: '<?php echo $folder_parent ?>'
-          },
-          success: function(resp) {
-            if (typeof resp != 'undefined') {
-              resp = JSON.parse(resp);
-              if (resp.status == 1) {
-                _this.siblings('b.to_file').text(resp.new_name);
-                _this.hide();
-                _this.siblings('b.to_file').show();
-              }
-            }
-            setTimeout(function() {
-              location.reload();
-            }, 1000);
-          },
-          error: function() {
-            end_load();
-          }
+    $("div.file.custom-menu .view").click(function(e) {
+      e.preventDefault();
+      var fileId = $(this).attr('data-id');
+      var fileName = $('.file-item[data-id="' + fileId + '"]').attr('data-name');
+      var fileExtension = fileName.split('.').pop().toLowerCase();
+      var imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+      if (imageExtensions.includes(fileExtension)) {
+        // Open image viewer modal
+        var imageUrl = 'files/view.php?id=' + fileId;
+        var modal = $('<div class="modal fade" id="imageViewerModal" tabindex="-1" role="dialog" aria-labelledby="imageViewerModalLabel" aria-hidden="true">' +
+          '<div class="modal-dialog modal-lg" role="document">' +
+          '<div class="modal-content">' +
+          '<div class="modal-header">' +
+          '<h5 class="modal-title" id="imageViewerModalLabel">' + fileName + '</h5>' +
+          '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+          '<span aria-hidden="true">&times;</span>' +
+          '</button>' +
+          '</div>' +
+          '<div class="modal-body">' +
+          '<img src="' + imageUrl + '" class="img-fluid" alt="' + fileName + '">' +
+          '</div>' +
+          '</div>' +
+          '</div>' +
+          '</div>');
+
+        $('body').append(modal);
+        $('#imageViewerModal').modal('show');
+
+        $('#imageViewerModal').on('hidden.bs.modal', function(e) {
+          $(this).remove();
         });
+      } else {
+        alert('ไฟล์ประเภทนี้ไม่สามารถดูได้โดยตรง กรุณาดาวน์โหลดไฟล์เพื่อดูเนื้อหา');
       }
     });
   });
@@ -317,16 +339,19 @@ $files = fetch_files($con, $folder_parent);
       return false;
     uni_modal($(this).attr('data-name'), 'files/manage_files.php?<?php echo $folder_parent ?>&files_id=' + $(this).attr('data-id'));
   });
+
   $(document).bind("click", function(event) {
     $("div.custom-menu").hide();
     $('#file-item').removeClass('active');
   });
+
   $(document).keyup(function(e) {
     if (e.keyCode === 27) {
       $("div.custom-menu").hide();
       $('#file-item').removeClass('active');
     }
   });
+
   $(document).ready(function() {
     $('#search').keyup(function() {
       var _f = $(this).val().toLowerCase();
@@ -358,13 +383,28 @@ $files = fetch_files($con, $folder_parent);
       },
       success: function(resp) {
         if (resp == 1) {
-          setTimeout(function() {
+          Swal.fire(
+            'สำเร็จ',
+            'โฟลเดอร์ถูกลบแล้ว',
+            'success'
+          ).then(() => {
             location.reload();
-          }, 1500);
+          });
+        } else {
+          Swal.fire(
+            'ไม่สำเร็จ',
+            'เกิดข้อผิดพลาดขณะลบโฟลเดอร์',
+            'error'
+          );
         }
         end_load();
       },
       error: function() {
+        Swal.fire(
+          'ไม่สำเร็จ',
+          'เกิดข้อผิดพลาดขณะประมวลผลคำขอของคุณ',
+          'error'
+        );
         end_load();
       }
     });
@@ -378,21 +418,37 @@ $files = fetch_files($con, $folder_parent);
       data: {
         files_id: $files_id
       },
+      dataType: 'json',
       success: function(resp) {
-        if (resp == 1) {
-          setTimeout(function() {
+        if (resp.status == 1) {
+          Swal.fire(
+            'สำเร็จ',
+            resp.msg,
+            'success'
+          ).then(() => {
             location.reload();
-          }, 1500);
+          });
+        } else {
+          Swal.fire(
+            'Error',
+            resp.msg,
+            'error'
+          );
         }
         end_load();
       },
       error: function() {
+        Swal.fire(
+          'ไม่สำเร็จ',
+          'เกิดข้อผิดพลาดขณะลบไฟล์',
+          'error'
+        );
         end_load();
       }
     });
   }
 
-  //ลำดับหน้า
+  // Pagination
   $(document).ready(function() {
     var rowsPerPage = 20;
     var totalRows = $('tbody tr').length;
@@ -455,7 +511,7 @@ $files = fetch_files($con, $folder_parent);
     });
   });
 
-  //modal*************************************************************************************************************************
+  // Modal functions
   window.start_load = function() {
     $('body').prepend('<div id="preloader2"></div>')
   }
@@ -483,33 +539,8 @@ $files = fetch_files($con, $folder_parent);
       }
     })
   }
-  window._conf = function($msg = '', $func = '', $params = []) {
-    $('#confirm_modal #confirm').attr('onclick', $func + "(" + $params.join(',') + ")")
-    $('#confirm_modal .modal-body').html($msg)
-    $('#confirm_modal').modal('show')
-  }
-  window.alert_toast = function($msg = 'TEST', $bg = 'success') {
-    $('#alert_toast').removeClass('bg-success bg-danger bg-info bg-warning')
 
-    if ($bg == 'success')
-      $('#alert_toast').addClass('bg-success')
-    if ($bg == 'danger')
-      $('#alert_toast').addClass('bg-danger')
-    if ($bg == 'info')
-      $('#alert_toast').addClass('bg-info')
-    if ($bg == 'warning')
-      $('#alert_toast').addClass('bg-warning')
-    $('#alert_toast .toast-body').html($msg)
-    $('#alert_toast').toast({
-      delay: 3000
-    }).toast('show');
-  }
-  $(document).ready(function() {
-    $('#preloader').fadeOut('fast', function() {
-      $(this).remove();
-    })
-  })
-
+  // File and folder management
   $('#manage-files').submit(function(e) {
     e.preventDefault();
     start_load();
@@ -525,15 +556,22 @@ $files = fetch_files($con, $folder_parent);
         if (typeof resp != undefined) {
           resp = JSON.parse(resp);
           if (resp.status == 1) {
-            alert_toast("Files uploaded successfully", 'success');
-            setTimeout(function() {
+            Swal.fire(
+              'สำเร็จ',
+              "Files uploaded successfully",
+              'success'
+            ).then(() => {
               location.reload();
-            }, 1500);
+            });
           } else {
-            alert_toast(resp.msg, 'error');
-            end_load();
+            Swal.fire(
+              'Error',
+              resp.msg,
+              'error'
+            );
           }
         }
+        end_load();
       }
     });
   });
@@ -549,15 +587,22 @@ $files = fetch_files($con, $folder_parent);
         if (typeof resp != undefined) {
           resp = JSON.parse(resp);
           if (resp.status == 1) {
-            alert_toast(resp.msg, 'success');
-            setTimeout(function() {
+            Swal.fire(
+              'สำเร็จ',
+              resp.msg,
+              'success'
+            ).then(() => {
               location.reload();
-            }, 1500);
+            });
           } else {
-            alert_toast(resp.msg, 'error');
-            end_load();
+            Swal.fire(
+              'Error',
+              resp.msg,
+              'error'
+            );
           }
         }
+        end_load();
       }
     });
   });
@@ -579,13 +624,22 @@ $files = fetch_files($con, $folder_parent);
           if (typeof resp != undefined) {
             resp = JSON.parse(resp);
             if (resp.status == 1) {
-              alert_toast(resp.msg, 'success');
-              _this.siblings('b.to_file').text(resp.new_name);
-              _this.hide();
-              _this.siblings('b.to_file').show();
-              end_load();
+              Swal.fire(
+                'สำเร็จ',
+                resp.msg,
+                'success'
+              ).then(() => {
+                _this.siblings('b.to_file').text(resp.new_name);
+                _this.hide();
+                _this.siblings('b.to_file').show();
+                end_load();
+              });
             } else {
-              alert_toast(resp.msg, 'error');
+              Swal.fire(
+                'Error',
+                resp.msg,
+                'error'
+              );
               end_load();
             }
           }
