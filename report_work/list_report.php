@@ -13,8 +13,7 @@ function fetch_folders($con, $parent_id)
 function fetch_files($con, $folder_parent)
 {
   if ($folder_parent == 0) {
-    // Modified this query to exclude files with NULL folders_id
-    $stmt = $con->prepare("SELECT * FROM files WHERE folders_id IS NOT NULL ORDER BY files_date ASC");
+    $stmt = $con->prepare("SELECT * FROM files WHERE folders_id IS NOT NULL AND folders_id IS NULL ORDER BY files_date ASC");
   } else {
     $stmt = $con->prepare("SELECT * FROM files WHERE folders_id = :folders_id ORDER BY files_date ASC");
     $stmt->bindParam(':folders_id', $folder_parent, PDO::PARAM_INT);
@@ -62,10 +61,6 @@ $files = fetch_files($con, $folder_parent);
                             $("#paths").prepend("<a href=\"index.php?page=' . base64_encode('report_work/list_report') . '\">หน้าหลัก</a>/")
                             </script>';
             ?>
-          </div>
-          <div class="ml-auto">
-            <button class="btn btn-primary btn-sm" id="new_folder"><i class="fa fa-plus"></i> Add โฟลเดอร์</button>
-            <button class="btn btn-primary btn-sm" id="new_file"><i class="fa fa-upload"></i> Add ไฟล์</button>
           </div>
         </div>
         <hr>
