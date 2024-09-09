@@ -191,13 +191,13 @@ include('connect.php');
         });
 
         // sweetalert editForm
-        $('#editModal').on('submit', function(e) {
+        $('#editForm').on('submit', function(e) {
             e.preventDefault();
             var form = $(this);
 
             $.ajax({
                 type: "POST",
-                url: form.attr('action'),
+                url: 'employee/update_salary.php',
                 data: form.serialize(),
                 success: function(response) {
                     Swal.fire({

@@ -271,7 +271,7 @@
 
             $.ajax({
                 type: "POST",
-                url: form.attr('action'),
+                url: 'employee/update_employee.php', // ตรวจสอบ URL ว่าถูกต้อง
                 data: form.serialize(),
                 success: function(response) {
                     Swal.fire({
@@ -291,6 +291,7 @@
                 }
             });
         });
+
 
 
         $('#editModal').on('show.bs.modal', function(event) {

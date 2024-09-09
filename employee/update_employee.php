@@ -13,6 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_status = $_POST['employee_status'];
 
     try {
+        // เริ่มต้น transaction
+        $con->beginTransaction();
+
+        // SQL สำหรับอัปเดตข้อมูลพนักงาน
         $sql = "UPDATE employee 
             SET employee_name = :employee_name, 
                 employee_lastname = :employee_lastname, 
@@ -34,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindParam(':employee_status', $employee_status);
         $stmt->execute();
 
-
+        // บันทึก log การอัปเดต
         $stmtLog = $con->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
         $logStatus = 'Employee Updated';
         $logDetail = "Updated employee ID: $employee_id, Name: $employee_name $employee_lastname";
@@ -44,18 +48,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmtLog->bindParam(':user_id', $user_id);
         $stmtLog->execute();
 
+        // คอมมิต transaction เมื่อทำงานสำเร็จ
         $con->commit();
+
         echo json_encode(['success' => true]);
         exit();
     } catch (PDOException $e) {
+        // ยกเลิก transaction หากเกิดข้อผิดพลาด
         $con->rollBack();
         http_response_code(400);
         echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
         exit();
     }
-
-    $con = null;
-
-    header("Location: ../index.php?page=" . base64_encode('employee/list_employee'));
-    exit();
 }
+
+// ปิดการเชื่อมต่อฐานข้อมูล
+$con = null;
