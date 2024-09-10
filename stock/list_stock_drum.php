@@ -1,3 +1,6 @@
+<?php
+if ($_SESSION["lv"] == 0 || $_SESSION["lv"] == 1 || $_SESSION["lv"] == 2) {
+?>
     <!-- Begin Page Content -->
     <div class="container-fluid">
         <!-- List table -->
@@ -337,3 +340,10 @@
             });
         });
     </script>
+<?php
+} else {
+    echo '<script>
+    window.location.href = "index.php?page=' . base64_encode('home') . '";
+    </script>';
+}
+?>
