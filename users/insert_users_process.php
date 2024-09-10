@@ -32,12 +32,13 @@ if ($_SESSION["lv"] == 0) {
 
         $employee_id = $con->lastInsertId();
 
-        $sql = "INSERT INTO users(username, passW, lv, employee_id) 
-            VALUES (:username, :passW, :lv, :employee_id)";
+        $sql = "INSERT INTO users(username, passW, lv, status, employee_id) 
+            VALUES (:username, :passW, :lv,  :status, :employee_id)";
         $stmt = $con->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':passW', $hashed_password);
         $stmt->bindParam(':lv', $lv);
+        $stmt->bindParam(':status', $employee_status);
         $stmt->bindParam(':employee_id', $employee_id);
         $stmt->execute();
 
@@ -55,13 +56,10 @@ if ($_SESSION["lv"] == 0) {
         echo json_encode(['success' => true]);
         exit();
     } catch (PDOException $e) {
-        if ($con->inTransaction()) {
-            $con->rollBack();
-        }
-        echo '<script>
-        alert("เกิดข้อผิดพลาด: ' . $e->getMessage() . '");
-        history.back();
-        </script>';
+        $con->rollBack();
+        http_response_code(400);
+        echo json_encode(['success' => false]);
+        exit();
     }
     $con = null;
 } else {

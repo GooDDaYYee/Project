@@ -168,10 +168,13 @@ include('connect.php');
                 year: year
             },
             success: function(response) {
-                $('#table-container').html(response); // โหลดข้อมูลใน table-container
+                $('#table-container').html(response);
+                if (month == "1" && year == "1") {
+                    $('tbody').html("<tr><td colspan='9'>กรุณาเลือกเดือนและปี</td></tr>");
+                }
             },
             error: function(xhr, status, error) {
-                console.error('Error:', error); // ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
+                console.error('Error:', error);
             }
         });
     }
@@ -242,29 +245,32 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
     $month = $_GET['month'];
     $year = $_GET['year'];
 
-    $gregorian_year = $year + 543;
+    if ($month == "1" && $year == "1") {
+        echo "<tr><td colspan='9'>กรุณาเลือกเดือนและปี</td></tr>";
+    } else {
+        $gregorian_year = $year + 543;
 
-    $sql_filter = " WHERE MONTH(s.salary_date) = :month AND YEAR(s.salary_date) = :year AND DAY(s.salary_date) = 1";
-    $strsql = "SELECT s.*, 
-               DATE_FORMAT(s.salary_date, '%M') AS salary_month,
-               DATE_FORMAT(s.salary_date, '%Y') AS salary_year,
-               e.employee_name, 
-               e.employee_lastname 
-               FROM salary s
-               INNER JOIN employee e ON s.employee_id = e.employee_id"
-        . $sql_filter . " ORDER BY s.salary_id ASC";
+        $sql_filter = " WHERE MONTH(s.salary_date) = :month AND YEAR(s.salary_date) = :year AND DAY(s.salary_date) = 1";
+        $strsql = "SELECT s.*, 
+                   DATE_FORMAT(s.salary_date, '%M') AS salary_month,
+                   DATE_FORMAT(s.salary_date, '%Y') AS salary_year,
+                   e.employee_name, 
+                   e.employee_lastname 
+                   FROM salary s
+                   INNER JOIN employee e ON s.employee_id = e.employee_id"
+            . $sql_filter . " ORDER BY s.salary_id ASC";
 
-    $stmt = $con->prepare($strsql);
-    $stmt->bindParam(':month', $month, PDO::PARAM_INT);
-    $stmt->bindParam(':year', $gregorian_year, PDO::PARAM_INT);
-    $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $rowcount = count($result);
+        $stmt = $con->prepare($strsql);
+        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+        $stmt->bindParam(':year', $gregorian_year, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rowcount = count($result);
 
-    if ($rowcount > 0) {
-        $i = 1;
-        foreach ($result as $rs) {
-            echo '<tr>
+        if ($rowcount > 0) {
+            $i = 1;
+            foreach ($result as $rs) {
+                echo '<tr>
                     <th scope="row">' . $i . '</th>
                     <td>' . $rs['employee_name'] . '</td>
                     <td>' . $rs['employee_lastname'] . '</td>
@@ -286,12 +292,12 @@ if (isset($_GET['month']) && isset($_GET['year'])) {
                         </div>
                     </td>
                   </tr>';
-            $i++;
+                $i++;
+            }
+            echo '</tbody></table>';
+        } else {
+            echo "<tr><td colspan='9'>ไม่พบข้อมูล</td></tr>";
         }
-        echo '</tbody>
-            </table>';
-    } else {
-        echo "<tr><td colspan='9'>ไม่พบข้อมูล</td></tr>";
     }
 } else {
     echo "<tr><td colspan='9'>กรุณาเลือกเดือนและปี</td></tr>";

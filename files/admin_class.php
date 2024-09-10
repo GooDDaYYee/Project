@@ -47,7 +47,7 @@ class Action
 
 			if (!file_exists($full_path) && mkdir($full_path, 0755, true)) {
 				$this->add_log('Folder Created', 'Folder name: ' . $name, $_SESSION['user_id']);
-				return json_encode(['status' => 1, 'msg' => 'Folder created successfully']);
+				return json_encode(['status' => 1, 'msg' => 'สร้างโฟลเดอร์สำเร็จแล้ว']);
 			} else {
 				$this->db->prepare("DELETE FROM folders WHERE folders_id = ?")->execute([$new_folder_id]);
 				return json_encode(['status' => 2, 'msg' => 'กรุณาใส่ชื่อโฟลเดอร์']);

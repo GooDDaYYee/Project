@@ -21,6 +21,15 @@
                                 <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*">
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <div class="col">
+                                <label for="images" class="form-label">เลือกกลุ่มไลน์:</label>
+                                <select class="form-control" id="group" name="group">
+                                    <option value="1">PSNK กลุ่ม 1</option>
+                                    <option value="2">PSNK กลุ่ม 2</option>
+                                </select>
+                            </div>
+                        </div>
                         <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-4 container" id="insert_users" type="submit">
                             <h5>เพิ่มข้อมูล</h5>
                         </button>
@@ -34,17 +43,31 @@
     $(document).ready(function() {
         $('#report_work').submit(function(e) {
             e.preventDefault();
-            var formData = new FormData(this); // ใช้ FormData เพื่อรองรับไฟล์
+
+            // ตรวจสอบข้อมูลก่อนส่ง
+            var jobname = $('#jobname').val().trim();
+            if (jobname === '') {
+                Swal.fire({
+                    title: 'ข้อผิดพลาด!',
+                    text: 'กรุณากรอกชื่องาน',
+                    icon: 'warning',
+                    confirmButtonText: 'ตกลง'
+                });
+                return;
+            }
+
+            var formData = new FormData(this);
 
             $.ajax({
                 url: 'report_work/report_process.php',
                 method: 'POST',
                 data: formData,
-                contentType: false, // ต้องระบุ false เพื่อป้องกันการแปลงค่า FormData
+                contentType: false,
                 processData: false,
+                dataType: 'json',
                 success: function(resp) {
-                    if (typeof resp != undefined) {
-                        resp = JSON.parse(resp);
+                    console.log('Response:', resp);
+                    if (resp && resp.status) {
                         if (resp.status == 1) {
                             Swal.fire({
                                 title: 'สำเร็จ!',
@@ -62,12 +85,25 @@
                                 confirmButtonText: 'ตกลง'
                             });
                         }
+                    } else {
+                        console.error('การตอบสนองไม่ถูกต้อง:', resp);
+                        Swal.fire({
+                            title: 'ข้อผิดพลาด!',
+                            text: 'เกิดข้อผิดพลาดที่ไม่รู้จัก: ' + JSON.stringify(resp),
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
                     }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
+                error: function(xhr, status, error) {
+                    console.error('ข้อผิดพลาด Ajax:', status, error);
+                    console.error('ข้อความตอบกลับ:', xhr.responseText);
+                    Swal.fire({
+                        title: 'ข้อผิดพลาด!',
+                        text: 'เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error,
+                        icon: 'error',
+                        confirmButtonText: 'ตกลง'
+                    });
                 }
             });
         });

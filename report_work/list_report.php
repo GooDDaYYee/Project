@@ -32,7 +32,7 @@ $files = fetch_files($con, $folder_parent);
   <!-- List table -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-      <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการไฟล์
+      <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;รายการปฏิบัติงาน
       <!-- Topbar Search -->
       <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group">
@@ -195,7 +195,7 @@ $files = fetch_files($con, $folder_parent);
     uni_modal('', 'files/manage_files.php?fid=<?php echo $folder_parent ?>');
   });
   $('.folder-item').dblclick(function() {
-    var encodedPage = btoa('files/files');
+    var encodedPage = btoa('report_work/list_report');
     var encodedFid = btoa($(this).attr('data-id'));
     location.href = 'index.php?page=' + encodedPage + '&fid=' + encodedFid;
   });
