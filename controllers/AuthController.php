@@ -15,7 +15,7 @@ class AuthController extends BaseController
             header("Location: index.php?page=home");
             exit();
         }
-        
+
         $pageTitle = 'เข้าสู่ระบบ - PSNK Telecom';
         $this->render('auth/login', ['pageTitle' => $pageTitle], false);
     }
@@ -23,7 +23,7 @@ class AuthController extends BaseController
     public function login()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return $this->jsonResponse(false, 'Invalid request method', 405);
+            return $this->errorResponse('Invalid request method', null, 405);
         }
 
         $username = $_POST['username'] ?? '';
@@ -31,7 +31,7 @@ class AuthController extends BaseController
         $rememberMe = isset($_POST['rememberMe']) ? filter_var($_POST['rememberMe'], FILTER_VALIDATE_BOOLEAN) : false;
 
         if (empty($username) || empty($password)) {
-            return $this->jsonResponse(false, 'ข้อมูลไม่ครบถ้วน');
+            return $this->errorResponse('ข้อมูลไม่ครบถ้วน', null, 400);
         }
 
         try {
@@ -44,12 +44,12 @@ class AuthController extends BaseController
                 if (password_verify($password, $user['passW'])) {
                     $this->setSession($user, $rememberMe);
                     $this->logAction($user['user_id'], 'Login', 'User logged in');
-                    $this->jsonResponse(true, 'OK');
+                    return $this->successResponse('Login successful');
                 }
             }
-            return $this->jsonResponse(false, 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+            return $this->errorResponse('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', null, 401);
         } catch (PDOException $e) {
-            return $this->jsonResponse(false, 'Error login: ' . $e->getMessage());
+            return $this->errorResponse('เกิดข้อผิดพลาดในการเข้าสู่ระบบ', null, 500);
         }
     }
 
@@ -65,7 +65,7 @@ class AuthController extends BaseController
     public function forgotPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $this->processForgotPassword();
+            return $this->processForgotPassword();
         } else {
             $pageTitle = 'ลืมรหัสผ่าน - PSNK Telecom';
             $this->render('auth/forgot_password', ['pageTitle' => $pageTitle], false);
@@ -74,51 +74,45 @@ class AuthController extends BaseController
 
     private function processForgotPassword()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = $_POST['email'] ?? '';
-            $phone = $_POST['phone'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $phone = $_POST['phone'] ?? '';
 
-            if (empty($email) || empty($phone)) {
-                return $this->jsonResponse(false, 'ข้อมูลไม่ครบถ้วน');
-            }
-
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                return $this->jsonResponse(false, 'อีเมลไม่ถูกต้อง');
-            }
-
-            if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
-                return $this->jsonResponse(false, 'เบอร์โทรศัพท์ไม่ถูกต้อง');
-            }
-
-            try {
-                $employee = $this->getEmployeeByEmail($email);
-                if (!$employee) {
-                    return $this->jsonResponse(false, 'ไม่พบอีเมลนี้ในระบบพนักงาน');
-                }
-
-                $user = $this->getUserByEmployeeId($employee['employee_id']);
-                if (!$user) {
-                    return $this->jsonResponse(false, 'ไม่พบพนักงานนี้ในระบบผู้ใช้');
-                }
-
-                $newPassword = $this->generateRandomPassword();
-                $this->updateUserPassword($user['employee_id'], $newPassword);
-
-                $this->sendPasswordResetEmail($email, $newPassword);
-
-                $logDetail = "Password reset for User: {$user['username']}, Email: {$email}";
-                $this->logAction($user['user_id'], 'Reset Password', $logDetail);
-
-                return $this->jsonResponse(true, 'รหัสผ่านใหม่ถูกส่งไปยังอีเมลของคุณแล้ว');
-            } catch (Exception $e) {
-                $this->logError('Error during password reset: ' . $e->getMessage());
-                return $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน');
-            }
+        if (empty($email) || empty($phone)) {
+            return $this->errorResponse('ข้อมูลไม่ครบถ้วน', null, 400);
         }
 
-        return $this->jsonResponse(false, 'Invalid request method');
-    }
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->errorResponse('อีเมลไม่ถูกต้อง', null, 400);
+        }
 
+        if (!preg_match('/^[0-9]{10,15}$/', $phone)) {
+            return $this->errorResponse('เบอร์โทรศัพท์ไม่ถูกต้อง', null, 400);
+        }
+
+        try {
+            $employee = $this->getEmployeeByEmail($email);
+            if (!$employee) {
+                return $this->errorResponse('ไม่พบอีเมลนี้ในระบบพนักงาน', null, 404);
+            }
+
+            $user = $this->getUserByEmployeeId($employee['employee_id']);
+            if (!$user) {
+                return $this->errorResponse('ไม่พบพนักงานนี้ในระบบผู้ใช้', null, 404);
+            }
+
+            $newPassword = $this->generateRandomPassword();
+            $this->updateUserPassword($user['employee_id'], $newPassword);
+
+            $this->sendPasswordResetEmail($email, $newPassword);
+
+            $logDetail = "Password reset for User: {$user['username']}, Email: {$email}";
+            $this->logAction($user['user_id'], 'Reset Password', $logDetail);
+
+            return $this->successResponse('รหัสผ่านใหม่ถูกส่งไปยังอีเมลของคุณแล้ว');
+        } catch (Exception $e) {
+            return $this->errorResponse('เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน', null, 500);
+        }
+    }
 
     private function setSession($user, $rememberMe)
     {
@@ -182,13 +176,7 @@ class AuthController extends BaseController
 
             $mail->send();
         } catch (Exception $e) {
-            $this->logError('Error sending password reset email: ' . $e->getMessage());
             throw new Exception('Unable to send password reset email');
         }
-    }
-
-    private function logError($message)
-    {
-        error_log($message);
     }
 }

@@ -22,10 +22,44 @@ abstract class BaseController
         }
     }
 
-    protected function jsonResponse($success, $message, $code = 200) {
-        http_response_code($code);
-        echo json_encode(['success' => $success, 'message' => $message]);
+    protected function jsonResponse($success, $message, $data = null, $statusCode = 200)
+    {
+        $response = [
+            'success' => $success,
+            'message' => $message,
+            'status' => $statusCode,
+            'timestamp' => time(),
+        ];
+
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+
+        header('Content-Type: application/json; charset=utf-8');
+        http_response_code($statusCode);
+
+        echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         exit();
+    }
+
+    protected function successResponse($message, $data = null, $statusCode = 200)
+    {
+        $this->jsonResponse(true, $message, $data, $statusCode);
+    }
+
+    protected function errorResponse($message, $data = null, $statusCode = 400)
+    {
+        $this->jsonResponse(false, $message, $data, $statusCode);
+    }
+
+    protected function notFoundResponse($message = 'Resource not found')
+    {
+        $this->errorResponse($message, null, 404);
+    }
+
+    protected function validationErrorResponse($errors, $message = 'Validation failed')
+    {
+        $this->errorResponse($message, ['errors' => $errors], 422);
     }
 
     protected function getFileIcon($fileType)
@@ -72,10 +106,18 @@ abstract class BaseController
     {
         $timestamp = strtotime($date);
         $thai_month = array(
-            1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
-            4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
-            7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
-            10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
+            1 => "มกราคม",
+            2 => "กุมภาพันธ์",
+            3 => "มีนาคม",
+            4 => "เมษายน",
+            5 => "พฤษภาคม",
+            6 => "มิถุนายน",
+            7 => "กรกฎาคม",
+            8 => "สิงหาคม",
+            9 => "กันยายน",
+            10 => "ตุลาคม",
+            11 => "พฤศจิกายน",
+            12 => "ธันวาคม"
         );
         $thai_month_num = date('n', $timestamp);
         return date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . (date('Y', $timestamp) + 543);
