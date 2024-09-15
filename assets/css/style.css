@@ -1,0 +1,238 @@
+/* Login Page */
+#login-page {
+  font-family: "Mitr";
+  font-size: 22px;
+  background-image: url("../img/background-login.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#login-page .container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#login-page .btn-warning {
+  border: 1px solid #8a2be2;
+}
+
+#login-page .bg-gradient-purple {
+  background-color: #8a2be2;
+}
+
+#login-page table {
+  text-align: center;
+}
+
+#login-page .warning {
+  color: #ffc404;
+}
+
+#login-page h1 {
+  font-size: 100px;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* ส่วนโหลด */
+#preloader,
+#preloader2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+}
+
+#preloader2 {
+  background: #ffffff82;
+}
+
+#preloader:before,
+#preloader2:before {
+  content: "";
+  position: fixed;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  border: 6px solid #1977cc;
+  border-top-color: #d1e6f9;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: animate-preloader 1s linear infinite;
+  animation: animate-preloader 1s linear infinite;
+}
+
+@-webkit-keyframes animate-preloader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate-preloader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#editModal {
+  background-color: transparent;
+}
+
+/* สิ้นสุดส่วนโหลด */
+
+.btn-warning {
+  border: 1px solid #8a2be2;
+}
+
+.bg-gradient-purple {
+  background-color: #8a2be2;
+}
+
+.bg-gradient-purple2 {
+  background-color: #8a2be2;
+  padding: 10px;
+  border: 1px solid #8a2be2;
+  border-radius: 10px;
+}
+
+body {
+  font-family: "Mitr";
+  font-size: 16px;
+  background-color: #f8f9fc;
+}
+
+table {
+  text-align: center;
+}
+
+.warning {
+  color: #ffc404;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.folder-item {
+  cursor: pointer;
+}
+
+.folder-item:hover {
+  background: #eaeaea;
+  color: black;
+  box-shadow: 3px 3px #0000000f;
+}
+
+.custom-menu {
+  z-index: 1000;
+  position: absolute;
+  background-color: #ffffff;
+  border: 1px solid #0000001c;
+  border-radius: 5px;
+  padding: 8px;
+  min-width: 13vw;
+}
+
+a.custom-menu-list {
+  width: 100%;
+  display: flex;
+  color: #4c4b4b;
+  font-weight: 600;
+  font-size: 1em;
+  padding: 1px 11px;
+}
+
+.file-item {
+  cursor: pointer;
+}
+
+.file-item:hover {
+  background: #eaeaea;
+  color: black;
+  box-shadow: 3px 3px #0000000f;
+}
+
+a.custom-menu-list:hover,
+.file-item:hover,
+.file-item.active {
+  background: #80808024;
+}
+
+a.custom-menu-list span.icon {
+  width: 1em;
+  margin-right: 5px;
+}
+
+span.card-icon {
+  position: absolute;
+  font-size: 3em;
+  bottom: 0.2em;
+  color: #ffffff80;
+}
+
+.container {
+  justify-content: center;
+  /* ปรับให้ container มีความสูงเต็มหน้าจอ */
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#content-wrapper {
+  height: 100%;
+  overflow-y: auto; /* เปิดการเลื่อนเฉพาะใน content-wrapper */
+}
+
+.content-container {
+  padding: 20px;
+}
