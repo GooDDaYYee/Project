@@ -23,7 +23,7 @@
                             <th scope="col">Cable ใช้ไป</th>
                             <th scope="col">Drum</th>
                             <th scope="col">ใช้กับบริษัท</th>
-                            <th scope="col"> </th>
+                            <th scope="col">การดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>

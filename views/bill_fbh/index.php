@@ -24,7 +24,7 @@
               <th scope="col">Final BOQ 100%</th>
               <th scope="col">VAT 7%</th>
               <th scope="col">GRAND Total</th>
-              <th scope="col"> </th>
+              <th scope="col">การดำเนินการ</th>
             </tr>
           </thead>
           <tbody>
