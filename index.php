@@ -25,6 +25,10 @@ switch ($page) {
         require_once 'controllers/HomeController.php';
         $controller = new HomeController();
         break;
+    case 'manage-file':
+        require_once 'controllers/ManageFileController.php';
+        $controller = new ManageFileController();
+        break;
     case 'bill-mixed':
         require_once 'controllers/BillMixedController.php';
         $controller = new BillMixedController();
@@ -64,10 +68,6 @@ switch ($page) {
     case 'log':
         require_once 'controllers/LogController.php';
         $controller = new LogController();
-        break;
-    case 'elFinder':
-        require_once 'controllers/elFinderController.php';
-        $controller = new elFinderController();
         break;
     default:
         $pageTitle = '404 - Page Not Found';

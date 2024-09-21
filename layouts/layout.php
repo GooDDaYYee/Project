@@ -18,6 +18,15 @@
     <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
 
+    <!-- Custom CSS import via Controller -->
+    <?php
+    if (isset($customCSS) && is_array($customCSS)) {
+        foreach ($customCSS as $css) {
+            echo "<link rel='stylesheet' href=\"$css\">\n";
+        }
+    }
+    ?>
+
     <!-- Javascript Import -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -27,8 +36,8 @@
 
     <!-- Custom javascript import via Controller -->
     <?php
-    if (isset($customJs) && is_array($customJs)) {
-        foreach ($customJs as $js) {
+    if (isset($customJS) && is_array($customJS)) {
+        foreach ($customJS as $js) {
             echo "<script src=\"$js\"></script>\n";
         }
     }

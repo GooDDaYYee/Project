@@ -26,7 +26,7 @@ function isActive($page)
                 <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
                 <a class="collapse-item <?php isActive('home') ?>" href="index.php?page=home">&nbsp; แชร์ไฟล์</a>
                 <?php if (in_array($_SESSION["lv"], [0, 1, 2])): ?>
-                    <a class="collapse-item <?php isActive('export_pdf') ?>" href="index.php?page=elFinder">&nbsp; จัดการไฟล์</a>
+                    <a class="collapse-item <?php isActive('manage-file') ?>" href="index.php?page=manage-file">&nbsp; จัดการไฟล์</a>
                 <?php endif; ?>
             </div>
 
