@@ -396,42 +396,44 @@
       return auIds.length !== uniqueAuIds.length;
     }
 
+    // sweetalert delete bill
     $('.delete-btn').click(function() {
-      const billId = $(this).data('id');
-      if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
-        $.ajax({
-          url: 'index.php?page=bill-fbh&action=deleteBill',
-          method: 'POST',
-          data: {
-            bill_id: billId
-          },
-          dataType: 'json',
-          success: function(response) {
-            if (response.success) {
-              Swal.fire({
-                icon: 'success',
-                title: 'ลบสำเร็จ',
-                text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
-              }).then(() => {
-                location.reload();
-              });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'ไม่สำเร็จ',
-                text: response.message,
-              });
+      var bill_id = $(this).data('id');
+
+      Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: 'index.php?page=bill-fbh&action=deleteBill',
+            method: 'POST',
+            data: {
+              bill_id: bill_id
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
+                  .then(() => {
+                    location.reload();
+                  });
+              } else {
+                Swal.fire('ไม่สำเร็จ', response.message, 'error');
+              }
+            },
+            error: function() {
+              Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
             }
-          },
-          error: function() {
-            Swal.fire({
-              icon: 'error',
-              title: 'ไม่สำเร็จ',
-              text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-            });
-          }
-        });
-      }
+          });
+        }
+      });
     });
 
     $('.pdf-btn').click(function() {

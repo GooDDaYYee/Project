@@ -58,66 +58,68 @@
 </div>
 
 <!-- Edit Drum Modal -->
-<div class="modal" id="editDrumModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="editDrumModalLabel">แก้ไขงาน</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form id="editDrumForm">
-                <input type="hidden" id="edit_drum_id" name="edit_drum_id">
-                <div class="form-group">
-                    <label for="edit_drum_no">Drum Number</label>
-                    <input type="text" id="edit_drum_no" name="edit_drum_no" class="form-control" required>
-                    <p id="edit_drum_no_notice" style="display: none; color: red;"></p>
-                </div>
-                <div class="form-group">
-                    <label for="edit_drum_to">Drum To</label>
-                    <input type="text" id="edit_drum_to" name="edit_drum_to" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit_drum_description">Description</label>
-                    <input type="text" id="edit_drum_description" name="edit_drum_description" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit_drum_company">รับจากบริษัท</label>
-                    <select class="form-control" id="edit_drum_company" name="edit_drum_company">
-                        <option value="">เลือกบริษัท</option>
-                        <option value="Mixed">Mixed</option>
-                        <option value="FIBERHOME">FIBERHOME</option>
-                        <option value="FBH">FBH</option>
-                        <option value="CCS">CCS</option>
-                        <option value="W&W">W&W</option>
-                        <option value="TKI">TKI</option>
-                        <option value="MTE">MTE</option>
-                        <option value="Poonsub">Poonsub</option>
-                    </select>
-                    <p id="edit_drum_company_notice" style="display: none; color: red;"></p>
-                </div>
-                <div class="form-group">
-                    <label for="edit_drum_cable_company">บริษัทผลิตสาย</label>
-                    <select class="form-control" id="edit_drum_cable_company" name="edit_drum_cable_company">
-                        <option value="">เลือกบริษัท</option>
-                        <option value="FUTONG">FUTONG</option>
-                        <option value="FIBERHOME">FIBERHOME</option>
-                        <option value="TICC">TICC</option>
-                        <option value="TUC">TUC</option>
-                    </select>
-                    <p id="edit_drum_cable_company_notice" style="display: none; color: red;"></p>
-                </div>
-                <div class="form-group">
-                    <label for="edit_drum_full">Drum เต็ม</label>
-                    <input type="number" id="edit_drum_full" name="edit_drum_full" class="form-control" required>
-                    <p id="edit_drum_full_notice" style="display: none; color: red;"></p>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
-            <button type="button" class="btn btn-warning bg-gradient-purple" id="saveEditDrum">บันทึกการแก้ไข</button>
+<div class="modal fade" id="editDrumModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-custom-size" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDrumModalLabel">แก้ไขงาน</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editDrumForm">
+                    <input type="hidden" id="edit_drum_id" name="edit_drum_id">
+                    <div class="form-group">
+                        <label for="edit_drum_no">Drum Number</label>
+                        <input type="text" id="edit_drum_no" name="edit_drum_no" class="form-control" required>
+                        <p id="edit_drum_no_notice" style="display: none; color: red;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_drum_to">Drum To</label>
+                        <input type="text" id="edit_drum_to" name="edit_drum_to" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_drum_description">Description</label>
+                        <input type="text" id="edit_drum_description" name="edit_drum_description" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_drum_company">รับจากบริษัท</label>
+                        <select class="form-control" id="edit_drum_company" name="edit_drum_company">
+                            <option value="">เลือกบริษัท</option>
+                            <option value="Mixed">Mixed</option>
+                            <option value="FIBERHOME">FIBERHOME</option>
+                            <option value="FBH">FBH</option>
+                            <option value="CCS">CCS</option>
+                            <option value="W&W">W&W</option>
+                            <option value="TKI">TKI</option>
+                            <option value="MTE">MTE</option>
+                            <option value="Poonsub">Poonsub</option>
+                        </select>
+                        <p id="edit_drum_company_notice" style="display: none; color: red;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_drum_cable_company">บริษัทผลิตสาย</label>
+                        <select class="form-control" id="edit_drum_cable_company" name="edit_drum_cable_company">
+                            <option value="">เลือกบริษัท</option>
+                            <option value="FUTONG">FUTONG</option>
+                            <option value="FIBERHOME">FIBERHOME</option>
+                            <option value="TICC">TICC</option>
+                            <option value="TUC">TUC</option>
+                        </select>
+                        <p id="edit_drum_cable_company_notice" style="display: none; color: red;"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_drum_full">Drum เต็ม</label>
+                        <input type="number" id="edit_drum_full" name="edit_drum_full" class="form-control" required>
+                        <p id="edit_drum_full_notice" style="display: none; color: red;"></p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-warning bg-gradient-purple" id="saveEditDrum">บันทึกการแก้ไข</button>
+            </div>
         </div>
     </div>
 </div>
@@ -170,7 +172,7 @@
         $('#saveEditDrum').click(function() {
             var formData = $('#editDrumForm').serialize();
             $.ajax({
-                url: 'index.php?action=updateDrum',
+                url: 'index.php?page=stock-drum&action=updateDrum',
                 method: 'POST',
                 data: formData,
                 dataType: 'json',
@@ -267,7 +269,7 @@
         $('.edit-drum').click(function() {
             var drumId = $(this).data('id');
             $.ajax({
-                url: 'index.php?action=getDrumDetails',
+                url: 'index.php?page=stock-drum&action=getDrumDetails',
                 method: 'GET',
                 data: {
                     drum_id: drumId

@@ -154,16 +154,55 @@
             });
         });
 
+        function editCable(cableId, routeName, installedSection, placingTeam, cableForm, cableTo, cableUsed, drumNo, cableWork) {
+            $('#editCableId').val(cableId);
+            $('#editRoute').val(routeName);
+            $('#editSection').val(installedSection);
+            $('#editTeam').val(placingTeam);
+            $('#editCableFrom').val(cableForm);
+            $('#editCableTo').val(cableTo);
+            $('#editCableWork').val(cableWork);
+            $('#editDrumNo').val(drumNo);
+
+            $('#editCableModal').modal('show');
+        }
+
         $('.edit-cable').click(function() {
             var cableId = $(this).data('id');
-            // Fetch cable details and populate the form
-            // You'll need to implement this AJAX call
+            $.ajax({
+                url: 'index.php?page=stock-cable&action=updateCable',
+                method: 'GET',
+                data: {
+                    cableId: cableId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        editCable(
+                            response.cable.cable_id,
+                            response.cable.route_name,
+                            response.cable.installed_section,
+                            response.cable.placing_team,
+                            response.cable.cable_form,
+                            response.cable.cable_to,
+                            response.cable.cable_used,
+                            response.cable.drum_no,
+                            response.cable.cable_work
+                        );
+                    } else {
+                        Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Cable ได้', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+                }
+            });
         });
 
         $('#saveEditCable').click(function() {
             var formData = $('#editCableForm').serialize();
             $.ajax({
-                url: 'index.php?action=updateCable',
+                url: 'index.php?page=stock-cable&action=updateCable',
                 method: 'POST',
                 data: formData,
                 dataType: 'json',
