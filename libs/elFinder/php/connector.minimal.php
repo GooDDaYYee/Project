@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 error_reporting(0); // Set E_ALL for debuging
 
 // // Optional exec path settings (Default is called with command name only)
@@ -174,6 +174,8 @@ $opts = array(
 		),
 	)
 );
+
+$opts['session'] = session_id();
 
 // run elFinder
 $connector = new elFinderConnector(new elFinder($opts));

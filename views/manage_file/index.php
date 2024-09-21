@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <div class="mx-4 my-4">
     <div id="elfinder"></div>
 </div>
