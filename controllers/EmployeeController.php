@@ -6,7 +6,7 @@ class EmployeeController extends BaseController
     public function index()
     {
         $employees = $this->fetchEmployees();
-        
+
         $data = [
             'employees' => $employees,
         ];
@@ -23,7 +23,7 @@ class EmployeeController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching employees: " . $e->getMessage());
+            error_log("เกิดข้อผิดพลาดในการเรียกข้อมูลพนักงาน: " . $e->getMessage());
             return [];
         }
     }
@@ -62,9 +62,9 @@ class EmployeeController extends BaseController
                     ':status' => $status,
                     ':employee_id' => $employee_id
                 ]);
-                echo json_encode(['success' => true, 'message' => 'Employee updated successfully']);
+                echo json_encode(['success' => true, 'message' => 'อัปเดตพนักงานเรียบร้อยแล้ว']);
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error updating employee: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการอัปเดตพนักงาน: ' . $e->getMessage()]);
             }
         }
     }
@@ -86,10 +86,10 @@ class EmployeeController extends BaseController
                 $stmt->execute([':employee_id' => $employee_id]);
 
                 $this->db->commit();
-                echo json_encode(['success' => true, 'message' => 'Employee deleted successfully']);
+                echo json_encode(['success' => true, 'message' => 'ลบพนักงานเรียบร้อยแล้ว']);
             } catch (PDOException $e) {
                 $this->db->rollBack();
-                echo json_encode(['success' => false, 'message' => 'Error deleting employee: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบพนักงาน: ' . $e->getMessage()]);
             }
         }
     }
@@ -102,17 +102,17 @@ class EmployeeController extends BaseController
                 $stmt = $this->db->prepare("SELECT * FROM employee WHERE employee_id = :employee_id");
                 $stmt->execute([':employee_id' => $employee_id]);
                 $employee = $stmt->fetch(PDO::FETCH_ASSOC);
-                
+
                 if ($employee) {
                     echo json_encode(['success' => true, 'employee' => $employee]);
                 } else {
                     echo json_encode(['success' => false, 'message' => 'Employee not found']);
                 }
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error fetching employee details: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการเรียกรายละเอียดพนักงาน: ' . $e->getMessage()]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            echo json_encode(['success' => false, 'message' => 'คำขอไม่ถูกต้อง']);
         }
     }
 

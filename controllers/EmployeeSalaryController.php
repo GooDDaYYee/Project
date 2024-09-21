@@ -186,9 +186,9 @@ class EmployeeSalaryController extends BaseController
                     ':total_salary' => $total_salary,
                     ':salary_id' => $salary_id
                 ]);
-                echo json_encode(['success' => true, 'message' => 'Salary updated successfully', 'total_salary' => $total_salary]);
+                echo json_encode(['success' => true, 'message' => 'อัพเดตเงินเดือนเรียบร้อยแล้ว', 'total_salary' => $total_salary]);
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error updating salary: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการอัปเดตเงินเดือน: ' . $e->getMessage()]);
             }
         }
     }
@@ -201,9 +201,9 @@ class EmployeeSalaryController extends BaseController
             try {
                 $stmt = $this->db->prepare("DELETE FROM salary WHERE salary_id = :salary_id");
                 $stmt->execute([':salary_id' => $salary_id]);
-                echo json_encode(['success' => true, 'message' => 'Salary deleted successfully']);
+                echo json_encode(['success' => true, 'message' => 'ลบเงินเดือนเรียบร้อยแล้ว']);
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error deleting salary: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบเงินเดือน: ' . $e->getMessage()]);
             }
         }
     }

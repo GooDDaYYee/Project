@@ -29,7 +29,7 @@ class StockCableController extends BaseController
     public function fetchCableDetails()
     {
         if (!isset($_POST['cable_id'])) {
-            $this->jsonResponse(false, 'Cable ID not provided');
+            $this->jsonResponse(false, 'ไม่ได้ระบุรหัส Cable');
             return;
         }
 
@@ -43,12 +43,12 @@ class StockCableController extends BaseController
             $cable = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($cable) {
-                $this->jsonResponse(true, 'Cable details fetched successfully', $cable);
+                $this->jsonResponse(true, 'ดึงรายละเอียด Cable เรียบร้อยแล้ว', $cable);
             } else {
-                $this->jsonResponse(false, 'Cable not found');
+                $this->jsonResponse(false, 'ไม่พบ Cable');
             }
         } catch (PDOException) {
-            $this->jsonResponse(false, 'Error fetching cable details', null, 500);
+            $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการเรียกรายละเอียด Cable', null, 500);
         }
     }
 
@@ -119,7 +119,7 @@ class StockCableController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->updateCable();
         } else {
-            $this->jsonResponse(false, 'Invalid request method');
+            $this->jsonResponse(false, 'วิธีการร้องขอไม่ถูกต้อง');
         }
     }
 
@@ -177,7 +177,7 @@ class StockCableController extends BaseController
     public function delete()
     {
         if (!isset($_POST['cable_id'])) {
-            $this->jsonResponse(false, 'Cable ID not provided');
+            $this->jsonResponse(false, 'ไม่ได้ระบุรหัส Cable');
             return;
         }
 
@@ -215,7 +215,7 @@ class StockCableController extends BaseController
         }
 
         if ($data['cable_form'] <= $data['cable_to']) {
-            throw new Exception("Cable From must be greater than Cable To");
+            throw new Exception("สายเคเบิลจากต้องมากกว่าเคเบิลถึง");
         }
 
         return $data;
@@ -322,9 +322,9 @@ class StockCableController extends BaseController
                 $options .= "<option value='{$drum['drum_id']}'>{$drum['drum_no']}</option>";
             }
 
-            $this->jsonResponse(true, 'Drums fetched successfully', ['options' => $options]);
+            $this->jsonResponse(true, 'ดึงข้อมูลสำเร็จ Drums', ['options' => $options]);
         } catch (PDOException $e) {
-            $this->jsonResponse(false, 'Error fetching drums', null, 500);
+            $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการดึงข้อมูล Drums', null, 500);
         }
     }
 }

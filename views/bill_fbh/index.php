@@ -38,7 +38,7 @@
                 <td style="text-align: right;"><span class="to_file"><?= number_format($bill['grand_total'], 2) ?></span></td>
                 <td>
                   <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
-                  <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>">PDF</button>
+                  <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>" data-company="<?= $bill['bill_company'] ?>">PDF</button>
                   <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $bill['bill_id'] ?>">ลบ</button>
                 </td>
               </tr>
@@ -70,6 +70,7 @@
       <div class="modal-body">
         <form id="documentForm" action="index.php?page=bill-fbh&action=exportPDF" target="_blank" method="post">
           <input type="hidden" id="billId" name="billId" value="">
+          <input type="hidden" id="company" name="company" value="">
           <div class="form-group">
             <label for="documentType">ประเภทเอกสาร:</label>
             <select id="documentType" name="documentType" class="form-control">
@@ -233,12 +234,12 @@
     });
 
     $('.edit-btn').click(function() {
-      const billId = $(this).data('id');
+      const billid = $(this).data('id');
       $.ajax({
         url: 'index.php?page=bill-fbh&action=fetchBillDetails',
         method: 'POST',
         data: {
-          bill_id: billId
+          bill_id: billid
         },
         dataType: 'json',
         success: function(response) {
@@ -438,7 +439,9 @@
 
     $('.pdf-btn').click(function() {
       const billId = $(this).data('id');
+      const company = $(this).data('company');
       $('#billId').val(billId);
+      $('#company').val(company);
       $('#documentModal').modal('show');
     });
 

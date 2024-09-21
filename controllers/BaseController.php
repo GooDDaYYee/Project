@@ -213,8 +213,11 @@ abstract class BaseController
 
     protected function exPDF()
     {
-        if (isset($_POST['billId'])) {
+        if (isset($_POST['billId']) || isset($_POST['company'])) {
             $billId = $_POST['billId'];
+            $company = $_POST['company'];
+            $docType = $_POST['documentType'];
+
             $strsql = "SELECT * FROM bill WHERE bill_id = ?";
             try {
                 $stmt = $this->db->prepare($strsql);
@@ -304,9 +307,15 @@ abstract class BaseController
                                     </div>
                                 </td>
                                 <td colspan="4" style="border: none; vertical-align: top;" class="center">
-                                    <div class="header">
-                                        <h2>ใบแจ้งหนี้ / ใบวางบิล / INVOICE</h2>
-                                        <table>
+                                    <div class="header">';
+                    if ($docType == 'quotation') {
+                        $html .= '<h2>ใบเสนอราคา / Quotation</h2>';
+                    } elseif ($docType == 'invoice') {
+                        $html .= '<h2>ใบแจ้งหนี้ / ใบวางบิล / INVOICE</h2>';
+                    } elseif ($docType == 'receipt') {
+                        $html .= '<h2>ใบเสร็จรับเงิน / ใบกำกับภาษี / RECEIPT</h2>';
+                    }
+                    $html .= '<table>
                                             <tr>
                                                 <td style="border: none;" class="right">เลขที่ :</td>
                                                 <td style="border: none;" class="center">' . $bill['bill_id'] . '</td>
@@ -318,8 +327,10 @@ abstract class BaseController
                                         </table>
                                     </div>
                                 </td>
-                            </tr>
-                            <tr>
+                            </tr>';
+                    if ($company == 'mixed') {
+                        $html .= '
+                                <tr>
                                 <td colspan="3" style="vertical-align: top;" class="left">
                                     <strong>Customer : Mixed System Co.,Ltd</strong>
                                     <br>Address : 1 ซ.อินทามระ 41 แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400 ประเทศไทย
@@ -329,7 +340,22 @@ abstract class BaseController
                                     <strong>ผู้ติดต่อ : Management Center</strong>
                                     <br>Tel.02 276-2236-8 Fax : 02 276-2239
                                 </td>
-                            </tr>
+                            </tr>';
+                    } elseif ($company == 'FBH') {
+                        $html .= '
+                                <tr>
+                                <td colspan="3" style="vertical-align: top;" class="left">
+                                    <strong>Customer : บริษัท ไวร์เออ แอนด์ ไวร์เลส จำกัด</strong>
+                                    <br>Address : 240/64-67 อาคารอโยธยาทาวเวอร์ ชั้น 26 ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร 10310
+                                    <br>Tax ID : 0105538013293 สำนักงานใหญ่
+                                </td>
+                                    <td colspan="4" style="vertical-align: top;" class="left">
+                                    <strong>ผู้ติดต่อ : Chavisa Wisetwohan</strong>
+                                    <br>Tel.02 276-2236-8 Fax : 099-614-9196
+                                </td>
+                            </tr>';
+                    }
+                    $html .= '
                             <tr>
                                 <th colspan="2" class="center">Delivery Date (วันที่ส่งสินค้า)</th>
                                 <th colspan="1" class="center">Payment Term (เงื่อนไขการชำระเงิน)</th>

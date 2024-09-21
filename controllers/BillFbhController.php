@@ -70,7 +70,7 @@ class BillFBHController extends BaseController
     {
         try {
             if (!isset($_POST['inputField'])) {
-                $this->jsonResponse(false, 'Require AU');
+                $this->jsonResponse(false, 'จำเป็นต้องเพิ่ม AU ก่อน');
             }
             $this->db->beginTransaction();
 
@@ -81,10 +81,10 @@ class BillFBHController extends BaseController
             $this->logAction('Bill Created', "Bill ID: $billId");
 
             $this->db->commit();
-            $this->jsonResponse(true, 'Bill created successfully');
+            $this->jsonResponse(true, 'สร้างบิลสำเร็จแล้ว');
         } catch (PDOException $e) {
             $this->db->rollBack();
-            $this->jsonResponse(false, 'Unable to create bill. Please check your input.', null, 400);
+            $this->jsonResponse(false, 'ไม่สามารถสร้างบิลได้ กรุณาตรวจสอบข้อมูลของคุณ', null, 400);
         }
     }
 
@@ -288,7 +288,7 @@ class BillFBHController extends BaseController
     public function updateBill()
     {
         if (!isset($_POST['bill_Id'])) {
-            return $this->errorResponse('Bill ID not provided');
+            return $this->errorResponse('ไม่ได้ระบุรหัส Bill');
         }
 
         try {
@@ -367,7 +367,7 @@ class BillFBHController extends BaseController
     public function deleteBill()
     {
         if (!isset($_POST['bill_id'])) {
-            return $this->errorResponse('Bill ID not provided');
+            return $this->errorResponse('ไม่ได้ระบุรหัส Bill');
         }
 
         $billId = $_POST['bill_id'];
@@ -380,7 +380,7 @@ class BillFBHController extends BaseController
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                return $this->errorResponse('Bill not found', null, 500);
+                return $this->errorResponse('ไม่พบบิล', null, 500);
             }
 
             $this->db->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id")->execute([':bill_id' => $billId]);

@@ -22,7 +22,7 @@ class StockDrumController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching drums: " . $e->getMessage());
+            error_log("เกิดข้อผิดพลาดในการดึงข้อมูล Drum: " . $e->getMessage());
             return [];
         }
     }
@@ -49,9 +49,9 @@ class StockDrumController extends BaseController
                     ':drum_full' => $drum_full,
                     ':drum_id' => $drum_id
                 ]);
-                echo json_encode(['success' => true, 'message' => 'Drum updated successfully']);
+                echo json_encode(['success' => true, 'message' => 'อัปเดตเรียบร้อยแล้ว Drum']);
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error updating drum: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการอัปเดต Drum: ' . $e->getMessage()]);
             }
         }
     }
@@ -63,9 +63,9 @@ class StockDrumController extends BaseController
             try {
                 $stmt = $this->db->prepare("DELETE FROM drum WHERE drum_id = :drum_id");
                 $stmt->execute([':drum_id' => $drum_id]);
-                echo json_encode(['success' => true, 'message' => 'Drum deleted successfully']);
+                echo json_encode(['success' => true, 'message' => 'ลบ Drum สำเร็จแล้ว']);
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error deleting drum: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบ Drum: ' . $e->getMessage()]);
             }
         }
     }
@@ -82,13 +82,13 @@ class StockDrumController extends BaseController
                 if ($drum) {
                     echo json_encode(['success' => true, 'drum' => $drum]);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Drum not found']);
+                    echo json_encode(['success' => false, 'message' => 'ไม่พบ Drum']);
                 }
             } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'Error fetching drum details: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการเรียกรายละเอียด Drum: ' . $e->getMessage()]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Invalid request']);
+            echo json_encode(['success' => false, 'message' => 'คำขอไม่ถูกต้อง']);
         }
     }
 }
