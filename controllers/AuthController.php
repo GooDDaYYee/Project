@@ -31,7 +31,7 @@ class AuthController extends BaseController
         $rememberMe = isset($_POST['rememberMe']) ? filter_var($_POST['rememberMe'], FILTER_VALIDATE_BOOLEAN) : false;
 
         if (empty($username) || empty($password)) {
-            return $this->errorResponse('ข้อมูลไม่ครบถ้วน', null, 400);
+            return $this->errorResponse('ข้อมูลไม่ครบถ้วน', null, 200);
         }
 
         try {
@@ -47,7 +47,7 @@ class AuthController extends BaseController
                     return $this->successResponse('Login successful');
                 }
             }
-            return $this->errorResponse('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', null, 401);
+            return $this->errorResponse('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', null, 200);
         } catch (PDOException $e) {
             return $this->errorResponse('เกิดข้อผิดพลาดในการเข้าสู่ระบบ', null, 500);
         }
