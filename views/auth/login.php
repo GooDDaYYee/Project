@@ -42,8 +42,6 @@
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small d-flex justify-content-between align-items-center">
                                                 <div>
-                                                    <input type="checkbox" class="custom-control-input" id="rememberMe" name="rememberMe">
-                                                    <label class="custom-control-label" for="rememberMe">จำรหัสผ่าน</label>
                                                 </div>
                                                 <a href="index.php?page=auth&action=forgotPassword">ลืมรหัสผ่าน</a>
                                             </div>
