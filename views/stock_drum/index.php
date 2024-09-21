@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
             <div class="card border h-100">
-                <table class="table table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th scope="col">ลำดับ</th>
@@ -23,26 +23,24 @@
                             <th scope="col">Drum เต็ม</th>
                             <th scope="col">Drum ใช้ไป</th>
                             <th scope="col">Drum เหลือ</th>
-                            <th scope="col"> </th>
+                            <th scope="col">การดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($data['drums'] as $index => $drum): ?>
                             <tr>
-                                <th scope="row"><i class="to_file"><?= $index + 1 ?></i></th>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_cable_company']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_no']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_to']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_description']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_company']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_full']) ?> เมตร</i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_used']) ?> เมตร</i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</i></td>
+                                <td scope="row"><span class="to_file"><?= $index + 1 ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_cable_company']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_no']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_to']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_description']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_company']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_full']) ?> เมตร</span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_used']) ?> เมตร</span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</span></td>
                                 <td>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-outline-success edit-drum" data-id="<?= $drum['drum_id'] ?>">แก้ไข</button>
-                                        <button type="button" class="btn btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-index="<?= $index + 1 ?>">ลบ</button>
-                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-drum" data-id="<?= $drum['drum_id'] ?>">แก้ไข</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-index="<?= $index + 1 ?>">ลบ</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -125,180 +123,184 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    var rowsPerPage = 10;
-    var $rows = $('tbody tr');
-    var totalPages = Math.ceil($rows.length / rowsPerPage);
+    $(document).ready(function() {
+        var rowsPerPage = 10;
+        var $rows = $('tbody tr');
+        var totalPages = Math.ceil($rows.length / rowsPerPage);
 
-    function showPage(page) {
-        var start = (page - 1) * rowsPerPage;
-        var end = start + rowsPerPage;
+        function showPage(page) {
+            var start = (page - 1) * rowsPerPage;
+            var end = start + rowsPerPage;
 
-        $rows.hide().slice(start, end).show();
+            $rows.hide().slice(start, end).show();
 
-        var $pagination = $('.pagination');
-        $pagination.empty();
+            var $pagination = $('.pagination');
+            $pagination.empty();
 
-        var maxVisiblePages = 5;
-        var startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
-        var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            var maxVisiblePages = 5;
+            var startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+            var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-        if (startPage > 1) {
-            $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>');
-        }
-
-        for (var i = startPage; i <= endPage; i++) {
-            $pagination.append('<li class="page-item ' + (i === page ? 'active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
-        }
-
-        if (endPage < totalPages) {
-            $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="' + totalPages + '">หน้าสุดท้าย &raquo;</a></li>');
-        }
-    }
-
-    $('.pagination').on('click', 'a', function(e) {
-        e.preventDefault();
-        showPage(parseInt($(this).data('page')));
-    });
-
-    $('#search').on('keyup', function() {
-        var searchTerm = $(this).val().toLowerCase();
-        $rows.each(function() {
-            var rowText = $(this).text().toLowerCase();
-            $(this).toggle(rowText.indexOf(searchTerm) > -1);
-        });
-    });
-
-    $('#saveEditDrum').click(function() {
-        var formData = $('#editDrumForm').serialize();
-        $.ajax({
-            url: 'index.php?action=updateDrum',
-            method: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    Swal.fire('สำเร็จ', 'แก้ไขข้อมูล Drum สำเร็จ', 'success').then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire('ไม่สำเร็จ', response.message, 'error');
-                }
-            },
-            error: function() {
-                Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+            if (startPage > 1) {
+                $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>');
             }
-        });
-    });
 
-    $('.delete-drum').click(function() {
-        var drumId = $(this).data('id');
-        var drumId = $(this).data('id');
-        var index = $(this).data('index');
-        
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: "คุณต้องการลบข้อมูล Drum ลำดับที่ " + index + " หรือไม่?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ใช่',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: 'index.php?action=deleteDrum',
-                    method: 'POST',
-                    data: { drum_id: drumId },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Drum ลำดับที่ ' + index + ' เรียบร้อยแล้ว!', 'success')
-                            .then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire('ไม่สำเร็จ', response.message, 'error');
-                        }
-                    },
-                    error: function() {
-                        Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+            for (var i = startPage; i <= endPage; i++) {
+                $pagination.append('<li class="page-item ' + (i === page ? 'active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
+            }
+
+            if (endPage < totalPages) {
+                $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="' + totalPages + '">หน้าสุดท้าย &raquo;</a></li>');
+            }
+        }
+
+        $('.pagination').on('click', 'a', function(e) {
+            e.preventDefault();
+            showPage(parseInt($(this).data('page')));
+        });
+
+        $('#search').on('keyup', function() {
+            var searchTerm = $(this).val().toLowerCase();
+            $rows.each(function() {
+                var rowText = $(this).text().toLowerCase();
+                $(this).toggle(rowText.indexOf(searchTerm) > -1);
+            });
+        });
+
+        $('#saveEditDrum').click(function() {
+            var formData = $('#editDrumForm').serialize();
+            $.ajax({
+                url: 'index.php?action=updateDrum',
+                method: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire('สำเร็จ', 'แก้ไขข้อมูล Drum สำเร็จ', 'success').then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('ไม่สำเร็จ', response.message, 'error');
                     }
-                });
-            }
+                },
+                error: function() {
+                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+                }
+            });
         });
-    });
 
-    function editDrum(drumId, drumNo, drumTo, drumDescription, drumCompany, drumCableCompany, drumFull, drumUsed) {
-        $('#edit_drum_id').val(drumId);
-        $('#edit_drum_to').val(drumTo);
-        $('#edit_drum_description').val(drumDescription);
-        $('#edit_drum_company').val(drumCompany);
-        $('#edit_drum_cable_company').val(drumCableCompany);
-        $('#edit_drum_full').val(drumFull);
+        $('.delete-drum').click(function() {
+            var drumId = $(this).data('id');
+            var drumId = $(this).data('id');
+            var index = $(this).data('index');
 
-        if (drumUsed > 0) {
-            $('#edit_drum_no').val(drumNo).prop('disabled', true);
-            $('#edit_drum_company').prop('disabled', true);
-            $('#edit_drum_cable_company').prop('disabled', true);
-            $('#edit_drum_full').prop('disabled', true);
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: "คุณต้องการลบข้อมูล Drum ลำดับที่ " + index + " หรือไม่?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: 'index.php?action=deleteDrum',
+                        method: 'POST',
+                        data: {
+                            drum_id: drumId
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Drum ลำดับที่ ' + index + ' เรียบร้อยแล้ว!', 'success')
+                                    .then(() => {
+                                        location.reload();
+                                    });
+                            } else {
+                                Swal.fire('ไม่สำเร็จ', response.message, 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+                        }
+                    });
+                }
+            });
+        });
 
-            $('#edit_drum_no_notice').text('มีการเรียกใช้ดั้มอยู่').show();
-            $('#edit_drum_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
-            $('#edit_drum_cable_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
-            $('#edit_drum_full_notice').text('มีการเรียกใช้ดั้มอยู่').show();
-        } else {
-            $('#edit_drum_no').val(drumNo).prop('disabled', false);
-            $('#edit_drum_company').prop('disabled', false);
-            $('#edit_drum_cable_company').prop('disabled', false);
-            $('#edit_drum_full').prop('disabled', false);
+        function editDrum(drumId, drumNo, drumTo, drumDescription, drumCompany, drumCableCompany, drumFull, drumUsed) {
+            $('#edit_drum_id').val(drumId);
+            $('#edit_drum_to').val(drumTo);
+            $('#edit_drum_description').val(drumDescription);
+            $('#edit_drum_company').val(drumCompany);
+            $('#edit_drum_cable_company').val(drumCableCompany);
+            $('#edit_drum_full').val(drumFull);
 
-            $('#edit_drum_no_notice').hide();
-            $('#edit_drum_company_notice').hide();
-            $('#edit_drum_cable_company_notice').hide();
-            $('#edit_drum_full_notice').hide();
+            if (drumUsed > 0) {
+                $('#edit_drum_no').val(drumNo).prop('disabled', true);
+                $('#edit_drum_company').prop('disabled', true);
+                $('#edit_drum_cable_company').prop('disabled', true);
+                $('#edit_drum_full').prop('disabled', true);
+
+                $('#edit_drum_no_notice').text('มีการเรียกใช้ดั้มอยู่').show();
+                $('#edit_drum_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
+                $('#edit_drum_cable_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
+                $('#edit_drum_full_notice').text('มีการเรียกใช้ดั้มอยู่').show();
+            } else {
+                $('#edit_drum_no').val(drumNo).prop('disabled', false);
+                $('#edit_drum_company').prop('disabled', false);
+                $('#edit_drum_cable_company').prop('disabled', false);
+                $('#edit_drum_full').prop('disabled', false);
+
+                $('#edit_drum_no_notice').hide();
+                $('#edit_drum_company_notice').hide();
+                $('#edit_drum_cable_company_notice').hide();
+                $('#edit_drum_full_notice').hide();
+            }
+
+            $('#editDrumModal').modal('show');
         }
 
-        $('#editDrumModal').modal('show');
-    }
-
-    // Fetch drum details when edit button is clicked
-    $('.edit-drum').click(function() {
-        var drumId = $(this).data('id');
-        $.ajax({
-            url: 'index.php?action=getDrumDetails',
-            method: 'GET',
-            data: { drum_id: drumId },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    editDrum(
-                        response.drum.drum_id,
-                        response.drum.drum_no,
-                        response.drum.drum_to,
-                        response.drum.drum_description,
-                        response.drum.drum_company,
-                        response.drum.drum_cable_company,
-                        response.drum.drum_full,
-                        response.drum.drum_used
-                    );
-                } else {
-                    Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Drum ได้', 'error');
+        // Fetch drum details when edit button is clicked
+        $('.edit-drum').click(function() {
+            var drumId = $(this).data('id');
+            $.ajax({
+                url: 'index.php?action=getDrumDetails',
+                method: 'GET',
+                data: {
+                    drum_id: drumId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        editDrum(
+                            response.drum.drum_id,
+                            response.drum.drum_no,
+                            response.drum.drum_to,
+                            response.drum.drum_description,
+                            response.drum.drum_company,
+                            response.drum.drum_cable_company,
+                            response.drum.drum_full,
+                            response.drum.drum_used
+                        );
+                    } else {
+                        Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Drum ได้', 'error');
+                    }
+                },
+                error: function() {
+                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
                 }
-            },
-            error: function() {
-                Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
-            }
+            });
         });
-    });
 
-    // Enable disabled fields before form submission
-    $('#editDrumForm').on('submit', function() {
-        $('#edit_drum_no, #edit_drum_company, #edit_drum_cable_company, #edit_drum_full').prop('disabled', false);
-    });
+        // Enable disabled fields before form submission
+        $('#editDrumForm').on('submit', function() {
+            $('#edit_drum_no, #edit_drum_company, #edit_drum_cable_company, #edit_drum_full').prop('disabled', false);
+        });
 
-    // Initial page load
-    showPage(1);
-});
+        // Initial page load
+        showPage(1);
+    });
 </script>

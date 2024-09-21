@@ -19,7 +19,7 @@
                             <th scope="col">ชื่อผู้ใช้</th>
                             <th scope="col">ประเภทผู้ใช้</th>
                             <th scope="col">สถานะ</th>
-                            <th scope="col"> </th>
+                            <th scope="col">การดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -30,10 +30,8 @@
                                 <td><span class="to_file"><?= $this->getLevelName($user['lv']) ?></span></td>
                                 <td><span class="to_file"><?= $this->getStatusName($user['status']) ?></span></td>
                                 <td>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-sm btn-outline-primary edit-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-lv="<?= $user['lv'] ?>" data-status="<?= $user['status'] ?>">แก้ไข</button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>">ลบ</button>
-                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-lv="<?= $user['lv'] ?>" data-status="<?= $user['status'] ?>">แก้ไข</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>">ลบ</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

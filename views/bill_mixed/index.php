@@ -15,7 +15,7 @@
 
     <div class="card-body">
       <div class="card border h-100">
-        <table class="table table-striped" id="billTable">
+        <table class="table table-bordered table-striped" id="billTable">
           <thead>
             <tr>
               <th scope="col">เลขที่</th>
@@ -30,18 +30,16 @@
           <tbody>
             <?php foreach ($data['bills'] as $bill): ?>
               <tr>
-                <th scope="row"><i class="to_file"><?= htmlspecialchars($bill['bill_id']) ?></i></th>
-                <td><i class="to_file"><?= $this->formatThaiDate($bill['bill_date']) ?></i></td>
-                <td><i class="to_file"><?= htmlspecialchars($bill['bill_site']) ?></i></td>
-                <td><i class="to_file"><?= number_format($bill['total_amount'], 2) ?></i></td>
-                <td><i class="to_file"><?= number_format($bill['vat'], 2) ?></i></td>
-                <td><i class="to_file"><?= number_format($bill['grand_total'], 2) ?></i></td>
+                <td scope="row"><span class="to_file"><?= htmlspecialchars($bill['bill_id']) ?></span></td>
+                <td><span class="to_file"><?= $this->formatThaiDate($bill['bill_date']) ?></span></td>
+                <td><span class="to_file"><?= htmlspecialchars($bill['bill_site']) ?></span></td>
+                <td><span class="to_file"><?= number_format($bill['total_amount'], 2) ?></span></td>
+                <td><span class="to_file"><?= number_format($bill['vat'], 2) ?></span></td>
+                <td><span class="to_file"><?= number_format($bill['grand_total'], 2) ?></span></td>
                 <td>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-outline-success edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
-                    <button type="button" class="btn btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>">PDF</button>
-                    <button type="button" class="btn btn-outline-danger delete-btn" data-id="<?= $bill['bill_id'] ?>">ลบ</button>
-                  </div>
+                  <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
+                  <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>">PDF</button>
+                  <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $bill['bill_id'] ?>">ลบ</button>
                 </td>
               </tr>
             <?php endforeach; ?>
