@@ -65,6 +65,10 @@ switch ($page) {
         require_once 'controllers/LogController.php';
         $controller = new LogController();
         break;
+    case 'elFinder':
+        require_once 'controllers/elFinderController.php';
+        $controller = new elFinderController();
+        break;
     default:
         $pageTitle = '404 - Page Not Found';
         $content = '404.php';
