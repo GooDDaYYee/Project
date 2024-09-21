@@ -120,7 +120,7 @@ abstract class BaseController
             12 => "ธันวาคม"
         );
         $thai_month_num = date('n', $timestamp);
-        return date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . (date('Y', $timestamp) + 543);
+        return date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . (date('Y', $timestamp));
     }
     protected function Convert($amount_number, $decimal_count)
     {
