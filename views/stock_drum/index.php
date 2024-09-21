@@ -7,7 +7,7 @@
                     <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
                 </div>
             </form>
-            <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('stock/insert_drum') ?>', '_parent')">เพิ่มDrum</button>
+            <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock-drum&action=create', '_parent')">เพิ่มDrum</button>
         </div>
         <div class="card-body">
             <div class="card border h-100">
@@ -207,7 +207,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'index.php?action=deleteDrum',
+                        url: 'index.php?page=stock-drum&action=deleteDrum',
                         method: 'POST',
                         data: {
                             drum_id: drum_id
@@ -240,20 +240,32 @@
             $('#edit_drum_full').val(drumFull);
 
             if (drumUsed > 0) {
-                $('#edit_drum_no').val(drumNo).prop('disabled', true);
-                $('#edit_drum_company').prop('disabled', true);
-                $('#edit_drum_cable_company').prop('disabled', true);
-                $('#edit_drum_full').prop('disabled', true);
+                $('#edit_drum_no').val(drumNo).prop('readonly', true);
+                $('#edit_drum_company').css({
+                    'pointer-events': 'none',
+                    'background-color': '#eaecf4'
+                });
+                $('#edit_drum_cable_company').css({
+                    'pointer-events': 'none',
+                    'background-color': '#eaecf4'
+                });
+                $('#edit_drum_full').prop('readonly', true);
 
                 $('#edit_drum_no_notice').text('มีการเรียกใช้ดั้มอยู่').show();
                 $('#edit_drum_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
                 $('#edit_drum_cable_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
                 $('#edit_drum_full_notice').text('มีการเรียกใช้ดั้มอยู่').show();
             } else {
-                $('#edit_drum_no').val(drumNo).prop('disabled', false);
-                $('#edit_drum_company').prop('disabled', false);
-                $('#edit_drum_cable_company').prop('disabled', false);
-                $('#edit_drum_full').prop('disabled', false);
+                $('#edit_drum_no').val(drumNo).prop('readonly', false);
+                $('#edit_drum_full').prop('readonly', false);
+                $('#edit_drum_company').css({
+                    'pointer-events': '',
+                    'background-color': ''
+                });
+                $('#edit_drum_cable_company').css({
+                    'pointer-events': '',
+                    'background-color': ''
+                });
 
                 $('#edit_drum_no_notice').hide();
                 $('#edit_drum_company_notice').hide();

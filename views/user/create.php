@@ -66,40 +66,40 @@
 </div>
 
 <script>
-$(function() {
-    $('#insert_users').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-            type: "POST",
-            url: "index.php?page=user&action=create",
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                console.log(response)
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สำเร็จ',
-                        text: 'เพิ่มข้อมูล User สำเร็จ',
-                    }).then(function() {
-                        window.location.href = "index.php?page=user";
-                    });
-                } else {
+    $(function() {
+        $('#insert_users').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "index.php?page=user&action=create",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response)
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'เพิ่มข้อมูล User สำเร็จ',
+                        }).then(function() {
+                            window.location.href = "index.php?page=user";
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function() {
                     Swal.fire({
                         icon: 'error',
                         title: 'ไม่สำเร็จ',
-                        text: response.message,
+                        text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
                     });
                 }
-            },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ไม่สำเร็จ',
-                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-                });
-            }
+            });
         });
     });
-});
 </script>

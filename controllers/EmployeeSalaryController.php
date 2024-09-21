@@ -107,7 +107,7 @@ class EmployeeSalaryController extends BaseController
                     exit();
                 } else {
                     http_response_code(400);
-                    echo json_encode(['success' => false, 'message' => 'เพิ่มข้อมูลไม่ทำเสร็จ']);
+                    echo json_encode(['success' => false, 'message' => 'เพิ่มข้อมูลไม่สำเสร็จ']);
                     exit();
                 }
             } catch (PDOException $e) {
