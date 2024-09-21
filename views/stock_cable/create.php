@@ -78,22 +78,15 @@
                     url: 'index.php?page=stock-cable&action=fetchDrums',
                     data: {
                         'manufacturer': manufacturer,
-                        'company': company
+                        'company': company,
+                        'request_type': 'manufacturer'
                     },
-                    success: function(response) {
-                        var data = JSON.parse(response);
-                        if (data.success) {
-                            $('#drum_id').html(data.data.options);
-                        } else {
-                            alert('Error fetching drums: ' + data.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Error fetching drums');
+                    success: function(html) {
+                        $('#drum_id').html(html);
                     }
                 });
             } else {
-                $('#drum_id').html('<option value="">เลือก Drum</option>');
+                $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
             }
         });
 

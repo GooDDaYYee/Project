@@ -47,8 +47,7 @@ class StockCableController extends BaseController
             } else {
                 $this->jsonResponse(false, 'Cable not found');
             }
-        } catch (PDOException $e) {
-            $this->logError($e);
+        } catch (PDOException) {
             $this->jsonResponse(false, 'Error fetching cable details', null, 500);
         }
     }

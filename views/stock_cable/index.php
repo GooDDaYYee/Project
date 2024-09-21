@@ -15,7 +15,7 @@
 
         <div class="card-body">
             <div class="card border h-100">
-                <table class="table table-striped" id="cableTable">
+                <table class="table table-bordered table-striped" id="cableTable">
                     <thead>
                         <tr>
                             <th scope="col">ลำดับ</th>
@@ -33,7 +33,7 @@
                     <tbody>
                         <?php foreach ($data['cables'] as $i => $cable): ?>
                             <tr>
-                                <th scope="row"><span class="to_file"><?= $i + 1 ?></span></th>
+                                <td scope="row"><span class="to_file"><?= $i + 1 ?></span></td>
                                 <td><span class="to_file"><?= htmlspecialchars($cable['route_name']) ?></span></td>
                                 <td><span class="to_file"><?= htmlspecialchars($cable['installed_section']) ?></span></td>
                                 <td><span class="to_file"><?= htmlspecialchars($cable['placing_team']) ?></span></td>
@@ -43,10 +43,8 @@
                                 <td><span class="to_file"><?= htmlspecialchars($cable['drum_no']) ?></span></td>
                                 <td><span class="to_file"><?= htmlspecialchars($cable['cable_work']) ?></span></td>
                                 <td>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-outline-success edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
-                                        <button type="button" class="btn btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
-                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
