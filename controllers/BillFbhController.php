@@ -1,11 +1,11 @@
 <?php
 require_once __DIR__ . '/BaseController.php';
 
-class BillFbhController extends BaseController
+class BillFBHController extends BaseController
 {
     public function index()
     {
-        $bills = $this->fetchFbhBills();
+        $bills = $this->fetchFBHBills();
         $auOptions = $this->fetchAUOptions();
 
         $data = [
@@ -17,7 +17,7 @@ class BillFbhController extends BaseController
         $this->render('bill_fbh/index', ['pageTitle' => $pageTitle, 'data' => $data]);
     }
 
-    private function fetchFbhBills()
+    private function fetchFBHBills()
     {
         $strsql = "SELECT * FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC";
         try {
@@ -25,7 +25,6 @@ class BillFbhController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching FBH bills: " . $e->getMessage());
             return [];
         }
     }
@@ -38,19 +37,194 @@ class BillFbhController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching AU options: " . $e->getMessage());
             return [];
         }
     }
 
-    public function fetchBillDetails()
+    public function create()
     {
-        if (!isset($_GET['bill_id'])) {
-            echo json_encode(['success' => false, 'message' => 'Bill ID not provided']);
-            return;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->create_post();
+        } else {
+            $this->create_get();
+        }
+    }
+
+    private function create_get()
+    {
+        $newBillId = $this->generateNewBillId();
+        $thaiDate = $this->getCurrentThaiDate();
+        $auOptions = $this->getAuOptions();
+
+        $data = [
+            'pageTitle' => 'เพิ่มบิล FBH - PSNK TELECOM',
+            'newBillId' => $newBillId,
+            'thaiDate' => $thaiDate,
+            'auOptions' => $auOptions
+        ];
+
+        $this->render('bill_fbh/create', $data);
+    }
+
+    private function create_post()
+    {
+        try {
+            if (!isset($_POST['inputField'])) {
+                $this->jsonResponse(false, 'Require AU');
+            }
+            $this->db->beginTransaction();
+
+            $employeeId = $this->getEmployeeId($_SESSION['user_id']);
+            $billId = $this->insertBill($employeeId);
+            $this->insertBillDetails($billId);
+            $this->updateBillTotals($billId);
+            $this->logAction('Bill Created', "Bill ID: $billId");
+
+            $this->db->commit();
+            $this->jsonResponse(true, 'Bill created successfully');
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            $this->jsonResponse(false, 'Unable to create bill. Please check your input.', null, 400);
+        }
+    }
+
+    private function generateNewBillId()
+    {
+        $stmt = $this->db->prepare("SELECT bill_id FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC LIMIT 1");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $currentYear = date('Y') + 543; // ปีพุทธศักราช 4 หลัก
+        $newNumber = 1;
+
+        if ($result) {
+            if (preg_match('/(\d{4})\/(\d+)$/', $result['bill_id'], $matches) && count($matches) == 3) {
+                $lastYear = intval($matches[1]);
+                $lastNumber = intval($matches[2]);
+
+                if ($currentYear == $lastYear) {
+                    $newNumber = $lastNumber + 1;
+                }
+            } else {
+                // ถ้าไม่สามารถแยกส่วนได้ ให้ใช้ค่าเริ่มต้น
+                $lastYear = $currentYear;
+                $lastNumber = 0;
+            }
         }
 
-        $billId = $_GET['bill_id'];
+        return sprintf("PS%04d/%03d", $currentYear, $newNumber);
+    }
+
+    private function getCurrentThaiDate()
+    {
+        date_default_timezone_set('Asia/Bangkok');
+        return date("Y-m-d", strtotime("+543 year"));
+    }
+
+    private function getAuOptions()
+    {
+        $stmt = $this->db->prepare("SELECT * FROM au_all WHERE au_company = 'FBH'");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function getEmployeeId($userId)
+    {
+        $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
+        $stmt->execute([':user_id' => $userId]);
+        return $stmt->fetchColumn();
+    }
+
+    private function insertBill($employeeId)
+    {
+        $stmt = $this->db->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
+        VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
+
+        $stmt->execute([
+            ':bill_id' => $_POST['number'],
+            ':bill_date' => $_POST['thai_date'],
+            ':bill_date_product' => $_POST['thai_date_product'],
+            ':bill_payment' => $_POST['payment'],
+            ':bill_due_date' => $_POST['thai_due_date'],
+            ':bill_refer' => $_POST['refer'],
+            ':bill_site' => $_POST['Site'],
+            ':bill_pr' => $_POST['pr'],
+            ':bill_work_no' => $_POST['work_no'],
+            ':bill_project' => $_POST['project'],
+            ':list_num' => $_POST['auCount'],
+            ':total_amount' => 0,
+            ':vat' => 0,
+            ':withholding' => 0,
+            ':grand_total' => 0,
+            ':bill_company' => $_POST['company'],
+            ':employee_id' => $employeeId
+        ]);
+
+        return $_POST['number'];
+    }
+
+    private function insertBillDetails($billId)
+    {
+        $stmt = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
+
+        foreach ($_POST['inputField'] as $i => $auId) {
+            $unit = $_POST['unit'][$i];
+            $price = $this->calculateItemPrice($auId, $unit);
+
+            $stmt->execute([
+                ':bill_id' => $billId,
+                ':au_id' => $auId,
+                ':unit' => $unit,
+                ':price' => $price
+            ]);
+        }
+    }
+
+    private function calculateItemPrice($auId, $unit)
+    {
+        $stmt = $this->db->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
+        $stmt->execute([':au_id' => $auId]);
+        $auPrice = $stmt->fetchColumn();
+        return $unit * $auPrice;
+    }
+
+    private function updateBillTotals($billId)
+    {
+        $total = $this->calculateBillTotal($billId);
+        $vat = $total * 0.07;
+        $withholding = $total * 0.03;
+        $grandTotal = $total - $vat;
+
+        $stmt = $this->db->prepare("UPDATE bill SET
+            total_amount = :total_amount,
+            vat = :vat,
+            withholding = :withholding,
+            grand_total = :grand_total
+            WHERE bill_id = :bill_id");
+
+        $stmt->execute([
+            ':bill_id' => $billId,
+            ':total_amount' => $total,
+            ':vat' => $vat,
+            ':withholding' => $withholding,
+            ':grand_total' => $grandTotal
+        ]);
+    }
+
+    private function calculateBillTotal($billId)
+    {
+        $stmt = $this->db->prepare("SELECT SUM(price) FROM bill_detail WHERE bill_id = :bill_id");
+        $stmt->execute([':bill_id' => $billId]);
+        return $stmt->fetchColumn();
+    }
+
+    public function fetchBillDetails()
+    {
+        if (!isset($_POST['bill_id'])) {
+            return $this->errorResponse('Bill ID not provided');
+        }
+
+        $billId = $_POST['bill_id'];
         $strsql = "SELECT * FROM bill WHERE bill_id = :bill_id";
         try {
             $stmt = $this->db->prepare($strsql);
@@ -69,13 +243,13 @@ class BillFbhController extends BaseController
                 $detail = array_merge($detail, $auDetails);
             }
 
-            echo json_encode([
-                'success' => true,
+            $data = [
                 'bill' => $bill,
                 'details' => $details
-            ]);
+            ];
+            return $this->successResponse('OK', $data);
         } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
         }
     }
 
@@ -103,7 +277,6 @@ class BillFbhController extends BaseController
                 ];
             }
         } catch (PDOException $e) {
-            error_log("Error fetching AU details: " . $e->getMessage());
             return [
                 'au_detail' => 'error',
                 'au_type' => 'error',
@@ -114,25 +287,112 @@ class BillFbhController extends BaseController
 
     public function updateBill()
     {
-        // Implement update bill logic here
+        if (!isset($_POST['bill_Id'])) {
+            return $this->errorResponse('Bill ID not provided');
+        }
+
+        try {
+            $this->db->beginTransaction();
+
+            $billId = $_POST['bill_Id'];
+            $total = 0;
+            $vat = 0.07;
+            $withholding = 0.03;
+
+            $stmtUpdateBill = $this->db->prepare("UPDATE bill SET
+                bill_date = :bill_date, bill_date_product = :bill_date_product,
+                bill_payment = :bill_payment, bill_due_date = :bill_due_date,
+                bill_refer = :bill_refer, bill_site = :bill_site,
+                bill_pr = :bill_pr, bill_work_no = :bill_work_no,
+                bill_project = :bill_project, list_num = :list_num,
+                total_amount = :total_amount, vat = :vat,
+                withholding = :withholding, grand_total = :grand_total
+                WHERE bill_id = :bill_id");
+
+            $stmtUpdateBill->bindParam(':bill_id', $billId);
+            $stmtUpdateBill->bindParam(':bill_date', $_POST['thai_date']);
+            $stmtUpdateBill->bindParam(':bill_date_product', $_POST['thai_date_product']);
+            $stmtUpdateBill->bindParam(':bill_payment', $_POST['payment']);
+            $stmtUpdateBill->bindParam(':bill_due_date', $_POST['thai_due_date']);
+            $stmtUpdateBill->bindParam(':bill_refer', $_POST['refer']);
+            $stmtUpdateBill->bindParam(':bill_site', $_POST['Site']);
+            $stmtUpdateBill->bindParam(':bill_pr', $_POST['pr']);
+            $stmtUpdateBill->bindParam(':bill_work_no', $_POST['work_no']);
+            $stmtUpdateBill->bindParam(':bill_project', $_POST['project']);
+            $stmtUpdateBill->bindParam(':list_num', $_POST['auCount']);
+
+            $this->db->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id")->execute([':bill_id' => $billId]);
+
+            $stmtInvoiceItem = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
+
+            foreach ($_POST['inputField'] as $i => $auId) {
+                $stmtPrice = $this->db->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
+                $stmtPrice->execute([':au_id' => $auId]);
+                $auPrice = $stmtPrice->fetchColumn();
+
+                $unit = $_POST['unit'][$i];
+                $price = $unit * $auPrice;
+
+                $stmtInvoiceItem->execute([
+                    ':bill_id' => $billId,
+                    ':au_id' => $auId,
+                    ':unit' => $unit,
+                    ':price' => $price
+                ]);
+
+                $total += $price;
+            }
+
+            $totalVat = $total * $vat;
+            $totalWithholding = $total * $withholding;
+            $grand_total = $total - $totalVat;
+
+            $stmtUpdateBill->bindParam(':total_amount', $total);
+            $stmtUpdateBill->bindParam(':vat', $totalVat);
+            $stmtUpdateBill->bindParam(':withholding', $totalWithholding);
+            $stmtUpdateBill->bindParam(':grand_total', $grand_total);
+
+            $stmtUpdateBill->execute();
+
+            $this->logAction('Bill Updated', "Bill ID: $billId, Total Amount: $total");
+
+            $this->db->commit();
+            return $this->successResponse();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
+        }
     }
 
     public function deleteBill()
     {
-        // Implement delete bill logic here
-    }
+        if (!isset($_POST['bill_id'])) {
+            return $this->errorResponse('Bill ID not provided');
+        }
 
-    // Helper method to format Thai date
-    public function formatThaiDate($date)
-    {
-        $timestamp = strtotime($date);
-        $thai_month = array(
-            1 => "มกราคม", 2 => "กุมภาพันธ์", 3 => "มีนาคม",
-            4 => "เมษายน", 5 => "พฤษภาคม", 6 => "มิถุนายน",
-            7 => "กรกฎาคม", 8 => "สิงหาคม", 9 => "กันยายน",
-            10 => "ตุลาคม", 11 => "พฤศจิกายน", 12 => "ธันวาคม"
-        );
-        $thai_month_num = date('n', $timestamp);
-        return date('d', $timestamp) . ' ' . $thai_month[$thai_month_num] . ' ' . (date('Y', $timestamp) + 543);
+        $billId = $_POST['bill_id'];
+
+        try {
+            $this->db->beginTransaction();
+
+            $stmt = $this->db->prepare("SELECT bill_company FROM bill WHERE bill_id = :bill_id");
+            $stmt->execute([':bill_id' => $billId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$result) {
+                return $this->errorResponse('Bill not found', null, 500);
+            }
+
+            $this->db->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id")->execute([':bill_id' => $billId]);
+            $this->db->prepare("DELETE FROM bill WHERE bill_id = :bill_id")->execute([':bill_id' => $billId]);
+
+            $this->logAction('Bill Deleted', "Bill ID: $billId, Company: {$result['bill_company']}");
+
+            $this->db->commit();
+            return $this->successResponse();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
+        }
     }
 }
