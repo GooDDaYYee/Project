@@ -42,12 +42,12 @@ abstract class BaseController
         exit();
     }
 
-    protected function successResponse($message, $data = null, $statusCode = 200)
+    protected function successResponse($message = "OK", $data = null, $statusCode = 200)
     {
         $this->jsonResponse(true, $message, $data, $statusCode);
     }
 
-    protected function errorResponse($message, $data = null, $statusCode = 400)
+    protected function errorResponse($message = "Error", $data = null, $statusCode = 400)
     {
         $this->jsonResponse(false, $message, $data, $statusCode);
     }

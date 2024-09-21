@@ -25,7 +25,6 @@ class BillMixedController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching mixed bills: " . $e->getMessage());
             return [];
         }
     }
@@ -38,19 +37,37 @@ class BillMixedController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching AU options: " . $e->getMessage());
             return [];
         }
     }
 
+    public function create()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->create_post();
+        } else {
+            $this->create_get();
+        }
+    }
+
+    private function create_get()
+    {
+        $pageTitle = 'เพิ่มผู้ใช้ - PSNK TELECOM';
+        $this->render('bill_mixed/create', ['pageTitle' => $pageTitle]);
+    }
+
+    private function create_post()
+    {
+
+    }
+
     public function fetchBillDetails()
     {
-        if (!isset($_GET['bill_id'])) {
-            echo json_encode(['success' => false, 'message' => 'Bill ID not provided']);
-            return;
+        if (!isset($_POST['bill_id'])) {
+            return $this->errorResponse('Bill ID not provided');
         }
 
-        $billId = $_GET['bill_id'];
+        $billId = $_POST['bill_id'];
         $strsql = "SELECT * FROM bill WHERE bill_id = :bill_id";
         try {
             $stmt = $this->db->prepare($strsql);
@@ -69,13 +86,13 @@ class BillMixedController extends BaseController
                 $detail = array_merge($detail, $auDetails);
             }
 
-            echo json_encode([
-                'success' => true,
+            $data = [
                 'bill' => $bill,
                 'details' => $details
-            ]);
+            ];
+            return $this->successResponse('OK', $data);
         } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
         }
     }
 
@@ -103,7 +120,6 @@ class BillMixedController extends BaseController
                 ];
             }
         } catch (PDOException $e) {
-            error_log("Error fetching AU details: " . $e->getMessage());
             return [
                 'au_detail' => 'error',
                 'au_type' => 'error',
@@ -112,17 +128,10 @@ class BillMixedController extends BaseController
         }
     }
 
-    public function createBill()
-    {
-        // Implement bill creation logic here
-        // This method should handle POST data for creating a new bill
-    }
-
     public function updateBill()
     {
         if (!isset($_POST['bill_Id'])) {
-            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
-            return;
+            return $this->errorResponse('Bill ID not provided');
         }
 
         try {
@@ -191,18 +200,17 @@ class BillMixedController extends BaseController
             $this->logAction('Bill Updated', "Bill ID: $billId, Total Amount: $total");
 
             $this->db->commit();
-            echo json_encode(['success' => true, 'message' => 'Bill updated successfully.']);
+            return $this->successResponse();
         } catch (Exception $e) {
             $this->db->rollBack();
-            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
         }
     }
 
     public function deleteBill()
     {
         if (!isset($_POST['bill_id'])) {
-            echo json_encode(['success' => false, 'message' => 'Invalid request.']);
-            return;
+            return $this->errorResponse('Bill ID not provided');
         }
 
         $billId = $_POST['bill_id'];
@@ -215,7 +223,7 @@ class BillMixedController extends BaseController
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                throw new Exception("Bill not found.");
+                return $this->errorResponse('Bill not found', null, 500);
             }
 
             $this->db->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id")->execute([':bill_id' => $billId]);
@@ -224,10 +232,10 @@ class BillMixedController extends BaseController
             $this->logAction('Bill Deleted', "Bill ID: $billId, Company: {$result['bill_company']}");
 
             $this->db->commit();
-            echo json_encode(['success' => true, 'message' => 'Bill deleted successfully.']);
+            return $this->successResponse();
         } catch (Exception $e) {
             $this->db->rollBack();
-            echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
         }
     }
 }

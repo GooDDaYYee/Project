@@ -55,6 +55,9 @@
                         <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" type="submit">
                             <h5>เพิ่มข้อมูล</h5>
                         </button>
+                        <a href="index.php?page=user" class="btn btn-secondary btn-block col-sm-3 container">
+                            <h5>ย้อนกลับ</h5>
+                        </a>
                     </form>
                 </div>
             </div>

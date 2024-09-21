@@ -10,7 +10,7 @@
           <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
         </div>
       </form>
-      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=<?= base64_encode('bill/mixed_report') ?>', '_parent')">เพิ่มบิล</button>
+      <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=bill-mixed&action=create', '_parent')">เพิ่มบิล</button>
     </div>
 
     <div class="card-body">
@@ -180,98 +180,100 @@
 </div>
 
 <script>
-$(document).ready(function() {
-  let currentPage = 1;
-  const rowsPerPage = 10;
-  const $rows = $('#billTable tbody tr');
-  const totalPages = Math.ceil($rows.length / rowsPerPage);
+  $(document).ready(function() {
+    let currentPage = 1;
+    const rowsPerPage = 10;
+    const $rows = $('#billTable tbody tr');
+    const totalPages = Math.ceil($rows.length / rowsPerPage);
 
-  function showPage(page) {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+    function showPage(page) {
+      const start = (page - 1) * rowsPerPage;
+      const end = start + rowsPerPage;
 
-    $rows.hide().slice(start, end).show();
+      $rows.hide().slice(start, end).show();
 
-    updatePagination(page);
-  }
-
-  function updatePagination(currentPage) {
-    const $pagination = $('.pagination');
-    $pagination.empty();
-
-    const startPage = Math.max(1, currentPage - 2);
-    const endPage = Math.min(totalPages, startPage + 4);
-
-    if (startPage > 1) {
-      $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>`);
+      updatePagination(page);
     }
 
-    for (let i = startPage; i <= endPage; i++) {
-      $pagination.append(`<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
-    }
+    function updatePagination(currentPage) {
+      const $pagination = $('.pagination');
+      $pagination.empty();
 
-    if (endPage < totalPages) {
-      $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">หน้าสุดท้าย &raquo;</a></li>`);
-    }
-  }
+      const startPage = Math.max(1, currentPage - 2);
+      const endPage = Math.min(totalPages, startPage + 4);
 
-  $('.pagination').on('click', 'a', function(e) {
-    e.preventDefault();
-    currentPage = parseInt($(this).data('page'));
-    showPage(currentPage);
-  });
-
-  $('#search').on('keyup', function() {
-    const value = $(this).val().toLowerCase();
-    $rows.filter(function() {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-    });
-    currentPage = 1;
-    showPage(currentPage);
-  });
-
-  $('.edit-btn').click(function() {
-    const billId = $(this).data('id');
-    $.ajax({
-      url: 'index.php?page=bill-mixed&action=fetchBillDetails',
-      method: 'GET',
-      data: { bill_id: billId },
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          populateEditForm(response.bill, response.details);
-          $('#editModal').modal('show');
-        } else {
-          alert('Error fetching bill details: ' + response.message);
-        }
-      },
-      error: function() {
-        alert('Error fetching bill details');
+      if (startPage > 1) {
+        $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>`);
       }
+
+      for (let i = startPage; i <= endPage; i++) {
+        $pagination.append(`<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
+      }
+
+      if (endPage < totalPages) {
+        $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">หน้าสุดท้าย &raquo;</a></li>`);
+      }
+    }
+
+    $('.pagination').on('click', 'a', function(e) {
+      e.preventDefault();
+      currentPage = parseInt($(this).data('page'));
+      showPage(currentPage);
     });
-  });
 
-  function populateEditForm(bill, details) {
-    $('#bill_Id').val(bill.bill_id);
-    $('#thai_date').val(bill.bill_date);
-    $('#thai_date_product').val(bill.bill_date_product);
-    $('#payment').val(bill.bill_payment);
-    $('#thai_due_date').val(bill.bill_due_date);
-    $('#refer').val(bill.bill_refer);
-    $('#Site').val(bill.bill_site);
-    $('#pr').val(bill.bill_pr);
-    $('#work_no').val(bill.bill_work_no);
-    $('#project').val(bill.bill_project);
-    $('#auCount').val(details.length);
-
-    $('#auContainer').empty();
-    details.forEach((detail, index) => {
-      addAUInput(detail, index + 1);
+    $('#search').on('keyup', function() {
+      const value = $(this).val().toLowerCase();
+      $rows.filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+      });
+      currentPage = 1;
+      showPage(currentPage);
     });
-  }
 
-  function addAUInput(detail, index) {
-    const newInputFrame = $(`
+    $('.edit-btn').click(function() {
+      const billId = $(this).data('id');
+      $.ajax({
+        url: 'index.php?page=bill-mixed&action=fetchBillDetails',
+        method: 'POST',
+        data: {
+          bill_id: billId
+        },
+        dataType: 'json',
+        success: function(response) {
+          if (response.success) {
+            populateEditForm(response.data.bill, response.data.details);
+            $('#editModal').modal('show');
+          } else {
+            alert('Error fetching bill details: ' + response.message);
+          }
+        },
+        error: function() {
+          alert('Error fetching bill details');
+        }
+      });
+    });
+
+    function populateEditForm(bill, details) {
+      $('#bill_Id').val(bill.bill_id);
+      $('#thai_date').val(bill.bill_date);
+      $('#thai_date_product').val(bill.bill_date_product);
+      $('#payment').val(bill.bill_payment);
+      $('#thai_due_date').val(bill.bill_due_date);
+      $('#refer').val(bill.bill_refer);
+      $('#Site').val(bill.bill_site);
+      $('#pr').val(bill.bill_pr);
+      $('#work_no').val(bill.bill_work_no);
+      $('#project').val(bill.bill_project);
+      $('#auCount').val(details.length);
+
+      $('#auContainer').empty();
+      details.forEach((detail, index) => {
+        addAUInput(detail, index + 1);
+      });
+    }
+
+    function addAUInput(detail, index) {
+      const newInputFrame = $(`
       <div class="inputFrame">
         <div class="row mt-md-3" style="margin-bottom: 1rem;">
           <div class="col-md-3">
@@ -293,117 +295,150 @@ $(document).ready(function() {
         </div>
       </div>
     `);
-    $('#auContainer').append(newInputFrame);
+      $('#auContainer').append(newInputFrame);
 
-    $(`#inputField_${index}`).on('input', function() {
-      const selectedOption = $(this).val();
-      fetchAUDetails(selectedOption, index);
-    });
-  }
-
-  function fetchAUDetails(auId, index) {
-    $.ajax({
-      url: 'index.php?page=bill-mixed&action=fetchAUDetails',
-      method: 'GET',
-      data: { au_id: auId },
-      dataType: 'json',
-      success: function(data) {
-        $(`#selectedData_${index}`).text(data.au_detail);
-        $(`#selectedDataDetail_${index}`).val(data.au_detail);
-        $(`#selectedDataType_${index}`).val(data.au_type);
-        $(`#selectedDataPrice_${index}`).val(data.au_price);
-      },
-      error: function() {
-        alert('Error fetching AU details');
-      }
-    });
-  }
-
-  $('#addInputFrame').click(function() {
-    const numAU = parseInt($('#numAU').val());
-    if (numAU > 0) {
-      const currentCount = parseInt($('#auCount').val());
-      for (let i = 0; i < numAU; i++) {
-        addAUInput(null, currentCount + i + 1);
-      }
-      $('#auCount').val(currentCount + numAU);
-    }
-  });
-
-  $('#removeInputFrame').click(function() {
-    const $inputFrames = $('.inputFrame');
-    if ($inputFrames.length > 0) {
-      $inputFrames.last().remove();
-      const currentCount = parseInt($('#auCount').val());
-      $('#auCount').val(currentCount - 1);
-    }
-  });
-
-  $('#saveChanges').click(function() {
-    if (checkDuplicates()) {
-      alert("มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข");
-      return;
+      $(`#inputField_${index}`).on('input', function() {
+        const selectedOption = $(this).val();
+        fetchAUDetails(selectedOption, index);
+      });
     }
 
-    const formData = $('#editForm').serialize();
-    $.ajax({
-      url: 'index.php?page=bill-mixed&action=updateBill',
-      method: 'POST',
-      data: formData,
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          alert('Bill updated successfully');
-          $('#editModal').modal('hide');
-          location.reload();
-        } else {
-          alert('Error updating bill: ' + response.message);
-        }
-      },
-      error: function() {
-        alert('Error updating bill');
-      }
-    });
-  });
-
-  function checkDuplicates() {
-    const auIds = $('input[name="inputField[]"]').map(function() {
-      return $(this).val();
-    }).get();
-    const uniqueAuIds = [...new Set(auIds)];
-    return auIds.length !== uniqueAuIds.length;
-  }
-
-  $('.delete-btn').click(function() {
-    const billId = $(this).data('id');
-    if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
+    function fetchAUDetails(auId, index) {
       $.ajax({
-        url: 'index.php?page=bill-mixed&action=deleteBill',
-        method: 'POST',
-        data: { bill_id: billId },
+        url: 'index.php?page=bill-mixed&action=fetchAUDetails',
+        method: 'GET',
+        data: {
+          au_id: auId
+        },
         dataType: 'json',
-        success: function(response) {
-          if (response.success) {
-            alert('Bill deleted successfully');
-            location.reload();
-          } else {
-            alert('Error deleting bill: ' + response.message);
-          }
+        success: function(data) {
+          $(`#selectedData_${index}`).text(data.au_detail);
+          $(`#selectedDataDetail_${index}`).val(data.au_detail);
+          $(`#selectedDataType_${index}`).val(data.au_type);
+          $(`#selectedDataPrice_${index}`).val(data.au_price);
         },
         error: function() {
-          alert('Error deleting bill');
+          console.log('Error fetching AU details');
         }
       });
     }
-  });
 
-  $('.pdf-btn').click(function() {
-    const billId = $(this).data('id');
-    $('#billId').val(billId);
-    $('#documentModal').modal('show');
-  });
+    $('#addInputFrame').click(function() {
+      const numAU = parseInt($('#numAU').val());
+      if (numAU > 0) {
+        const currentCount = parseInt($('#auCount').val());
+        for (let i = 0; i < numAU; i++) {
+          addAUInput(null, currentCount + i + 1);
+        }
+        $('#auCount').val(currentCount + numAU);
+      }
+    });
 
-  // Initial page load
-  showPage(currentPage);
-});
+    $('#removeInputFrame').click(function() {
+      const $inputFrames = $('.inputFrame');
+      if ($inputFrames.length > 0) {
+        $inputFrames.last().remove();
+        const currentCount = parseInt($('#auCount').val());
+        $('#auCount').val(currentCount - 1);
+      }
+    });
+
+    $('#saveChanges').click(function() {
+      if (checkDuplicates()) {
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่สำเร็จ',
+          text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
+        });
+        return;
+      }
+
+      const formData = $('#editForm').serialize();
+      $.ajax({
+        url: 'index.php?page=bill-mixed&action=updateBill',
+        method: 'POST',
+        data: formData,
+        dataType: 'json',
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'สำเร็จ',
+              text: 'แก้ไขข้อมูลบิลสำเร็จ',
+            }).then(() => {
+              location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'ไม่สำเร็จ',
+              text: response.message,
+            });
+          }
+        },
+        error: function() {
+          Swal.fire({
+            icon: 'error',
+            title: 'ไม่สำเร็จ',
+            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+          });
+        }
+      });
+    });
+
+    function checkDuplicates() {
+      const auIds = $('input[name="inputField[]"]').map(function() {
+        return $(this).val();
+      }).get();
+      const uniqueAuIds = [...new Set(auIds)];
+      return auIds.length !== uniqueAuIds.length;
+    }
+
+    $('.delete-btn').click(function() {
+      const billId = $(this).data('id');
+      if (confirm("คุณแน่ใจหรือไม่ที่ต้องการลบข้อมูลบิล " + billId + " นี้?")) {
+        $.ajax({
+          url: 'index.php?page=bill-mixed&action=deleteBill',
+          method: 'POST',
+          data: {
+            bill_id: billId
+          },
+          dataType: 'json',
+          success: function(response) {
+            if (response.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'ลบสำเร็จ',
+                text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
+              }).then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'ไม่สำเร็จ',
+                text: response.message,
+              });
+            }
+          },
+          error: function() {
+            Swal.fire({
+              icon: 'error',
+              title: 'ไม่สำเร็จ',
+              text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+            });
+          }
+        });
+      }
+    });
+
+    $('.pdf-btn').click(function() {
+      const billId = $(this).data('id');
+      $('#billId').val(billId);
+      $('#documentModal').modal('show');
+    });
+
+    // Initial page load
+    showPage(currentPage);
+  });
 </script>

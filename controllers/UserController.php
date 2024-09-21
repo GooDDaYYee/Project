@@ -3,30 +3,41 @@ require_once __DIR__ . '/BaseController.php';
 
 class UserController extends BaseController
 {
-    public function index()
+    public function __construct()
     {
+        parent::__construct();
+
+        // Allow just admin to access this controller
         if ($_SESSION["lv"] != 0) {
             header("Location: index.php?page=home");
             exit();
         }
+    }
 
-        $users = $this->fetchUsers();
-
+    public function index()
+    {
         $data = [
-            'users' => $users,
+            'users' => $this->fetchUsers(),
         ];
 
         $pageTitle = 'จัดการผู้ใช้ - PSNK TELECOM';
         $this->render('user/index', ['pageTitle' => $pageTitle, 'data' => $data]);
     }
 
+    private function fetchUsers()
+    {
+        $strsql = "SELECT * FROM users ORDER BY users_date ASC";
+        try {
+            $stmt = $this->db->prepare($strsql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
     public function create()
     {
-        if ($_SESSION["lv"] != 0) {
-            header("Location: index.php?page=home");
-            exit();
-        }
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->create_post();
         } else {
@@ -53,8 +64,7 @@ class UserController extends BaseController
         $status = $_POST['status'];
 
         try {
-            $this->db->beginTransaction();
-
+            // ต้องเพิ่มการเช็ค user ซ้ำ
             $stmt = $this->db->prepare("INSERT INTO employee (employee_name, employee_lastname, employee_age, employee_phone, employee_email, employee_position, employee_status, employee_date) 
                                         VALUES (:name, :lastname, :age, :phone, :email, :position, :status, NOW())");
             $stmt->execute([
@@ -79,32 +89,28 @@ class UserController extends BaseController
                 ':employee_id' => $employee_id
             ]);
 
-            $this->db->commit();
-
             $logDetail = "Username: {$username}, Employee Name: {$name} {$lastname}, Position: {$type}";
             $this->logAction('User Created', $logDetail);
 
-            return $this->successResponse('User created successfully');
+            return $this->successResponse();
         } catch (PDOException $e) {
-            $this->db->rollBack();
-            return $this->errorResponse('Error creating user. Please try again later.', null, 500);
+            return $this->errorResponse();
         }
     }
 
     public function update()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return $this->errorResponse('Invalid request method', null, 405);
+        if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
+            return $this->errorResponse();
         }
-
+        
         $user_id = $_POST['user_id'];
         $username = $_POST['username'];
         $lv = $_POST['lv'];
         $status = $_POST['status'];
 
-        $sql = "UPDATE users SET username = :username, lv = :lv, status = :status WHERE user_id = :user_id";
-
         try {
+            $sql = "UPDATE users SET username = :username, lv = :lv, status = :status WHERE user_id = :user_id";
             $stmt = $this->db->prepare($sql);
             $stmt->execute([
                 ':username' => $username,
@@ -116,26 +122,22 @@ class UserController extends BaseController
             $logDetail = "User ID: {$user_id}, Username: {$username}, Lv: {$lv}, Status: {$status}";
             $this->logAction('User Updated', $logDetail);
 
-            return $this->successResponse('User updated successfully');
+            return $this->successResponse();
         } catch (PDOException $e) {
-            return $this->errorResponse('Error updating user. Please try again later.', null, 500);
+            return $this->errorResponse();
         }
     }
 
     public function delete()
     {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return $this->errorResponse('Invalid request method', null, 405);
-        }
-
+        
         if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
-            return $this->errorResponse('User ID is required', null, 400);
+            return $this->errorResponse();
         }
 
         $user_id = $_POST['user_id'];
-        try {
-            $this->db->beginTransaction();
 
+        try {
             $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
             $stmt->execute([':user_id' => $user_id]);
             $employee = $stmt->fetch();
@@ -149,27 +151,12 @@ class UserController extends BaseController
             $stmt = $this->db->prepare("DELETE FROM users WHERE user_id = :user_id");
             $stmt->execute([':user_id' => $user_id]);
 
-            $this->db->commit();
-
             $logDetail = "User ID: {$user_id}, Employee ID: " . ($employee_id ?? 'N/A');
             $this->logAction('User Deleted', $logDetail);
 
-            return $this->successResponse('User deleted successfully');
+            return $this->successResponse();
         } catch (PDOException $e) {
-            $this->db->rollBack();
-            return $this->errorResponse('Error deleting user. Please try again later.', null, 500);
-        }
-    }
-
-    private function fetchUsers()
-    {
-        $strsql = "SELECT * FROM users ORDER BY users_date ASC";
-        try {
-            $stmt = $this->db->prepare($strsql);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            return [];
+            return $this->errorResponse();
         }
     }
 
