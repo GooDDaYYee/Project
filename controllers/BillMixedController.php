@@ -52,13 +52,165 @@ class BillMixedController extends BaseController
 
     private function create_get()
     {
-        $pageTitle = 'เพิ่มผู้ใช้ - PSNK TELECOM';
-        $this->render('bill_mixed/create', ['pageTitle' => $pageTitle]);
+        $newBillId = $this->generateNewBillId();
+        $thaiDate = $this->getCurrentThaiDate();
+        $auOptions = $this->getAuOptions();
+
+        $data = [
+            'pageTitle' => 'เพิ่มบิล Mixed - PSNK TELECOM',
+            'newBillId' => $newBillId,
+            'thaiDate' => $thaiDate,
+            'auOptions' => $auOptions
+        ];
+
+        $this->render('bill_mixed/create', $data);
     }
 
     private function create_post()
     {
+        try {
+            if (!isset($_POST['inputField'])) {
+                $this->jsonResponse(false, 'Require AU');
+            }
+            $this->db->beginTransaction();
 
+            $employeeId = $this->getEmployeeId($_SESSION['user_id']);
+            $billId = $this->insertBill($employeeId);
+            $this->insertBillDetails($billId);
+            $this->updateBillTotals($billId);
+            $this->logAction('Bill Created', "Bill ID: $billId");
+
+            $this->db->commit();
+            $this->jsonResponse(true, 'Bill created successfully');
+        } catch (PDOException $e) {
+            $this->db->rollBack();
+            $this->jsonResponse(false, 'Unable to create bill. Please check your input.', null, 400);
+        }
+    }
+
+    private function generateNewBillId()
+    {
+        $stmt = $this->db->prepare("SELECT bill_id FROM bill WHERE bill_company = 'mixed' ORDER BY bill_id DESC LIMIT 1");
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $currentYear = (date('Y') + 543) % 100;
+        $newNumber = 1;
+
+        if ($result) {
+            preg_match('/(\d{2})\/(\d+)$/', $result['bill_id'], $matches);
+            $lastYear = $matches[1];
+            $lastNumber = intval($matches[2]);
+
+            if ($currentYear == $lastYear) {
+                $newNumber = $lastNumber + 1;
+            }
+        }
+
+        return sprintf("PSNK/MIXED/%02d/%03d", $currentYear, $newNumber);
+    }
+
+    private function getCurrentThaiDate()
+    {
+        date_default_timezone_set('Asia/Bangkok');
+        return date("Y-m-d", strtotime("+543 year"));
+    }
+
+    private function getAuOptions()
+    {
+        $stmt = $this->db->prepare("SELECT * FROM au_all WHERE au_company = 'mixed'");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function getEmployeeId($userId)
+    {
+        $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
+        $stmt->execute([':user_id' => $userId]);
+        return $stmt->fetchColumn();
+    }
+
+    private function insertBill($employeeId)
+    {
+        $stmt = $this->db->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
+        VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
+
+        $stmt->execute([
+            ':bill_id' => $_POST['number'],
+            ':bill_date' => $_POST['thai_date'],
+            ':bill_date_product' => $_POST['thai_date_product'],
+            ':bill_payment' => $_POST['payment'],
+            ':bill_due_date' => $_POST['thai_due_date'],
+            ':bill_refer' => $_POST['refer'],
+            ':bill_site' => $_POST['Site'],
+            ':bill_pr' => $_POST['pr'],
+            ':bill_work_no' => $_POST['work_no'],
+            ':bill_project' => $_POST['project'],
+            ':list_num' => $_POST['auCount'],
+            ':total_amount' => 0,
+            ':vat' => 0,
+            ':withholding' => 0,
+            ':grand_total' => 0,
+            ':bill_company' => $_POST['company'],
+            ':employee_id' => $employeeId
+        ]);
+
+        return $_POST['number'];
+    }
+
+    private function insertBillDetails($billId)
+    {
+        $stmt = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
+
+        foreach ($_POST['inputField'] as $i => $auId) {
+            $unit = $_POST['unit'][$i];
+            $price = $this->calculateItemPrice($auId, $unit);
+
+            $stmt->execute([
+                ':bill_id' => $billId,
+                ':au_id' => $auId,
+                ':unit' => $unit,
+                ':price' => $price
+            ]);
+        }
+    }
+
+    private function calculateItemPrice($auId, $unit)
+    {
+        $stmt = $this->db->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
+        $stmt->execute([':au_id' => $auId]);
+        $auPrice = $stmt->fetchColumn();
+        return $unit * $auPrice;
+    }
+
+    private function updateBillTotals($billId)
+    {
+        $total = $this->calculateBillTotal($billId);
+        $vat = $total * 0.07;
+        $withholding = $total * 0.03;
+        $grandTotal = $total - $vat;
+
+        $stmt = $this->db->prepare("UPDATE bill SET
+            total_amount = :total_amount,
+            vat = :vat,
+            withholding = :withholding,
+            grand_total = :grand_total
+            WHERE bill_id = :bill_id");
+
+        $stmt->execute([
+            ':bill_id' => $billId,
+            ':total_amount' => $total,
+            ':vat' => $vat,
+            ':withholding' => $withholding,
+            ':grand_total' => $grandTotal
+        ]);
+    }
+
+    private function calculateBillTotal($billId)
+    {
+        $stmt = $this->db->prepare("SELECT SUM(price) FROM bill_detail WHERE bill_id = :bill_id");
+        $stmt->execute([':bill_id' => $billId]);
+        return $stmt->fetchColumn();
     }
 
     public function fetchBillDetails()
