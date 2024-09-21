@@ -192,8 +192,7 @@
         });
 
         $('.delete-drum').click(function() {
-            var drumId = $(this).data('id');
-            var drumId = $(this).data('id');
+            var drum_id = $(this).data('id');
             var index = $(this).data('index');
 
             Swal.fire({
@@ -211,7 +210,7 @@
                         url: 'index.php?action=deleteDrum',
                         method: 'POST',
                         data: {
-                            drum_id: drumId
+                            drum_id: drum_id
                         },
                         dataType: 'json',
                         success: function(response) {

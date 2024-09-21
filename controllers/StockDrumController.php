@@ -78,7 +78,7 @@ class StockDrumController extends BaseController
                 $stmt = $this->db->prepare("SELECT * FROM drum WHERE drum_id = :drum_id");
                 $stmt->execute([':drum_id' => $drum_id]);
                 $drum = $stmt->fetch(PDO::FETCH_ASSOC);
-                
+
                 if ($drum) {
                     echo json_encode(['success' => true, 'drum' => $drum]);
                 } else {
