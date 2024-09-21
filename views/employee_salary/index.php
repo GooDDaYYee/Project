@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </form>
-            <button type="button" class="btn btn-warning bg-gradient-purple ml-2" onclick="window.location.href='index.php?page=<?= base64_encode('employee/add_salary') ?>'">เพิ่มเงินเดือน</button>
+            <button type="button" class="btn btn-warning bg-gradient-purple ml-2" onclick="window.open('index.php?page=employee-salary&action=create', '_parent')">เพิ่มเงินเดือน</button>
         </div>
 
         <div class="card-body">
@@ -47,7 +47,7 @@
                             <th>นามสกุล</th>
                             <th>เงินเดือน</th>
                             <th>OT</th>
-                            <th>ประกันสังคม</th>
+                            <th style="width: 14%;">ประกันสังคม (หักในเงินเดือน)</th>
                             <th>อื่นๆ</th>
                             <th>รวม</th>
                             <th>การดำเนินการ</th>
@@ -59,13 +59,13 @@
                                 <td><?= $index + 1 ?></td>
                                 <td><?= htmlspecialchars($salary['employee_name']) ?></td>
                                 <td><?= htmlspecialchars($salary['employee_lastname']) ?></td>
-                                <td><?= number_format($salary['salary'], 2) ?></td>
-                                <td><?= number_format($salary['ot'], 2) ?></td>
-                                <td><?= number_format($salary['social_security'], 2) ?></td>
-                                <td><?= number_format($salary['other'], 2) ?></td>
-                                <td><?= number_format($salary['total_salary'], 2) ?></td>
+                                <td style="text-align: right;"><?= number_format($salary['salary'], 2) ?></td>
+                                <td style="text-align: right;"><?= number_format($salary['ot'], 2) ?></td>
+                                <td style="text-align: right;"><?= number_format($salary['social_security'], 2) ?></td>
+                                <td style="text-align: right;"><?= number_format($salary['other'], 2) ?></td>
+                                <td style="text-align: right;"><?= number_format($salary['total_salary'], 2) ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary edit-salary" 
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-salary"
                                         data-salary_id="<?= $salary['salary_id'] ?>"
                                         data-salary="<?= $salary['salary'] ?>"
                                         data-ot="<?= $salary['ot'] ?>"
@@ -73,7 +73,7 @@
                                         data-other="<?= $salary['other'] ?>">
                                         แก้ไข
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger delete-salary" 
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-salary"
                                         data-salary_id="<?= $salary['salary_id'] ?>"
                                         data-index="<?= $index + 1 ?>">
                                         ลบ
@@ -90,7 +90,7 @@
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-custom-size" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลเงินเดือน</h5>
@@ -128,32 +128,6 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    var table = $('#salaryTable').DataTable({
-        "pageLength": 10,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "language": {
-            "search": "ค้นหา:",
-            "lengthMenu": "แสดง _MENU_ รายการ",
-            "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
-            "infoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
-            "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
-            "zeroRecords": "ไม่พบข้อมูล",
-            "paginate": {
-                "first": "หน้าแรก",
-                "last": "หน้าสุดท้าย",
-                "next": "ถัดไป",
-                "previous": "ก่อนหน้า"
-            }
-        }
-    });
-
-    $('#search').on('keyup', function() {
-        table.search(this.value).draw();
-    });
-
     $('.edit-salary').click(function() {
         var salaryId = $(this).data('salary_id');
         var salary = $(this).data('salary');
@@ -173,7 +147,7 @@ $(document).ready(function() {
     $('#editForm').on('submit', function(e) {
         e.preventDefault();
         $.ajax({
-            url: 'index.php?action=updateSalary',
+            url: 'index.php?page=employee-salary&action=updateSalary',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
@@ -203,11 +177,37 @@ $(document).ready(function() {
             }
         });
     });
+    $(document).ready(function() {
+        var table = $('#salaryTable').DataTable({
+            "pageLength": 10,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "language": {
+                "search": "ค้นหา:",
+                "lengthMenu": "แสดง _MENU_ รายการ",
+                "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                "infoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+                "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
+                "zeroRecords": "ไม่พบข้อมูล",
+                "paginate": {
+                    "first": "หน้าแรก",
+                    "last": "หน้าสุดท้าย",
+                    "next": "ถัดไป",
+                    "previous": "ก่อนหน้า"
+                }
+            }
+        });
+
+        $('#search').on('keyup', function() {
+            table.search(this.value).draw();
+        });
+    });
 
     $('.delete-salary').click(function() {
         var salaryId = $(this).data('salary_id');
         var index = $(this).data('index');
-        
+
         Swal.fire({
             title: 'คุณแน่ใจหรือไม่?',
             text: "คุณต้องการลบเงินเดือนลำดับที่ " + index + " หรือไม่?",
@@ -220,9 +220,11 @@ $(document).ready(function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: 'index.php?action=deleteSalary',
+                    url: 'index.php?page=employee-salary&action=deleteSalary',
                     method: 'POST',
-                    data: { salary_id: salaryId },
+                    data: {
+                        salary_id: salaryId
+                    },
                     dataType: 'json',
                     success: function(response) {
                         if (response.success) {
@@ -252,5 +254,4 @@ $(document).ready(function() {
             }
         });
     });
-});
 </script>

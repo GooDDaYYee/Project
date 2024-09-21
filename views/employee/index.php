@@ -57,59 +57,61 @@
 </div>
 
 <!-- Edit Modal -->
-<div class="modal" id="editModal">
-    <div class="modal-content">
-        <form id="editForm">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลพนักงาน</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="edit-employee-id" name="employee_id">
-                <div class="form-group">
-                    <label for="edit-employee-name">ชื่อ</label>
-                    <input type="text" class="form-control" id="edit-employee-name" name="employee_name" required>
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-custom-size" role="document">
+        <div class="modal-content">
+            <form id="editForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">แก้ไขข้อมูลพนักงาน</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label for="edit-employee-lastname">นามสกุล</label>
-                    <input type="text" class="form-control" id="edit-employee-lastname" name="employee_lastname" required>
+                <div class="modal-body">
+                    <input type="hidden" id="edit-employee-id" name="employee_id">
+                    <div class="form-group">
+                        <label for="edit-employee-name">ชื่อ</label>
+                        <input type="text" class="form-control" id="edit-employee-name" name="employee_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-employee-lastname">นามสกุล</label>
+                        <input type="text" class="form-control" id="edit-employee-lastname" name="employee_lastname" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-employee-age">อายุ</label>
+                        <input type="number" class="form-control" id="edit-employee-age" name="employee_age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-employee-phone">เบอร์โทร</label>
+                        <input type="text" class="form-control" id="edit-employee-phone" name="employee_phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-employee-email">อีเมล</label>
+                        <input type="email" class="form-control" id="edit-employee-email" name="employee_email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-employee-position">ตำแหน่ง</label>
+                        <select class="form-control" id="edit-employee-position" name="employee_position" required>
+                            <option value="0">แอดมิน</option>
+                            <option value="1">เจ้าของ</option>
+                            <option value="2">พนักงานเอกสาร</option>
+                            <option value="3">พนักงานปฏิบัติ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-employee-status">สถานะการทำงาน</label>
+                        <select class="form-control" id="edit-employee-status" name="employee_status" required>
+                            <option value="1">ทำงานอยู่</option>
+                            <option value="0">ลาออก</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="edit-employee-age">อายุ</label>
-                    <input type="number" class="form-control" id="edit-employee-age" name="employee_age" required>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
+                    <button type="submit" class="btn btn-warning bg-gradient-purple">บันทึกการแก้ไข</button>
                 </div>
-                <div class="form-group">
-                    <label for="edit-employee-phone">เบอร์โทร</label>
-                    <input type="text" class="form-control" id="edit-employee-phone" name="employee_phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-employee-email">อีเมล</label>
-                    <input type="email" class="form-control" id="edit-employee-email" name="employee_email" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-employee-position">ตำแหน่ง</label>
-                    <select class="form-control" id="edit-employee-position" name="employee_position" required>
-                        <option value="0">แอดมิน</option>
-                        <option value="1">เจ้าของ</option>
-                        <option value="2">พนักงานเอกสาร</option>
-                        <option value="3">พนักงานปฏิบัติ</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="edit-employee-status">สถานะการทำงาน</label>
-                    <select class="form-control" id="edit-employee-status" name="employee_status" required>
-                        <option value="1">ทำงานอยู่</option>
-                        <option value="0">ลาออก</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-                <button type="submit" class="btn btn-warning bg-gradient-purple">บันทึกการแก้ไข</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -156,12 +158,6 @@
                 var rowText = $(this).text().toLowerCase();
                 $(this).toggle(rowText.indexOf(searchTerm) > -1);
             });
-        });
-
-        $('.edit-employee').click(function() {
-            var employeeId = $(this).data('id');
-            // Fetch employee details and populate the form
-            // You'll need to implement this AJAX call
         });
 
         $('#editForm').on('submit', function(e) {
@@ -252,7 +248,7 @@
         $('.edit-employee').click(function() {
             var employeeId = $(this).data('id');
             $.ajax({
-                url: 'index.php?action=getEmployeeDetails',
+                url: 'index.php?page=employee&action=getEmployeeDetails',
                 method: 'GET',
                 data: {
                     employee_id: employeeId

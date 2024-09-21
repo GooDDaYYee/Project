@@ -33,9 +33,9 @@
                 <td scope="row"><span class="to_file"><?= htmlspecialchars($bill['bill_id']) ?></span></td>
                 <td><span class="to_file"><?= $this->formatThaiDate($bill['bill_date']) ?></span></td>
                 <td><span class="to_file"><?= htmlspecialchars($bill['bill_site']) ?></span></td>
-                <td><span class="to_file"><?= number_format($bill['total_amount'], 2) ?></span></td>
-                <td><span class="to_file"><?= number_format($bill['vat'], 2) ?></span></td>
-                <td><span class="to_file"><?= number_format($bill['grand_total'], 2) ?></span></td>
+                <td style="text-align: right;"><span class="to_file"><?= number_format($bill['total_amount'], 2) ?></span></td>
+                <td style="text-align: right;"><span class="to_file"><?= number_format($bill['vat'], 2) ?></span></td>
+                <td style="text-align: right;"><span class="to_file"><?= number_format($bill['grand_total'], 2) ?></span></td>
                 <td>
                   <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
                   <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>">PDF</button>
@@ -58,121 +58,125 @@
 </div>
 
 <!-- Modal for Document Options -->
-<div id="documentModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="modal-title" id="editModalLabel">ออกเอกสารเป็น PDF</h4>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form id="documentForm" action="index.php?page=bill-fbh&action=exportPDF" target="_blank" method="post">
-        <input type="hidden" id="billId" name="billId" value="">
-        <div class="form-group">
-          <label for="documentType">ประเภทเอกสาร:</label>
-          <select id="documentType" name="documentType" class="form-control">
-            <option value="quotation">ใบเสนอราคา</option>
-            <option value="invoice">ใบแจ้งหนี้</option>
-            <option value="receipt">ใบเสร็จรับเงิน</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-warning bg-gradient-purple ml-auto">สร้างเอกสาร</button>
-      </form>
+<div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-custom-size" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="editModalLabel">ออกเอกสารเป็น PDF</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="documentForm" action="index.php?page=bill-fbh&action=exportPDF" target="_blank" method="post">
+          <input type="hidden" id="billId" name="billId" value="">
+          <div class="form-group">
+            <label for="documentType">ประเภทเอกสาร:</label>
+            <select id="documentType" name="documentType" class="form-control">
+              <option value="quotation">ใบเสนอราคา</option>
+              <option value="invoice">ใบแจ้งหนี้</option>
+              <option value="receipt">ใบเสร็จรับเงิน</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-warning bg-gradient-purple ml-auto">สร้างเอกสาร</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Edit Modal -->
-<div id="editModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title" id="editModalLabel">แก้ไขบิล</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form id="editForm">
-        <div class="p-5">
-          <div class="text-center">
-            <h1 class="h5 text-gray-900 mb-2" style="font-size: 1.5rem;">แก้ไข เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-custom-size" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">แก้ไขบิล</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <div class="p-5">
+            <div class="text-center">
+              <h1 class="h5 text-gray-900 mb-2" style="font-size: 1.5rem;">แก้ไข เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
+            </div>
+            <hr class="user">
+            <div class="row mt-md-3">
+              <div class="col">
+                <h5>เลขที่</h5>
+                <input type="text" id="bill_Id" name="bill_Id" class="form-control form-control-user" value="" readonly>
+              </div>
+              <div class="col">
+                <h5>วันที่ออกบิล</h5>
+                <input type="date" class="form-control" id="thai_date" name="thai_date" value="">
+              </div>
+              <div class="col">
+                <h5>วันที่ส่งสินค้า</h5>
+                <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="">
+              </div>
+            </div>
+            <div class="row mt-md-3">
+              <div class="col-md-5">
+                <h5>เงื่อนไขการชำระเงิน</h5>
+                <input type="text" id="payment" name="payment" class="form-control form-control-user" value="">
+              </div>
+              <div class="col-md-3">
+                <h5>วันครบกำหนด</h5>
+                <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="">
+              </div>
+              <div class="col-md-4">
+                <h5>เลขที่ใบแจ้งหนี้/อ้างถึง</h5>
+                <input type="text" id="refer" name="refer" class="form-control form-control-user" value="">
+              </div>
+            </div>
+            <div class="row mt-md-3">
+              <div class="col-md-3">
+                <h5>Site</h5>
+                <input type="text" id="Site" name="Site" class="form-control form-control-user" value="">
+              </div>
+              <div class="col-md-3">
+                <h5>PR No</h5>
+                <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน" value="">
+              </div>
+              <div class="col-md-3">
+                <h5>Work No</h5>
+                <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน" value="">
+              </div>
+              <div class="col-md-3">
+                <h5>Project</h5>
+                <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน" value="">
+              </div>
+            </div>
+            <div class="row mt-md-3">
+              <div class="col-md-3">
+                <h5>จำนวนAU</h5>
+                <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" value="0" required>
+              </div>
+              <div class="col-md-2">
+                <h5>&nbsp;</h5>
+                <button type="button" id="addInputFrame" class="btn btn-success btn-user btn-block">เพิ่ม AU</button>
+              </div>
+              <div class="col-md-2">
+                <h5>&nbsp;</h5>
+                <button type="button" id="removeInputFrame" class="btn btn-danger btn-user btn-block">ลบ AU</button>
+              </div>
+              <div class="col-md-3">
+                <h5>จำนวน AU ที่เพิ่ม</h5>
+                <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
+                <input type="hidden" name="company" value="FBH">
+              </div>
+            </div>
+            <div id="auContainer">
+              <!-- AU inputs will be dynamically added here -->
+            </div>
           </div>
-          <hr class="user">
-          <div class="row mt-md-3">
-            <div class="col">
-              <h5>เลขที่</h5>
-              <input type="text" id="bill_Id" name="bill_Id" class="form-control form-control-user" value="" readonly>
-            </div>
-            <div class="col">
-              <h5>วันที่ออกบิล</h5>
-              <input type="date" class="form-control" id="thai_date" name="thai_date" value="">
-            </div>
-            <div class="col">
-              <h5>วันที่ส่งสินค้า</h5>
-              <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="">
-            </div>
-          </div>
-          <div class="row mt-md-3">
-            <div class="col-md-5">
-              <h5>เงื่อนไขการชำระเงิน</h5>
-              <input type="text" id="payment" name="payment" class="form-control form-control-user" value="">
-            </div>
-            <div class="col-md-3">
-              <h5>วันครบกำหนด</h5>
-              <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="">
-            </div>
-            <div class="col-md-4">
-              <h5>เลขที่ใบแจ้งหนี้/อ้างถึง</h5>
-              <input type="text" id="refer" name="refer" class="form-control form-control-user" value="">
-            </div>
-          </div>
-          <div class="row mt-md-3">
-            <div class="col-md-3">
-              <h5>Site</h5>
-              <input type="text" id="Site" name="Site" class="form-control form-control-user" value="">
-            </div>
-            <div class="col-md-3">
-              <h5>PR No</h5>
-              <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน" value="">
-            </div>
-            <div class="col-md-3">
-              <h5>Work No</h5>
-              <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน" value="">
-            </div>
-            <div class="col-md-3">
-              <h5>Project</h5>
-              <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน" value="">
-            </div>
-          </div>
-          <div class="row mt-md-3">
-            <div class="col-md-3">
-              <h5>จำนวนAU</h5>
-              <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" value="0" required>
-            </div>
-            <div class="col-md-2">
-              <h5>&nbsp;</h5>
-              <button type="button" id="addInputFrame" class="btn btn-success btn-user btn-block">เพิ่ม AU</button>
-            </div>
-            <div class="col-md-2">
-              <h5>&nbsp;</h5>
-              <button type="button" id="removeInputFrame" class="btn btn-danger btn-user btn-block">ลบ AU</button>
-            </div>
-            <div class="col-md-3">
-              <h5>จำนวน AU ที่เพิ่ม</h5>
-              <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
-              <input type="hidden" name="company" value="FBH">
-            </div>
-          </div>
-          <div id="auContainer">
-            <!-- AU inputs will be dynamically added here -->
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
-      <button type="button" class="btn btn-warning bg-gradient-purple" id="saveChanges">บันทึกการแก้ไข</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="btn btn-warning bg-gradient-purple" id="saveChanges">บันทึกการแก้ไข</button>
+      </div>
     </div>
   </div>
 </div>
