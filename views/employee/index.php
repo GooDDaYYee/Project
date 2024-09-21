@@ -11,7 +11,7 @@
 
         <div class="card-body">
             <div class="card border h-100">
-                <table class="table table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th scope="col">ลำดับ</th>
@@ -22,25 +22,23 @@
                             <th scope="col">อีเมล</th>
                             <th scope="col">ตำแหน่ง</th>
                             <th scope="col">สถานะ</th>
-                            <th scope="col"> </th>
+                            <th scope="col">การดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($data['employees'] as $i => $employee): ?>
                             <tr>
-                                <th scope="row"><i class="to_file"><?= $i + 1 ?></i></th>
-                                <td><i class="to_file"><?= htmlspecialchars($employee['employee_name']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($employee['employee_lastname']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($employee['employee_age']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($employee['employee_phone']) ?></i></td>
-                                <td><i class="to_file"><?= htmlspecialchars($employee['employee_email']) ?></i></td>
-                                <td><i class="to_file"><?= $this->getPositionName($employee['employee_position']) ?></i></td>
-                                <td><i class="to_file"><?= $this->getStatusName($employee['employee_status']) ?></i></td>
+                                <td scope="row"><span class="to_file"><?= $i + 1 ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($employee['employee_name']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($employee['employee_lastname']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($employee['employee_age']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($employee['employee_phone']) ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($employee['employee_email']) ?></span></td>
+                                <td><span class="to_file"><?= $this->getPositionName($employee['employee_position']) ?></span></td>
+                                <td><span class="to_file"><?= $this->getStatusName($employee['employee_status']) ?></span></td>
                                 <td>
-                                    <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-outline-success edit-employee" data-id="<?= $employee['employee_id'] ?>">แก้ไข</button>
-                                        <button type="button" class="btn btn-outline-danger delete-employee" data-id="<?= $employee['employee_id'] ?>" data-index="<?= $i + 1 ?>">ลบ</button>
-                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-employee" data-id="<?= $employee['employee_id'] ?>">แก้ไข</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-employee" data-id="<?= $employee['employee_id'] ?>" data-index="<?= $i + 1 ?>">ลบ</button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

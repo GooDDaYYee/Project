@@ -12,7 +12,7 @@
 
         <div class="card-body">
             <div class="card border h-100">
-                <table class="table table-striped">
+                <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th scope="col">ลำดับ</th>
@@ -25,14 +25,14 @@
                     <tbody>
                         <?php foreach ($data['users'] as $i => $user): ?>
                             <tr>
-                                <th scope="row"><i class="to_file"><?= $i + 1 ?></i></th>
-                                <td><i class="to_file"><?= htmlspecialchars($user['username']) ?></i></td>
-                                <td><i class="to_file"><?= $this->getLevelName($user['lv']) ?></i></td>
-                                <td><i class="to_file"><?= $this->getStatusName($user['status']) ?></i></td>
+                                <td scope="row"><span class="to_file"><?= $i + 1 ?></span></td>
+                                <td><span class="to_file"><?= htmlspecialchars($user['username']) ?></span></td>
+                                <td><span class="to_file"><?= $this->getLevelName($user['lv']) ?></span></td>
+                                <td><span class="to_file"><?= $this->getStatusName($user['status']) ?></span></td>
                                 <td>
                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-outline-success edit-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-lv="<?= $user['lv'] ?>" data-status="<?= $user['status'] ?>">แก้ไข</button>
-                                        <button type="button" class="btn btn-outline-danger delete-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>">ลบ</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary edit-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-lv="<?= $user['lv'] ?>" data-status="<?= $user['status'] ?>">แก้ไข</button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>">ลบ</button>
                                     </div>
                                 </td>
                             </tr>

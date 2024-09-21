@@ -24,7 +24,7 @@
               <th scope="col">Final BOQ 100%</th>
               <th scope="col">VAT 7%</th>
               <th scope="col">GRAND Total</th>
-              <th scope="col"> </th>
+              <th scope="col">การดำเนินการ</th>
             </tr>
           </thead>
           <tbody>
@@ -69,7 +69,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <form id="documentForm" action="export_pdf/bill_pdf.php" target="_blank" method="post">
+      <form id="documentForm" action="index.php?page=bill-mixed&action=exportPDF" target="_blank" method="post">
         <input type="hidden" id="billId" name="billId" value="">
         <div class="form-group">
           <label for="documentType">ประเภทเอกสาร:</label>

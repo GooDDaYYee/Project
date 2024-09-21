@@ -69,7 +69,7 @@
       </button>
     </div>
     <div class="modal-body">
-      <form id="documentForm" action="export_pdf/bill_pdf.php" target="_blank" method="post">
+      <form id="documentForm" action="index.php?page=bill-fbh&action=exportPDF" target="_blank" method="post">
         <input type="hidden" id="billId" name="billId" value="">
         <div class="form-group">
           <label for="documentType">ประเภทเอกสาร:</label>

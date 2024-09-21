@@ -395,4 +395,8 @@ class BillFBHController extends BaseController
             return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
         }
     }
+    public function exportPDF()
+    {
+        $this->exPDF();
+    }
 }
