@@ -81,8 +81,10 @@
                         'company': company,
                         'request_type': 'manufacturer'
                     },
-                    success: function(html) {
-                        $('#drum_id').html(html);
+                    success: function(response) {
+                        if (response.success) {
+                            $('#drum_id').html(response.data.options);
+                        }
                     }
                 });
             } else {
