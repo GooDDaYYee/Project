@@ -30,6 +30,15 @@
                                 <label for="images" class="form-label">รูปภาพ:</label>
                                 <input type="file" id="images" name="images[]" multiple accept="image/*">
                             </div>
+                            <div class="form-group row">
+                                <div class="col">
+                                    <label for="images" class="form-label">เลือกกลุ่มไลน์:</label>
+                                    <select class="form-control" id="group" name="group">
+                                        <option value="1">PSNK กลุ่ม 1</option>
+                                        <option value="2">PSNK กลุ่ม 2</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div id="imagePreviewGrid" class="row mb-3">
                                 <!-- Image previews will be inserted here -->
                             </div>

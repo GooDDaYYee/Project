@@ -14,6 +14,7 @@ class WorkReportController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = $_POST['name'] ?? '';
             $jobname = $_POST['jobname'] ?? '';
+            $group = $_POST['group'] ?? 1;
             $user_id = $_SESSION['user_id'] ?? null;
 
             if (empty($name) || empty($jobname) || empty($user_id)) {
@@ -76,14 +77,58 @@ class WorkReportController extends BaseController
 
 
             // เพิ่มแจ้งเตือนไลน์ที่นี่
-            echo "ใช้ตัวแปรนี้ส่งไปที่ไลน์ได้เลย: " . $fullPath;
-            die();
 
+            $notify_result = $this->sendLineNotify($name, $group, $jobname, $fullPath);
+
+            $response = [
+                'status' => 1,
+                'msg' => 'บันทึกข้อมูลสำเร็จ',
+                'notify_result' => json_decode($notify_result, true)
+            ];
 
             $_SESSION['success_message'] = "รายงานถูกบันทึกเรียบร้อยแล้ว";
             header("Location: index.php?page=work-report");
             exit();
         }
+    }
+
+    public function sendLineNotify($name, $jobname, $group, $lik)
+    {
+        $tokens = [
+            1 => "ZttPwN3qU9h2cl2HUAipy2MPFMCfTGxXb37Qbf4IKt2", // PSNK Group 1
+            2 => "I9A20aBNYwcqavN0tbvR5B4uwDxBCIeWMXhQ2LRA0Gr"  // PSNK Group 2
+        ];
+
+        $token = $tokens[$group] ?? null;
+
+        if (!$token) {
+            return json_encode(['status' => 'error', 'message' => 'Invalid group selected']);
+        }
+
+        $message = "\nชื่อผู้รายงาน: " . $name;
+        $message = "\nรายงานงานใหม่: " . $jobname;
+        $message .= "\ลิ้ง: " . $lik;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://notify-api.line.me/api/notify");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "message=" . $message);
+        $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer ' . $token . '',);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($ch);
+
+        if (curl_error($ch)) {
+            $response = ['status' => 'error', 'message' => curl_error($ch)];
+        } else {
+            $res = json_decode($result, true);
+            $response = ['status' => $res['status'], 'message' => $res['message']];
+        }
+        curl_close($ch);
+
+        return json_encode($response);
     }
 
     private function createSlug($string)
