@@ -71,26 +71,16 @@ class WorkReportController extends BaseController
                 }
             }
 
-            // Save report to database
-            try {
-                $this->db->beginTransaction();
+            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/index.php?page=work-list&action=view&folder=";
+            $fullPath = $currentUrl . $uploadDir;
 
-                $stmt = $this->db->prepare("INSERT INTO work_reports (user_id, name, job_name) VALUES (:user_id, :name, :job_name)");
-                $stmt->execute([':user_id' => $user_id, ':name' => $name, ':job_name' => $jobname]);
-                $report_id = $this->db->lastInsertId();
 
-                foreach ($uploadedFiles as $file) {
-                    $stmt = $this->db->prepare("INSERT INTO report_images (report_id, image_path) VALUES (:report_id, :image_path)");
-                    $stmt->execute([':report_id' => $report_id, ':image_path' => $file]);
-                }
+            // เพิ่มแจ้งเตือนไลน์ที่นี่
+            echo "ใช้ตัวแปรนี้ส่งไปที่ไลน์ได้เลย: " . $fullPath;
+            die();
 
-                $this->db->commit();
-                $_SESSION['success_message'] = "รายงานถูกบันทึกเรียบร้อยแล้ว";
-            } catch (PDOException $e) {
-                $this->db->rollBack();
-                $_SESSION['error_message'] = "เกิดข้อผิดพลาดในการบันทึกรายงาน: " . $e->getMessage();
-            }
 
+            $_SESSION['success_message'] = "รายงานถูกบันทึกเรียบร้อยแล้ว";
             header("Location: index.php?page=work-report");
             exit();
         }

@@ -10,7 +10,7 @@ class HomeController extends BaseController
             'document_employees_count' => $this->getEmployeesCount('พนักงานเอกสาร'),
             'operational_employees_count' => $this->getEmployeesCount('พนักงานปฏิบัติงาน'),
             'files_count' => $this->getFilesCount(),
-            'shared_files' => $this->getSharedFiles()
+            // 'shared_files' => $this->getSharedFiles()
         ];
 
         // Set the page title and content
@@ -33,6 +33,7 @@ class HomeController extends BaseController
 
     private function getFilesCount()
     {
+        return 0;
         $stmt = $this->db->query('SELECT COUNT(*) FROM files');
         return $stmt->fetchColumn();
     }
