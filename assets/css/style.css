@@ -241,7 +241,8 @@ body {
   border-radius: 1rem;
 }
 
-.bg-gradient-purple {
+.btn.bg-gradient-purple,
+.page-item.active .page-link {
   background: linear-gradient(to right, #8e2de2, #4a00e0);
   color: white;
 }

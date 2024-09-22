@@ -28,7 +28,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="images" class="form-label">รูปภาพ:</label>
-                                <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*">
+                                <input type="file" id="images" name="images[]" multiple accept="image/*">
                             </div>
                             <div id="imagePreviewGrid" class="row mb-3">
                                 <!-- Image previews will be inserted here -->
@@ -43,7 +43,6 @@
         </div>
     </div>
 </div>
-
 
 <script>
     $(document).ready(function() {
@@ -69,7 +68,7 @@
                     return function(e) {
                         $('#imagePreviewGrid').append(`
                             <div class="col-md-3 col-sm-6 mb-3 preview-container">
-                                <img src="${e.target.result}" class="img-preview" alt="Preview">
+                                <div class="img-preview" style="background-image: url('${e.target.result}');"></div>
                                 <span class="remove-img" data-file="${file.name}"><i class="fas fa-times"></i></span>
                             </div>
                         `);
@@ -118,3 +117,6 @@
         });
     });
 </script>
+</body>
+
+</html>
