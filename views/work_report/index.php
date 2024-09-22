@@ -15,7 +15,7 @@
                             <div class="alert alert-danger"><?= $_SESSION['error_message'];
                                                             unset($_SESSION['error_message']); ?></div>
                         <?php endif; ?>
-                        <form action="index.php?action=submitReport" method="post" enctype="multipart/form-data">
+                        <form action="index.php?page=work-report&action=submitReport" method="post" enctype="multipart/form-data">
                             <div class="form-group row mb-3">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     <label for="name" class="form-label">ชื่อ:</label>
