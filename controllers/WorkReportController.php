@@ -72,27 +72,23 @@ class WorkReportController extends BaseController
                 }
             }
 
-            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/index.php?page=work-list&action=view&folder=";
+            $projectFolder = "project"; // remove if production
+            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/project/index.php?page=work-list&action=view&folder=";
             $fullPath = $currentUrl . $uploadDir;
 
+            $notify_result = $this->sendLineNotify($name, $jobname, $group, $fullPath);
 
-            // เพิ่มแจ้งเตือนไลน์ที่นี่
+            if (!$notify_result) {
+                $_SESSION['error_message'] = "เพิ่มรายงานใหม่แล้ว แต่ไม่สามารถส่งการแจ้งเตือน LINE Notify ได้";
+            }
 
-            $notify_result = $this->sendLineNotify($name, $group, $jobname, $fullPath);
-
-            $response = [
-                'status' => 1,
-                'msg' => 'บันทึกข้อมูลสำเร็จ',
-                'notify_result' => json_decode($notify_result, true)
-            ];
-
-            $_SESSION['success_message'] = "รายงานถูกบันทึกเรียบร้อยแล้ว";
-            header("Location: index.php?page=work-report");
+            $_SESSION['success_message'] = "รายงานถูกบันทึกและส่งการแจ้งเตือนเรียบร้อยแล้ว";
+            header("Location: $fullPath");
             exit();
         }
     }
 
-    public function sendLineNotify($name, $jobname, $group, $lik)
+    public function sendLineNotify($name, $jobname, $group, $link)
     {
         $tokens = [
             1 => "ZttPwN3qU9h2cl2HUAipy2MPFMCfTGxXb37Qbf4IKt2", // PSNK Group 1
@@ -102,12 +98,12 @@ class WorkReportController extends BaseController
         $token = $tokens[$group] ?? null;
 
         if (!$token) {
-            return json_encode(['status' => 'error', 'message' => 'Invalid group selected']);
+            return false;
         }
 
         $message = "\nชื่อผู้รายงาน: " . $name;
         $message = "\nรายงานงานใหม่: " . $jobname;
-        $message .= "\ลิ้ง: " . $lik;
+        $message .= "\nลิ้ง: " . $link;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://notify-api.line.me/api/notify");
@@ -121,14 +117,12 @@ class WorkReportController extends BaseController
         $result = curl_exec($ch);
 
         if (curl_error($ch)) {
-            $response = ['status' => 'error', 'message' => curl_error($ch)];
-        } else {
-            $res = json_decode($result, true);
-            $response = ['status' => $res['status'], 'message' => $res['message']];
+            curl_close($ch);
+            return false;
         }
         curl_close($ch);
 
-        return json_encode($response);
+        return true;
     }
 
     private function createSlug($string)
