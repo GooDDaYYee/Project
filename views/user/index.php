@@ -6,8 +6,8 @@
         </div>
 
         <div class="card-body">
-            <div class="card border h-100">
-                <table class="table table-bordered table-striped table-responsive" id="myTable">
+            <div class="">
+                <table class="table table-bordered table-striped table-responsive w-100" id="myTable">
                     <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -21,7 +21,7 @@
                         <?php foreach ($data['users'] as $i => $user): ?>
                             <tr>
                                 <td><?= $i + 1 ?></td>
-                                <td><?= htmlspecialchars($user['username']) ?></span></td>
+                                <td><?= htmlspecialchars($user['username']) ?></td>
                                 <td><?= $this->getLevelName($user['lv']) ?></td>
                                 <td><?= $this->getStatusName($user['status']) ?></td>
                                 <td>

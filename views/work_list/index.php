@@ -6,15 +6,15 @@
         </div>
 
         <div class="card-body">
-            <div class="card border h-100">
+            <div class="table-responsive">
                 <table class="table table-bordered table-striped table-responsive" id="myTable">
                     <thead>
                         <tr>
-                            <th scope="col">ลำดับ</th>
-                            <th scope="col">ชื่อโฟรเดอร์</th>
-                            <th scope="col">จำนวนไฟล์</th>
-                            <th scope="col">วันที่รายงาน</th>
-                            <th scope="col">ดูรายงาน</th>
+                            <th>ลำดับ</th>
+                            <th>ชื่อโฟรเดอร์</th>
+                            <th>จำนวนไฟล์</th>
+                            <th>วันที่รายงาน</th>
+                            <th>ดูรายงาน</th>
                         </tr>
                     </thead>
                     <tbody>
