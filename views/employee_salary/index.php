@@ -36,54 +36,52 @@
             </div>
         </div>
 
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped table-responsive" id="myTable">
-                    <thead>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>ชื่อ</th>
+                        <th>นามสกุล</th>
+                        <th>เงินเดือน</th>
+                        <th>OT</th>
+                        <th style="width: 14%;">ประกันสังคม (หักในเงินเดือน)</th>
+                        <th>อื่นๆ</th>
+                        <th>รวม</th>
+                        <th>การดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    foreach ($data['salaries'] as $index => $salary): ?>
                         <tr>
-                            <th>ลำดับ</th>
-                            <th>ชื่อ</th>
-                            <th>นามสกุล</th>
-                            <th>เงินเดือน</th>
-                            <th>OT</th>
-                            <th style="width: 14%;">ประกันสังคม (หักในเงินเดือน)</th>
-                            <th>อื่นๆ</th>
-                            <th>รวม</th>
-                            <th>การดำเนินการ</th>
+                            <td><?= $index + 1 ?></td>
+                            <td><?= htmlspecialchars($salary['employee_name']) ?></td>
+                            <td><?= htmlspecialchars($salary['employee_lastname']) ?></td>
+                            <td style="text-align: right;"><?= number_format($salary['salary'], 2) ?></td>
+                            <td style="text-align: right;"><?= number_format($salary['ot'], 2) ?></td>
+                            <td style="text-align: right;"><?= number_format($salary['social_security'], 2) ?></td>
+                            <td style="text-align: right;"><?= number_format($salary['other'], 2) ?></td>
+                            <td style="text-align: right;"><?= number_format($salary['total_salary'], 2) ?></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-salary"
+                                    data-salary_id="<?= $salary['salary_id'] ?>"
+                                    data-salary="<?= $salary['salary'] ?>"
+                                    data-ot="<?= $salary['ot'] ?>"
+                                    data-social_security="<?= $salary['social_security'] ?>"
+                                    data-other="<?= $salary['other'] ?>">
+                                    แก้ไข
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-salary"
+                                    data-salary_id="<?= $salary['salary_id'] ?>"
+                                    data-index="<?= $index + 1 ?>">
+                                    ลบ
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($data['salaries'] as $index => $salary): ?>
-                            <tr>
-                                <td><?= $index + 1 ?></td>
-                                <td><?= htmlspecialchars($salary['employee_name']) ?></td>
-                                <td><?= htmlspecialchars($salary['employee_lastname']) ?></td>
-                                <td style="text-align: right;"><?= number_format($salary['salary'], 2) ?></td>
-                                <td style="text-align: right;"><?= number_format($salary['ot'], 2) ?></td>
-                                <td style="text-align: right;"><?= number_format($salary['social_security'], 2) ?></td>
-                                <td style="text-align: right;"><?= number_format($salary['other'], 2) ?></td>
-                                <td style="text-align: right;"><?= number_format($salary['total_salary'], 2) ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary edit-salary"
-                                        data-salary_id="<?= $salary['salary_id'] ?>"
-                                        data-salary="<?= $salary['salary'] ?>"
-                                        data-ot="<?= $salary['ot'] ?>"
-                                        data-social_security="<?= $salary['social_security'] ?>"
-                                        data-other="<?= $salary['other'] ?>">
-                                        แก้ไข
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger delete-salary"
-                                        data-salary_id="<?= $salary['salary_id'] ?>"
-                                        data-index="<?= $index + 1 ?>">
-                                        ลบ
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

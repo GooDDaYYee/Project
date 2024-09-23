@@ -7,44 +7,42 @@
             <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock-cable&action=create', '_parent')">เพิ่ม Cable</button>
         </div>
 
-        <div class="card-body">
-            <div class="card border h-100">
-                <table class="table table-bordered table-striped table-responsive" id="myTable">
-                    <thead>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>Route</th>
+                        <th>Section</th>
+                        <th>Team</th>
+                        <th>Cable จาก</th>
+                        <th>Cable ถึง</th>
+                        <th>Cable ใช้ไป</th>
+                        <th>Drum</th>
+                        <th>ใช้กับบริษัท</th>
+                        <th>การดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($data['cables'] as $i => $cable): ?>
                         <tr>
-                            <th>ลำดับ</th>
-                            <th>Route</th>
-                            <th>Section</th>
-                            <th>Team</th>
-                            <th>Cable จาก</th>
-                            <th>Cable ถึง</th>
-                            <th>Cable ใช้ไป</th>
-                            <th>Drum</th>
-                            <th>ใช้กับบริษัท</th>
-                            <th>การดำเนินการ</th>
+                            <td scope="row"><?= $i + 1 ?></td>
+                            <td><?= htmlspecialchars($cable['route_name']) ?></td>
+                            <td><?= htmlspecialchars($cable['installed_section']) ?></td>
+                            <td><?= htmlspecialchars($cable['placing_team']) ?></td>
+                            <td>ML <?= htmlspecialchars($cable['cable_form']) ?></td>
+                            <td>ML <?= htmlspecialchars($cable['cable_to']) ?></td>
+                            <td><?= htmlspecialchars($cable['cable_used']) ?> เมตร</td>
+                            <td><?= htmlspecialchars($cable['drum_no']) ?></td>
+                            <td><?= htmlspecialchars($cable['cable_work']) ?></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($data['cables'] as $i => $cable): ?>
-                            <tr>
-                                <td scope="row"><?= $i + 1 ?></td>
-                                <td><?= htmlspecialchars($cable['route_name']) ?></td>
-                                <td><?= htmlspecialchars($cable['installed_section']) ?></td>
-                                <td><?= htmlspecialchars($cable['placing_team']) ?></td>
-                                <td>ML <?= htmlspecialchars($cable['cable_form']) ?></td>
-                                <td>ML <?= htmlspecialchars($cable['cable_to']) ?></td>
-                                <td><?= htmlspecialchars($cable['cable_used']) ?> เมตร</td>
-                                <td><?= htmlspecialchars($cable['drum_no']) ?></td>
-                                <td><?= htmlspecialchars($cable['cable_work']) ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

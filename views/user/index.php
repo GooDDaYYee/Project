@@ -5,34 +5,32 @@
             <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=user&action=create', '_parent')">เพิ่มผู้ใช้</button>
         </div>
 
-        <div class="card-body">
-            <div class="">
-                <table class="table table-bordered table-striped table-responsive w-100" id="myTable">
-                    <thead>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>ชื่อผู้ใช้</th>
+                        <th>ประเภทผู้ใช้</th>
+                        <th>สถานะ</th>
+                        <th>การดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($data['users'] as $i => $user): ?>
                         <tr>
-                            <th>ลำดับ</th>
-                            <th>ชื่อผู้ใช้</th>
-                            <th>ประเภทผู้ใช้</th>
-                            <th>สถานะ</th>
-                            <th>การดำเนินการ</th>
+                            <td><?= $i + 1 ?></td>
+                            <td><?= htmlspecialchars($user['username']) ?></td>
+                            <td><?= $this->getLevelName($user['lv']) ?></td>
+                            <td><?= $this->getStatusName($user['status']) ?></td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-lv="<?= $user['lv'] ?>" data-status="<?= $user['status'] ?>">แก้ไข</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>">ลบ</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($data['users'] as $i => $user): ?>
-                            <tr>
-                                <td><?= $i + 1 ?></td>
-                                <td><?= htmlspecialchars($user['username']) ?></td>
-                                <td><?= $this->getLevelName($user['lv']) ?></td>
-                                <td><?= $this->getStatusName($user['status']) ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary edit-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>" data-lv="<?= $user['lv'] ?>" data-status="<?= $user['status'] ?>">แก้ไข</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $user['user_id'] ?>" data-username="<?= htmlspecialchars($user['username']) ?>">ลบ</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

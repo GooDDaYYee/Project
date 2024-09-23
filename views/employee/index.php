@@ -3,48 +3,44 @@
         <div class="card-header d-flex align-items-center py-3">
             <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการข้อมูลพนักงาน
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped table-responsive" id="myTable">
-                    <thead>
-                        <tr>
-                            <th>ลำดับ</th>
-                            <th>ชื่อ</th>
-                            <th>นามสกุล</th>
-                            <th>อายุ</th>
-                            <th>เบอร์โทร</th>
-                            <th>อีเมล</th>
-                            <th>ตำแหน่ง</th>
-                            <th>สถานะ</th>
-                            <th>การดำเนินการ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if (count($data['employees']) > 0) {
-                            foreach ($data['employees'] as $i => $employee): ?>
-                                <tr>
-                                    <td><?= $i + 1 ?></td>
-                                    <td><?= htmlspecialchars($employee['employee_name']) ?></td>
-                                    <td><?= htmlspecialchars($employee['employee_lastname']) ?></td>
-                                    <td><?= htmlspecialchars($employee['employee_age']) ?></td>
-                                    <td><?= htmlspecialchars($employee['employee_phone']) ?></td>
-                                    <td><?= htmlspecialchars($employee['employee_email']) ?></td>
-                                    <td><?= $this->getPositionName($employee['employee_position']) ?></td>
-                                    <td><?= $this->getStatusName($employee['employee_status']) ?></td>
-                                    <td>
-                                        <button type="button" class="btn btn-sm btn-outline-primary edit-employee" data-id="<?= $employee['employee_id'] ?>">แก้ไข</button>
-                                        <button type="button" class="btn btn-sm btn-outline-danger delete-employee" data-id="<?= $employee['employee_id'] ?>" data-index="<?= $i + 1 ?>">ลบ</button>
-                                    </td>
-                                </tr>
-                        <?php endforeach;
-                        } else {
-                            echo "<tr><td colspan='8'>test</td></tr>";
-                        } ?>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>ชื่อ</th>
+                        <th>นามสกุล</th>
+                        <th>อายุ</th>
+                        <th>เบอร์โทร</th>
+                        <th>อีเมล</th>
+                        <th>ตำแหน่ง</th>
+                        <th>สถานะ</th>
+                        <th>การดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if (count($data['employees']) > 0) {
+                        foreach ($data['employees'] as $i => $employee): ?>
+                            <tr>
+                                <td><?= $i + 1 ?></td>
+                                <td><?= htmlspecialchars($employee['employee_name']) ?></td>
+                                <td><?= htmlspecialchars($employee['employee_lastname']) ?></td>
+                                <td><?= htmlspecialchars($employee['employee_age']) ?></td>
+                                <td><?= htmlspecialchars($employee['employee_phone']) ?></td>
+                                <td><?= htmlspecialchars($employee['employee_email']) ?></td>
+                                <td><?= $this->getPositionName($employee['employee_position']) ?></td>
+                                <td><?= $this->getStatusName($employee['employee_status']) ?></td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-employee" data-id="<?= $employee['employee_id'] ?>">แก้ไข</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger delete-employee" data-id="<?= $employee['employee_id'] ?>" data-index="<?= $i + 1 ?>">ลบ</button>
+                                </td>
+                            </tr>
+                    <?php endforeach;
+                    } ?>
 
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

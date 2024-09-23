@@ -4,31 +4,29 @@
             <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;Log
         </div>
 
-        <div class="card-body">
-            <div class="card border h-100">
-                <table class="table table-bordered table-striped table-responsive" id="myTable">
-                    <thead>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>สถานะ</th>
+                        <th>รายละเอียด</th>
+                        <th>ผู้ใช้</th>
+                        <th scope="col" class="sortable" data-sort="date">วันที่</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($data['logs'] as $i => $log): ?>
                         <tr>
-                            <th>ลำดับ</th>
-                            <th>สถานะ</th>
-                            <th>รายละเอียด</th>
-                            <th>ผู้ใช้</th>
-                            <th scope="col" class="sortable" data-sort="date">วันที่</th>
+                            <td scope="row"><span><?= $i + 1 ?></span></td>
+                            <td><?= htmlspecialchars($log['log_status']) ?></td>
+                            <td><?= htmlspecialchars($log['log_detail']) ?></td>
+                            <td><?= htmlspecialchars($log['employee_name'] ?? 'ไม่พบข้อมูลพนักงาน') ?></td>
+                            <td><?= htmlspecialchars($log['log_date']) ?></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($data['logs'] as $i => $log): ?>
-                            <tr>
-                                <td scope="row"><span><?= $i + 1 ?></span></td>
-                                <td><?= htmlspecialchars($log['log_status']) ?></td>
-                                <td><?= htmlspecialchars($log['log_detail']) ?></td>
-                                <td><?= htmlspecialchars($log['employee_name'] ?? 'ไม่พบข้อมูลพนักงาน') ?></td>
-                                <td><?= htmlspecialchars($log['log_date']) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

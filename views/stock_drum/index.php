@@ -9,44 +9,42 @@
             </form>
             <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=stock-drum&action=create', '_parent')">เพิ่มDrum</button>
         </div>
-        <div class="card-body">
-            <div class="card border h-100">
-                <table class="table table-bordered table-striped table-responsive" id="myTable">
-                    <thead>
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped" id="myTable">
+                <thead>
+                    <tr>
+                        <th>ลำดับ</th>
+                        <th>บริษัทผลิตสาย</th>
+                        <th>Drum Number</th>
+                        <th>Drum To</th>
+                        <th>Description</th>
+                        <th>รับจากบริษัท</th>
+                        <th>Drum เต็ม</th>
+                        <th>Drum ใช้ไป</th>
+                        <th>Drum เหลือ</th>
+                        <th>การดำเนินการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($data['drums'] as $index => $drum): ?>
                         <tr>
-                            <th>ลำดับ</th>
-                            <th>บริษัทผลิตสาย</th>
-                            <th>Drum Number</th>
-                            <th>Drum To</th>
-                            <th>Description</th>
-                            <th>รับจากบริษัท</th>
-                            <th>Drum เต็ม</th>
-                            <th>Drum ใช้ไป</th>
-                            <th>Drum เหลือ</th>
-                            <th>การดำเนินการ</th>
+                            <td><?= $index + 1 ?></td>
+                            <td><?= htmlspecialchars($drum['drum_cable_company']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_no']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_to']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_description']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_company']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_full']) ?> เมตร</td>
+                            <td><?= htmlspecialchars($drum['drum_used']) ?> เมตร</td>
+                            <td><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-drum" data-id="<?= $drum['drum_id'] ?>">แก้ไข</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-index="<?= $index + 1 ?>">ลบ</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($data['drums'] as $index => $drum): ?>
-                            <tr>
-                                <td><?= $index + 1 ?></td>
-                                <td><?= htmlspecialchars($drum['drum_cable_company']) ?></td>
-                                <td><?= htmlspecialchars($drum['drum_no']) ?></td>
-                                <td><?= htmlspecialchars($drum['drum_to']) ?></td>
-                                <td><?= htmlspecialchars($drum['drum_description']) ?></td>
-                                <td><?= htmlspecialchars($drum['drum_company']) ?></td>
-                                <td><?= htmlspecialchars($drum['drum_full']) ?> เมตร</td>
-                                <td><?= htmlspecialchars($drum['drum_used']) ?> เมตร</td>
-                                <td><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary edit-drum" data-id="<?= $drum['drum_id'] ?>">แก้ไข</button>
-                                    <button type="button" class="btn btn-sm btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-index="<?= $index + 1 ?>">ลบ</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
