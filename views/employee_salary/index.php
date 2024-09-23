@@ -39,7 +39,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="myTable">
+                <table class="table table-bordered table-striped table-responsive" id="myTable">
                     <thead>
                         <tr>
                             <th>ลำดับ</th>

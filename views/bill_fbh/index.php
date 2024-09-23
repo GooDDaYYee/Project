@@ -9,7 +9,7 @@
 
     <div class="card-body">
       <div class="card border h-100">
-        <table class="table table-bordered table-striped" id="myTable">
+        <table class="table table-bordered table-striped table-responsive" id="myTable">
           <thead>
             <tr>
               <th>เลขที่</th>
@@ -171,6 +171,7 @@
 
 <script>
   let table = new DataTable('#myTable');
+  const auOptions = <?php echo json_encode($data['auOptions']); ?>;
 
   $('.edit-btn').click(function() {
     const billid = $(this).data('id');
@@ -221,6 +222,9 @@
           <div class="col-md-3">
             <h5>AU ลำดับที่ ${index}</h5>
             <input list="dataList" id="inputField_${index}" name="inputField[]" class="form-control" required value="${detail ? detail.au_id : ''}">
+            <datalist id="dataList">
+                ${auOptions.map(option => `<option value="${option.au_id}">${option.au_id}</option>`).join('')}
+            </datalist>
           </div>
           <div class="col-md-3">
             <h5>รายละเอียด AU</h5>

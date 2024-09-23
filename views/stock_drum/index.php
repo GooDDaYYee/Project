@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
             <div class="card border h-100">
-                <table class="table table-bordered table-striped" id="myTable">
+                <table class="table table-bordered table-striped table-responsive" id="myTable">
                     <thead>
                         <tr>
                             <th>ลำดับ</th>
