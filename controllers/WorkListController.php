@@ -45,6 +45,7 @@ class WorkListController extends BaseController
                 $folderDetails[] = [
                     "name" => $item,
                     "created" => date('Y-m-d H:i:s', $stats['ctime']),
+                    "ctime" => $stats['ctime'],
                     "modified" => date('Y-m-d H:i:s', $stats['mtime']),
                     "size" => $stats['size'],
                     "permissions" => substr(sprintf('%o', fileperms($fullPath)), -4),
@@ -53,6 +54,68 @@ class WorkListController extends BaseController
             }
         }
 
+        usort($folderDetails, function ($a, $b) {
+            return $b['ctime'] - $a['ctime'];
+        });
+
+
         return $folderDetails;
+    }
+
+    public function view()
+    {
+        $folderName = $_GET['folder'] ?? null;
+
+        if ($folderName) {
+            $path = 'assets/files/LINE/' . $folderName;
+
+            if (is_dir($path)) {
+                $images = $this->getImagesFromFolder($path);
+
+                $data = [
+                    'folderName' => $folderName,
+                    'images' => $images
+                ];
+
+                $pageTitle = $folderName . ' - PSNK TELECOM';
+                $customCSS = [
+                    'assets/css/lightbox.min.css'
+                ];
+
+                $customJS = [
+                    'assets/js/lightbox.min.js'
+                ];
+                $this->render('work_list/view', ['pageTitle' => $pageTitle, 'data' => $data, 'customCSS' => $customCSS, 'customJS' =>  $customJS]);
+            } else {
+                // จัดการกรณีที่โฟลเดอร์ไม่มีอยู่จริง
+                header("Location: index.php?page=work-list");
+            }
+        } else {
+            // จัดการกรณีที่ไม่ได้ระบุชื่อโฟลเดอร์
+            header("Location: index.php?page=work-list");
+        }
+    }
+
+    private function getImagesFromFolder($path)
+    {
+        $images = [];
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif']; // รายการนามสกุลไฟล์รูปภาพที่อนุญาต
+
+        if ($handle = opendir($path)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    $ext = strtolower(pathinfo($entry, PATHINFO_EXTENSION));
+                    if (in_array($ext, $allowedExtensions)) {
+                        $images[] = [
+                            'name' => $entry,
+                            'path' => $path . '/' . $entry
+                        ];
+                    }
+                }
+            }
+            closedir($handle);
+        }
+
+        return $images;
     }
 }

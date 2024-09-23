@@ -177,6 +177,7 @@
 
 <script>
   let table = new DataTable('#myTable');
+  const auOptions = <?php echo json_encode($data['auOptions']); ?>;
 
   $('.edit-btn').click(function() {
     const billId = $(this).data('id');
@@ -227,7 +228,10 @@
           <div class="col-md-3">
             <h5>AU ลำดับที่ ${index}</h5>
             <input list="dataList" id="inputField_${index}" name="inputField[]" class="form-control" required value="${detail ? detail.au_id : ''}">
-          </div>
+            <datalist id="dataList">
+                ${auOptions.map(option => `<option value="${option.au_id}">${option.au_id}</option>`).join('')}
+            </datalist>
+            </div>
           <div class="col-md-3">
             <h5>รายละเอียด AU</h5>
             <p id="selectedData_${index}">${detail ? detail.au_detail : ''}</p>
