@@ -2,14 +2,8 @@
 <div class="container-fluid">
   <!-- List table -->
   <div class="card shadow mb-4">
-    <div class="card-header d-flex justify-content-between align-items-center py-3">
+    <div class="card-header d-flex align-items-center py-3">
       <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการบิลบริษัท Mixed
-      <!-- Topbar Search -->
-      <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group">
-          <input type="text" class="form-control" id="search" aria-label="Small" aria-describedby="inputGroup-sizing-sm" placeholder="ค้นหาข้อมูล">
-        </div>
-      </form>
       <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=bill-mixed&action=create', '_parent')">เพิ่มบิล</button>
     </div>
 
@@ -178,50 +172,51 @@
 <script>
   let table = new DataTable('#myTable');
 
-  $('.edit-btn').click(function() {
-    const billId = $(this).data('id');
-    $.ajax({
-      url: 'index.php?page=bill-mixed&action=fetchBillDetails',
-      method: 'POST',
-      data: {
-        bill_id: billId
-      },
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          populateEditForm(response.data.bill, response.data.details);
-          $('#editModal').modal('show');
-        } else {
-          alert('Error fetching bill details: ' + response.message);
+  $(document).ready(function() {
+    $('.edit-btn').click(function() {
+      const billId = $(this).data('id');
+      $.ajax({
+        url: 'index.php?page=bill-mixed&action=fetchBillDetails',
+        method: 'POST',
+        data: {
+          bill_id: billId
+        },
+        dataType: 'json',
+        success: function(response) {
+          if (response.success) {
+            populateEditForm(response.data.bill, response.data.details);
+            $('#editModal').modal('show');
+          } else {
+            alert('Error fetching bill details: ' + response.message);
+          }
+        },
+        error: function() {
+          alert('Error fetching bill details');
         }
-      },
-      error: function() {
-        alert('Error fetching bill details');
-      }
+      });
     });
-  });
 
-  function populateEditForm(bill, details) {
-    $('#bill_Id').val(bill.bill_id);
-    $('#thai_date').val(bill.bill_date);
-    $('#thai_date_product').val(bill.bill_date_product);
-    $('#payment').val(bill.bill_payment);
-    $('#thai_due_date').val(bill.bill_due_date);
-    $('#refer').val(bill.bill_refer);
-    $('#Site').val(bill.bill_site);
-    $('#pr').val(bill.bill_pr);
-    $('#work_no').val(bill.bill_work_no);
-    $('#project').val(bill.bill_project);
-    $('#auCount').val(details.length);
+    function populateEditForm(bill, details) {
+      $('#bill_Id').val(bill.bill_id);
+      $('#thai_date').val(bill.bill_date);
+      $('#thai_date_product').val(bill.bill_date_product);
+      $('#payment').val(bill.bill_payment);
+      $('#thai_due_date').val(bill.bill_due_date);
+      $('#refer').val(bill.bill_refer);
+      $('#Site').val(bill.bill_site);
+      $('#pr').val(bill.bill_pr);
+      $('#work_no').val(bill.bill_work_no);
+      $('#project').val(bill.bill_project);
+      $('#auCount').val(details.length);
 
-    $('#auContainer').empty();
-    details.forEach((detail, index) => {
-      addAUInput(detail, index + 1);
-    });
-  }
+      $('#auContainer').empty();
+      details.forEach((detail, index) => {
+        addAUInput(detail, index + 1);
+      });
+    }
 
-  function addAUInput(detail, index) {
-    const newInputFrame = $(`
+    function addAUInput(detail, index) {
+      const newInputFrame = $(`
       <div class="inputFrame">
         <div class="row mt-md-3" style="margin-bottom: 1rem;">
           <div class="col-md-3">
@@ -243,151 +238,152 @@
         </div>
       </div>
     `);
-    $('#auContainer').append(newInputFrame);
+      $('#auContainer').append(newInputFrame);
 
-    $(`#inputField_${index}`).on('input', function() {
-      const selectedOption = $(this).val();
-      fetchAUDetails(selectedOption, index);
-    });
-  }
-
-  function fetchAUDetails(auId, index) {
-    $.ajax({
-      url: 'index.php?page=bill-mixed&action=fetchAUDetails',
-      method: 'GET',
-      data: {
-        au_id: auId
-      },
-      dataType: 'json',
-      success: function(data) {
-        $(`#selectedData_${index}`).text(data.au_detail);
-        $(`#selectedDataDetail_${index}`).val(data.au_detail);
-        $(`#selectedDataType_${index}`).val(data.au_type);
-        $(`#selectedDataPrice_${index}`).val(data.au_price);
-      },
-      error: function() {
-        console.log('Error fetching AU details');
-      }
-    });
-  }
-
-  $('#addInputFrame').click(function() {
-    const numAU = parseInt($('#numAU').val());
-    if (numAU > 0) {
-      const currentCount = parseInt($('#auCount').val());
-      for (let i = 0; i < numAU; i++) {
-        addAUInput(null, currentCount + i + 1);
-      }
-      $('#auCount').val(currentCount + numAU);
-    }
-  });
-
-  $('#removeInputFrame').click(function() {
-    const $inputFrames = $('.inputFrame');
-    if ($inputFrames.length > 0) {
-      $inputFrames.last().remove();
-      const currentCount = parseInt($('#auCount').val());
-      $('#auCount').val(currentCount - 1);
-    }
-  });
-
-  $('#saveChanges').click(function() {
-    if (checkDuplicates()) {
-      Swal.fire({
-        icon: 'error',
-        title: 'ไม่สำเร็จ',
-        text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
+      $(`#inputField_${index}`).on('input', function() {
+        const selectedOption = $(this).val();
+        fetchAUDetails(selectedOption, index);
       });
-      return;
     }
 
-    const formData = $('#editForm').serialize();
-    $.ajax({
-      url: 'index.php?page=bill-mixed&action=updateBill',
-      method: 'POST',
-      data: formData,
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'สำเร็จ',
-            text: 'แก้ไขข้อมูลบิลสำเร็จ',
-          }).then(() => {
-            location.reload();
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'ไม่สำเร็จ',
-            text: response.message,
-          });
+    function fetchAUDetails(auId, index) {
+      $.ajax({
+        url: 'index.php?page=bill-mixed&action=fetchAUDetails',
+        method: 'GET',
+        data: {
+          au_id: auId
+        },
+        dataType: 'json',
+        success: function(data) {
+          $(`#selectedData_${index}`).text(data.au_detail);
+          $(`#selectedDataDetail_${index}`).val(data.au_detail);
+          $(`#selectedDataType_${index}`).val(data.au_type);
+          $(`#selectedDataPrice_${index}`).val(data.au_price);
+        },
+        error: function() {
+          console.log('Error fetching AU details');
         }
-      },
-      error: function() {
+      });
+    }
+
+    $('#addInputFrame').click(function() {
+      const numAU = parseInt($('#numAU').val());
+      if (numAU > 0) {
+        const currentCount = parseInt($('#auCount').val());
+        for (let i = 0; i < numAU; i++) {
+          addAUInput(null, currentCount + i + 1);
+        }
+        $('#auCount').val(currentCount + numAU);
+      }
+    });
+
+    $('#removeInputFrame').click(function() {
+      const $inputFrames = $('.inputFrame');
+      if ($inputFrames.length > 0) {
+        $inputFrames.last().remove();
+        const currentCount = parseInt($('#auCount').val());
+        $('#auCount').val(currentCount - 1);
+      }
+    });
+
+    $('#saveChanges').click(function() {
+      if (checkDuplicates()) {
         Swal.fire({
           icon: 'error',
           title: 'ไม่สำเร็จ',
-          text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+          text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
         });
+        return;
       }
-    });
-  });
 
-  function checkDuplicates() {
-    const auIds = $('input[name="inputField[]"]').map(function() {
-      return $(this).val();
-    }).get();
-    const uniqueAuIds = [...new Set(auIds)];
-    return auIds.length !== uniqueAuIds.length;
-  }
-
-  // sweetalert delete bill
-  $('.delete-btn').click(function() {
-    var bill_id = $(this).data('id');
-
-    Swal.fire({
-      title: 'คุณแน่ใจหรือไม่?',
-      text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'ใช่',
-      cancelButtonText: 'ยกเลิก'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          url: 'index.php?page=bill-mixed&action=deleteBill',
-          method: 'POST',
-          data: {
-            bill_id: bill_id
-          },
-          dataType: 'json',
-          success: function(response) {
-            if (response.success) {
-              Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
-                .then(() => {
-                  location.reload();
-                });
-            } else {
-              Swal.fire('ไม่สำเร็จ', response.message, 'error');
-            }
-          },
-          error: function() {
-            Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+      const formData = $('#editForm').serialize();
+      $.ajax({
+        url: 'index.php?page=bill-mixed&action=updateBill',
+        method: 'POST',
+        data: formData,
+        dataType: 'json',
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              icon: 'success',
+              title: 'สำเร็จ',
+              text: 'แก้ไขข้อมูลบิลสำเร็จ',
+            }).then(() => {
+              location.reload();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'ไม่สำเร็จ',
+              text: response.message,
+            });
           }
-        });
-      }
+        },
+        error: function() {
+          Swal.fire({
+            icon: 'error',
+            title: 'ไม่สำเร็จ',
+            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+          });
+        }
+      });
     });
-  });
 
-  $('.pdf-btn').click(function() {
-    const billId = $(this).data('id');
-    const company = $(this).data('company');
-    $('#billId').val(billId);
-    $('#company').val(company);
+    function checkDuplicates() {
+      const auIds = $('input[name="inputField[]"]').map(function() {
+        return $(this).val();
+      }).get();
+      const uniqueAuIds = [...new Set(auIds)];
+      return auIds.length !== uniqueAuIds.length;
+    }
 
-    $('#documentModal').modal('show');
+    // sweetalert delete bill
+    $('.delete-btn').click(function() {
+      var bill_id = $(this).data('id');
+
+      Swal.fire({
+        title: 'คุณแน่ใจหรือไม่?',
+        text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'ใช่',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: 'index.php?page=bill-mixed&action=deleteBill',
+            method: 'POST',
+            data: {
+              bill_id: bill_id
+            },
+            dataType: 'json',
+            success: function(response) {
+              if (response.success) {
+                Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
+                  .then(() => {
+                    location.reload();
+                  });
+              } else {
+                Swal.fire('ไม่สำเร็จ', response.message, 'error');
+              }
+            },
+            error: function() {
+              Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+            }
+          });
+        }
+      });
+    });
+
+    $('.pdf-btn').click(function() {
+      const billId = $(this).data('id');
+      const company = $(this).data('company');
+      $('#billId').val(billId);
+      $('#company').val(company);
+
+      $('#documentModal').modal('show');
+    });
   });
 </script>
