@@ -12,7 +12,7 @@ class AuthController extends BaseController
     public function index()
     {
         if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
-            header("Location: index.php?page=home");
+            header("Location: index.php?page=manage-file");
             exit();
         }
 

@@ -5,14 +5,19 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'home';
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 
 // Allow access to auth page without being logged in
+// http://localhost/project/index.php?page=work-list&action=view&folder=test-20240922154206
 if ($page !== 'auth' && (!isset($_SESSION['login']) || $_SESSION['login'] !== true)) {
-    header("Location: index.php?page=auth");
+    $redirect = '';
+    if ($page === 'work-list' && isset($_GET['action']) && $_GET['action'] === 'view') {
+        $redirect = '&redirect=' . urlencode($_SERVER['REQUEST_URI']);
+    }
+    header("Location: index.php?page=auth" . $redirect);
     exit();
 }
 
 // Redirect logged-in users trying to access the login page
 if ($page === 'auth' && $action === 'index' && isset($_SESSION['login']) && $_SESSION['login'] === true) {
-    header("Location: index.php?page=home");
+    header("Location: index.php?page=manage-file");
     exit();
 }
 

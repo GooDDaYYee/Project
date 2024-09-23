@@ -75,7 +75,6 @@
         $(document).ready(function() {
             $('#loginForm').on('submit', function(e) {
                 e.preventDefault();
-
                 $.ajax({
                     type: "POST",
                     url: "index.php?page=auth&action=login",
@@ -88,7 +87,17 @@
                                 title: 'สำเร็จ',
                                 text: 'เข้าสู่ระบบสำเร็จ',
                             }).then(function() {
-                                window.location.href = "index.php?page=manage-file";
+                                // Check if there's a redirect parameter in the URL
+                                var urlParams = new URLSearchParams(window.location.search);
+                                var redirectUrl = urlParams.get('redirect');
+
+                                if (redirectUrl) {
+                                    // If redirect parameter exists, use it
+                                    window.location.href = decodeURIComponent(redirectUrl);
+                                } else {
+                                    // If no redirect parameter, use the default
+                                    window.location.href = "index.php?page=manage-file";
+                                }
                             });
                         } else {
                             Swal.fire({
