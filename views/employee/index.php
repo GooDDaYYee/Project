@@ -3,9 +3,8 @@
         <div class="card-header d-flex align-items-center py-3">
             <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการข้อมูลพนักงาน
         </div>
-
         <div class="card-body">
-            <div class="card border h-100">
+            <div class="table-responsive">
                 <table class="table table-bordered table-striped table-responsive" id="myTable">
                     <thead>
                         <tr>
