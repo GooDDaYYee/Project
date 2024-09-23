@@ -24,7 +24,7 @@ function isActive($page)
         <div id="collapseTwo" class="collapse show bg-gradient-purple2" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header collapseTwo"><i class="fa-solid fa-file-zipper"></i> ไฟล์</h6>
-                <a class="collapse-item <?php isActive('home') ?>" href="index.php?page=home">&nbsp; แชร์ไฟล์</a>
+                <!-- <a class="collapse-item <?php isActive('home') ?>" href="index.php?page=home">&nbsp; แชร์ไฟล์</a> -->
                 <?php if (in_array($_SESSION["lv"], [0, 1, 2])): ?>
                     <a class="collapse-item <?php isActive('manage-file') ?>" href="index.php?page=manage-file">&nbsp; จัดการไฟล์</a>
                 <?php endif; ?>

@@ -88,7 +88,7 @@
                                 title: 'สำเร็จ',
                                 text: 'เข้าสู่ระบบสำเร็จ',
                             }).then(function() {
-                                window.location.href = "index.php?page=home";
+                                window.location.href = "index.php?page=manage-file";
                             });
                         } else {
                             Swal.fire({

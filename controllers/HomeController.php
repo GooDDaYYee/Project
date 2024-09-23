@@ -3,6 +3,12 @@ require_once __DIR__ . '/BaseController.php';
 
 class HomeController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        header("Location: index.php?page=manage-file");
+    }
+
     public function index()
     {
         $data = [
