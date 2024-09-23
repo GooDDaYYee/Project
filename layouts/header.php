@@ -26,6 +26,28 @@ try {
         max-width: 100%;
         width: 100%;
     }
+
+    .sortable {
+        cursor: pointer;
+    }
+
+    .sortable::after {
+        content: '\f0dc';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        margin-left: 5px;
+        color: #ccc;
+    }
+
+    .sortable.sorted-asc::after {
+        content: '\f0de';
+        color: #007bff;
+    }
+
+    .sortable.sorted-desc::after {
+        content: '\f0dd';
+        color: #007bff;
+    }
 </style>
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

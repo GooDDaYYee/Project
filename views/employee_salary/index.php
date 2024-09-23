@@ -39,7 +39,7 @@
 
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="salaryTable">
+                <table class="table table-bordered table-striped" id="myTable">
                     <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -54,7 +54,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($data['salaries'] as $index => $salary): ?>
+                        <?php
+                        foreach ($data['salaries'] as $index => $salary): ?>
                             <tr>
                                 <td><?= $index + 1 ?></td>
                                 <td><?= htmlspecialchars($salary['employee_name']) ?></td>
@@ -128,6 +129,8 @@
 </div>
 
 <script>
+    let table = new DataTable('#myTable');
+
     $('.edit-salary').click(function() {
         var salaryId = $(this).data('salary_id');
         var salary = $(this).data('salary');
@@ -175,32 +178,6 @@
                     text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
                 });
             }
-        });
-    });
-    $(document).ready(function() {
-        var table = $('#salaryTable').DataTable({
-            "pageLength": 10,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "language": {
-                "search": "ค้นหา:",
-                "lengthMenu": "แสดง _MENU_ รายการ",
-                "info": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
-                "infoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
-                "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
-                "zeroRecords": "ไม่พบข้อมูล",
-                "paginate": {
-                    "first": "หน้าแรก",
-                    "last": "หน้าสุดท้าย",
-                    "next": "ถัดไป",
-                    "previous": "ก่อนหน้า"
-                }
-            }
-        });
-
-        $('#search').on('keyup', function() {
-            table.search(this.value).draw();
         });
     });
 

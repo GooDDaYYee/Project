@@ -5,8 +5,8 @@ class EmployeeSalaryController extends BaseController
 {
     public function index()
     {
-        $month = isset($_GET['month']) ? $_GET['month'] : date('m');
-        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
+        $month = isset($_GET['month']) ? $_GET['month'] : NULL;
+        $year = isset($_GET['year']) ? $_GET['year'] : NULL;
 
         $salaries = $this->fetchSalaries($month, $year);
         $months = $this->getMonths();
@@ -121,22 +121,26 @@ class EmployeeSalaryController extends BaseController
 
     private function fetchSalaries($month, $year)
     {
-        $gregorian_year = $year + 543;
-        $sql = "SELECT s.*, 
-                DATE_FORMAT(s.salary_date, '%M') AS salary_month,
-                DATE_FORMAT(s.salary_date, '%Y') AS salary_year,
-                e.employee_name, 
-                e.employee_lastname 
-                FROM salary s
-                INNER JOIN employee e ON s.employee_id = e.employee_id
-                WHERE MONTH(s.salary_date) = :month AND YEAR(s.salary_date) = :year AND DAY(s.salary_date) = 1
-                ORDER BY s.salary_id ASC";
+        if ($month && $year) {
+            $gregorian_year = $year + 543;
+            $sql = "SELECT s.*, 
+                    DATE_FORMAT(s.salary_date, '%M') AS salary_month,
+                    DATE_FORMAT(s.salary_date, '%Y') AS salary_year,
+                    e.employee_name, 
+                    e.employee_lastname 
+                    FROM salary s
+                    INNER JOIN employee e ON s.employee_id = e.employee_id
+                    WHERE MONTH(s.salary_date) = :month AND YEAR(s.salary_date) = :year AND DAY(s.salary_date) = 1
+                    ORDER BY s.salary_id ASC";
 
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':month', $month, PDO::PARAM_INT);
-        $stmt->bindParam(':year', $gregorian_year, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+            $stmt->bindParam(':year', $gregorian_year, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return array();
+        }
     }
 
     private function getMonths()

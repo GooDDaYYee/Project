@@ -15,27 +15,27 @@
 
     <div class="card-body">
       <div class="card border h-100">
-        <table class="table table-bordered table-striped" id="billTable">
+        <table class="table table-bordered table-striped" id="myTable">
           <thead>
             <tr>
-              <th scope="col">เลขที่</th>
-              <th scope="col">วันที่ออกบิล</th>
-              <th scope="col">Site</th>
-              <th scope="col">Final BOQ 100%</th>
-              <th scope="col">VAT 7%</th>
-              <th scope="col">GRAND Total</th>
-              <th scope="col">การดำเนินการ</th>
+              <th>เลขที่</th>
+              <th>วันที่ออกบิล</th>
+              <th>Site</th>
+              <th>Final BOQ 100%</th>
+              <th>VAT 7%</th>
+              <th>GRAND Total</th>
+              <th>การดำเนินการ</th>
             </tr>
           </thead>
           <tbody>
             <?php foreach ($data['bills'] as $bill): ?>
               <tr>
-                <td scope="row"><span class="to_file"><?= htmlspecialchars($bill['bill_id']) ?></span></td>
-                <td><span class="to_file"><?= $this->formatThaiDate($bill['bill_date']) ?></span></td>
-                <td><span class="to_file"><?= htmlspecialchars($bill['bill_site']) ?></span></td>
-                <td style="text-align: right;"><span class="to_file"><?= number_format($bill['total_amount'], 2) ?></span></td>
-                <td style="text-align: right;"><span class="to_file"><?= number_format($bill['vat'], 2) ?></span></td>
-                <td style="text-align: right;"><span class="to_file"><?= number_format($bill['grand_total'], 2) ?></span></td>
+                <td><?= htmlspecialchars($bill['bill_id']) ?></td>
+                <td><?= $this->formatThaiDate($bill['bill_date']) ?></td>
+                <td><?= htmlspecialchars($bill['bill_site']) ?></td>
+                <td style="text-align: right;"><?= number_format($bill['total_amount'], 2) ?></td>
+                <td style="text-align: right;"><?= number_format($bill['vat'], 2) ?></td>
+                <td style="text-align: right;"><?= number_format($bill['grand_total'], 2) ?></td>
                 <td>
                   <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
                   <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>" data-company="<?= $bill['bill_company'] ?>">PDF</button>
@@ -45,13 +45,6 @@
             <?php endforeach; ?>
           </tbody>
         </table>
-        &nbsp;
-        <div class="pagination-container">
-          <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-            </ul>
-          </nav>
-        </div>
       </div>
     </div>
   </div>
@@ -183,100 +176,52 @@
 </div>
 
 <script>
-  $(document).ready(function() {
-    let currentPage = 1;
-    const rowsPerPage = 10;
-    const $rows = $('#billTable tbody tr');
-    const totalPages = Math.ceil($rows.length / rowsPerPage);
+  let table = new DataTable('#myTable');
 
-    function showPage(page) {
-      const start = (page - 1) * rowsPerPage;
-      const end = start + rowsPerPage;
-
-      $rows.hide().slice(start, end).show();
-
-      updatePagination(page);
-    }
-
-    function updatePagination(currentPage) {
-      const $pagination = $('.pagination');
-      $pagination.empty();
-
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, startPage + 4);
-
-      if (startPage > 1) {
-        $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>`);
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        $pagination.append(`<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
-      }
-
-      if (endPage < totalPages) {
-        $pagination.append(`<li class="page-item"><a class="page-link" href="#" data-page="${totalPages}">หน้าสุดท้าย &raquo;</a></li>`);
-      }
-    }
-
-    $('.pagination').on('click', 'a', function(e) {
-      e.preventDefault();
-      currentPage = parseInt($(this).data('page'));
-      showPage(currentPage);
-    });
-
-    $('#search').on('keyup', function() {
-      const value = $(this).val().toLowerCase();
-      $rows.filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-      });
-      currentPage = 1;
-      showPage(currentPage);
-    });
-
-    $('.edit-btn').click(function() {
-      const billId = $(this).data('id');
-      $.ajax({
-        url: 'index.php?page=bill-mixed&action=fetchBillDetails',
-        method: 'POST',
-        data: {
-          bill_id: billId
-        },
-        dataType: 'json',
-        success: function(response) {
-          if (response.success) {
-            populateEditForm(response.data.bill, response.data.details);
-            $('#editModal').modal('show');
-          } else {
-            alert('Error fetching bill details: ' + response.message);
-          }
-        },
-        error: function() {
-          alert('Error fetching bill details');
+  $('.edit-btn').click(function() {
+    const billId = $(this).data('id');
+    $.ajax({
+      url: 'index.php?page=bill-mixed&action=fetchBillDetails',
+      method: 'POST',
+      data: {
+        bill_id: billId
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          populateEditForm(response.data.bill, response.data.details);
+          $('#editModal').modal('show');
+        } else {
+          alert('Error fetching bill details: ' + response.message);
         }
-      });
+      },
+      error: function() {
+        alert('Error fetching bill details');
+      }
     });
+  });
 
-    function populateEditForm(bill, details) {
-      $('#bill_Id').val(bill.bill_id);
-      $('#thai_date').val(bill.bill_date);
-      $('#thai_date_product').val(bill.bill_date_product);
-      $('#payment').val(bill.bill_payment);
-      $('#thai_due_date').val(bill.bill_due_date);
-      $('#refer').val(bill.bill_refer);
-      $('#Site').val(bill.bill_site);
-      $('#pr').val(bill.bill_pr);
-      $('#work_no').val(bill.bill_work_no);
-      $('#project').val(bill.bill_project);
-      $('#auCount').val(details.length);
+  function populateEditForm(bill, details) {
+    $('#bill_Id').val(bill.bill_id);
+    $('#thai_date').val(bill.bill_date);
+    $('#thai_date_product').val(bill.bill_date_product);
+    $('#payment').val(bill.bill_payment);
+    $('#thai_due_date').val(bill.bill_due_date);
+    $('#refer').val(bill.bill_refer);
+    $('#Site').val(bill.bill_site);
+    $('#pr').val(bill.bill_pr);
+    $('#work_no').val(bill.bill_work_no);
+    $('#project').val(bill.bill_project);
+    $('#auCount').val(details.length);
 
-      $('#auContainer').empty();
-      details.forEach((detail, index) => {
-        addAUInput(detail, index + 1);
-      });
-    }
+    $('#auContainer').empty();
+    details.forEach((detail, index) => {
+      addAUInput(detail, index + 1);
+    });
+  }
 
-    function addAUInput(detail, index) {
-      const newInputFrame = $(`
+  function addAUInput(detail, index) {
+    const newInputFrame = $(`
       <div class="inputFrame">
         <div class="row mt-md-3" style="margin-bottom: 1rem;">
           <div class="col-md-3">
@@ -298,155 +243,151 @@
         </div>
       </div>
     `);
-      $('#auContainer').append(newInputFrame);
+    $('#auContainer').append(newInputFrame);
 
-      $(`#inputField_${index}`).on('input', function() {
-        const selectedOption = $(this).val();
-        fetchAUDetails(selectedOption, index);
-      });
-    }
+    $(`#inputField_${index}`).on('input', function() {
+      const selectedOption = $(this).val();
+      fetchAUDetails(selectedOption, index);
+    });
+  }
 
-    function fetchAUDetails(auId, index) {
-      $.ajax({
-        url: 'index.php?page=bill-mixed&action=fetchAUDetails',
-        method: 'GET',
-        data: {
-          au_id: auId
-        },
-        dataType: 'json',
-        success: function(data) {
-          $(`#selectedData_${index}`).text(data.au_detail);
-          $(`#selectedDataDetail_${index}`).val(data.au_detail);
-          $(`#selectedDataType_${index}`).val(data.au_type);
-          $(`#selectedDataPrice_${index}`).val(data.au_price);
-        },
-        error: function() {
-          console.log('Error fetching AU details');
-        }
-      });
-    }
-
-    $('#addInputFrame').click(function() {
-      const numAU = parseInt($('#numAU').val());
-      if (numAU > 0) {
-        const currentCount = parseInt($('#auCount').val());
-        for (let i = 0; i < numAU; i++) {
-          addAUInput(null, currentCount + i + 1);
-        }
-        $('#auCount').val(currentCount + numAU);
+  function fetchAUDetails(auId, index) {
+    $.ajax({
+      url: 'index.php?page=bill-mixed&action=fetchAUDetails',
+      method: 'GET',
+      data: {
+        au_id: auId
+      },
+      dataType: 'json',
+      success: function(data) {
+        $(`#selectedData_${index}`).text(data.au_detail);
+        $(`#selectedDataDetail_${index}`).val(data.au_detail);
+        $(`#selectedDataType_${index}`).val(data.au_type);
+        $(`#selectedDataPrice_${index}`).val(data.au_price);
+      },
+      error: function() {
+        console.log('Error fetching AU details');
       }
     });
+  }
 
-    $('#removeInputFrame').click(function() {
-      const $inputFrames = $('.inputFrame');
-      if ($inputFrames.length > 0) {
-        $inputFrames.last().remove();
-        const currentCount = parseInt($('#auCount').val());
-        $('#auCount').val(currentCount - 1);
+  $('#addInputFrame').click(function() {
+    const numAU = parseInt($('#numAU').val());
+    if (numAU > 0) {
+      const currentCount = parseInt($('#auCount').val());
+      for (let i = 0; i < numAU; i++) {
+        addAUInput(null, currentCount + i + 1);
       }
-    });
+      $('#auCount').val(currentCount + numAU);
+    }
+  });
 
-    $('#saveChanges').click(function() {
-      if (checkDuplicates()) {
-        Swal.fire({
-          icon: 'error',
-          title: 'ไม่สำเร็จ',
-          text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
-        });
-        return;
-      }
+  $('#removeInputFrame').click(function() {
+    const $inputFrames = $('.inputFrame');
+    if ($inputFrames.length > 0) {
+      $inputFrames.last().remove();
+      const currentCount = parseInt($('#auCount').val());
+      $('#auCount').val(currentCount - 1);
+    }
+  });
 
-      const formData = $('#editForm').serialize();
-      $.ajax({
-        url: 'index.php?page=bill-mixed&action=updateBill',
-        method: 'POST',
-        data: formData,
-        dataType: 'json',
-        success: function(response) {
-          if (response.success) {
-            Swal.fire({
-              icon: 'success',
-              title: 'สำเร็จ',
-              text: 'แก้ไขข้อมูลบิลสำเร็จ',
-            }).then(() => {
-              location.reload();
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'ไม่สำเร็จ',
-              text: response.message,
-            });
-          }
-        },
-        error: function() {
+  $('#saveChanges').click(function() {
+    if (checkDuplicates()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ไม่สำเร็จ',
+        text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
+      });
+      return;
+    }
+
+    const formData = $('#editForm').serialize();
+    $.ajax({
+      url: 'index.php?page=bill-mixed&action=updateBill',
+      method: 'POST',
+      data: formData,
+      dataType: 'json',
+      success: function(response) {
+        if (response.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: 'แก้ไขข้อมูลบิลสำเร็จ',
+          }).then(() => {
+            location.reload();
+          });
+        } else {
           Swal.fire({
             icon: 'error',
             title: 'ไม่สำเร็จ',
-            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+            text: response.message,
           });
         }
-      });
+      },
+      error: function() {
+        Swal.fire({
+          icon: 'error',
+          title: 'ไม่สำเร็จ',
+          text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+        });
+      }
     });
+  });
 
-    function checkDuplicates() {
-      const auIds = $('input[name="inputField[]"]').map(function() {
-        return $(this).val();
-      }).get();
-      const uniqueAuIds = [...new Set(auIds)];
-      return auIds.length !== uniqueAuIds.length;
-    }
+  function checkDuplicates() {
+    const auIds = $('input[name="inputField[]"]').map(function() {
+      return $(this).val();
+    }).get();
+    const uniqueAuIds = [...new Set(auIds)];
+    return auIds.length !== uniqueAuIds.length;
+  }
 
-    // sweetalert delete bill
-    $('.delete-btn').click(function() {
-      var bill_id = $(this).data('id');
+  // sweetalert delete bill
+  $('.delete-btn').click(function() {
+    var bill_id = $(this).data('id');
 
-      Swal.fire({
-        title: 'คุณแน่ใจหรือไม่?',
-        text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'ใช่',
-        cancelButtonText: 'ยกเลิก'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.ajax({
-            url: 'index.php?page=bill-mixed&action=deleteBill',
-            method: 'POST',
-            data: {
-              bill_id: bill_id
-            },
-            dataType: 'json',
-            success: function(response) {
-              if (response.success) {
-                Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
-                  .then(() => {
-                    location.reload();
-                  });
-              } else {
-                Swal.fire('ไม่สำเร็จ', response.message, 'error');
-              }
-            },
-            error: function() {
-              Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+    Swal.fire({
+      title: 'คุณแน่ใจหรือไม่?',
+      text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'ใช่',
+      cancelButtonText: 'ยกเลิก'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: 'index.php?page=bill-mixed&action=deleteBill',
+          method: 'POST',
+          data: {
+            bill_id: bill_id
+          },
+          dataType: 'json',
+          success: function(response) {
+            if (response.success) {
+              Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
+                .then(() => {
+                  location.reload();
+                });
+            } else {
+              Swal.fire('ไม่สำเร็จ', response.message, 'error');
             }
-          });
-        }
-      });
+          },
+          error: function() {
+            Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+          }
+        });
+      }
     });
+  });
 
-    $('.pdf-btn').click(function() {
-      const billId = $(this).data('id');
-      const company = $(this).data('company');
-      $('#billId').val(billId);
-      $('#company').val(company);
+  $('.pdf-btn').click(function() {
+    const billId = $(this).data('id');
+    const company = $(this).data('company');
+    $('#billId').val(billId);
+    $('#company').val(company);
 
-      $('#documentModal').modal('show');
-    });
-
-    // Initial page load
-    showPage(currentPage);
+    $('#documentModal').modal('show');
   });
 </script>

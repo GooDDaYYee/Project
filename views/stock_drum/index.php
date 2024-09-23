@@ -11,33 +11,33 @@
         </div>
         <div class="card-body">
             <div class="card border h-100">
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped" id="myTable">
                     <thead>
                         <tr>
-                            <th scope="col">ลำดับ</th>
-                            <th scope="col">บริษัทผลิตสาย</th>
-                            <th scope="col">Drum Number</th>
-                            <th scope="col">Drum To</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">รับจากบริษัท</th>
-                            <th scope="col">Drum เต็ม</th>
-                            <th scope="col">Drum ใช้ไป</th>
-                            <th scope="col">Drum เหลือ</th>
-                            <th scope="col">การดำเนินการ</th>
+                            <th>ลำดับ</th>
+                            <th>บริษัทผลิตสาย</th>
+                            <th>Drum Number</th>
+                            <th>Drum To</th>
+                            <th>Description</th>
+                            <th>รับจากบริษัท</th>
+                            <th>Drum เต็ม</th>
+                            <th>Drum ใช้ไป</th>
+                            <th>Drum เหลือ</th>
+                            <th>การดำเนินการ</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($data['drums'] as $index => $drum): ?>
                             <tr>
-                                <td scope="row"><span class="to_file"><?= $index + 1 ?></span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_cable_company']) ?></span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_no']) ?></span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_to']) ?></span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_description']) ?></span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_company']) ?></span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_full']) ?> เมตร</span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_used']) ?> เมตร</span></td>
-                                <td><span class="to_file"><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</span></td>
+                                <td><?= $index + 1 ?></td>
+                                <td><?= htmlspecialchars($drum['drum_cable_company']) ?></td>
+                                <td><?= htmlspecialchars($drum['drum_no']) ?></td>
+                                <td><?= htmlspecialchars($drum['drum_to']) ?></td>
+                                <td><?= htmlspecialchars($drum['drum_description']) ?></td>
+                                <td><?= htmlspecialchars($drum['drum_company']) ?></td>
+                                <td><?= htmlspecialchars($drum['drum_full']) ?> เมตร</td>
+                                <td><?= htmlspecialchars($drum['drum_used']) ?> เมตร</td>
+                                <td><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-primary edit-drum" data-id="<?= $drum['drum_id'] ?>">แก้ไข</button>
                                     <button type="button" class="btn btn-sm btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-index="<?= $index + 1 ?>">ลบ</button>
@@ -46,12 +46,6 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-                <div class="pagination-container">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination justify-content-center">
-                        </ul>
-                    </nav>
-                </div>
             </div>
         </div>
     </div>
@@ -126,48 +120,7 @@
 
 <script>
     $(document).ready(function() {
-        var rowsPerPage = 10;
-        var $rows = $('tbody tr');
-        var totalPages = Math.ceil($rows.length / rowsPerPage);
-
-        function showPage(page) {
-            var start = (page - 1) * rowsPerPage;
-            var end = start + rowsPerPage;
-
-            $rows.hide().slice(start, end).show();
-
-            var $pagination = $('.pagination');
-            $pagination.empty();
-
-            var maxVisiblePages = 5;
-            var startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
-            var endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-            if (startPage > 1) {
-                $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="1">&laquo; หน้าแรก</a></li>');
-            }
-
-            for (var i = startPage; i <= endPage; i++) {
-                $pagination.append('<li class="page-item ' + (i === page ? 'active' : '') + '"><a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>');
-            }
-
-            if (endPage < totalPages) {
-                $pagination.append('<li class="page-item"><a class="page-link" href="#" data-page="' + totalPages + '">หน้าสุดท้าย &raquo;</a></li>');
-            }
-        }
-
-        $('.pagination').on('click', 'a', function(e) {
-            e.preventDefault();
-            showPage(parseInt($(this).data('page')));
-        });
-
-        $('#search').on('keyup', function() {
-            var searchTerm = $(this).val().toLowerCase();
-            $rows.each(function() {
-                var rowText = $(this).text().toLowerCase();
-                $(this).toggle(rowText.indexOf(searchTerm) > -1);
-            });
-        });
+        let table = new DataTable('#myTable');
 
         $('#saveEditDrum').click(function() {
             var formData = $('#editDrumForm').serialize();
@@ -312,8 +265,5 @@
         $('#editDrumForm').on('submit', function() {
             $('#edit_drum_no, #edit_drum_company, #edit_drum_cable_company, #edit_drum_full').prop('disabled', false);
         });
-
-        // Initial page load
-        showPage(1);
     });
 </script>

@@ -17,6 +17,7 @@
     <link href="assets/css/sweetalert2.min.css" rel="stylesheet">
     <link href="assets/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/dataTables.dataTables.min.css" rel="stylesheet">
 
     <!-- Custom CSS import via Controller -->
     <?php
@@ -33,6 +34,7 @@
     <script src="assets/js/jquery.easing.min.js"></script>
     <script src="assets/js/sb-admin-2.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
+    <script src="assets/js/dataTables.min.js"></script>
 
     <!-- Custom javascript import via Controller -->
     <?php
