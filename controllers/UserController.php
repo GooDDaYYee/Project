@@ -103,7 +103,7 @@ class UserController extends BaseController
         if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
             return $this->errorResponse();
         }
-        
+
         $user_id = $_POST['user_id'];
         $username = $_POST['username'];
         $lv = $_POST['lv'];
@@ -130,7 +130,7 @@ class UserController extends BaseController
 
     public function delete()
     {
-        
+
         if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
             return $this->errorResponse();
         }

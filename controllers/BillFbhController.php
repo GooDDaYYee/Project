@@ -78,7 +78,6 @@ class BillFBHController extends BaseController
             $billId = $this->insertBill($employeeId);
             $this->insertBillDetails($billId);
             $this->updateBillTotals($billId);
-            $this->logAction('Bill Created', "Bill ID: $billId");
 
             $this->db->commit();
             $this->jsonResponse(true, 'สร้างบิลสำเร็จแล้ว');
@@ -209,6 +208,7 @@ class BillFBHController extends BaseController
             ':withholding' => $withholding,
             ':grand_total' => $grandTotal
         ]);
+        $this->logAction('Bill Created', "Bill ID: $billId, Total Amount: $total");
     }
 
     private function calculateBillTotal($billId)

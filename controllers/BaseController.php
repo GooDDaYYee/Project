@@ -135,12 +135,12 @@ abstract class BaseController
         }
 
         $ret = "";
-        $baht = ReadNumber($number);
+        $baht = $this->ReadNumber($number);
         if ($baht != "") {
             $ret .= $baht . "บาท";
         }
 
-        $satang = ReadNumber($fraction);
+        $satang = $this->ReadNumber($fraction);
         if ($satang != "") {
             $ret .=  $satang . "สตางค์";
         } else {
@@ -157,7 +157,7 @@ abstract class BaseController
         $ret = "";
         if ($number == 0) return $ret;
         if ($number > 1000000) {
-            $ret .= ReadNumber(intval($number / 1000000)) . "ล้าน";
+            $ret .= $this->ReadNumber(intval($number / 1000000)) . "ล้าน";
             $number = intval(fmod($number, 1000000));
         }
 
