@@ -75,6 +75,11 @@
         $(document).ready(function() {
             $('#loginForm').on('submit', function(e) {
                 e.preventDefault();
+                var $submitButton = $(this).find('button[type="submit"]');
+
+                // Disable the submit button to prevent multiple submissions
+                $submitButton.prop('disabled', true);
+
                 $.ajax({
                     type: "POST",
                     url: "index.php?page=auth&action=login",
@@ -105,6 +110,8 @@
                                 title: 'ไม่สำเร็จ',
                                 text: response.message || 'เข้าสู่ระบบไม่สำเร็จ โปรดตรวจสอบ Username และ Password',
                             });
+                            // Re-enable the submit button on error
+                            $submitButton.prop('disabled', false);
                         }
                     },
                     error: function() {
@@ -113,6 +120,8 @@
                             title: 'ข้อผิดพลาด',
                             text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
                         });
+                        // Re-enable the submit button on error
+                        $submitButton.prop('disabled', false);
                     }
                 });
             });

@@ -168,7 +168,17 @@
 </div>
 
 <script>
-  let table = new DataTable('#myTable');
+  let table = new DataTable('#myTable', {
+    language: {
+      emptyTable: "กรุณาเลือก เดือน และปี ก่อนดูข้อมูลเงินเดือน",
+      lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
+      info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+      infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
+      infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
+      search: "ค้นหา:",
+    }
+  });
+
   const auOptions = <?php echo json_encode($data['auOptions']); ?>;
 
   $(document).ready(function() {
