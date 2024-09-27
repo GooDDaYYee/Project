@@ -73,8 +73,13 @@ class WorkReportController extends BaseController
             }
 
             $projectFolder = "project"; // remove if production
-            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/$projectFolder/index.php?page=work-list&action=view&folder=";
-            $fullPath = $currentUrl . $uploadDir;
+            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/$projectFolder/index.php";
+            $params = http_build_query([
+                'page' => 'work-list',
+                'action' => 'view',
+                'folder' => $uploadDir
+            ]);
+            $fullPath = $currentUrl . '?' . $params;
 
             $notify_result = $this->sendLineNotify($name, $jobname, $group, $fullPath);
 
