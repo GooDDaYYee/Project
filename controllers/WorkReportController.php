@@ -106,7 +106,7 @@ class WorkReportController extends BaseController
 
         $message = "\nชื่อผู้รายงาน: " . $name;
         $message = "\nรายงานงานใหม่: " . $jobname;
-        $message .= "\nลิ้ง: http://localhost/project/index.php?folder=bie-test-20240927211734";
+        $message .= "\nลิ้ง: " . $link;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://notify-api.line.me/api/notify");
