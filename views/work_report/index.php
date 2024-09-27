@@ -106,6 +106,8 @@
         });
 
         $('form').on('submit', function(e) {
+            var loadingOverlay = new LoadingOverlay();
+            loadingOverlay.show();
             var fileInput = $('#images');
             var maxSize = 5 * 1024 * 1024; // 5MB
 

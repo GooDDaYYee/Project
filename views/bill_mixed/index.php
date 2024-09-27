@@ -183,8 +183,11 @@
   const auOptions = <?php echo json_encode($data['auOptions']); ?>;
 
   $(document).ready(function() {
+
     $('.edit-btn').click(function() {
       const billId = $(this).data('id');
+      var loadingOverlay = new LoadingOverlay();
+      loadingOverlay.show();
       $.ajax({
         url: 'index.php?page=bill-mixed&action=fetchBillDetails',
         method: 'POST',
@@ -193,6 +196,7 @@
         },
         dataType: 'json',
         success: function(response) {
+          loadingOverlay.hide();
           if (response.success) {
             populateEditForm(response.data.bill, response.data.details);
             $('#editModal').modal('show');
@@ -201,6 +205,7 @@
           }
         },
         error: function() {
+          loadingOverlay.hide();
           alert('Error fetching bill details');
         }
       });
