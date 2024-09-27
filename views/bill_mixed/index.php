@@ -266,17 +266,17 @@
 
     function fetchAUDetails(auId, index) {
       $.ajax({
-        url: 'index.php?page=bill-mixed&action=fetchAUDetails',
+        url: 'index.php?page=bill-fbh&action=fetchAUDetails2',
         method: 'GET',
         data: {
           au_id: auId
         },
         dataType: 'json',
-        success: function(data) {
-          $(`#selectedData_${index}`).text(data.au_detail);
-          $(`#selectedDataDetail_${index}`).val(data.au_detail);
-          $(`#selectedDataType_${index}`).val(data.au_type);
-          $(`#selectedDataPrice_${index}`).val(data.au_price);
+        success: function(resp) {
+          $(`#selectedData_${index}`).text(resp.data.au_detail);
+          $(`#selectedDataDetail_${index}`).val(resp.data.au_detail);
+          $(`#selectedDataType_${index}`).val(resp.data.au_type);
+          $(`#selectedDataPrice_${index}`).val(resp.data.au_price);
         },
         error: function() {
           console.log('Error fetching AU details');

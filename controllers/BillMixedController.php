@@ -280,6 +280,26 @@ class BillMixedController extends BaseController
         }
     }
 
+    public function fetchAUDetails2()
+    {
+        $auid = $_GET['au_id'];
+        $query = "SELECT * FROM au_all WHERE au_id = :au_id";
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':au_id', $auid, PDO::PARAM_STR);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row) {
+                return $this->successResponse('OK', $row);
+            } else {
+                return $this->errorResponse('ไม่สามารถแสดง Detail ของ AU ได้');
+            }
+        } catch (PDOException $e) {
+            return $this->errorResponse('ไม่สามารถแสดง Detail ของ AU ได้');
+        }
+    }
+
     public function updateBill()
     {
         if (!isset($_POST['bill_Id'])) {
