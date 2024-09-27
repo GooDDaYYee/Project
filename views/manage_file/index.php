@@ -29,6 +29,8 @@
                     ["view", "sort"],
                 ],
             },
+            lang: "th",
+            i18nBaseUrl: "libs/elFinder/js/i18n/",
         });
     });
 </script>
