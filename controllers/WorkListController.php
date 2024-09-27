@@ -118,4 +118,29 @@ class WorkListController extends BaseController
 
         return $images;
     }
+
+    public function handleDeleteImages()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $imagesToDelete = $data['images'] ?? [];
+        $result = $this->deleteImg($imagesToDelete);
+
+        header('Content-Type: application/json');
+        echo json_encode(['success' => $result]);
+        exit;
+    }
+
+    private function deleteImg($imagePaths)
+    {
+        $success = true;
+        foreach ($imagePaths as $imagePath) {
+            if (file_exists($imagePath)) {
+                if (!unlink($imagePath)) {
+                    $success = false;
+                    break;
+                }
+            }
+        }
+        return $success;
+    }
 }

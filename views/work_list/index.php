@@ -2,7 +2,6 @@
     <div class="card shadow mb-4">
         <div class="card-header d-flex align-items-center py-3">
             <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp; รายการปฏิบัติงาน
-            <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=user&action=create', '_parent')">เพิ่มผู้ใช้</button>
         </div>
 
         <div class="card-body table-responsive">

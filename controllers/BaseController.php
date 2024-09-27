@@ -436,7 +436,7 @@ abstract class BaseController
                     $html .= '
                             <tr>
                                 <td colspan="6" class="right"><strong>Total</strong></td>
-                                <td class="right">1,521.44</td>
+                                <td class="right">' . $bill['total_amount'] . '</td>
                             </tr>
                             <tr>
                                 <td colspan="7" class="center" style="color:red;">เงื่อนไข: Payment 1 = 100%</td>
@@ -449,15 +449,15 @@ abstract class BaseController
                                         <br>บัญชีเลขที่ 086-3-06705-7
                                 </td>
                                 <td class="right"><strong>Final BOQ 100%</strong></td>
-                                <td class="right">1,521.44</td>
+                                <td class="right">' . $bill['total_amount'] . '</td>
                             </tr>
                             <tr>
                                 <td class="right"><strong>Payment 100%</strong></td>
-                                <td class="right">1,111,521.44</td>
+                                <td class="right">' . $bill['total_amount'] . '</td>
                             </tr>
                             <tr>
                                 <td class="right"><strong>VAT 7%</strong></td>
-                                <td class="right">106.50</td>
+                                <td class="right">' . $bill['vat'] . '</td>
                             </tr>
                             <tr>
                                 <td colspan="5" class="center">
@@ -469,13 +469,13 @@ abstract class BaseController
                                         </tr>
                                         <tr>
                                             <td style="border: none;" class="center hide">
-                                                หนึ่งพันสี่ร้อยสิบสี่บาทเก้าสิบสี่สตางค์
+                                                ' . $this->Convert($bill['grand_total'], 2) . '
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                                 <td class="right"><strong>Grand Total</strong></td>
-                                <td class="right">1,414.94</td>
+                                <td class="right">' . $bill['grand_total'] . '</td>
                             </tr>
                         </table>
                         <table>
