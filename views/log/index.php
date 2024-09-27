@@ -34,7 +34,7 @@
 <script>
     let table = new DataTable('#myTable', {
         language: {
-            emptyTable: "กรุณาเลือก เดือน และปี ก่อนดูข้อมูลเงินเดือน",
+            emptyTable: "ไม่มีข้อมูล",
             lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
             info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
             infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
