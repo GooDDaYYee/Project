@@ -1,3 +1,5 @@
+Updated index.php
+
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header d-flex align-items-center py-3">
@@ -23,7 +25,8 @@
                             <td><?= htmlspecialchars($folder['fileCount']) ?></td>
                             <td><?= htmlspecialchars($folder['created']) ?></td>
                             <td>
-                                <a href="<?= "index.php?page=work-list&action=view&folder=" . $folder['name'] ?>" class="btn btn-sm btn-outline-primary">ดูรายงาน</a>
+                                <a href="<?= "index.php?page=work-list&action=view&folder=" . urlencode($folder['name']) ?>" class="btn btn-sm btn-outline-primary">ดูรายงาน</a>
+                                <a href="<?= "index.php?page=work-list&action=delete&folder=" . urlencode($folder['name']) ?>" class="btn btn-sm btn-outline-danger delete-folder">ลบ</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -44,5 +47,14 @@
             search: "ค้นหา:",
             zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
         }
+    });
+
+    // Add confirmation for folder deletion
+    document.querySelectorAll('.delete-folder').forEach(button => {
+        button.addEventListener('click', function(e) {
+            if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบโฟลเดอร์นี้?')) {
+                e.preventDefault();
+            }
+        });
     });
 </script>

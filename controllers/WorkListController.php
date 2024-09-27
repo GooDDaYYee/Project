@@ -143,4 +143,46 @@ class WorkListController extends BaseController
         }
         return $success;
     }
+
+    public function delete()
+    {
+        $folderName = $_GET['folder'] ?? null;
+
+        if ($folderName) {
+            $path = 'assets/files/LINE/' . $folderName;
+
+            if (is_dir($path)) {
+                if ($this->deleteFolder($path)) {
+                    // Folder deleted successfully
+                    $_SESSION['success_message'] = "โฟลเดอร์ถูกลบเรียบร้อยแล้ว";
+                } else {
+                    // Failed to delete folder
+                    $_SESSION['error_message'] = "ไม่สามารถลบโฟลเดอร์ได้";
+                }
+            } else {
+                // Folder doesn't exist
+                $_SESSION['error_message'] = "ไม่พบโฟลเดอร์ที่ระบุ";
+            }
+        } else {
+            // No folder specified
+            $_SESSION['error_message'] = "ไม่ได้ระบุชื่อโฟลเดอร์";
+        }
+
+        // Redirect back to the work list page
+        header("Location: index.php?page=work-list");
+        exit;
+    }
+
+    private function deleteFolder($path)
+    {
+        if (is_dir($path)) {
+            $files = array_diff(scandir($path), array('.', '..'));
+            foreach ($files as $file) {
+                $fullPath = $path . DIRECTORY_SEPARATOR . $file;
+                (is_dir($fullPath)) ? $this->deleteFolder($fullPath) : unlink($fullPath);
+            }
+            return rmdir($path);
+        }
+        return false;
+    }
 }
