@@ -11,7 +11,12 @@
         object-fit: cover;
         width: 100%;
         height: 100%;
+
         transition: transform 0.3s ease;
+    }
+
+    .col-md-4 {
+        margin-bottom: 15px;
     }
 
     .image-container:hover img {
