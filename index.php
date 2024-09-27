@@ -21,6 +21,11 @@ if ($page === 'auth' && $action === 'index' && isset($_SESSION['login']) && $_SE
     exit();
 }
 
+if (isset($_GET['folder']) && !isset($_GET['page']) && !isset($_GET['action'])) {
+    header("Location: index.php?page=work-list&action=view&folder=" . $_GET['folder']);
+    exit();
+}
+
 switch ($page) {
     case 'auth':
         require_once 'controllers/AuthController.php';

@@ -72,12 +72,9 @@ class WorkReportController extends BaseController
                 }
             }
 
-            $projectFolder = "project"; // remove if production
-            $currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/$projectFolder/index.php";
+            $currentUrl = "https://$_SERVER[HTTP_HOST]/index.php";
             $params = http_build_query([
-                'page' => 'work-list',
-                'action' => 'view',
-                'folder' => $uploadDir
+                'folder' => $folderName
             ]);
             $fullPath = $currentUrl . '?' . $params;
 
@@ -95,6 +92,7 @@ class WorkReportController extends BaseController
 
     public function sendLineNotify($name, $jobname, $group, $link)
     {
+        // VdcG5s5qwLcyD6xJto8HEOjT9DiTxv4UpzvJkzg4Ode
         $tokens = [
             1 => "ZttPwN3qU9h2cl2HUAipy2MPFMCfTGxXb37Qbf4IKt2", // PSNK Group 1
             2 => "I9A20aBNYwcqavN0tbvR5B4uwDxBCIeWMXhQ2LRA0Gr"  // PSNK Group 2
@@ -108,7 +106,7 @@ class WorkReportController extends BaseController
 
         $message = "\nชื่อผู้รายงาน: " . $name;
         $message = "\nรายงานงานใหม่: " . $jobname;
-        $message .= "\nลิ้ง: " . $link;
+        $message .= "\nลิ้ง: http://localhost/project/index.php?folder=bie-test-20240927211734";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://notify-api.line.me/api/notify");
