@@ -153,22 +153,16 @@ class WorkListController extends BaseController
 
             if (is_dir($path)) {
                 if ($this->deleteFolder($path)) {
-                    // Folder deleted successfully
                     $_SESSION['success_message'] = "โฟลเดอร์ถูกลบเรียบร้อยแล้ว";
                 } else {
-                    // Failed to delete folder
                     $_SESSION['error_message'] = "ไม่สามารถลบโฟลเดอร์ได้";
                 }
             } else {
-                // Folder doesn't exist
                 $_SESSION['error_message'] = "ไม่พบโฟลเดอร์ที่ระบุ";
             }
         } else {
-            // No folder specified
             $_SESSION['error_message'] = "ไม่ได้ระบุชื่อโฟลเดอร์";
         }
-
-        // Redirect back to the work list page
         header("Location: index.php?page=work-list");
         exit;
     }
@@ -184,5 +178,45 @@ class WorkListController extends BaseController
             return rmdir($path);
         }
         return false;
+    }
+
+    public function handleUploadImages()
+    {
+        $folderName = $_POST['folder'] ?? null;
+        $uploadPath = 'assets/files/LINE/' . $folderName . '/';
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+
+        $uploadedFiles = [];
+        $errors = [];
+
+        foreach ($_FILES['images']['name'] as $key => $name) {
+            $tmpName = $_FILES['images']['tmp_name'][$key];
+            $error = $_FILES['images']['error'][$key];
+
+            if ($error === UPLOAD_ERR_OK) {
+                $extension = pathinfo($name, PATHINFO_EXTENSION);
+                $newName = uniqid() . '.' . $extension;
+                $destination = $uploadPath . $newName;
+
+                if (move_uploaded_file($tmpName, $destination)) {
+                    $uploadedFiles[] = $destination;
+                } else {
+                    $errors[] = "ไม่สามารถอัพโหลดไฟล์ $name ได้";
+                }
+            } else {
+                $errors[] = "เกิดข้อผิดพลาดในการอัพโหลดไฟล์ $name";
+            }
+        }
+
+        header('Content-Type: application/json');
+        if (empty($errors)) {
+            echo json_encode(['success' => true, 'files' => $uploadedFiles]);
+        } else {
+            echo json_encode(['success' => false, 'errors' => $errors]);
+        }
+        exit;
     }
 }

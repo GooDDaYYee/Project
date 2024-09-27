@@ -38,9 +38,13 @@
                 <i class="fa fa-folder-open fa-fw me-2"></i>
                 <h5 class="m-0 font-weight-bold d-inline"><?= htmlspecialchars($data['folderName']) ?></h5>
             </div>
-            <button id="deleteSelected" class="btn btn-danger" style="display: none;">ลบรูปภาพที่เลือก</button>
+            <div>
+                <button class="btn btn-primary me-2" id="uploadButton">เพิ่มรูป</button>
+                <button id="selectAllButton" class="btn btn-secondary me-2">เลือกทั้งหมด</button>
+                <button id="deselectAllButton" class="btn btn-secondary me-2" style="display: none;">ยกเลิกเลือกทั้งหมด</button>
+                <button id="deleteSelected" class="btn btn-danger" style="display: none;">ลบรูปภาพที่เลือก</button>
+            </div>
         </div>
-
         <div class="card-body">
             <div class="row g-4" id="imageGallery">
                 <?php foreach ($data['images'] as $index => $image): ?>
@@ -63,22 +67,28 @@
     </div>
 </div>
 
+<form id="uploadForm" style="display: none;">
+    <input type="file" id="fileInput" name="images[]" multiple accept="image/*" style="display: none;">
+</form>
+
 <!-- เพิ่ม JavaScript เฉพาะสำหรับหน้านี้ -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        if (typeof lightbox !== 'undefined') {
-            lightbox.option({
-                'resizeDuration': 200,
-                'wrapAround': true,
-                'alwaysShowNavOnTouchDevices': true
-            });
-        } else {
-            console.error('Lightbox is not defined. Make sure it is properly loaded.');
-        }
-
         const imageGallery = document.getElementById('imageGallery');
         const deleteButton = document.getElementById('deleteSelected');
+        const selectAllButton = document.getElementById('selectAllButton');
+        const deselectAllButton = document.getElementById('deselectAllButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const fileInput = document.getElementById('fileInput');
+        const uploadForm = document.getElementById('uploadForm');
         let selectedImages = [];
+
+        function updateButtonVisibility() {
+            const hasSelectedImages = selectedImages.length > 0;
+            deleteButton.style.display = hasSelectedImages ? 'inline-block' : 'none';
+            selectAllButton.style.display = hasSelectedImages ? 'none' : 'inline-block';
+            deselectAllButton.style.display = hasSelectedImages ? 'inline-block' : 'none';
+        }
 
         imageGallery.addEventListener('change', function(e) {
             if (e.target.classList.contains('image-checkbox')) {
@@ -93,13 +103,35 @@
                     imageCard.classList.remove('selected');
                 }
 
-                deleteButton.style.display = selectedImages.length > 0 ? 'block' : 'none';
+                updateButtonVisibility();
             }
+        });
+
+        selectAllButton.addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.image-checkbox:not(:checked)');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+                const imagePath = checkbox.dataset.imagePath;
+                if (!selectedImages.includes(imagePath)) {
+                    selectedImages.push(imagePath);
+                }
+                checkbox.closest('.image-card').classList.add('selected');
+            });
+            updateButtonVisibility();
+        });
+
+        deselectAllButton.addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.image-checkbox:checked');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.closest('.image-card').classList.remove('selected');
+            });
+            selectedImages = [];
+            updateButtonVisibility();
         });
 
         deleteButton.addEventListener('click', function() {
             if (confirm('คุณแน่ใจหรือไม่ที่จะลบรูปภาพที่เลือก?')) {
-                // ปรับปรุง URL ของ endpoint
                 fetch('index.php?page=work-list&action=handleDeleteImages', {
                         method: 'POST',
                         headers: {
@@ -112,13 +144,12 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // ลบรูปภาพออกจาก DOM
                             selectedImages.forEach(path => {
                                 const imageCard = document.querySelector(`.image-checkbox[data-image-path="${path}"]`).closest('.col-6');
                                 imageCard.remove();
                             });
                             selectedImages = [];
-                            deleteButton.style.display = 'none';
+                            updateButtonVisibility();
                             alert('ลบรูปภาพเรียบร้อยแล้ว');
                         } else {
                             alert('เกิดข้อผิดพลาดในการลบรูปภาพ');
@@ -130,5 +161,44 @@
                     });
             }
         });
+
+        uploadButton.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length > 0) {
+                const formData = new FormData(uploadForm);
+                formData.append('folder', '<?= htmlspecialchars($data['folderName']) ?>');
+
+                fetch('index.php?page=work-list&action=handleUploadImages', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('อัพโหลดรูปภาพเรียบร้อยแล้ว');
+                            location.reload(); // รีโหลดหน้าเพื่อแสดงรูปภาพใหม่
+                        } else {
+                            alert('เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ');
+                    });
+            }
+        });
+
+        if (typeof lightbox !== 'undefined') {
+            lightbox.option({
+                'resizeDuration': 200,
+                'wrapAround': true,
+                'alwaysShowNavOnTouchDevices': true
+            });
+        } else {
+            console.error('Lightbox is not defined. Make sure it is properly loaded.');
+        }
     });
 </script>
