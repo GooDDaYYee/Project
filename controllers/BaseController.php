@@ -405,8 +405,8 @@ abstract class BaseController
                     $x = 0;
                     for ($i = 0; $i < $list; $i += 5.25) {
                         if (isset($bill_details[$x])) {
-                            $formatted_unit1 = number_format($bill_details[$x]['au_price'], 2);
-                            $formatted_unit2 = number_format($bill_details[$x]['unit'], 2);
+                            $formatted_unit1 = number_format($bill_details[$x]['au_price'], 2, '.', ',');
+                            $formatted_unit2 = number_format($bill_details[$x]['unit'], 2, '.', ',');
 
                             $html .= '
                                     <tr>
@@ -416,7 +416,7 @@ abstract class BaseController
                                         <td class="center">' . $bill_details[$x]['au_type'] . '</td>
                                         <td class="right">' . $formatted_unit2 . '</td>
                                         <td class="right">' . $formatted_unit1 . '</td>
-                                        <td class="right">' . number_format($bill_details[$x]['price'], 2) . '</td>
+                                        <td class="right">' . number_format($bill_details[$x]['price'], 2, '.', ',') . '</td>
                                     </tr>';
                         } else {
                             $html .= '
@@ -434,32 +434,45 @@ abstract class BaseController
                     }
 
                     $html .= '
-                            <tr>
-                                <td colspan="6" class="right"><strong>Total</strong></td>
-                                <td class="right">' . $bill['total_amount'] . '</td>
-                            </tr>
-                            <tr>
-                                <td colspan="7" class="center" style="color:red;">เงื่อนไข: Payment 1 = 100%</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" rowspan="3" style="vertical-align: top;" class="left">
-                                        หมายเหตุ  : ชำระเป็น เงินสด โอนเข้าบัญชี
-                                        <br>ธนาคาร กสิกรไทย สาขา บ่อสร้าง ประเภท ออมทรัพย์
-                                        <br>ในนาม บริษัท พีเอสเอ็นเค เทเลคอม จำกัด (สำนักงานใหญ่)
-                                        <br>บัญชีเลขที่ 086-3-06705-7
-                                </td>
-                                <td class="right"><strong>Final BOQ 100%</strong></td>
-                                <td class="right">' . $bill['total_amount'] . '</td>
-                            </tr>
-                            <tr>
-                                <td class="right"><strong>Payment 100%</strong></td>
-                                <td class="right">' . $bill['total_amount'] . '</td>
-                            </tr>
-                            <tr>
-                                <td class="right"><strong>VAT 7%</strong></td>
-                                <td class="right">' . $bill['vat'] . '</td>
-                            </tr>
-                            <tr>
+                    <tr>
+                        <td colspan="6" class="right"><strong>Total</strong></td>
+                        <td class="right">' . number_format($bill['total_amount'], 2, '.', ',') . '</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" class="center" style="color:red;">เงื่อนไข: Payment 1 = 100%</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" rowspan="';
+                    if ($docType == 'quotation' || $docType == 'invoice') {
+                        $html .= '3';
+                    } elseif ($docType == 'receipt') {
+                        $html .= '4';
+                    }
+                    $html .= '" style="vertical-align: top;" class="left">
+                                หมายเหตุ  : ชำระเป็น เงินสด โอนเข้าบัญชี
+                                <br>ธนาคาร กสิกรไทย สาขา บ่อสร้าง ประเภท ออมทรัพย์
+                                <br>ในนาม บริษัท พีเอสเอ็นเค เทเลคอม จำกัด (สำนักงานใหญ่)
+                                <br>บัญชีเลขที่ 086-3-06705-7
+                        </td>
+                        <td class="right"><strong>Final BOQ 100%</strong></td>
+                        <td class="right">' . number_format($bill['total_amount'], 2, '.', ',') . '</td>
+                    </tr>
+                    <tr>
+                        <td class="right"><strong>Payment 100%</strong></td>
+                        <td class="right">' . number_format($bill['total_amount'], 2, '.', ',') . '</td>
+                    </tr>
+                    <tr>
+                        <td class="right"><strong>VAT 7%</strong></td>
+                        <td class="right">' . number_format($bill['vat'], 2, '.', ',') . '</td>
+                    </tr>';
+                    if ($docType == 'receipt') {
+                        $html .= '<tr>
+                                        <td class="right"><strong>หัก ณ ที่จ่าย 3%</strong></td>
+                                        <td class="right">' . number_format($bill['total_amount'], 2, '.', ',') . '</td>
+                                    </tr>';
+                    }
+
+                    $html .= ' <tr>
                                 <td colspan="5" class="center">
                                     <table class="hide">
                                         <tr>
@@ -475,7 +488,7 @@ abstract class BaseController
                                     </table>
                                 </td>
                                 <td class="right"><strong>Grand Total</strong></td>
-                                <td class="right">' . $bill['grand_total'] . '</td>
+                                <td class="right">' . number_format($bill['grand_total'], 2, '.', ',') . '</td>
                             </tr>
                         </table>
                         <table>
