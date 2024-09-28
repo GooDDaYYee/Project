@@ -1,9 +1,3 @@
-/* icon */
-link[rel="icon"] {
-  border-radius: 50%;
-  overflow: hidden;
-}
-
 /* loading */
 .loading-overlay {
   position: fixed;
