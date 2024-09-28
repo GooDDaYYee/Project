@@ -80,7 +80,6 @@
 
 <script>
     $(document).ready(function() {
-
         let table = new DataTable('#myTable', {
             language: {
                 emptyTable: "ไม่มีข้อมูล",
@@ -157,7 +156,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: 'index.php?page=user&action=delete',
+                        url: 'index.php?page=user&action=deleteUser',
                         method: 'POST',
                         data: {
                             user_id: userId

@@ -8,7 +8,7 @@ class ManageFileController extends BaseController
         parent::__construct();
 
         // Allow just admin to access this controller
-        if ($_SESSION["lv"] != 0 || $_SESSION["lv"] != 1 || $_SESSION["lv"] != 2) {
+        if ($_SESSION["lv"] != 0 && $_SESSION["lv"] != 1 && $_SESSION["lv"] != 2) {
             header("Location: index.php?page=work-report");
             exit();
         }

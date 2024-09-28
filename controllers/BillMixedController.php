@@ -271,7 +271,7 @@ class BillMixedController extends BaseController
                     'au_price' => 'undefined'
                 ];
             }
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             return [
                 'au_detail' => 'error',
                 'au_type' => 'error',

@@ -79,6 +79,10 @@ switch ($page) {
         require_once 'controllers/LogController.php';
         $controller = new LogController();
         break;
+    case 'edit-back':
+        require_once 'controllers/EditBackController.php';
+        $controller = new EditBackController();
+        break;
     default:
         $pageTitle = '404 - Page Not Found';
         $content = '404.php';

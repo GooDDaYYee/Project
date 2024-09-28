@@ -72,7 +72,7 @@ class EmployeeController extends BaseController
     public function deleteEmployee()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $employee_id = $_POST['employee_id'];
+            $employee_id = $_POST['employeeid'];
 
             try {
                 $this->db->beginTransaction();

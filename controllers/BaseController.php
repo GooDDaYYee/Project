@@ -336,7 +336,7 @@ abstract class BaseController
                                     <br>Address : 1 ซ.อินทามระ 41 แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400 ประเทศไทย
                                     <br>Tax ID : 0-1055-49093-10-2
                                 </td>
-                                    <td colspan="4" style="vertical-align: top;" class="left">
+                                <td colspan="4" style="vertical-align: top;" class="left">
                                     <strong>ผู้ติดต่อ : Management Center</strong>
                                     <br>Tel.02 276-2236-8 Fax : 02 276-2239
                                 </td>

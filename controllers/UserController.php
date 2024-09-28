@@ -128,35 +128,44 @@ class UserController extends BaseController
         }
     }
 
-    public function delete()
+    public function deleteUser()
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user_id = $_POST['user_id'];
 
-        if (!isset($_POST['user_id']) || empty($_POST['user_id'])) {
-            return $this->errorResponse();
-        }
+            try {
+                $this->db->beginTransaction();
 
-        $user_id = $_POST['user_id'];
+                // ลบข้อมูลที่เกี่ยวข้องในตาราง log ก่อน
+                $stmt = $this->db->prepare("DELETE FROM log WHERE user_id = :user_id");
+                $stmt->execute([':user_id' => $user_id]);
 
-        try {
-            $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
-            $stmt->execute([':user_id' => $user_id]);
-            $employee = $stmt->fetch();
+                // ตรวจสอบและลบข้อมูลใน employee ถ้ามี
+                $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
+                $stmt->execute([':user_id' => $user_id]);
+                $employee = $stmt->fetch();
 
-            if ($employee) {
-                $employee_id = $employee['employee_id'];
-                $stmt = $this->db->prepare("DELETE FROM employee WHERE employee_id = :employee_id");
-                $stmt->execute([':employee_id' => $employee_id]);
+                if ($employee) {
+                    $employee_id = $employee['employee_id'];
+                    $stmt = $this->db->prepare("DELETE FROM employee WHERE employee_id = :employee_id");
+                    $stmt->execute([':employee_id' => $employee_id]);
+                }
+
+                // ลบข้อมูลจากตาราง users
+                $stmt = $this->db->prepare("DELETE FROM users WHERE user_id = :user_id");
+                $stmt->execute([':user_id' => $user_id]);
+
+                $this->db->commit();
+
+                $logDetail = "User ID: {$user_id}, Employee ID: " . ($employee_id ?? 'N/A');
+                $this->logAction('User Deleted', $logDetail);
+
+                $this->successResponse();
+            } catch (PDOException $e) {
+                $this->db->rollBack();
+                $this->logAction('Error Deleting User', $e->getMessage());
+                $this->errorResponse($e->getMessage());
             }
-
-            $stmt = $this->db->prepare("DELETE FROM users WHERE user_id = :user_id");
-            $stmt->execute([':user_id' => $user_id]);
-
-            $logDetail = "User ID: {$user_id}, Employee ID: " . ($employee_id ?? 'N/A');
-            $this->logAction('User Deleted', $logDetail);
-
-            return $this->successResponse();
-        } catch (PDOException $e) {
-            return $this->errorResponse();
         }
     }
 

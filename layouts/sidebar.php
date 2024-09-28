@@ -62,6 +62,7 @@ function isActive($page)
                     <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
                     <a class="collapse-item <?php isActive('user') ?>" href="index.php?page=user">&nbsp; จัดการผู้ใช้</a>
                     <a class="collapse-item <?php isActive('log') ?>" href="index.php?page=log">&nbsp; ประวัติการใช้งาน</a>
+                    <a class="collapse-item <?php isActive('edit-back') ?>" href="index.php?page=edit-back">&nbsp; แก้ไขข้อมูล</a>
                 </div>
             <?php endif; ?>
         </div>

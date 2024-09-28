@@ -180,4 +180,55 @@
             }
         });
     });
+
+    $('.delete-employee').click(function() {
+        var employeeid = $(this).data('id');
+        var index = $(this).data('index');
+
+        Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            html: "คุณต้องการลบข้อมูลพนักงาน " + index + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลพนักงาน ข้อมูลผู้ใช้จะหายไปด้วย !!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'index.php?page=employee&action=deleteEmployee',
+                    method: 'POST',
+                    data: {
+                        employeeid: employeeid
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'ลบสำเร็จ',
+                                text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ไม่สำเร็จ',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                        });
+                    }
+                });
+            }
+        });
+    });
 </script>
