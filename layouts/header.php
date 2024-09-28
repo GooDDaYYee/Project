@@ -58,7 +58,7 @@ try {
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= htmlspecialchars($row['employee_name'] . ' ' . $row['employee_lastname']) ?></span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 text-sm"><?= htmlspecialchars($row['employee_name'] . ' ' . $row['employee_lastname']) ?></span>
                 <?php
                 // ฟังก์ชันสำหรับดึงอักษรแรกของคำภาษาไทย
                 function getFirstChar($str)

@@ -10,6 +10,8 @@
 
     <title>ลืมรหัสผ่าน - PSNK Telecom</title>
 
+    <link rel="icon" href="assets/images/icon.svg" type="image/svg+xml">
+
     <!-- CSS Import -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Mitr' rel='stylesheet'>
@@ -43,12 +45,12 @@
                                                 <input type="text" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทรศัพท์" required="">
                                             </div>
                                             <div class="form-group">
-                                            <div class="custom-control custom-checkbox small d-flex justify-content-end align-items-center">
-                                                <a href="index.php?page=auth">เข้าสู่ระบบ</a>
+                                                <div class="custom-control custom-checkbox small d-flex justify-content-end align-items-center">
+                                                    <a href="index.php?page=auth">เข้าสู่ระบบ</a>
+                                                </div>
                                             </div>
-                                        </div>
                                             <div class="row justify-content-center align-items-center">
-                                                <div class="col-4">
+                                                <div>
                                                     <button class="btn btn-warning bg-gradient-purple col" type="submit">
                                                         <h5>รีเซ็ตรหัสผ่าน</h5>
                                                     </button>
