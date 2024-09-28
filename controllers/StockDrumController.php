@@ -41,21 +41,24 @@ class StockDrumController extends BaseController
                 $drum_cable_company = $_POST['drum_cable_company'];
                 $employee_id = $_SESSION['employee_id'];
 
-                $strsql = "SELECT * FROM drum WHERE drum_no=:drum_no";
-                $stmt = $this->db->prepare($strsql);
-                $stmt->bindParam(':drum_no', $drum_no);
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $strsql = "SELECT * FROM drum WHERE drum_no = :drum_no AND drum_company = :drum_company AND drum_cable_company = :drum_cable_company";
+                $checkDupStmt = $this->db->prepare($strsql);
+                $checkDupStmt->bindParam(':drum_no', $drum_no);
+                $checkDupStmt->bindParam(':drum_company', $drum_company);
+                $checkDupStmt->bindParam(':drum_cable_company', $drum_cable_company);
+                $checkDupStmt->execute();
+                $dupResult = $checkDupStmt->fetch(PDO::FETCH_ASSOC);
 
-                if ($result && ($drum_company == $result['drum_company'] && $drum_cable_company == $result['drum_cable_company'])) {
-                    http_response_code(400);
-                    echo json_encode(['success' => false, 'message' => 'มีข้อมูล Drum อยู่แล้วกรุณาเลือกใหม่']);
-                    exit();
+                if ($drum_full > 4000 && $dupResult) {
+                    $this->jsonResponse(false, 'จำนวน Drum มีมากกว่า 4000 เมตร และมีข้อมูล Drum อยู่แล้วกรุณาตรวจสอบข้อมูลใหม่');
                 }
+
                 if ($drum_full > 4000) {
-                    http_response_code(400);
-                    echo json_encode(['success' => false, 'message' => 'จำนวน Drum มีมากกว่า 4000 เมตร']);
-                    exit();
+                    $this->jsonResponse(false, 'จำนวน Drum มีมากกว่า 4000 เมตร');
+                }
+
+                if ($dupResult) {
+                    $this->jsonResponse(false, 'มีข้อมูล Drum อยู่แล้วกรุณาตรวจสอบข้อมูลใหม่');
                 }
 
                 $this->db->beginTransaction();
@@ -84,19 +87,14 @@ class StockDrumController extends BaseController
                     $stmtLog->bindParam(':log_detail', $logDetail);
                     $stmtLog->bindParam(':user_id', $user_id);
                     $stmtLog->execute();
+
+                    $this->db->commit();
+                    $this->successResponse();
                 } else {
-                    http_response_code(400);
-                    echo json_encode(['success' => false, 'message' => 'เพิ่มข้อมูล Drum ไม่สำเร็จ!']);
-                    exit();
+                    $this->jsonResponse(false, 'เพิ่มข้อมูล Drum ไม่สำเร็จ!');
                 }
-                $this->db->commit();
-                echo json_encode(['success' => true]);
-                exit();
-            } catch (PDOException $e) {
-                $this->db->rollBack();
-                http_response_code(400);
-                echo json_encode(['success' => false, 'message' => 'เชื่อมต่อฐานข้อมูลล้มเหลว']);
-                exit();
+            } catch (PDOException) {
+                $this->errorResponse();
             }
         }
     }
@@ -130,18 +128,19 @@ class StockDrumController extends BaseController
             $checkDupStmt->bindParam(':drum_no', $drum_no);
             $checkDupStmt->bindParam(':drum_company', $drum_company);
             $checkDupStmt->bindParam(':drum_cable_company', $drum_cable_company);
-            $checkDupStmt->bindParam(':drum_id', $drum_id);
             $checkDupStmt->execute();
             $dupResult = $checkDupStmt->fetch(PDO::FETCH_ASSOC);
 
+            if ($drum_full > 4000 && $dupResult) {
+                $this->jsonResponse(false, 'จำนวน Drum มีมากกว่า 4000 เมตร และมีข้อมูล Drum อยู่แล้วกรุณาตรวจสอบข้อมูลใหม่');
+            }
+
             if ($dupResult) {
-                echo json_encode(['success' => false, 'message' => 'มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่']);
-                exit();
+                $this->jsonResponse(false, 'มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่');
             }
 
             if ($drum_full > 4000) {
-                echo json_encode(['success' => false, 'message' => 'จำนวน Drum มีมากกว่า 4000 เมตร']);
-                exit();
+                $this->jsonResponse(false, "จำนวน Drum มีมากกว่า 4000 เมตร");
             }
 
             try {
@@ -155,10 +154,12 @@ class StockDrumController extends BaseController
                     ':drum_full' => $drum_full,
                     ':drum_id' => $drum_id
                 ]);
-                echo json_encode(['success' => true, 'message' => 'อัปเดตเรียบร้อยแล้ว Drum']);
-            } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการอัปเดต Drum: ' . $e->getMessage()]);
+                $this->successResponse();
+            } catch (PDOException) {
+                $this->errorResponse();
             }
+        } else {
+            $this->jsonResponse(false, "ข้อมูลไม่ถูกส่งไป");
         }
     }
 
@@ -174,13 +175,15 @@ class StockDrumController extends BaseController
                 if ($result && $result['drum_used'] == 0) {
                     $stmt = $this->db->prepare("DELETE FROM drum WHERE drum_id = :drum_id");
                     $stmt->execute([':drum_id' => $drum_id]);
-                    echo json_encode(['success' => true, 'message' => 'ลบ Drum สำเร็จแล้ว']);
+                    $this->successResponse();
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'ไม่สามารถลบข้อมูล Drum ได้ มีการเรียกใช้เคเบิลอยู่!']);
+                    $this->jsonResponse(false, 'ไม่สามารถลบข้อมูล Drum ได้ มีการเรียกใช้เคเบิลอยู่!');
                 }
-            } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบ Drum: ' . $e->getMessage()]);
+            } catch (PDOException) {
+                $this->errorResponse();
             }
+        } else {
+            $this->jsonResponse(false, "ข้อมูลไม่ถูกส่งไป");
         }
     }
 
@@ -194,15 +197,15 @@ class StockDrumController extends BaseController
                 $drum = $stmt->fetch(PDO::FETCH_ASSOC);
 
                 if ($drum) {
-                    echo json_encode(['success' => true, 'drum' => $drum]);
+                    $this->successResponse('Ok', $drum);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'ไม่พบ Drum']);
+                    $this->jsonResponse(false, "ไม่พบ Drum");
                 }
-            } catch (PDOException $e) {
-                echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการเรียกรายละเอียด Drum: ' . $e->getMessage()]);
+            } catch (PDOException) {
+                $this->errorResponse();
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'คำขอไม่ถูกต้อง']);
+            $this->jsonResponse(false, "ข้อมูลไม่ถูกส่งไป");
         }
     }
 }

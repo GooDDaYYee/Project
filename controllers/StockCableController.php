@@ -43,12 +43,12 @@ class StockCableController extends BaseController
             $cable = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($cable) {
-                $this->jsonResponse(true, 'ดึงรายละเอียด Cable เรียบร้อยแล้ว', $cable);
+                $this->successResponse('ดึงรายละเอียด Cable เรียบร้อยแล้ว', $cable);
             } else {
                 $this->jsonResponse(false, 'ไม่พบ Cable');
             }
         } catch (PDOException) {
-            $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการเรียกรายละเอียด Cable', null, 500);
+            $this->errorResponse('เกิดข้อผิดพลาดในการเรียกรายละเอียด Cable',);
         }
     }
 
@@ -107,10 +107,9 @@ class StockCableController extends BaseController
             $this->logAction('Cable Inserted', "Cable ID: $cable_id, Route: {$cableData['route']}, Section: {$cableData['section']}, Used: $cable_used");
 
             $this->db->commit();
-            $this->jsonResponse(true, 'เพิ่มข้อมูล Cable สำเร็จ');
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            $this->jsonResponse(false, 'เกิดข้อผิดพลาด: ' . $e->getMessage(), null, 400);
+            $this->successResponse();
+        } catch (Exception) {
+            $this->errorResponse('เกิดข้อผิดพลาดในการสร้าง Cable');
         }
     }
 
@@ -136,7 +135,7 @@ class StockCableController extends BaseController
             $total_cable = $this->calculateTotalCable($cableData['drum_id'], $oldCableData['cable_used'], $new_cable_used);
 
             if ($total_cable > 4000) {
-                throw new Exception('จำนวนสายเคเบิลทั้งหมดเกิน 4000');
+                $this->jsonResponse(false, 'จำนวนสายเคเบิลทั้งหมดเกิน 4000');
             }
 
             $stmt = $this->db->prepare("UPDATE cable SET 
@@ -167,10 +166,9 @@ class StockCableController extends BaseController
             $this->logAction('Cable Updated', "Cable ID: $cable_id, Route: {$cableData['route']}, Section: {$cableData['section']}, Used: $new_cable_used");
 
             $this->db->commit();
-            $this->jsonResponse(true, 'อัปเดตข้อมูล Cable สำเร็จ');
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            $this->jsonResponse(false, 'อัปเดตข้อมูลไม่สำเร็จ: ' . $e->getMessage(), null, 400);
+            $this->successResponse();
+        } catch (Exception) {
+            $this->errorResponse("เกิดข้อผิดพลาดในการอัพเดตข้อมูล Cable");
         }
     }
 
@@ -178,7 +176,6 @@ class StockCableController extends BaseController
     {
         if (!isset($_POST['cable_id'])) {
             $this->jsonResponse(false, 'ไม่ได้ระบุรหัส Cable');
-            return;
         }
 
         $cable_id = $_POST['cable_id'];
@@ -196,10 +193,9 @@ class StockCableController extends BaseController
             $this->updateAllDrumUsages();
 
             $this->db->commit();
-            $this->jsonResponse(true, 'ลบข้อมูล Cable สำเร็จ');
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            $this->jsonResponse(false, 'ลบข้อมูลไม่สำเร็จ', null, 400);
+            $this->successResponse();
+        } catch (Exception) {
+            $this->errorResponse('การลบข้อมูลผิดพลาด');
         }
     }
 
@@ -207,15 +203,24 @@ class StockCableController extends BaseController
     {
         // Implement validation logic here
         // This is a basic example, you should add more comprehensive validation
-        $required = ['route', 'section', 'team', 'cable_form', 'cable_to', 'cable_work', 'drum_id'];
-        foreach ($required as $field) {
+        $required = [
+            'route' => 'Route',
+            'section' => 'Section',
+            'team' => 'Team',
+            'cable_form' => 'Cable Form',
+            'cable_to' => 'Cable To',
+            'cable_work' => 'งานที่ทำ',
+            'drum_id' => 'รหัส Drum'
+        ];
+
+        foreach ($required as $field => $fieldName) {
             if (!isset($data[$field]) || empty($data[$field])) {
-                throw new Exception("Field $field is required");
+                $this->jsonResponse(false, "กรุณากรอกข้อมูล $fieldName ก่อน");
             }
         }
 
         if ($data['cable_form'] <= $data['cable_to']) {
-            throw new Exception("สายเคเบิลจากต้องมากกว่าเคเบิลถึง");
+            $this->jsonResponse(false, 'สายเคมีจำนวนเท่ากัน หรือน้อยกว่าปลายสาย');
         }
 
         return $data;
@@ -229,7 +234,7 @@ class StockCableController extends BaseController
         $total_cable = $result['total_cable'] + $new_cable_used;
 
         if ($total_cable > 4000) {
-            throw new Exception('จำนวนสายเคเบิลทั้งหมดเกิน 4000 เมตร');
+            $this->jsonResponse(false, 'จำนวนสายเคเบิลทั้งหมดเกิน 4000 เมตร');
         }
     }
 
@@ -313,18 +318,27 @@ class StockCableController extends BaseController
         $company = $_POST['company'];
 
         try {
-            $stmt = $this->db->prepare("SELECT * FROM drum WHERE drum_cable_company = :manufacturer AND drum_company = :company AND drum_remaining > 0");
+            $stmt = $this->db->prepare("SELECT * FROM drum WHERE drum_cable_company = :manufacturer AND drum_company = :company");
             $stmt->execute([':manufacturer' => $manufacturer, ':company' => $company]);
             $drums = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $options = '<option value="">เลือก Drum</option>';
-            foreach ($drums as $drum) {
-                $options .= "<option value='{$drum['drum_id']}'>{$drum['drum_no']}</option>";
+            if (empty($drums)) {
+                $options = '<option value="">ไม่มีข้อมูล</option>';
+                $message = 'ไม่พบข้อมูล Drum สำหรับ manufacturer และ company ที่เลือก';
+            } else {
+                $options = '<option value="">เลือก Drum</option>';
+                foreach ($drums as $drum) {
+                    $options .= "<option value='{$drum['drum_id']}'>{$drum['drum_no']} (คงเหลือ: {$drum['drum_remaining']})</option>";
+                }
+                $message = 'ดึงข้อมูลสำเร็จ Drums';
             }
 
-            $this->jsonResponse(true, 'ดึงข้อมูลสำเร็จ Drums', ['options' => $options]);
-        } catch (PDOException $e) {
-            $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการดึงข้อมูล Drums', null, 500);
+            error_log("Found " . count($drums) . " drums for manufacturer $manufacturer and company $company");
+
+
+            $this->successResponse($message, ['options' => $options]);
+        } catch (PDOException) {
+            $this->errorResponse('เกิดข้อผิดพลาดในการดึงข้อมูล Drums');
         }
     }
 }

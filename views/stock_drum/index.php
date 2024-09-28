@@ -143,11 +143,11 @@
                             location.reload();
                         });
                     } else {
-                        Swal.fire('ไม่สำเร็จ', response.message, 'error');
+                        Swal.fire('ไม่สำเร็จ', response.message);
                     }
                 },
                 error: function() {
-                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
                 }
             });
         });
@@ -250,14 +250,14 @@
                 success: function(response) {
                     if (response.success) {
                         editDrum(
-                            response.drum.drum_id,
-                            response.drum.drum_no,
-                            response.drum.drum_to,
-                            response.drum.drum_description,
-                            response.drum.drum_company,
-                            response.drum.drum_cable_company,
-                            response.drum.drum_full,
-                            response.drum.drum_used
+                            response.data.drum_id,
+                            response.data.drum_no,
+                            response.data.drum_to,
+                            response.data.drum_description,
+                            response.data.drum_company,
+                            response.data.drum_cable_company,
+                            response.data.drum_full,
+                            response.data.drum_used
                         );
                     } else {
                         Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Drum ได้', 'error');
@@ -269,7 +269,6 @@
             });
         });
 
-        // Enable disabled fields before form submission
         $('#editDrumForm').on('submit', function() {
             $('#edit_drum_no, #edit_drum_company, #edit_drum_cable_company, #edit_drum_full').prop('disabled', false);
         });

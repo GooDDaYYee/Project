@@ -59,7 +59,27 @@ try {
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= htmlspecialchars($row['employee_name'] . ' ' . $row['employee_lastname']) ?></span>
-                <img class="img-profile rounded-circle" src="images/picture.png" alt="Profile Picture">
+                <?php
+                // ฟังก์ชันสำหรับดึงอักษรแรกของคำภาษาไทย
+                function getFirstChar($str)
+                {
+                    return mb_substr($str, 0, 1, 'UTF-8');
+                }
+
+                $name = $row['employee_name'];
+                $lastname = $row['employee_lastname'];
+                $firstInitial = getFirstChar($name);
+                $lastInitial = getFirstChar($lastname);
+                $initials = $firstInitial . $lastInitial;
+
+                // สร้างอาร์เรย์ของคลาสสี Bootstrap
+                $bgColors = ['bg-primary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info'];
+                // สุ่มเลือกสีจากอาร์เรย์
+                $randomColor = $bgColors[array_rand($bgColors)];
+                ?>
+                <div class="img-profile rounded-circle <?= $randomColor ?> text-white d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; font-size: 18px;">
+                    <?= htmlspecialchars($initials) ?>
+                </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

@@ -32,7 +32,15 @@
                                 <td><?= $this->getPositionName($employee['employee_position']) ?></td>
                                 <td><?= $this->getStatusName($employee['employee_status']) ?></td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary edit-employee" data-id="<?= $employee['employee_id'] ?>">แก้ไข</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary edit-employee"
+                                        data-id="<?= $employee['employee_id'] ?>"
+                                        data-name="<?= $employee['employee_name'] ?>"
+                                        data-lastname="<?= $employee['employee_lastname'] ?>"
+                                        data-age="<?= $employee['employee_age'] ?>"
+                                        data-phone="<?= $employee['employee_phone'] ?>"
+                                        data-email="<?= $employee['employee_email'] ?>"
+                                        data-position="<?= $employee['employee_position'] ?>"
+                                        data-status="<?= $employee['employee_status'] ?>">แก้ไข</button>
                                     <button type="button" class="btn btn-sm btn-outline-danger delete-employee" data-id="<?= $employee['employee_id'] ?>" data-index="<?= $i + 1 ?>">ลบ</button>
                                 </td>
                             </tr>
@@ -115,5 +123,61 @@
             search: "ค้นหา:",
             zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
         }
+    });
+
+    $('.edit-employee').click(function() {
+        var EmployeeId = $(this).data('id');
+        var EmployeeName = $(this).data('name');
+        var EmployeeLastname = $(this).data('lastname');
+        var EmployeeAge = $(this).data('age');
+        var EmployeePhone = $(this).data('phone');
+        var EmployeeEmail = $(this).data('email');
+        var EmployeePosition = $(this).data('position');
+        var EmployeeStatus = $(this).data('status');
+
+        $('#edit-employee-id').val(EmployeeId);
+        $('#edit-employee-name').val(EmployeeName);
+        $('#edit-employee-lastname').val(EmployeeLastname);
+        $('#edit-employee-age').val(EmployeeAge);
+        $('#edit-employee-phone').val(EmployeePhone);
+        $('#edit-employee-email').val(EmployeeEmail);
+        $('#edit-employee-position').val(EmployeePosition);
+        $('#edit-employee-status').val(EmployeeStatus);
+
+        $('#editModal').modal('show');
+    });
+
+    $('#editForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'index.php?page=employee&action=updateEmployee',
+            method: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ',
+                        text: 'แก้ไขข้อมูลพนักงานสำเร็จ',
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: response.message,
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สำเร็จ',
+                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                });
+            }
+        });
     });
 </script>

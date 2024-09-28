@@ -37,7 +37,7 @@
                             <td><?= htmlspecialchars($cable['cable_work']) ?></td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -135,7 +135,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'ไม่สำเร็จ',
-                        text: 'เกิดข้อผิดพลาดในการดึงข้อมูลเคเบิล: ' + response.message
+                        text: response.message
                     });
                 }
             },
@@ -169,7 +169,7 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'ไม่สำเร็จ',
-                        text: 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล Cable: ' + response.message
+                        text: response.message
                     });
                 }
             },
@@ -185,9 +185,10 @@
 
     $('.delete-btn').click(function() {
         const cableId = $(this).data('id');
+        const id = $(this).data('id');
         Swal.fire({
             title: 'คุณแน่ใจหรือไม่?',
-            text: "คุณต้องการลบข้อมูล Cable นี้หรือไม่?",
+            text: "คุณต้องการลบข้อมูล" + id + "นี้หรือไม่?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -216,7 +217,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'ไม่สำเร็จ',
-                                text: 'เกิดข้อผิดพลาดในการลบข้อมูล Cable: ' + response.message
+                                text: response.message
                             });
                         }
                     },

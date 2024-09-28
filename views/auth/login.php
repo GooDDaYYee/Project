@@ -47,7 +47,7 @@
                                             </div>
                                         </div>
                                         <div class="row justify-content-center">
-                                            <div class="col-4">
+                                            <div>
                                                 <button type="submit" class="btn btn-warning bg-gradient-purple btn-user btn-block">
                                                     <h5>เข้าสู่ระบบ</h5>
                                                 </button>

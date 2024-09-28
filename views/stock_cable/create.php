@@ -17,7 +17,7 @@
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="route" name="route" placeholder="Route" required>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="section" name="section" placeholder="Section" required>
                             </div>
                             <div class="col-sm-4">
@@ -28,7 +28,7 @@
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="number" class="form-control form-control-user" id="cable_form" name="cable_form" placeholder="Cable From" required>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mb-3 mb-sm-0">
                                 <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required>
                             </div>
                             <div class="col-sm-4">
@@ -48,7 +48,7 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mb-3 mb-sm-0">
                                 <select class="form-control" id="manufacturer" name="manufacturer">
                                     <option value="">เลือกบริษัทผลิตสาย</option>
                                     <?php foreach ($data['manufacturers'] as $value => $label): ?>
@@ -56,7 +56,7 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 mb-3">
                                 <select class="form-control" id="drum_id" name="drum_id">
                                     <option value="">เลือก Drum</option>
                                 </select>
@@ -87,8 +87,16 @@
                         'request_type': 'manufacturer'
                     },
                     success: function(response) {
+                        console.log("AJAX response:", response);
                         if (response.success) {
                             $('#drum_id').html(response.data.options);
+                            console.log("Drum options updated");
+                            if (response.message === 'ไม่พบข้อมูล Drum สำหรับ manufacturer และ company ที่เลือก') {
+                                // อาจจะแสดง alert หรือข้อความแจ้งเตือนเพิ่มเติมที่นี่
+                                console.log("No drums found for the selected manufacturer and company");
+                            }
+                        } else {
+                            console.error("Error in AJAX response:", response.message);
                         }
                     }
                 });

@@ -64,17 +64,18 @@
     </form>
 
     <script>
-        // sweetalert editForm
-        $(function() {
+        $(document).ready(function() {
+            // sweetalert editForm
             $('#insert_drum').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
                     type: "POST",
                     url: "index.php?page=stock-drum&action=create",
                     data: $(this).serialize(),
+                    dataType: 'json',
                     success: function(response) {
-                        const data = JSON.parse(response);
-                        if (data.success) {
+                        console.log(response)
+                        if (response.success) {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'สำเร็จ',
@@ -86,16 +87,15 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'ไม่สำเร็จ',
-                                text: data.message,
+                                text: response.message,
                             });
                         }
                     },
-                    error: function(xhr) {
-                        const data = JSON.parse(xhr.responseText);
+                    error: function() {
                         Swal.fire({
                             icon: 'error',
                             title: 'ไม่สำเร็จ',
-                            text: data.message || 'เกิดข้อผิดพลาดบางอย่าง',
+                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
                         });
                     }
                 });

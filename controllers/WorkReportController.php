@@ -26,8 +26,8 @@ class WorkReportController extends BaseController
             // Handle file uploads
             $uploadedFiles = [];
             if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
-                // Create a folder if not exist and folder name is slug jobname-YmdHis
-                $folderName = $this->createSlug($jobname) . '-' . date('YmdHis');
+                // Create a folder if not exist and folder name is slug name-jobname-YmdHis
+                $folderName =   $this->createSlug($jobname) . '-' . $this->createSlug($name) . '-' . date('YmdHis');
                 $uploadDir = 'assets/files/LINE/' . $folderName . '/';
 
                 if (!file_exists($uploadDir)) {
@@ -78,7 +78,8 @@ class WorkReportController extends BaseController
             ]);
             $fullPath = $currentUrl . '?' . $params;
 
-            $notify_result = $this->sendLineNotify($name, $jobname, $group, $fullPath);
+            $imageCount = count($uploadedFiles);
+            $notify_result = $this->sendLineNotify($name, $jobname, $group, $fullPath, $imageCount);
 
             if (!$notify_result) {
                 $_SESSION['error_message'] = "เพิ่มรายงานใหม่แล้ว แต่ไม่สามารถส่งการแจ้งเตือน LINE Notify ได้";
@@ -90,9 +91,8 @@ class WorkReportController extends BaseController
         }
     }
 
-    public function sendLineNotify($name, $jobname, $group, $link)
+    public function sendLineNotify($name, $jobname, $group, $link, $imageCount)
     {
-        // VdcG5s5qwLcyD6xJto8HEOjT9DiTxv4UpzvJkzg4Ode
         $tokens = [
             1 => "ZttPwN3qU9h2cl2HUAipy2MPFMCfTGxXb37Qbf4IKt2", // PSNK Group 1
             2 => "I9A20aBNYwcqavN0tbvR5B4uwDxBCIeWMXhQ2LRA0Gr"  // PSNK Group 2
@@ -105,7 +105,8 @@ class WorkReportController extends BaseController
         }
 
         $message = "\nชื่อผู้รายงาน: " . $name;
-        $message = "\nรายงานงานใหม่: " . $jobname;
+        $message .= "\nรายงานงานใหม่: " . $jobname;
+        $message .= "\nจำนวนรูปที่รายงาน: " . $imageCount;
         $message .= "\nลิ้ง: " . $link;
 
         $ch = curl_init();
