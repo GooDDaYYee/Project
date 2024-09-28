@@ -2,6 +2,18 @@
 require_once __DIR__ . '/BaseController.php';
 class ManageFileController extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Allow just admin to access this controller
+        if ($_SESSION["lv"] != 0 || $_SESSION["lv"] != 1 || $_SESSION["lv"] != 2) {
+            header("Location: index.php?page=work-report");
+            exit();
+        }
+    }
+
     public function index()
     {
         $pageTitle = 'จัดการไฟล์ - PSNK TELECOM';
