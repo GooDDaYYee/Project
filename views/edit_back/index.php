@@ -1,3 +1,32 @@
+<style>
+    .scrollable-list {
+        max-height: calc(5 * 58px);
+        /* Approximate height of 5 items */
+        overflow-y: auto;
+    }
+
+    .list-group-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .close-btn {
+        cursor: pointer;
+        padding: 0 5px;
+        font-weight: bold;
+        color: #777;
+    }
+
+    .close-btn:hover {
+        color: #000;
+    }
+</style>
+
+<?php
+$data = $this->QryDb();
+?>
+
 <div class="text-center">
     <h1 class="h2 text-gray-900 mb-3">ข้อมูลเชิงลึก</h1>
 </div>
@@ -19,13 +48,19 @@
                     </div>
                     <div class="row">
                         <div class="col-12 mt-4">
-                            <ul class="list-group">
-                                <li class="list-group-item">An item</li>
-                                <li class="list-group-item">A second item</li>
-                                <li class="list-group-item">A third item</li>
-                                <li class="list-group-item">A fourth item</li>
-                                <li class="list-group-item">And a fifth one</li>
-                            </ul>
+                            <div class="scrollable-list">
+                                <ul class="list-group">
+                                    <?php
+                                    foreach ($data['drum_company'] as $row) {
+                                        echo '<li class="list-group-item">';
+                                        echo $row['drum_company_detail'];
+                                        echo '<span class="close-btn">&times;</span>';
+                                        echo '</li>';
+                                    }
+                                    ?>
+                                    <!-- Add more items as needed -->
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,13 +82,19 @@
                     </div>
                     <div class="row">
                         <div class="col-12 mt-4">
-                            <ul class="list-group">
-                                <li class="list-group-item">An item</li>
-                                <li class="list-group-item">A second item</li>
-                                <li class="list-group-item">A third item</li>
-                                <li class="list-group-item">A fourth item</li>
-                                <li class="list-group-item">And a fifth one</li>
-                            </ul>
+                            <div class="scrollable-list">
+                                <ul class="list-group">
+                                    <?php
+                                    foreach ($data['drum_cable_company'] as $row) {
+                                        echo '<li class="list-group-item">';
+                                        echo $row['drum_cable_company_detail'];
+                                        echo '<span class="close-btn">&times;</span>';
+                                        echo '</li>';
+                                    }
+                                    ?>
+                                    <!-- Add more items as needed -->
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,13 +116,19 @@
                     </div>
                     <div class="row">
                         <div class="col-12 mt-4">
-                            <ul class="list-group">
-                                <li class="list-group-item">An item</li>
-                                <li class="list-group-item">A second item</li>
-                                <li class="list-group-item">A third item</li>
-                                <li class="list-group-item">A fourth item</li>
-                                <li class="list-group-item">And a fifth one</li>
-                            </ul>
+                            <div class="scrollable-list">
+                                <ul class="list-group">
+                                    <?php
+                                    foreach ($data['cable_work'] as $row) {
+                                        echo '<li class="list-group-item">';
+                                        echo $row['cable_work_name'];
+                                        echo '<span class="close-btn">&times;</span>';
+                                        echo '</li>';
+                                    }
+                                    ?>
+                                    <!-- Add more items as needed -->
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,7 +164,28 @@
                     <div class="col">
                         <h4>แก้ไขข้อมูลธนาคารภายใน Bill</h4>
                         <form action="process.php" method="post" enctype="multipart/form-data">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"><?php foreach ($data['bill_bank'] as $row) {
+                                                                                                            echo $row['bank_detail'];
+                                                                                                        } ?></textarea>
+                        </form>
+                    </div>
+                    <div class="col mt-3 text-center">
+                        <button class="btn btn-warning bg-gradient-purple" type="submit">
+                            ตกลง
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col">
+                        <h4>แก้ไขข้อมูลที่อยู่บริษัท PSNK</h4>
+                        <form action="process.php" method="post" enctype="multipart/form-data">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"><?php foreach ($data['company_address_psnk'] as $row) {
+                                                                                                            echo $row['company_address_detaill'];
+                                                                                                        } ?></textarea>
                         </form>
                     </div>
                     <div class="col mt-3 text-center">
@@ -134,7 +202,9 @@
                     <div class="col">
                         <h4>แก้ไขข้อมูลที่อยู่บริษัท Mixed</h4>
                         <form action="process.php" method="post" enctype="multipart/form-data">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"><?php foreach ($data['company_address_mixed'] as $row) {
+                                                                                                            echo $row['company_address_detaill'];
+                                                                                                        } ?></textarea>
                         </form>
                     </div>
                     <div class="col mt-3 text-center">
@@ -151,7 +221,9 @@
                     <div class="col">
                         <h4>แก้ไขข้อมูลที่อยู่บริษัท FBH</h4>
                         <form action="process.php" method="post" enctype="multipart/form-data">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"><?php foreach ($data['company_address_fbh'] as $row) {
+                                                                                                            echo $row['company_address_detaill'];
+                                                                                                        } ?></textarea>
                         </form>
                     </div>
                     <div class="col mt-3 text-center">
@@ -168,7 +240,9 @@
                     <div class="col">
                         <h4>แก้ไขข้อมูลผู้ติดต่อ Mixed</h4>
                         <form action="process.php" method="post" enctype="multipart/form-data">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"><?php foreach ($data['company_address_mixed_contact'] as $row) {
+                                                                                                            echo $row['company_address_name'];
+                                                                                                        } ?></textarea>
                         </form>
                     </div>
                     <div class="col mt-3 text-center">
@@ -185,7 +259,9 @@
                     <div class="col">
                         <h4>แก้ไขข้อมูลผู้ติดต่อ FBH</h4>
                         <form action="process.php" method="post" enctype="multipart/form-data">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="6"><?php foreach ($data['company_address_fbh_contact'] as $row) {
+                                                                                                            echo $row['company_address_name'];
+                                                                                                        } ?></textarea>
                         </form>
                     </div>
                     <div class="col mt-3 text-center">

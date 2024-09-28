@@ -349,7 +349,7 @@ abstract class BaseController
                                     <br>Address : 240/64-67 อาคารอโยธยาทาวเวอร์ ชั้น 26 ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร 10310
                                     <br>Tax ID : 0105538013293 สำนักงานใหญ่
                                 </td>
-                                    <td colspan="4" style="vertical-align: top;" class="left">
+                                <td colspan="4" style="vertical-align: top;" class="left">
                                     <strong>ผู้ติดต่อ : Chavisa Wisetwohan</strong>
                                     <br>Tel.02 276-2236-8 Fax : 099-614-9196
                                 </td>
