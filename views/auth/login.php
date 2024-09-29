@@ -106,6 +106,7 @@
                                     window.location.href = "index.php?page=manage-file";
                                 }
                             });
+                            $submitButton.prop('disabled', false);
                         } else {
                             Swal.fire({
                                 icon: 'error',
