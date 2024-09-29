@@ -81,6 +81,7 @@
 <script>
     $(document).ready(function() {
         let table = new DataTable('#myTable', {
+            pageLength: 1,
             language: {
                 emptyTable: "ไม่มีข้อมูล",
                 lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
@@ -89,22 +90,84 @@
                 infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
                 search: "ค้นหา:",
                 zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
+            },
+            drawCallback: function() {
+                // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
+                addEventListener();
             }
         });
 
-        $('.edit-user').click(function() {
-            var userId = $(this).data('id');
-            var username = $(this).data('username');
-            var lv = $(this).data('lv');
-            var status = $(this).data('status');
 
-            $('#edit-user-id').val(userId);
-            $('#edit-username').val(username);
-            $('#edit-lv').val(lv);
-            $('#edit-status').val(status);
+        function addEventListener() {
+            // Event ปุ่ม edit
+            $('.edit-user').off('click').on('click', function() {
+                console.log("edit-user");
+                var userId = $(this).data('id');
+                var username = $(this).data('username');
+                var lv = $(this).data('lv');
+                var status = $(this).data('status');
 
-            $('#editModal').modal('show');
-        });
+                $('#edit-user-id').val(userId);
+                $('#edit-username').val(username);
+                $('#edit-lv').val(lv);
+                $('#edit-status').val(status);
+
+                $('#editModal').modal('show');
+            });
+
+            // Event ปุ่ม delete
+            $('.delete-user').off('click').on('click', function() {
+                var userId = $(this).data('id');
+                var username = $(this).data('username');
+
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    html: "คุณต้องการลบผู้ใช้ " + username + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลผู้ใช้ ข้อมูลพนักงานจะหายไปด้วย !!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ใช่',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'index.php?page=user&action=deleteUser',
+                            method: 'POST',
+                            data: {
+                                user_id: userId
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'ลบสำเร็จ',
+                                        text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'ไม่สำเร็จ',
+                                        text: response.message,
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไม่สำเร็จ',
+                                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
 
         $('#editForm').on('submit', function(e) {
             e.preventDefault();
@@ -135,57 +198,6 @@
                         icon: 'error',
                         title: 'ไม่สำเร็จ',
                         text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-                    });
-                }
-            });
-        });
-
-        $('.delete-user').click(function() {
-            var userId = $(this).data('id');
-            var username = $(this).data('username');
-
-            Swal.fire({
-                title: 'คุณแน่ใจหรือไม่?',
-                html: "คุณต้องการลบผู้ใช้ " + username + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลผู้ใช้ ข้อมูลพนักงานจะหายไปด้วย !!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ใช่',
-                cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'index.php?page=user&action=deleteUser',
-                        method: 'POST',
-                        data: {
-                            user_id: userId
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'ลบสำเร็จ',
-                                    text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
-                                }).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'ไม่สำเร็จ',
-                                    text: response.message,
-                                });
-                            }
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'ไม่สำเร็จ',
-                                text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-                            });
-                        }
                     });
                 }
             });
