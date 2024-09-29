@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 26, 2024 at 04:55 PM
+-- Generation Time: Sep 29, 2024 at 06:44 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -387,11 +387,27 @@ CREATE TABLE `bill` (
 --
 
 INSERT INTO `bill` (`bill_id`, `bill_date`, `bill_date_product`, `bill_payment`, `bill_due_date`, `bill_refer`, `bill_site`, `bill_pr`, `bill_work_no`, `bill_project`, `list_num`, `total_amount`, `vat`, `withholding`, `grand_total`, `bill_company`, `employee_id`) VALUES
-('PS2567/001', '2567-06-04', '2567-06-04', 'N/A', '2567-06-04', '-', 'LPG3182', '', '', '', 2, 50.35, 3.52, 1.51, 46.83, 'FBH', 0),
-('PS2567/002', '2567-06-14', '2567-06-14', 'N/A', '2567-06-14', '-', '', '', '', '', 2, 268.92, 18.82, 8.07, 250.10, 'FBH', 0),
-('PS2567/003', '2567-07-04', '2567-07-04', 'N/A', '2567-07-04', '-', 'LPG3182', '', '', '', 5, 319.42, 22.36, 9.58, 297.06, 'FBH', 0),
-('PSNK/MIXED/67/001', '2567-06-04', '2567-06-04', 'N/A', '2567-06-04', '-', 'LPG3182', '', '', '', 16, 16763.20, 1173.42, 502.90, 15589.78, 'Mixed', 0),
-('PSNK/MIXED/67/002', '2567-07-04', '2567-07-16', 'N/A', '2567-07-17', '-', '', '', '', '', 4, 273.60, 19.15, 8.21, 254.45, 'mixed', 0);
+('PS2567/001', '2567-09-21', '2567-09-21', 'N/A', '2567-09-21', '-', '2', '2', '2', '2', 1, 446.26, 31.24, 13.39, 415.02, 'FBH', 1),
+('PS2567/002', '2567-09-24', '2567-09-24', 'N/A', '2567-09-24', '-', '', '', '', '', 1, 9.07, 0.63, 0.27, 8.44, 'FBH', 1),
+('PSNK/MIXED/67/001', '2567-09-21', '2567-09-21', 'N/A', '2567-09-21', '-', '', '', '', '', 2, 27360010.00, 1915200.70, 820800.30, 25444809.30, 'mixed', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bill_bank`
+--
+
+CREATE TABLE `bill_bank` (
+  `bank_id` int(1) NOT NULL,
+  `bank_detail` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `bill_bank`
+--
+
+INSERT INTO `bill_bank` (`bank_id`, `bank_detail`) VALUES
+(1, 'หมายเหตุ  : ชำระเป็น เงินสด โอนเข้าบัญชี\n<br>ธนาคาร กสิกรไทย สาขา บ่อสร้าง ประเภท ออมทรัพย์\n<br>ในนาม บริษัท พีเอสเอ็นเค เทเลคอม จำกัด (สำนักงานใหญ่)\n<br>บัญชีเลขที่ 086-3-06705-7');
 
 -- --------------------------------------------------------
 
@@ -411,35 +427,10 @@ CREATE TABLE `bill_detail` (
 --
 
 INSERT INTO `bill_detail` (`bill_id`, `au_id`, `unit`, `price`) VALUES
-('PS2567/001', 'SM13075-0100020001-TH', 5, 45.35),
-('PS2567/001', 'SM13075-0100320006-TH', 5, 5.00),
-('PS2567/002', 'SM13075-0100100001-TH', 2, 267.76),
-('PS2567/002', 'SM13075-0100190001-TH', 2, 1.16),
-('PS2567/003', 'SM13075-0100020001-TH', 2, 18.14),
-('PS2567/003', 'SM13075-0100020002-TH', 2, 23.52),
-('PS2567/003', 'SM13075-0100090002-TH', 2, 4.00),
-('PS2567/003', 'SM13075-0100090004-TH', 2, 6.00),
-('PS2567/003', 'SM13075-0100100002-TH', 2, 267.76),
-('PSNK/MIXED/67/001', 'Mix-TD-17.85', 5, 25.00),
-('PSNK/MIXED/67/001', 'TPCHDMX001C', 5, 792.00),
-('PSNK/MIXED/67/001', 'TPCHDMX003C', 3, 6.00),
-('PSNK/MIXED/67/001', 'TPCHDMX004C', 4, 8.80),
-('PSNK/MIXED/67/001', 'TPCHDMX005C', 5, 25.20),
-('PSNK/MIXED/67/001', 'TPCHDMX006C', 2, 22.00),
-('PSNK/MIXED/67/001', 'TPCHDMX009C', 5, 25.20),
-('PSNK/MIXED/67/001', 'TPCHDMX010C', 2, 547.20),
-('PSNK/MIXED/67/001', 'TPCHDMX011C', 4, 1680.00),
-('PSNK/MIXED/67/001', 'TPCHDMX013C', 5, 2476.80),
-('PSNK/MIXED/67/001', 'TPCHDMX014C', 5, 4200.00),
-('PSNK/MIXED/67/001', 'TPCHDMX015C', 5, 3780.00),
-('PSNK/MIXED/67/001', 'TPCHDMX018C', 5, 5.00),
-('PSNK/MIXED/67/001', 'TPCHDMX021C', 2, 1224.00),
-('PSNK/MIXED/67/001', 'TPCHDMX023C', 2, 2.00),
-('PSNK/MIXED/67/001', 'TPCHDMX025C', 2, 1944.00),
-('PSNK/MIXED/67/002', 'Mix-TD-17.85', 10, 50.00),
-('PSNK/MIXED/67/002', 'TPCHDMX005C', 30, 151.20),
-('PSNK/MIXED/67/002', 'TPCHDMX008C', 10, 22.00),
-('PSNK/MIXED/67/002', 'TPCHDMX009C', 10, 50.40);
+('PS2567/001', 'SM13075-0100110002-TH', 2, 446.26),
+('PS2567/002', 'SM13075-0100020001-TH', 1, 9.07),
+('PSNK/MIXED/67/001', 'Mix-TD-17.85', 2, 10.00),
+('PSNK/MIXED/67/001', 'TPCHDMX010C', 100000, 9999999.99);
 
 -- --------------------------------------------------------
 
@@ -458,16 +449,49 @@ CREATE TABLE `cable` (
   `cable_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `employee_id` int(4) NOT NULL,
   `drum_id` int(4) NOT NULL,
-  `cable_work` varchar(100) NOT NULL
+  `cable_work_id` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cable_work`
+--
+
+CREATE TABLE `cable_work` (
+  `cable_work_id` int(1) NOT NULL,
+  `cable_work_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `cable`
+-- Dumping data for table `cable_work`
 --
 
-INSERT INTO `cable` (`cable_id`, `route_name`, `installed_section`, `placing_team`, `cable_form`, `cable_to`, `cable_used`, `cable_date`, `employee_id`, `drum_id`, `cable_work`) VALUES
-(69, 'U2211148 เชียงใหม่', 'CMI01X39ECQ - L2 NEW', 'ดุ่ย', 120, 20, 100, '2024-08-04 16:20:03', 1, 1, 'Mixed'),
-(70, 'U2211148 เชียงใหม่', 'CMI01X39ECQ - L2 NEW', 'ดุ่ย', 1000, 100, 900, '2024-08-04 20:40:52', 1, 1, 'Mixed');
+INSERT INTO `cable_work` (`cable_work_id`, `cable_work_name`) VALUES
+(1, 'Mixed'),
+(2, 'FBH');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_address`
+--
+
+CREATE TABLE `company_address` (
+  `company_address_id` int(1) NOT NULL,
+  `company_address_detaill` text NOT NULL,
+  `company_address_type` varchar(1) NOT NULL COMMENT '0=psnk,1=mixed,2=fbh',
+  `company_address_name` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `company_address`
+--
+
+INSERT INTO `company_address` (`company_address_id`, `company_address_detaill`, `company_address_type`, `company_address_name`) VALUES
+(1, '<h2>บริษัท พีเอสเอ็นเค เทเลคอม จำกัด (สำนักงานใหญ่)</h2>\n<h2>PSNK Telecom Company Limited (Head office)</h2>\n<p>เลขที่ 99/2 หมู่ที่ 9 ตำบลสันทรายน้อย อำเภอสันทราย จังหวัดเชียงใหม่ 50130</p>\n<p>Tel : 063-5415398 , 064-1954565 , 064-7898995 | E-Mail: psnktelecom@gmail.com</p>\n<p>เลขประจำตัวผู้เสียภาษี 0-5055-64000-43-4</p>', '0', ''),
+(2, '<tr>\r\n<td colspan=\"3\" style=\"vertical-align: top;\" class=\"left\">\r\n<strong>Customer : Mixed System Co.,Ltd</strong>\r\n<br>Address : 1 ซ.อินทามระ 41 แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400 ประเทศไทย\r\n<br>Tax ID : 0-1055-49093-10-2\r\n</td>\r\n<td colspan=\"4\" style=\"vertical-align: top;\" class=\"left\">\r\n<strong>ผู้ติดต่อ : Management Center</strong>\r\n<br>Tel.02 276-2236-8 Fax : 02 276-2239\r\n</td>\r\n</tr>', '1', '<td colspan=\"4\" style=\"vertical-align: top;\" class=\"left\">\n<strong>ผู้ติดต่อ : Management Center</strong>\n<br>Tel.02 276-2236-8 Fax : 02 276-2239\n</td>'),
+(3, '<tr>\r\n<td colspan=\"3\" style=\"vertical-align: top;\" class=\"left\">\r\n<strong>Customer : บริษัท ไวร์เออ แอนด์ ไวร์เลส จำกัด</strong>\r\n<br>Address : 240/64-67 อาคารอโยธยาทาวเวอร์ ชั้น 26 ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร 10310\r\n<br>Tax ID : 0105538013293 สำนักงานใหญ่\r\n</td>\r\n<td colspan=\"4\" style=\"vertical-align: top;\" class=\"left\">\r\n<strong>ผู้ติดต่อ : Chavisa Wisetwohan</strong>\r\n<br>Tel.02 276-2236-8 Fax : 099-614-9196\r\n</td>\r\n</tr>', '2', '<td colspan=\"4\" style=\"vertical-align: top;\" class=\"left\"> <strong>ผู้ติดต่อ : Chavisa Wisetwohan</strong> <br>Tel.02 276-2236-8 Fax : 099-614-9196 </td>');
 
 -- --------------------------------------------------------
 
@@ -482,8 +506,8 @@ CREATE TABLE `drum` (
   `drum_description` varchar(100) NOT NULL,
   `drum_full` int(4) NOT NULL,
   `drum_remaining` int(4) NOT NULL,
-  `drum_company` varchar(100) NOT NULL,
-  `drum_cable_company` varchar(100) NOT NULL,
+  `drum_company_id` int(3) NOT NULL,
+  `drum_cable_company_id` int(3) NOT NULL,
   `drum_used` int(4) NOT NULL,
   `drum_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `employee_id` int(4) NOT NULL
@@ -493,9 +517,55 @@ CREATE TABLE `drum` (
 -- Dumping data for table `drum`
 --
 
-INSERT INTO `drum` (`drum_id`, `drum_no`, `drum_to`, `drum_description`, `drum_full`, `drum_remaining`, `drum_company`, `drum_cable_company`, `drum_used`, `drum_date`, `employee_id`) VALUES
-(1, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 3000, 'FBH', 'FUTONG', 1000, '2024-08-05 10:45:36', 0),
-(2, '0012', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 4000, 'FBH', 'FIBERHOME', 0, '2024-08-04 17:49:00', 0);
+INSERT INTO `drum` (`drum_id`, `drum_no`, `drum_to`, `drum_description`, `drum_full`, `drum_remaining`, `drum_company_id`, `drum_cable_company_id`, `drum_used`, `drum_date`, `employee_id`) VALUES
+(86, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 0, 1, 1, 0, '2024-09-29 02:36:05', 1),
+(88, '0062', 'DNWK-TR20220914-7', 'OFC,MINI ADSS CABLE 12 CORES,2 FR,TNE-NS', 4000, 0, 2, 2, 0, '2024-09-29 02:36:03', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `drum_cable_company`
+--
+
+CREATE TABLE `drum_cable_company` (
+  `drum_cable_company_id` int(3) NOT NULL,
+  `drum_cable_company_detail` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `drum_cable_company`
+--
+
+INSERT INTO `drum_cable_company` (`drum_cable_company_id`, `drum_cable_company_detail`) VALUES
+(1, 'FUTONG'),
+(2, 'FIBERHOME'),
+(4, 'TICC'),
+(5, 'TUC');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `drum_company`
+--
+
+CREATE TABLE `drum_company` (
+  `drum_company_id` int(3) NOT NULL,
+  `drum_company_detail` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `drum_company`
+--
+
+INSERT INTO `drum_company` (`drum_company_id`, `drum_company_detail`) VALUES
+(1, 'Mixed'),
+(2, 'FIBERHOME'),
+(3, 'FBH'),
+(4, 'CCS'),
+(5, 'W&W'),
+(6, 'TKI'),
+(7, 'MTE'),
+(8, 'Poonsub');
 
 -- --------------------------------------------------------
 
@@ -512,83 +582,17 @@ CREATE TABLE `employee` (
   `employee_email` varchar(100) NOT NULL,
   `employee_position` int(1) NOT NULL,
   `employee_status` int(1) NOT NULL,
-  `employee_date` datetime NOT NULL
+  `employee_date` datetime NOT NULL,
+  `delete_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `employee`
 --
 
-INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_lastname`, `employee_age`, `employee_phone`, `employee_email`, `employee_position`, `employee_status`, `employee_date`) VALUES
-(1, 'นุ๊ก', 'นุ๊ก', 30, '0999999999', 'Thanakon@gmail.com', 2, 1, '2024-07-24 15:27:24'),
-(13, 'Oakkharaphon', 'Kanthiya', 20, '0927131610', 'bollboll41@gmail.com', 0, 1, '2024-08-01 20:55:23');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `files`
---
-
-CREATE TABLE `files` (
-  `files_id` int(5) NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `description` text NOT NULL,
-  `user_id` int(4) NOT NULL,
-  `folder_id` int(5) NOT NULL,
-  `file_type` varchar(50) NOT NULL,
-  `file_path` text NOT NULL,
-  `is_public` tinyint(1) DEFAULT 0,
-  `files_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `files`
---
-
-INSERT INTO `files` (`files_id`, `name`, `description`, `user_id`, `folder_id`, `file_type`, `file_path`, `is_public`, `files_date`) VALUES
-(79, 'FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 'หฟกฟหกasd', 2, 0, 'pdf', '1720880280_FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา.pdf', 1, '2024-07-13 21:18:19'),
-(86, 'ประเทศฟิลิปปินส์-1 (1)', '', 2, 49, 'docx', '1722757560_ประเทศฟิลิปปินส์-1 (1).docx', 0, '2024-08-04 14:46:54'),
-(106, 'checkuser1', '', 2, 65, 'php', '1724658300_checkuser.php', 0, '2024-08-26 14:45:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `folders`
---
-
-CREATE TABLE `folders` (
-  `folders_id` int(5) NOT NULL,
-  `user_id` int(4) NOT NULL,
-  `name` varchar(200) NOT NULL,
-  `parent_id` int(5) NOT NULL DEFAULT 0,
-  `folder_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `folders`
---
-
-INSERT INTO `folders` (`folders_id`, `user_id`, `name`, `parent_id`, `folder_date`) VALUES
-(28, 2, 'PSNK+++++', 0, '2024-08-18 14:24:36'),
-(29, 2, 'เอกสาร บปช', 0, '2024-08-04 17:12:24'),
-(32, 2, 'เอกสาร PSNK', 0, '2024-08-04 17:12:24'),
-(42, 2, 'asdasd', 0, '2024-08-04 17:12:24'),
-(43, 2, 'asdasdsaddsa', 0, '2024-08-04 17:12:24'),
-(44, 2, 'asdasddd', 0, '2024-08-04 17:12:24'),
-(45, 2, 'asdasdsa', 0, '2024-08-04 17:12:24'),
-(46, 2, 'asdasdasd', 0, '2024-08-04 17:12:24'),
-(47, 2, 'asdasdasaaaad', 0, '2024-08-04 17:12:24'),
-(50, 2, 'ssssssssssssssssssssssssssssssssssssssssssssaaaaa', 0, '2024-08-20 14:47:30'),
-(54, 2, 'sssssssss', 0, '2024-08-04 17:12:24'),
-(61, 2, 'ddd', 0, '2024-08-04 17:12:24'),
-(63, 2, 'Oakkharaphons', 0, '2024-08-04 17:12:24'),
-(65, 2, 'sdasd', 0, '2024-08-04 17:12:24'),
-(66, 2, 'daaa', 0, '2024-08-04 17:12:24'),
-(74, 2, 'ฟหกฟหกหฟก', 0, '2024-08-18 15:04:37'),
-(75, 2, 'ฟหฟฟฟฟฟ', 0, '2024-08-18 15:04:41'),
-(76, 2, 'ไไไไไไไsdsd', 0, '2024-08-20 14:47:15'),
-(79, 2, '12222', 0, '2024-08-26 17:21:39'),
-(80, 2, 'า่า่าส', 0, '2024-08-26 17:21:46');
+INSERT INTO `employee` (`employee_id`, `employee_name`, `employee_lastname`, `employee_age`, `employee_phone`, `employee_email`, `employee_position`, `employee_status`, `employee_date`, `delete_at`) VALUES
+(1, 'นุ๊ก', 'นุ๊ก', 30, '0999999999', 'Thanakon@gmail.com', 2, 1, '2024-07-24 15:27:24', '2024-09-28 17:39:26'),
+(31, 'view', 'view', 20, '0999999', 'bollboll41@gmail.com', 3, 1, '2024-09-28 22:39:07', '2024-09-28 17:39:26');
 
 -- --------------------------------------------------------
 
@@ -609,246 +613,1251 @@ CREATE TABLE `log` (
 --
 
 INSERT INTO `log` (`log_id`, `log_status`, `log_detail`, `user_id`, `log_date`) VALUES
-(1, 'Folder Deleted', 'Folder name: aaaaaaaaaaaaaaaaaa', 2, '2024-08-04 15:21:32'),
-(2, 'Folder Created', 'Folder name: Oakkharaphon', 2, '2024-08-04 15:21:32'),
-(3, 'Folder Deleted', 'Folder name: Oakkharaphon', 2, '2024-08-04 15:21:32'),
-(4, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 15:34:56'),
-(5, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 14.4', 2, '2024-08-04 15:34:58'),
-(6, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-04 15:34:59'),
-(7, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 15:26:32'),
-(8, 'Folder Deleted', 'Folder name: f', 2, '2024-08-04 15:45:17'),
-(10, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 16:08:12'),
-(11, 'Cable Deleted', 'Cable ID: 66, Route: , Section: , Used: ', 2, '2024-08-04 16:09:06'),
-(12, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 80', 2, '2024-08-04 16:11:04'),
-(13, 'Cable Deleted', 'Cable ID: 62, Route: , Section: , Used: ', 2, '2024-08-04 16:11:17'),
-(14, 'Cable Deleted', 'Cable ID: 67, Route: , Section: , Used: ', 2, '2024-08-04 16:11:55'),
-(15, 'Cable Inserted', 'Cable ID: , Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 5', 2, '2024-08-04 16:16:00'),
-(16, 'Cable Deleted', 'Cable ID: 68, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 5', 2, '2024-08-04 16:17:28'),
-(17, 'Cable Inserted', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 16:20:03'),
-(18, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 16:20:32'),
-(19, 'File Updated', 'File ID: 79', 2, '2024-08-04 16:39:04'),
-(20, 'File Uploaded', 'File name: maxresdefault (2)', 2, '2024-08-04 16:40:31'),
-(21, 'File Deleted', 'File name: maxresdefault (2)', 2, '2024-08-04 16:54:43'),
-(22, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 17:19:41'),
-(23, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:41:58'),
-(24, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:43:40'),
-(25, 'Drum Updated', 'Drum ID: 2, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:43:59'),
-(26, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:44:13'),
-(27, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:45:30'),
-(28, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:45:58'),
-(29, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:48:40'),
-(30, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 17:48:42'),
-(31, 'Drum Updated', 'Drum ID: 2, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:48:50'),
-(32, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 17:49:00'),
-(33, 'Folder Deleted', 'Folder name: asdas', 2, '2024-08-04 17:50:58'),
-(34, 'Folder Deleted', 'Folder name: ', 2, '2024-08-04 17:50:59'),
-(35, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 20:10:15'),
-(36, 'Drum Inserted', 'Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:13:22'),
-(37, 'Drum Updated', 'Drum ID: 29, Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:13:53'),
-(38, 'Drum Deleted', 'Drum No: , Company: , Cable Company: ', 2, '2024-08-04 20:15:03'),
-(39, 'Drum Inserted', 'Drum ID: Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:15:18'),
-(40, 'Drum Deleted', 'Drum No: , Company: , Cable Company: ', 2, '2024-08-04 20:16:19'),
-(41, 'Drum Inserted', 'Drum ID: 31Drum No: 0111, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:16:26'),
-(42, 'Drum Deleted', 'Drum ID: 31, Drum No: , Company: , Cable Company: ', 2, '2024-08-04 20:20:04'),
-(43, 'Drum Inserted', 'Drum ID: 32, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:23:39'),
-(44, 'Drum Deleted', 'Drum ID: 32, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-04 20:23:47'),
-(45, 'User Created', 'Username: admin3, Employee Name: Oakkharaphon Kanthiya, Position: 0', 2, '2024-08-04 20:32:10'),
-(46, 'User Updated', 'User ID: 20, Username: admin3, Level: 0, Status: 1', 2, '2024-08-04 20:32:38'),
-(47, 'User Deleted', 'User ID: 20, Employee ID: 16', 2, '2024-08-04 20:32:54'),
-(48, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 20:38:32'),
-(49, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 10', 2, '2024-08-04 20:39:59'),
-(50, 'Bill Updated', 'Bill ID: PS2567/003, Total Amount: 319.42', 2, '2024-08-04 20:40:07'),
-(51, 'Cable Inserted', 'Cable ID: 70, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-04 20:40:52'),
-(52, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 20:41:00'),
-(53, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-04 20:41:09'),
-(54, 'File Uploaded', 'File name: 0383', 2, '2024-08-04 20:42:27'),
-(55, 'File Deleted', 'File name: 0383', 2, '2024-08-04 20:45:32'),
-(56, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:24'),
-(57, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:24'),
-(58, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:25'),
-(59, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:26'),
-(60, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:26'),
-(61, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:27'),
-(62, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:28'),
-(63, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:29'),
-(64, 'Cable Updated', 'Cable ID: 69, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-04 21:21:30'),
-(65, 'Drum Updated', 'Drum ID: 2, Drum No: 0012, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-04 21:21:47'),
-(66, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:48'),
-(67, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:49'),
-(68, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:50'),
-(69, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:51'),
-(70, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:52'),
-(71, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:53'),
-(72, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:54'),
-(73, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:55'),
-(74, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:56'),
-(75, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:57'),
-(76, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:58'),
-(77, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:21:59'),
-(78, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:22:01'),
-(79, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:14'),
-(80, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:15'),
-(81, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:16'),
-(82, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:17'),
-(83, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:18'),
-(84, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:19'),
-(85, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:20'),
-(86, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:20'),
-(87, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:21'),
-(88, 'Employee Updated', 'Updated employee ID: 13, Name: Oakkharaphon Kanthiya', 2, '2024-08-04 21:22:22'),
-(89, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:28'),
-(90, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:29'),
-(91, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:29'),
-(92, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-04 21:22:30'),
-(93, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-08-04 21:27:36'),
-(94, 'File Uploaded', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:32'),
-(95, 'File Deleted', 'File name: maxresdefault (2)', 2, '2024-08-04 21:53:35'),
-(96, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-05 10:43:19'),
-(97, 'Cable Inserted', 'Cable ID: 71, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 120', 2, '2024-08-05 10:43:47'),
-(98, 'Cable Deleted', 'Cable ID: 71, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 120', 2, '2024-08-05 10:45:36'),
-(99, 'File Uploaded', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-05 14:24:07'),
-(100, 'File Uploaded', 'File name: checkuser', 2, '2024-08-15 18:14:00'),
-(101, 'File Uploaded', 'File name: login', 2, '2024-08-15 18:14:00'),
-(102, 'File Deleted', 'File name: checkuser', 2, '2024-08-15 18:14:08'),
-(103, 'File Deleted', 'File name: login', 2, '2024-08-15 18:14:12'),
-(104, 'File Uploaded', 'File name: 1721901011194', 2, '2024-08-15 18:14:27'),
-(105, 'File Uploaded', 'File name: 20240719061503_page-0001', 2, '2024-08-15 18:14:27'),
-(106, 'File Uploaded', 'File name: checkuser', 2, '2024-08-15 18:14:44'),
-(107, 'File Uploaded', 'File name: login', 2, '2024-08-15 18:14:44'),
-(108, 'File Deleted', 'File name: checkuser', 2, '2024-08-15 18:14:52'),
-(109, 'File Deleted', 'File name: login', 2, '2024-08-15 18:14:58'),
-(110, 'File Deleted', 'File name: 20240719061503_page-0001', 2, '2024-08-15 19:36:43'),
-(111, 'File Deleted', 'File name: 1721901011194', 2, '2024-08-15 19:36:50'),
-(112, 'File Updated', 'File ID: 79', 2, '2024-08-15 20:00:28'),
-(113, 'File Uploaded', 'File name: checkuser', 2, '2024-08-15 20:00:40'),
-(114, 'File Uploaded', 'File name: login', 2, '2024-08-15 20:00:40'),
-(115, 'File Updated', 'File ID: 98', 2, '2024-08-15 20:00:58'),
-(116, 'File Deleted', 'File name: checkuser', 2, '2024-08-15 20:01:04'),
-(117, 'File Deleted', 'File name: ', 2, '2024-08-15 20:01:05'),
-(118, 'File Deleted', 'File name: login', 2, '2024-08-15 20:01:11'),
-(119, 'File Deleted', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-15 20:43:18'),
-(120, 'Folder Created', 'Folder name: Oakkharaphon', 2, '2024-08-15 20:52:12'),
-(121, 'Folder Deleted', 'Folder name: Oakkharaphon', 2, '2024-08-15 20:52:16'),
-(122, 'Folder Deleted', 'Folder name: ffff', 2, '2024-08-18 14:10:49'),
-(123, 'File Updated', 'File ID: 79', 2, '2024-08-18 14:23:14'),
-(124, 'Folder Updated', 'Folder name: ssss', 2, '2024-08-18 14:24:07'),
-(125, 'Folder Updated', 'Folder name: PSNK++++++', 2, '2024-08-18 14:24:22'),
-(126, 'Folder Updated', 'Folder name: PSNK+++++', 2, '2024-08-18 14:24:36'),
-(127, 'Folder Deleted', 'Folder name: fff', 2, '2024-08-18 15:00:24'),
-(128, 'Folder Deleted', 'Folder name: ffffffffffffffff', 2, '2024-08-18 15:00:28'),
-(129, 'Folder Deleted', 'Folder name: fffffffff', 2, '2024-08-18 15:00:32'),
-(130, 'Folder Deleted', 'Folder name: sdddsa', 2, '2024-08-18 15:00:36'),
-(131, 'Folder Updated', 'Folder name: asdsdกกกก', 2, '2024-08-18 15:00:44'),
-(132, 'File Uploaded', 'File name: 20240719061503_page-0001', 2, '2024-08-18 15:02:02'),
-(133, 'File Deleted', 'File name: 20240719061503_page-0001', 2, '2024-08-18 15:02:16'),
-(134, 'Folder Deleted', 'Folder name: asdsdกกกก', 2, '2024-08-18 15:02:50'),
-(135, 'Folder Deleted', 'Folder name: ssss', 2, '2024-08-18 15:02:59'),
-(136, 'Folder Deleted', 'Folder name: sssssss', 2, '2024-08-18 15:03:13'),
-(137, 'Folder Deleted', 'Folder name: wwwwwwwwwwwww', 2, '2024-08-18 15:03:27'),
-(138, 'Folder Deleted', 'Folder name: asdasdddd', 2, '2024-08-18 15:03:57'),
-(139, 'Folder Deleted', 'Folder name: dddd', 2, '2024-08-18 15:04:27'),
-(140, 'Folder Created', 'Folder name: ฟหกฟหกหฟก', 2, '2024-08-18 15:04:37'),
-(141, 'Folder Created', 'Folder name: ฟหฟฟฟฟฟ', 2, '2024-08-18 15:04:41'),
-(142, 'Folder Created', 'Folder name: ไไไไไไไ', 2, '2024-08-18 15:04:45'),
-(143, 'File Renamed', 'New name: FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 2, '2024-08-18 16:29:52'),
-(144, 'File Renamed', 'New name: FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 2, '2024-08-18 16:31:09'),
-(145, 'Folder Deleted', 'Folder name: dddddddddddd', 2, '2024-08-19 20:38:42'),
-(146, 'Folder Updated', 'Folder name: ไไไไไไไsdsd', 2, '2024-08-20 14:47:15'),
-(147, 'File Renamed', 'New name: FM-BIS-10_แบบบันทึกรายละเอียดการเข้าพบอาจารย์ที่ปรึกษา', 2, '2024-08-20 14:47:22'),
-(148, 'Folder Updated', 'Folder name: ssssssssssssssssssssssssssssssssssssssssssssaaaaa', 2, '2024-08-20 14:47:30'),
-(149, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:43:34'),
-(150, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:50:55'),
-(151, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:51:02'),
-(152, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:51:11'),
-(153, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:51:17'),
-(154, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:54:30'),
-(155, 'Employee Updated', 'Updated employee ID: 1, Name: นุ๊ก นุ๊ก', 2, '2024-08-20 15:54:33'),
-(156, 'Folder Created', 'Folder name: ฟฟฟฟฟ', 2, '2024-08-20 16:56:24'),
-(157, 'File Uploaded', 'File name: 20240719061503_page-0001', 2, '2024-08-20 16:56:38'),
-(158, 'File Updated', 'File ID: 101', 2, '2024-08-20 16:56:51'),
-(159, 'File Deleted', 'File name: 20240719061503_page-0001', 2, '2024-08-20 16:57:00'),
-(160, 'Folder Deleted', 'Folder name: ฟฟฟฟฟ', 2, '2024-08-20 16:57:02'),
-(161, 'Folder Created', 'Folder name: Oakkharaphon', 19, '2024-08-20 18:35:37'),
-(162, 'Folder Deleted', 'Folder name: Oakkharaphon', 19, '2024-08-20 18:35:44'),
-(163, 'File Uploaded', 'File name: asdaaa', 19, '2024-08-20 18:35:57'),
-(164, 'File Uploaded', 'File name: asdasd', 19, '2024-08-20 18:35:57'),
-(165, 'File Uploaded', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:35:57'),
-(166, 'File Uploaded', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:35:57'),
-(167, 'File Deleted', 'File name: asdaaa', 19, '2024-08-20 18:35:59'),
-(168, 'File Deleted', 'File name: asdasd', 19, '2024-08-20 18:36:01'),
-(169, 'File Deleted', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:36:12'),
-(170, 'File Deleted', 'File name: ca45a47f-0146-411d-9823-a92f27bddf04', 19, '2024-08-20 18:36:14'),
-(171, 'Folder Deleted', 'Folder name: dddaa', 2, '2024-08-22 09:33:20'),
-(172, 'Reset Password', 'User : admin2', 19, '2024-08-22 20:58:39'),
-(173, 'User Updated', 'User ID: 19, Username: admin2, Level: , Status: 0', 2, '2024-08-22 21:41:50'),
-(174, 'User Updated', 'User ID: 19, Username: admin2, Level: , Status: 1', 2, '2024-08-22 21:42:15'),
-(175, 'Reset Password', 'User : admin2', 19, '2024-08-22 21:42:55'),
-(176, 'Salary Created', 'User ID: , Employee ID: 1', 2, '2024-08-23 19:42:23'),
-(177, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 17', 2, '2024-08-24 15:26:47'),
-(178, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-24 15:27:11'),
-(179, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1512', 2, '2024-08-24 20:46:51'),
-(180, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: mixed', 2, '2024-08-24 20:47:01'),
-(181, 'Salary Deleted', 'Salary ID: 12', 2, '2024-08-24 21:49:02'),
-(182, 'Salary Created', 'User ID: , Employee ID: 1', 2, '2024-08-24 22:38:31'),
-(183, 'Salary Updated', 'User ID: 1', 2, '2024-08-25 11:04:41'),
-(184, 'Salary Updated', 'User ID: 1', 2, '2024-08-25 11:04:51'),
-(185, 'Salary Created', 'Salary ID: 14', 2, '2024-08-25 11:07:16'),
-(186, 'Salary Created', 'Salary ID: 15', 2, '2024-08-25 11:07:23'),
-(187, 'Salary Deleted', 'Salary ID: 15', 2, '2024-08-25 11:08:21'),
-(188, 'Reset Password', 'User : admin2', 19, '2024-08-26 14:29:14'),
-(189, 'Salary Created', 'Salary ID: 16', 2, '2024-08-26 14:31:29'),
-(190, 'File Uploaded', 'File name: checkuser', 2, '2024-08-26 14:45:51'),
-(191, 'File Renamed', 'New name: checkuser1', 2, '2024-08-26 14:46:05'),
-(192, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:06:28'),
-(193, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:11:04'),
-(194, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:51:00'),
-(195, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:53:20'),
-(196, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:54:20'),
-(197, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:57:14'),
-(198, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:57:17'),
-(199, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:57:51'),
-(200, 'Reset Password', 'User : admin2', 19, '2024-08-26 16:58:19'),
-(201, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:04:01'),
-(202, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:13:37'),
-(203, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:13:49'),
-(204, 'Reset Password', 'User : admin2', 19, '2024-08-26 17:13:59'),
-(205, 'Folder Created', 'Folder name: 12222', 2, '2024-08-26 17:21:39'),
-(206, 'Folder Created', 'Folder name: า่า่าส', 2, '2024-08-26 17:21:46'),
-(207, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:16:01'),
-(208, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:16:05'),
-(209, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:16:06'),
-(210, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:17:18'),
-(211, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:17:22'),
-(212, 'Reset Password', 'User : admin2', 19, '2024-08-26 18:17:22'),
-(214, 'User Deleted', 'User ID: 21, Employee ID: 17', 2, '2024-08-26 18:30:46'),
-(216, 'User Deleted', 'User ID: 22, Employee ID: 18', 2, '2024-08-26 18:31:06'),
-(218, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 18:34:14'),
-(219, 'User Deleted', 'User ID: 24, Employee ID: 20', 2, '2024-08-26 18:35:26'),
-(220, 'Employee Deleted', 'Employee ID: 21', 2, '2024-08-26 18:35:37'),
-(221, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 18:38:55'),
-(222, 'User Deleted', 'User ID: 25, Employee ID: 22', 2, '2024-08-26 21:01:12'),
-(223, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 21:01:25'),
-(224, 'User Deleted', 'User ID: 26, Employee ID: 23', 2, '2024-08-26 21:01:34'),
-(225, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-26 21:02:33'),
-(226, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-26 21:03:21'),
-(227, 'User Deleted', 'User ID: 27, Employee ID: 24', 2, '2024-08-26 21:03:26'),
-(228, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-26 21:04:57'),
-(229, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 1', 2, '2024-08-26 21:05:00'),
-(230, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 0', 2, '2024-08-26 21:05:05'),
-(231, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 0', 2, '2024-08-26 21:05:07'),
-(232, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 1', 2, '2024-08-26 21:05:11'),
-(233, 'User Updated', 'User ID: 19, Username: admin2, Level: 2, Status: 1', 2, '2024-08-26 21:05:32'),
-(234, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-08-26 21:07:50'),
-(235, 'Salary Deleted', 'Salary ID: 14', 2, '2024-08-26 21:20:38'),
-(236, 'Salary Created', 'Salary ID: 17', 2, '2024-08-26 21:25:11'),
-(246, 'Salary Created', 'Salary ID: 27', 2, '2024-08-26 21:38:11'),
-(247, 'Salary Deleted', 'Salary ID: 27', 2, '2024-08-26 21:38:58'),
-(248, 'Salary Created', 'Salary ID: 28', 2, '2024-08-26 21:39:18'),
-(249, 'Salary Created', 'Salary ID: 29', 2, '2024-08-26 21:44:22'),
-(250, 'Salary Created', 'Salary ID: 30', 2, '2024-08-26 21:44:39'),
-(251, 'Salary Created', 'Salary ID: 31', 2, '2024-08-26 21:46:54'),
-(252, 'Salary Created', 'Salary ID: 32', 2, '2024-08-26 21:47:34'),
-(253, 'Salary Created', 'Salary ID: 33', 2, '2024-08-26 21:50:01');
+(161, 'Salary Created', 'Salary ID: 11', 2, '2024-08-27 00:34:08'),
+(162, 'Bill Created', 'Bill ID: PS2567/001, Total Amount: 133.88', 2, '2024-08-27 00:44:01'),
+(163, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 267.76', 2, '2024-08-27 00:46:14'),
+(164, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 401.64', 2, '2024-08-27 00:46:22'),
+(165, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 133.88', 2, '2024-08-27 00:46:32'),
+(166, 'Bill Created', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 10', 2, '2024-08-27 00:46:43'),
+(167, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 5', 2, '2024-08-27 00:46:47'),
+(168, 'Drum Inserted', 'Drum ID: 1, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-27 00:47:25'),
+(169, 'Drum Inserted', 'Drum ID: 2, Drum No: 0012, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-08-27 00:47:39'),
+(170, 'Cable Inserted', 'Cable ID: 1, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-27 00:48:13'),
+(171, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-27 00:48:20'),
+(172, 'Folder Deleted', 'Folder name: า่า่าส', 2, '2024-08-27 00:48:45'),
+(173, 'Folder Created', 'Folder name: 4545', 2, '2024-08-27 00:51:25'),
+(174, 'Folder Created', 'Folder name: 6546', 2, '2024-08-27 01:01:25'),
+(175, 'Folder Updated', 'Folder name: 6546452', 2, '2024-08-27 01:02:54'),
+(176, 'User Created', 'Username: admin3, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-08-27 01:11:06'),
+(177, 'User Deleted', 'User ID: 28, Employee ID: 25', 2, '2024-08-27 01:11:10'),
+(179, 'File Uploaded', 'File name: psnktelecom', 2, '2024-08-27 13:23:14'),
+(180, 'File Deleted', 'File name: psnktelecom', 2, '2024-08-27 13:23:18'),
+(181, 'Folder Deleted', 'Folder name: 6546452', 2, '2024-08-27 13:34:00'),
+(182, 'Folder Created', 'Folder name: ฟฟฟฟหหก', 2, '2024-08-27 13:34:06'),
+(183, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 13:36:32'),
+(184, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 13:36:45'),
+(185, 'Folder Created', 'Folder name: 12222', 2, '2024-08-27 13:36:53'),
+(186, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:37:16'),
+(187, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:37:26'),
+(188, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:38:13'),
+(189, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:38:28'),
+(190, 'Folder Deleted', 'Folder name: 12222', 2, '2024-08-27 13:38:46'),
+(191, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 13:38:51'),
+(192, 'File Uploaded', 'File name: report', 2, '2024-08-27 13:40:13'),
+(193, 'File Deleted', 'File name: report', 2, '2024-08-27 13:40:19'),
+(194, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:43:09'),
+(195, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 13:51:19'),
+(196, 'Folder Deleted', 'Folder name: ', 2, '2024-08-27 13:51:19'),
+(197, 'Folder Created', 'Folder name: หฟกฟห', 2, '2024-08-27 13:51:33'),
+(198, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 13:51:40'),
+(199, 'Folder Deleted', 'Folder name: หฟกฟห', 2, '2024-08-27 13:51:43'),
+(200, 'Folder Deleted', 'Folder name: ', 2, '2024-08-27 13:51:43'),
+(201, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-08-27 13:52:05'),
+(202, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 13:52:15'),
+(203, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-08-27 13:52:25'),
+(204, 'Folder Deleted', 'Folder name: ', 2, '2024-08-27 13:52:25'),
+(205, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 13:56:41'),
+(206, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:56:47'),
+(207, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 13:56:52'),
+(208, 'Folder Created', 'Folder name: หก', 2, '2024-08-27 13:57:19'),
+(209, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:57:25'),
+(210, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 13:58:57'),
+(211, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 14:02:27'),
+(212, 'Folder Deleted', 'Folder name: หก', 2, '2024-08-27 14:03:08'),
+(213, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:04:37'),
+(214, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:04:42'),
+(215, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-08-27 14:05:43'),
+(216, 'Folder Created', 'Folder name: ฟหกฟหกฟฟฟฟฟ', 2, '2024-08-27 14:05:49'),
+(217, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:05:55'),
+(218, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:11:42'),
+(219, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 14:11:48'),
+(220, 'Folder Created', 'Folder name: 121212', 2, '2024-08-27 14:11:52'),
+(221, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 14:13:26'),
+(222, 'Folder Deleted', 'Folder name: 121212', 2, '2024-08-27 14:13:30'),
+(223, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:13:34'),
+(224, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:13:44'),
+(225, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:14:20'),
+(226, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:14:27'),
+(227, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:16:18'),
+(228, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:16:38'),
+(229, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:17:12'),
+(230, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:17:17'),
+(231, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:17:23'),
+(232, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:17:37'),
+(233, 'Folder Created', 'Folder name: อัครพล2', 2, '2024-08-27 14:17:42'),
+(234, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:21:56'),
+(235, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:22:05'),
+(236, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 14:24:20'),
+(237, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:24:24'),
+(238, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:24:29'),
+(239, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:25:09'),
+(240, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:25:14'),
+(241, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:25:18'),
+(242, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:26:17'),
+(243, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:26:27'),
+(244, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:28:23'),
+(245, 'File Uploaded', 'File name: ประเทศฟิลิปปินส์-ล่าสุด', 2, '2024-08-27 14:28:32'),
+(246, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 14:29:26'),
+(247, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 14:29:33'),
+(248, 'File Deleted', 'File name: ประเทศฟิลิปปินส์-ล่าสุด', 2, '2024-08-27 14:29:36'),
+(249, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:29:40'),
+(250, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:33:02'),
+(251, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:34:20'),
+(252, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:34:27'),
+(253, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:34:35'),
+(254, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:34:47'),
+(255, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:35:23'),
+(256, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:37:51'),
+(257, 'Folder Created', 'Folder name: 12222', 2, '2024-08-27 14:38:08'),
+(258, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:38:16'),
+(259, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:40:17'),
+(260, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:40:22'),
+(261, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:40:30'),
+(262, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:40:41'),
+(263, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:41:12'),
+(264, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:41:16'),
+(265, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:41:21'),
+(266, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:41:24'),
+(267, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:47:06'),
+(268, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:47:11'),
+(269, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:47:22'),
+(270, 'Folder Deleted', 'Folder name: ', 2, '2024-08-27 14:47:29'),
+(271, 'Folder Deleted', 'Folder name: ', 2, '2024-08-27 14:47:29'),
+(272, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:49:23'),
+(273, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:49:27'),
+(274, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:49:31'),
+(275, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:54:49'),
+(276, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:54:54'),
+(277, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:58:08'),
+(278, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:58:24'),
+(279, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:58:28'),
+(280, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:58:33'),
+(281, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:58:36'),
+(282, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 14:59:20'),
+(283, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 14:59:26'),
+(284, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 14:59:41'),
+(285, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:00:46'),
+(286, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:00:54'),
+(287, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 15:04:00'),
+(288, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:04:13'),
+(289, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:04:17'),
+(290, 'File Uploaded', 'File name: ประเทศฟิลิปปินส์-ล่าสุด2 (1)', 2, '2024-08-27 15:04:25'),
+(291, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:05:10'),
+(292, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:05:14'),
+(293, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 15:06:09'),
+(294, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:06:20'),
+(295, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 15:06:26'),
+(296, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:06:32'),
+(297, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:08:22'),
+(298, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:08:27'),
+(299, 'File Uploaded', 'File name: ประเทศฟิลิปปินส์-ล่าสุด2 (1)', 2, '2024-08-27 15:08:32'),
+(300, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:11:22'),
+(301, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 15:11:28'),
+(302, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:13:31'),
+(303, 'File Uploaded', 'File name: folders', 2, '2024-08-27 15:13:37'),
+(304, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 15:13:41'),
+(305, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:13:51'),
+(306, 'File Uploaded', 'File name: สำรวจระบบนิเวศทางเดินขึ้นวัดผาลาด', 2, '2024-08-27 15:14:15'),
+(307, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:14:19'),
+(308, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 15:14:26'),
+(309, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 15:17:28'),
+(310, 'File Uploaded', 'File name: folders', 2, '2024-08-27 15:17:34'),
+(311, 'File Deleted', 'File name: folders', 2, '2024-08-27 15:17:48'),
+(312, 'File Uploaded', 'File name: files', 2, '2024-08-27 15:43:56'),
+(313, 'File Uploaded', 'File name: folders (1)', 2, '2024-08-27 15:43:56'),
+(314, 'File Uploaded', 'File name: folders', 2, '2024-08-27 15:43:56'),
+(315, 'File Deleted', 'File name: files', 2, '2024-08-27 15:44:17'),
+(316, 'File Deleted', 'File name: folders (1)', 2, '2024-08-27 15:44:21'),
+(317, 'File Deleted', 'File name: folders', 2, '2024-08-27 15:44:27'),
+(318, 'Folder Created', 'Folder name: อัครพล1', 2, '2024-08-27 15:45:24'),
+(319, 'File Uploaded', 'File name: folders', 2, '2024-08-27 16:27:18'),
+(320, 'File Uploaded', 'File name: folders ||1', 2, '2024-08-27 16:27:46'),
+(321, 'File Uploaded', 'File name: files', 2, '2024-08-27 16:28:05'),
+(322, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 16:30:02'),
+(323, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 16:39:40'),
+(324, 'File Deleted', 'File name: files', 2, '2024-08-27 16:39:43'),
+(325, 'Folder Deleted', 'Folder name: อัครพล1', 2, '2024-08-27 16:43:14'),
+(326, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 16:43:17'),
+(327, 'Cable Deleted', 'Cable ID: 1, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-27 16:43:27'),
+(328, 'Cable Inserted', 'Cable ID: 2, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 90', 2, '2024-08-27 16:43:56'),
+(329, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/001, Company: mixed', 2, '2024-08-27 16:46:20'),
+(330, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24 (1)', 2, '2024-08-27 16:53:15'),
+(331, 'File Renamed', 'New name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24 (1)', 2, '2024-08-27 16:53:20'),
+(332, 'File Updated', 'File ID: 88', 2, '2024-08-27 16:53:24'),
+(333, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24 (1)', 2, '2024-08-27 16:53:33'),
+(334, 'File Uploaded', 'File name: PHPMailer-6', 2, '2024-08-27 16:55:40'),
+(335, 'File Updated', 'File ID: 89', 2, '2024-08-27 16:55:44'),
+(336, 'File Deleted', 'File name: PHPMailer-6', 2, '2024-08-27 16:55:53'),
+(337, 'File Uploaded', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-27 16:58:48'),
+(338, 'File Uploaded', 'File name: PHPMailer-6', 2, '2024-08-27 17:00:36'),
+(339, 'File Uploaded', 'File name: การถ่ายภาพ AF-SN', 2, '2024-08-27 17:00:42'),
+(340, 'File Uploaded', 'File name: PHPMailer-6_9_1', 2, '2024-08-27 17:01:01'),
+(341, 'File Deleted', 'File name: PHPMailer-6', 2, '2024-08-27 17:01:05'),
+(342, 'File Uploaded', 'File name: 1434430277-TRex001-o', 2, '2024-08-27 17:04:40'),
+(343, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 17:06:00'),
+(344, 'File Deleted', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 17:06:04'),
+(345, 'File Deleted', 'File name: 1434430277-TRex001-o', 2, '2024-08-27 17:10:45'),
+(346, 'File Deleted', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-27 17:10:57'),
+(347, 'File Deleted', 'File name: การถ่ายภาพ AF-SN', 2, '2024-08-27 17:11:01'),
+(348, 'File Deleted', 'File name: PHPMailer-6_9_1', 2, '2024-08-27 17:11:05'),
+(349, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 17:11:32'),
+(350, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 17:11:37'),
+(351, 'File Uploaded', 'File name: Plan Work RFC Consolidat _ Smart City Project _North_region_Progress_report_as_21-Aug-24', 2, '2024-08-27 17:11:46'),
+(352, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 17:11:59'),
+(353, 'Folder Created', 'Folder name: โฟลเดอร์ 1', 2, '2024-08-27 17:12:38'),
+(354, 'Folder Created', 'Folder name: โฟลเดอร์ 2', 2, '2024-08-27 17:12:49'),
+(355, 'File Uploaded', 'File name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-27 17:13:10'),
+(356, 'File Renamed', 'New name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-27 17:13:17'),
+(357, 'File Renamed', 'New name: 451865270_2294336704245096_2755956675318857470_n', 2, '2024-08-27 17:13:17'),
+(358, 'File Renamed', 'New name: 36704245096_2755956675318857470_n', 2, '2024-08-27 17:13:26'),
+(359, 'File Renamed', 'New name: 755956675318857470_n', 2, '2024-08-27 17:13:28'),
+(360, 'File Renamed', 'New name: 755956675318857470_n', 2, '2024-08-27 17:13:28'),
+(361, 'File Renamed', 'New name: 18857470_n', 2, '2024-08-27 17:13:33'),
+(362, 'File Renamed', 'New name: 18857470', 2, '2024-08-27 18:20:36'),
+(363, 'File Renamed', 'New name: 18857470', 2, '2024-08-27 18:20:36'),
+(364, 'File Renamed', 'New name: 1885747', 2, '2024-08-27 18:20:43'),
+(365, 'File Renamed', 'New name: 1885747', 2, '2024-08-27 18:20:43'),
+(366, 'File Renamed', 'New name: 188574', 2, '2024-08-27 18:22:22'),
+(367, 'File Renamed', 'New name: 1885', 2, '2024-08-27 18:22:25'),
+(368, 'File Renamed', 'New name: 1885หฟกฟหก', 2, '2024-08-27 18:22:30'),
+(369, 'File Renamed', 'New name: 1885หฟก', 2, '2024-08-27 18:22:33'),
+(370, 'File Renamed', 'New name: 1885หฟ', 2, '2024-08-27 18:22:39'),
+(371, 'File Renamed', 'New name: 1885ห', 2, '2024-08-27 18:22:44'),
+(372, 'File Renamed', 'New name: 1885', 2, '2024-08-27 18:24:20'),
+(373, 'File Renamed', 'New name: 18851212', 2, '2024-08-27 18:24:24'),
+(374, 'File Renamed', 'New name: 18851212', 2, '2024-08-27 18:24:24'),
+(375, 'File Renamed', 'New name: 18851212', 2, '2024-08-27 18:24:24'),
+(376, 'File Renamed', 'New name: 18851212', 2, '2024-08-27 18:24:24'),
+(377, 'File Renamed', 'New name: 18851212 หกหก', 2, '2024-08-27 18:25:15'),
+(378, 'File Renamed', 'New name: 18851212', 2, '2024-08-27 18:25:17'),
+(379, 'File Renamed', 'New name: 18851212', 2, '2024-08-27 18:25:17'),
+(380, 'File Renamed', 'New name: 188512121212', 2, '2024-08-27 18:26:06'),
+(381, 'File Renamed', 'New name: 188512121212', 2, '2024-08-27 18:26:06'),
+(382, 'File Renamed', 'New name: 188512121212', 2, '2024-08-27 18:26:06'),
+(383, 'Folder Updated', 'Folder name: โฟลเดอร์ 3', 2, '2024-08-27 18:27:13'),
+(384, 'Folder Updated', 'Folder name: โฟลเดอร์ 1', 2, '2024-08-27 18:27:19'),
+(385, 'Folder Updated', 'Folder name: โฟลเดอร์ 3', 2, '2024-08-27 18:27:40'),
+(386, 'File Renamed', 'New name: 188512121', 2, '2024-08-27 18:29:45'),
+(387, 'File Renamed', 'New name: 1885121', 2, '2024-08-27 18:29:47'),
+(388, 'File Renamed', 'New name: 1885121', 2, '2024-08-27 18:29:47'),
+(389, 'Folder Updated', 'Folder name: โฟลเดอร์ ', 2, '2024-08-27 18:30:00'),
+(390, 'Folder Deleted', 'Folder name: โฟลเดอร์ 1', 2, '2024-08-27 18:30:19'),
+(391, 'Folder Updated', 'Folder name: โฟลเดอร์ ', 2, '2024-08-27 18:30:23'),
+(392, 'Folder Deleted', 'Folder name: โฟลเดอร์ ', 2, '2024-08-27 18:30:33'),
+(393, 'File Deleted', 'File name: 1885121', 2, '2024-08-27 18:30:36'),
+(394, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 18:30:40'),
+(395, 'Folder Created', 'Folder name: อัครพล12', 2, '2024-08-27 18:30:49'),
+(396, 'Folder Deleted', 'Folder name: อัครพล12', 2, '2024-08-27 18:30:53'),
+(397, 'Folder Updated', 'Folder name: อัครพล', 2, '2024-08-27 18:30:56'),
+(398, 'Folder Updated', 'Folder name: อัครพลหกหก', 2, '2024-08-27 18:31:43'),
+(399, 'Folder Updated', 'Folder name: อัครพลหกหกหกหก', 2, '2024-08-27 18:31:47'),
+(400, 'Folder Updated', 'Folder name: อัครพลหกหกหกหกกกก', 2, '2024-08-27 18:31:51'),
+(401, 'Folder Updated', 'Folder name: อัครพลหก', 2, '2024-08-27 18:32:38'),
+(402, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 18:33:17'),
+(403, 'File Uploaded', 'File name: files', 2, '2024-08-27 18:33:21'),
+(404, 'Folder Updated', 'Folder name: อัครพล', 2, '2024-08-27 18:35:15'),
+(405, 'Folder Updated', 'Folder name: อัครพล12', 2, '2024-08-27 18:35:23'),
+(406, 'Folder Updated', 'Folder name: อัครพล', 2, '2024-08-27 18:35:33'),
+(407, 'Folder Created', 'Folder name: อัครพล2', 2, '2024-08-27 18:35:43'),
+(408, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-08-27 18:35:47'),
+(409, 'File Uploaded', 'File name: files', 2, '2024-08-27 18:35:52'),
+(410, 'File Deleted', 'File name: files', 2, '2024-08-27 18:35:56'),
+(411, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-08-27 18:36:00'),
+(412, 'Folder Deleted', 'Folder name: อัครพล2', 2, '2024-08-27 18:36:14'),
+(413, 'Folder Updated', 'Folder name: อัครพลหหห', 2, '2024-08-27 18:36:44'),
+(414, 'Folder Updated', 'Folder name: อัครพลหหห', 2, '2024-08-27 18:36:47'),
+(415, 'Folder Updated', 'Folder name: อัครพลหหห', 2, '2024-08-27 18:36:50'),
+(416, 'Folder Updated', 'Folder name: อัครพลหหห', 2, '2024-08-27 18:36:50'),
+(417, 'Folder Updated', 'Folder name: อัครพลหหห', 2, '2024-08-27 18:36:50'),
+(418, 'Folder Updated', 'Folder name: อัครพ', 2, '2024-08-27 18:37:26'),
+(419, 'Folder Updated', 'Folder name: อัครพ12', 2, '2024-08-27 18:37:28'),
+(420, 'Folder Updated', 'Folder name: อัครพ12', 2, '2024-08-27 18:37:28'),
+(421, 'Folder Updated', 'Folder name: อัครพ12', 2, '2024-08-27 18:44:36'),
+(422, 'Folder Updated', 'Folder name: อัครพ12', 2, '2024-08-27 18:44:36'),
+(423, 'Folder Updated', 'Folder name: อัครพ', 2, '2024-08-27 18:44:42'),
+(424, 'Folder Updated', 'Folder name: อัครพ', 2, '2024-08-27 18:44:42'),
+(425, 'Folder Updated', 'Folder name: อัครพกดก', 2, '2024-08-27 18:45:15'),
+(426, 'Folder Updated', 'Folder name: อัครพก', 2, '2024-08-27 18:45:27'),
+(427, 'Folder Updated', 'Folder name: อัครพก2323', 2, '2024-08-27 18:47:30'),
+(428, 'File Uploaded', 'File name: files', 2, '2024-08-27 18:50:53'),
+(429, 'File Uploaded', 'File name: files ||1', 2, '2024-08-27 18:51:04'),
+(430, 'File Deleted', 'File name: files ||1', 2, '2024-08-27 18:51:10'),
+(431, 'File Uploaded', 'File name: files ||1', 2, '2024-08-27 18:51:55'),
+(432, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 18:52:00'),
+(433, 'Folder Created', 'Folder name: อัครพล2', 2, '2024-08-27 18:52:08'),
+(434, 'Folder Updated', 'Folder name: อัครพก245', 2, '2024-08-27 18:52:15'),
+(435, 'Folder Updated', 'Folder name: อัครพก245', 2, '2024-08-27 18:52:17'),
+(436, 'Folder Updated', 'Folder name: อัครพก245', 2, '2024-08-27 18:52:19'),
+(437, 'Folder Updated', 'Folder name: อัครพก245', 2, '2024-08-27 18:52:20'),
+(438, 'Folder Updated', 'Folder name: อัครพก245', 2, '2024-08-27 18:52:20'),
+(439, 'File Updated', 'File ID: 101', 2, '2024-08-27 18:56:02'),
+(440, 'File Updated', 'File ID: 103', 2, '2024-08-27 18:56:06'),
+(441, 'Folder Updated', 'Folder name: อัครพล111', 2, '2024-08-27 18:56:18'),
+(442, 'Folder Updated', 'Folder name: อัครพล111', 2, '2024-08-27 18:56:24'),
+(443, 'Folder Updated', 'Folder name: อัครพล111', 2, '2024-08-27 18:56:24'),
+(444, 'Folder Updated', 'Folder name: อัครพล111', 2, '2024-08-27 18:56:24'),
+(445, 'Folder Updated', 'Folder name: อัครพล', 2, '2024-08-27 18:56:30'),
+(446, 'File Uploaded', 'File name: folders', 2, '2024-08-27 19:09:22'),
+(447, 'File Uploaded', 'File name: files ||2', 2, '2024-08-27 19:09:22'),
+(448, 'File Deleted', 'File name: files ||2', 2, '2024-08-27 19:09:28'),
+(449, 'File Deleted', 'File name: folders', 2, '2024-08-27 19:09:31'),
+(450, 'File Deleted', 'File name: files ||1', 2, '2024-08-27 19:09:34'),
+(451, 'File Updated', 'File ID: 101', 2, '2024-08-27 19:10:45'),
+(452, 'File Deleted', 'File name: files', 2, '2024-08-27 19:10:50'),
+(453, 'Folder Deleted', 'Folder name: อัครพล2', 2, '2024-08-27 19:12:15'),
+(454, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 19:12:22'),
+(455, 'Folder Deleted', 'Folder name: อัครพก', 2, '2024-08-27 19:13:50'),
+(456, 'File Uploaded', 'File name: folders', 2, '2024-08-27 19:17:07'),
+(457, 'File Deleted', 'File name: folders', 2, '2024-08-27 19:17:13'),
+(458, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 19:19:23'),
+(459, 'File Uploaded', 'File name: files', 2, '2024-08-27 19:19:32'),
+(460, 'File Uploaded', 'File name: files ||1', 2, '2024-08-27 19:19:33'),
+(461, 'File Uploaded', 'File name: files ||2', 2, '2024-08-27 19:19:33'),
+(462, 'File Uploaded', 'File name: files ||3', 2, '2024-08-27 19:19:34'),
+(463, 'File Uploaded', 'File name: files ||4', 2, '2024-08-27 19:19:34'),
+(464, 'File Uploaded', 'File name: files ||5', 2, '2024-08-27 19:19:34'),
+(465, 'File Uploaded', 'File name: files ||6', 2, '2024-08-27 19:19:34'),
+(466, 'File Uploaded', 'File name: files ||7', 2, '2024-08-27 19:19:34'),
+(467, 'File Deleted', 'File name: files ||7', 2, '2024-08-27 19:19:52'),
+(468, 'File Deleted', 'File name: files ||6', 2, '2024-08-27 19:19:54'),
+(469, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 19:19:58'),
+(470, 'File Deleted', 'File name: files', 2, '2024-08-27 19:20:01'),
+(471, 'File Deleted', 'File name: files ||1', 2, '2024-08-27 19:20:13'),
+(472, 'File Deleted', 'File name: files ||2', 2, '2024-08-27 19:20:19'),
+(473, 'File Deleted', 'File name: files ||3', 2, '2024-08-27 19:20:22'),
+(474, 'File Deleted', 'File name: files ||4', 2, '2024-08-27 19:20:25'),
+(475, 'File Deleted', 'File name: files ||5', 2, '2024-08-27 19:20:28'),
+(476, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 19:24:11'),
+(477, 'Folder Updated', 'Folder name: อัครพล12', 2, '2024-08-27 19:24:18'),
+(478, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 19:24:30'),
+(479, 'Folder Created', 'Folder name: อัครพลหก', 2, '2024-08-27 19:24:33'),
+(480, 'Folder Created', 'Folder name: อัครพล4', 2, '2024-08-27 19:24:42'),
+(481, 'Folder Created', 'Folder name: อัครพล45', 2, '2024-08-27 19:24:48'),
+(482, 'Folder Updated', 'Folder name: อัครพล4544', 2, '2024-08-27 19:24:53'),
+(483, 'Folder Updated', 'Folder name: อัครพล565656', 2, '2024-08-27 19:25:02'),
+(484, 'Folder Deleted', 'Folder name: อัครพล565656', 2, '2024-08-27 19:25:11'),
+(485, 'File Uploaded', 'File name: files', 2, '2024-08-27 19:25:18'),
+(486, 'File Deleted', 'File name: files', 2, '2024-08-27 19:25:44'),
+(487, 'Folder Updated', 'Folder name: อัครพล45444545', 2, '2024-08-27 19:25:48'),
+(488, 'File Uploaded', 'File name: folders', 2, '2024-08-27 19:25:56'),
+(489, 'File Deleted', 'File name: folders', 2, '2024-08-27 19:27:45'),
+(490, 'Folder Deleted', 'Folder name: อัครพล45444545', 2, '2024-08-27 19:27:48'),
+(491, 'Folder Deleted', 'Folder name: อัครพล4', 2, '2024-08-27 19:27:50'),
+(492, 'Folder Deleted', 'Folder name: อัครพลหก', 2, '2024-08-27 19:27:54'),
+(493, 'Folder Deleted', 'Folder name: อัครพล12', 2, '2024-08-27 19:27:56'),
+(494, 'File Uploaded', 'File name: folders', 2, '2024-08-27 19:28:05'),
+(495, 'File Deleted', 'File name: folders', 2, '2024-08-27 19:28:10'),
+(496, 'File Uploaded', 'File name: folders (1)', 2, '2024-08-27 19:28:25'),
+(497, 'Folder Created', 'Folder name: 45454', 2, '2024-08-27 19:44:02'),
+(498, 'Folder Updated', 'Folder name: 45454หกหก', 2, '2024-08-27 19:44:07'),
+(499, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-08-27 19:44:35'),
+(500, 'Folder Created', 'Folder name: ฟหกฟหกฟหกฟหกฟห', 2, '2024-08-27 19:44:49'),
+(501, 'Folder Updated', 'Folder name: 45454หกหกฟหกฟหก', 2, '2024-08-27 19:44:52'),
+(502, 'Folder Updated', 'Folder name: ฟหกฟหกฟหกฟหก', 2, '2024-08-27 19:45:00'),
+(503, 'Folder Updated', 'Folder name: ฟหก', 2, '2024-08-27 19:47:55'),
+(504, 'Folder Updated', 'Folder name: ฟหก4545', 2, '2024-08-27 19:47:57'),
+(505, 'Folder Updated', 'Folder name: ฟหก4545', 2, '2024-08-27 19:47:58'),
+(506, 'Folder Updated', 'Folder name: ฟหก454545444', 2, '2024-08-27 19:47:59'),
+(507, 'Folder Updated', 'Folder name: ฟหก454545444', 2, '2024-08-27 19:47:59'),
+(508, 'Folder Updated', 'Folder name: ฟหก454545444', 2, '2024-08-27 19:48:00'),
+(509, 'Folder Updated', 'Folder name: sdsdsd', 2, '2024-08-27 19:48:03'),
+(510, 'Folder Updated', 'Folder name: sdsdsd', 2, '2024-08-27 19:48:04'),
+(511, 'Folder Updated', 'Folder name: sdsdsd', 2, '2024-08-27 19:48:04'),
+(512, 'Folder Created', 'Folder name: หหกหก', 2, '2024-08-27 19:48:16'),
+(513, 'Folder Updated', 'Folder name: 45454หกหกหกหก', 2, '2024-08-27 19:48:33'),
+(514, 'Folder Updated', 'Folder name: ฟ', 2, '2024-08-27 19:48:49'),
+(515, 'Folder Updated', 'Folder name: sdsdsd45', 2, '2024-08-27 19:49:12'),
+(516, 'Folder Updated', 'Folder name: 4', 2, '2024-08-27 19:49:49'),
+(517, 'Folder Updated', 'Folder name: 456456546', 2, '2024-08-27 19:49:54'),
+(518, 'Folder Updated', 'Folder name: ห', 2, '2024-08-27 19:50:00'),
+(519, 'File Deleted', 'File name: 12f', 2, '2024-08-27 19:53:54'),
+(520, 'Folder Deleted', 'Folder name: ห', 2, '2024-08-27 19:53:57'),
+(521, 'Folder Updated', 'Folder name: 456456546', 2, '2024-08-27 19:54:00'),
+(522, 'Folder Deleted', 'Folder name: 456456546', 2, '2024-08-27 19:54:06'),
+(523, 'Folder Deleted', 'Folder name: 4', 2, '2024-08-27 19:54:10'),
+(524, 'Folder Deleted', 'Folder name: ฟ', 2, '2024-08-27 19:54:12'),
+(525, 'File Uploaded', 'File name: folders', 2, '2024-08-27 19:57:34'),
+(526, 'File Deleted', 'File name: fo', 2, '2024-08-27 19:57:56'),
+(527, 'File Uploaded', 'File name: files', 2, '2024-08-27 19:58:02'),
+(528, 'File Deleted', 'File name: files', 2, '2024-08-27 19:59:44'),
+(529, 'File Uploaded', 'File name: files', 2, '2024-08-27 19:59:48'),
+(530, 'File Deleted', 'File name: fil', 2, '2024-08-27 19:59:56'),
+(531, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:02:04'),
+(532, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:02:19'),
+(533, 'Folder Updated', 'Folder name: อัคร', 2, '2024-08-27 20:02:24'),
+(534, 'File Deleted', 'File name: filหฟกฟหกฟหก', 2, '2024-08-27 20:11:42'),
+(535, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:12:10'),
+(536, 'File Deleted', 'File name: filesหกหกหกหก', 2, '2024-08-27 20:12:23'),
+(537, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:16:08'),
+(538, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:17:18'),
+(539, 'File Deleted', 'File name: fil', 2, '2024-08-27 20:17:30'),
+(540, 'Folder Deleted', 'Folder name: อัคร', 2, '2024-08-27 20:17:35'),
+(541, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 20:17:38'),
+(542, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:17:41'),
+(543, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-08-27 20:17:47'),
+(544, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:17:52'),
+(545, 'File Uploaded', 'File name: folders', 2, '2024-08-27 20:17:59'),
+(546, 'File Deleted', 'File name: folders', 2, '2024-08-27 20:18:14'),
+(547, 'File Deleted', 'File name: files', 2, '2024-08-27 20:18:18'),
+(548, 'Folder Created', 'Folder name: ฟหกหฟก', 2, '2024-08-27 20:18:33'),
+(549, 'Folder Created', 'Folder name: อัครพล2', 2, '2024-08-27 20:18:48'),
+(550, 'File Uploaded', 'File name: folders', 2, '2024-08-27 20:18:55'),
+(551, 'Folder Updated', 'Folder name: อัครพ', 2, '2024-08-27 20:20:55'),
+(552, 'File Deleted', 'File name: fol4545', 2, '2024-08-27 20:21:08'),
+(553, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 20:21:48'),
+(554, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-08-27 20:21:51'),
+(555, 'Folder Deleted', 'Folder name: ฟหกหฟก', 2, '2024-08-27 20:21:59'),
+(556, 'Folder Deleted', 'Folder name: อัครพ', 2, '2024-08-27 20:22:02'),
+(557, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:22:13'),
+(558, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:22:19'),
+(559, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:22:23'),
+(560, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 20:22:27'),
+(561, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:23:26'),
+(562, 'Folder Updated', 'Folder name: อัครพล565', 2, '2024-08-27 20:23:50'),
+(563, 'Folder Updated', 'Folder name: อัครพ', 2, '2024-08-27 20:24:08'),
+(564, 'Folder Updated', 'Folder name: อัครพ56', 2, '2024-08-27 20:24:20'),
+(565, 'Folder Updated', 'Folder name: อัครพ', 2, '2024-08-27 20:24:32'),
+(566, 'Folder Updated', 'Folder name: อัครพ2323', 2, '2024-08-27 20:24:35'),
+(567, 'Folder Updated', 'Folder name: อัครพ223232323', 2, '2024-08-27 20:25:04'),
+(568, 'Folder Updated', 'Folder name: อัค', 2, '2024-08-27 20:25:08'),
+(569, 'Folder Updated', 'Folder name: อัค233265465', 2, '2024-08-27 20:25:11'),
+(570, 'Folder Updated', 'Folder name: อัค233', 2, '2024-08-27 20:25:13'),
+(571, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-08-27 20:25:18'),
+(572, 'Folder Created', 'Folder name: 4556456456', 2, '2024-08-27 20:25:23'),
+(573, 'Folder Created', 'Folder name: dfdf', 2, '2024-08-27 20:25:28'),
+(574, 'Folder Created', 'Folder name: asdaaaa', 2, '2024-08-27 20:25:32'),
+(575, 'Folder Updated', 'Folder name: อัค233454', 2, '2024-08-27 20:26:33'),
+(576, 'Folder Created', 'Folder name: 454545', 2, '2024-08-27 20:26:35'),
+(577, 'Folder Updated', 'Folder name: ฟหกฟหก45454545', 2, '2024-08-27 20:27:18'),
+(578, 'Folder Updated', 'Folder name: 45454544444', 2, '2024-08-27 20:27:21'),
+(579, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:30:30'),
+(580, 'Folder Created', 'Folder name: 232323', 2, '2024-08-27 20:30:50'),
+(581, 'Folder Created', 'Folder name: 2323', 2, '2024-08-27 20:31:12'),
+(582, 'Folder Updated', 'Folder name: อัค545454', 2, '2024-08-27 20:31:15'),
+(583, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:32:33'),
+(584, 'Folder Updated', 'Folder name: ฟหกฟหก', 2, '2024-08-27 20:34:13'),
+(585, 'Folder Updated', 'Folder name: 45454', 2, '2024-08-27 20:34:16'),
+(586, 'Folder Updated', 'Folder name: อัครพ3232', 2, '2024-08-27 20:34:30'),
+(587, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:06'),
+(588, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:06'),
+(589, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:07'),
+(590, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:07'),
+(591, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:07'),
+(592, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:07'),
+(593, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:08'),
+(594, 'Folder Updated', 'Folder name: 23232', 2, '2024-08-27 20:35:08'),
+(595, 'Folder Updated', 'Folder name: 23232323', 2, '2024-08-27 20:38:12'),
+(596, 'Folder Updated', 'Folder name: อั', 2, '2024-08-27 20:38:27'),
+(597, 'Folder Deleted', 'Folder name: อั', 2, '2024-08-27 20:39:31'),
+(598, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-08-27 20:39:38'),
+(599, 'Folder Deleted', 'Folder name: 45454', 2, '2024-08-27 20:39:41'),
+(600, 'Folder Deleted', 'Folder name: อัครพ3232', 2, '2024-08-27 20:39:44'),
+(601, 'Folder Deleted', 'Folder name: 23232', 2, '2024-08-27 20:39:48'),
+(602, 'Folder Deleted', 'Folder name: 23232323', 2, '2024-08-27 20:39:52'),
+(603, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-27 20:40:00'),
+(604, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-27 20:40:06'),
+(605, 'File Deleted', 'File name: fil1112323', 2, '2024-08-27 20:40:10'),
+(606, 'File Uploaded', 'File name: files', 2, '2024-08-27 20:40:49'),
+(607, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-27 20:54:13'),
+(608, 'Drum Inserted', 'Drum ID: 3, Drum No: 0062, Company: CCS, Cable Company: FIBERHOME', 2, '2024-08-27 20:54:23'),
+(609, 'Drum Inserted', 'Drum ID: 4, Drum No: 0062, Company: Mixed, Cable Company: TICC', 2, '2024-08-27 20:57:55'),
+(610, 'Drum Deleted', 'Drum ID: 4, Drum No: 0062, Company: Mixed, Cable Company: TICC', 2, '2024-08-27 20:58:01'),
+(611, 'Drum Deleted', 'Drum ID: 3, Drum No: 0062, Company: CCS, Cable Company: FIBERHOME', 2, '2024-08-27 20:58:03'),
+(612, 'Drum Deleted', 'Drum ID: 2, Drum No: 0012, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-08-27 20:58:05'),
+(613, 'Drum Inserted', 'Drum ID: 5, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-27 20:58:16'),
+(614, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-27 20:58:21'),
+(615, 'Drum Inserted', 'Drum ID: 6, Drum No: 0, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-27 20:58:36'),
+(616, 'Drum Deleted', 'Drum ID: 6, Drum No: 0, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-08-27 20:58:41'),
+(617, 'Drum Inserted', 'Drum ID: 7, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-08-27 20:59:23'),
+(618, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-28 08:16:12'),
+(619, 'File Uploaded', 'File name: files', 2, '2024-08-28 08:16:57'),
+(620, 'File Uploaded', 'File name: files ||1', 2, '2024-08-28 08:17:04'),
+(621, 'File Deleted', 'File name: fil', 2, '2024-08-28 08:17:40'),
+(622, 'File Deleted', 'File name: files', 2, '2024-08-28 08:17:43'),
+(623, 'File Deleted', 'File name: files ||1', 2, '2024-08-28 08:17:46'),
+(624, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-28 08:17:50'),
+(625, 'Drum Updated', 'Drum ID: 1, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-28 08:27:59'),
+(626, 'Cable Inserted', 'Cable ID: 3, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 90', 2, '2024-08-28 08:28:11'),
+(627, 'Cable Deleted', 'Cable ID: 3, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 90', 2, '2024-08-28 08:49:06'),
+(628, 'Cable Inserted', 'Cable ID: 4, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:49:35'),
+(629, 'Cable Inserted', 'Cable ID: 5, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:49:37'),
+(630, 'Cable Inserted', 'Cable ID: 6, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:49:38'),
+(631, 'Cable Inserted', 'Cable ID: 7, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:49:38'),
+(632, 'Cable Inserted', 'Cable ID: 8, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-28 08:49:44'),
+(633, 'Cable Inserted', 'Cable ID: 9, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-28 08:49:46'),
+(634, 'Cable Inserted', 'Cable ID: 10, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-28 08:49:46'),
+(635, 'Cable Deleted', 'Cable ID: 4, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:50:00'),
+(636, 'Cable Deleted', 'Cable ID: 5, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:50:03'),
+(637, 'Cable Deleted', 'Cable ID: 9, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-28 08:50:05'),
+(638, 'Cable Deleted', 'Cable ID: 10, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-28 08:50:07'),
+(639, 'Cable Deleted', 'Cable ID: 8, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-08-28 08:50:09'),
+(640, 'Cable Deleted', 'Cable ID: 6, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:50:11'),
+(641, 'Cable Deleted', 'Cable ID: 7, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 900', 2, '2024-08-28 08:50:14'),
+(642, 'Cable Inserted', 'Cable ID: 11, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 990', 2, '2024-08-28 08:50:24'),
+(643, 'Cable Inserted', 'Cable ID: 12, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 990', 2, '2024-08-28 08:50:44'),
+(646, 'Drum Deleted', 'Drum ID: 7, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-08-28 08:50:57'),
+(649, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-28 08:51:45'),
+(650, 'File Uploaded', 'File name: Javascript 101', 2, '2024-08-28 08:52:17'),
+(651, 'File Uploaded', 'File name: Javascript 101 ||1', 2, '2024-08-28 08:52:25'),
+(652, 'File Updated', 'File ID: 133', 2, '2024-08-28 08:53:37'),
+(653, 'File Deleted', 'File name: Javas', 2, '2024-08-28 08:55:22'),
+(654, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-08-28 08:55:25'),
+(656, 'Drum Deleted', 'Drum ID: 5, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-08-28 09:01:43'),
+(657, 'File Uploaded', 'File name: Thanin Chinlapha - CV', 2, '2024-08-28 10:47:28'),
+(658, 'File Updated', 'File ID: 135', 2, '2024-08-28 10:52:54'),
+(659, 'Folder Created', 'Folder name: อัครพล', 2, '2024-08-28 10:53:04'),
+(660, 'Drum Updated', 'Drum ID: 1, Drum No: , Company: , Cable Company: ', 2, '2024-08-28 12:53:11'),
+(661, 'Drum Updated', 'Drum ID: 1, Drum No: , Company: , Cable Company: ', 2, '2024-08-28 12:54:31'),
+(662, 'Cable Deleted', 'Cable ID: 2, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 90', 2, '2024-08-28 12:54:40'),
+(663, 'Cable Deleted', 'Cable ID: 11, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 990', 2, '2024-08-28 12:54:42'),
+(664, 'Cable Deleted', 'Cable ID: 12, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 990', 2, '2024-08-28 12:54:43'),
+(665, 'Drum Deleted', 'Drum ID: 1, Drum No: , Company: , Cable Company: ', 2, '2024-08-28 12:54:46'),
+(666, 'Drum Inserted', 'Drum ID: 8, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-28 12:54:55'),
+(667, 'Cable Inserted', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-08-28 12:55:06'),
+(668, 'Drum Updated', 'Drum ID: 8, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-08-28 12:55:11'),
+(669, 'File Deleted', 'File name: Thanin Chinlapha - CV', 2, '2024-09-03 20:20:30'),
+(670, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:20:36'),
+(671, 'Folder Updated', 'Folder name: อัครพลหกหก', 2, '2024-09-03 20:20:43'),
+(672, 'File Uploaded', 'File name: rendercapslog', 2, '2024-09-03 20:21:05'),
+(673, 'File Renamed', 'Old name: rendercapslog, New name: rende', 2, '2024-09-03 20:21:13'),
+(674, 'File Renamed', 'Old name: rende, New name: rende', 2, '2024-09-03 20:21:13'),
+(675, 'File Renamed', 'Old name: rende, New name: ren', 2, '2024-09-03 20:21:19'),
+(676, 'File Renamed', 'Old name: ren, New name: ren', 2, '2024-09-03 20:21:19'),
+(677, 'File Deleted', 'File name: ren', 2, '2024-09-03 20:22:05'),
+(678, 'Folder Updated', 'Folder name: อัคร', 2, '2024-09-03 20:22:19'),
+(679, 'Folder Deleted', 'Folder name: อัคร', 2, '2024-09-03 20:22:24'),
+(680, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-03 20:23:08'),
+(681, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-03 20:23:08'),
+(682, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-03 20:23:08'),
+(683, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n ||1', 2, '2024-09-03 20:23:20'),
+(684, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n ||1', 2, '2024-09-03 20:23:20'),
+(685, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n ||1', 2, '2024-09-03 20:23:20'),
+(686, 'File Deleted', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-03 20:23:30'),
+(687, 'File Deleted', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-03 20:23:33'),
+(688, 'File Deleted', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-03 20:23:36'),
+(689, 'File Deleted', 'File name: 213224417_800378113996553_6734008933617835215_n ||1', 2, '2024-09-03 20:23:39'),
+(690, 'File Deleted', 'File name: 415945709_1103847357506482_449857628865336633_n ||1', 2, '2024-09-03 20:23:42'),
+(691, 'File Deleted', 'File name: 415945709_1103847357506482_449857628865336633_n ||1', 2, '2024-09-03 20:23:45'),
+(692, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-03 20:23:50'),
+(693, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:23:55'),
+(694, 'File Uploaded', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-03 20:24:00'),
+(695, 'File Deleted', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-03 20:25:15'),
+(696, 'File Uploaded', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-03 20:25:22'),
+(697, 'File Deleted', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-03 20:25:35'),
+(698, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:31:37'),
+(699, 'File Uploaded', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-03 20:31:42'),
+(700, 'File Uploaded', 'File name: แบบฝึกหัดท้ายหน่วยเรียนที่ 6', 2, '2024-09-03 20:32:05'),
+(701, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-03 20:32:22'),
+(702, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:32:32'),
+(703, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-03 20:33:05'),
+(704, 'File Deleted', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-03 20:33:09'),
+(705, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-03 20:36:23'),
+(706, 'File Uploaded', 'File name: แบบฝึกหัดท้ายหน่วยเรียนที่ 6', 2, '2024-09-03 20:37:45'),
+(707, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-03 20:37:58'),
+(708, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:38:03'),
+(709, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-03 20:38:10'),
+(710, 'File Renamed', 'Old name: 415945709_1103847357506482_449857628865336633_n, New name: 7357506482_449857628865336633_n', 2, '2024-09-03 20:38:34'),
+(711, 'File Renamed', 'Old name: 7357506482_449857628865336633_n, New name: 7357506482_449857628865336633_n', 2, '2024-09-03 20:38:34'),
+(712, 'Folder Updated', 'Folder name: อัคร', 2, '2024-09-03 20:38:41'),
+(713, 'File Renamed', 'Old name: แบบฝึกหัดท้ายหน่วยเรียนที่ 6, New name: แบบฝึกหัดท้ายหน่วยเรียนที่', 2, '2024-09-03 20:38:46'),
+(714, 'File Renamed', 'Old name: แบบฝึกหัดท้ายหน่วยเรียนที่, New name: แบบฝึกหัดท้ายหน่วยเรียนที่', 2, '2024-09-03 20:38:46'),
+(715, 'File Renamed', 'Old name: แบบฝึกหัดท้ายหน่วยเรียนที่, New name: แบบฝึกหัดท้ายหน่วยเรียนที่ 6', 2, '2024-09-03 20:38:50'),
+(716, 'File Renamed', 'Old name: แบบฝึกหัดท้ายหน่วยเรียนที่ 6, New name: แบบฝึกหัดท้ายหน่วยเรียนที่ 6', 2, '2024-09-03 20:38:50'),
+(717, 'Folder Deleted', 'Folder name: อัคร', 2, '2024-09-03 20:39:04'),
+(718, 'File Deleted', 'File name: 7357506482_449857628865336633_n', 2, '2024-09-03 20:52:26'),
+(719, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:52:33'),
+(720, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-03 20:52:51'),
+(721, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-03 20:54:02'),
+(722, 'Folder Updated', 'Folder name: อัคร', 2, '2024-09-03 20:54:09'),
+(741, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-05 12:49:35'),
+(742, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-05 12:49:51'),
+(743, 'File Renamed', 'Old name: 213224417_800378113996553_6734008933617835215_n, New name: 6553_6734008933617835215_n', 2, '2024-09-05 12:49:54'),
+(744, 'File Renamed', 'Old name: 6553_6734008933617835215_n, New name: 6553_6734008933617835215_n', 2, '2024-09-05 12:49:54'),
+(745, 'File Renamed', 'Old name: 6553_6734008933617835215_n, New name: 08933617835215_n', 2, '2024-09-05 12:49:57'),
+(746, 'File Renamed', 'Old name: 08933617835215_n, New name: 08933617835215_n', 2, '2024-09-05 12:49:57'),
+(747, 'File Renamed', 'Old name: แบบฝึกหัดท้ายหน่วยเรียนที่, New name: หน่วยเรียนที่', 2, '2024-09-05 12:50:01'),
+(748, 'File Renamed', 'Old name: หน่วยเรียนที่, New name: หน่วยเรียนที่', 2, '2024-09-05 12:50:01'),
+(749, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-05 12:50:06'),
+(750, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n ||1', 2, '2024-09-05 12:50:12'),
+(751, 'File Renamed', 'Old name: 08933617835215_n, New name: 617835215_n', 2, '2024-09-05 12:52:10'),
+(752, 'File Renamed', 'Old name: 617835215_n, New name: 617835215_n', 2, '2024-09-05 12:52:10'),
+(753, 'File Renamed', 'Old name: 617835215_n, New name: 617835215_n', 2, '2024-09-05 12:52:25'),
+(754, 'File Renamed', 'Old name: 617835215_n, New name: 617835215_n', 2, '2024-09-05 12:52:25'),
+(755, 'File Renamed', 'Old name: 617835215_n, New name: 617835215_n', 2, '2024-09-05 12:52:25'),
+(756, 'File Deleted', 'File name: 213224417_800378113996553_6734008933617835215_n ||1', 2, '2024-09-05 12:52:30'),
+(757, 'File Deleted', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-05 12:52:45'),
+(758, 'File Uploaded', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-05 12:52:52'),
+(759, 'File Renamed', 'Old name: Assignment 5 (Web Application Development), New name: nt 5 (Web Application Development)', 2, '2024-09-05 12:52:55'),
+(760, 'File Renamed', 'Old name: nt 5 (Web Application Development), New name: nt 5 (Web Application Development)', 2, '2024-09-05 12:52:55'),
+(761, 'File Uploaded', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-05 12:53:00'),
+(762, 'File Renamed', 'Old name: Assignment 5 (Web Application Development), New name: t 5 (Web Application Development)', 2, '2024-09-05 12:53:03'),
+(763, 'File Renamed', 'Old name: t 5 (Web Application Development), New name: t 5 (Web Application Development)', 2, '2024-09-05 12:53:03'),
+(764, 'File Deleted', 'File name: t 5 (Web Application Development)', 2, '2024-09-05 12:53:06'),
+(765, 'File Uploaded', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-05 12:53:14'),
+(766, 'File Renamed', 'Old name: Assignment 5 (Web Application Development), New name:  (Web Application Development)', 2, '2024-09-05 12:53:18'),
+(767, 'File Renamed', 'Old name:  (Web Application Development), New name:  (Web Application Development)', 2, '2024-09-05 12:53:18'),
+(768, 'File Uploaded', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-05 12:53:23'),
+(769, 'File Deleted', 'File name: Assignment 5 (Web Application Development)', 2, '2024-09-05 12:53:28'),
+(770, 'File Deleted', 'File name:  (Web Application Development)', 2, '2024-09-05 12:53:31'),
+(771, 'File Deleted', 'File name: 617835215_n', 2, '2024-09-05 12:53:34'),
+(772, 'File Deleted', 'File name: nt 5 (Web Application Development)', 2, '2024-09-05 12:53:38'),
+(773, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-05 12:58:19'),
+(774, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-09-05 13:02:42');
+INSERT INTO `log` (`log_id`, `log_status`, `log_detail`, `user_id`, `log_date`) VALUES
+(775, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-09-05 13:02:50'),
+(776, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-05 13:04:50'),
+(777, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-09-05 13:05:12'),
+(778, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-09-05 13:05:25'),
+(779, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-05 13:05:31'),
+(780, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-05 13:20:16'),
+(781, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-05 13:22:04'),
+(782, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-05 13:22:08'),
+(783, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-05 13:22:20'),
+(784, 'File Renamed', 'Old name: 415945709_1103847357506482_449857628865336633_n, New name: 7506482_449857628865336633_n', 2, '2024-09-05 13:22:23'),
+(785, 'File Renamed', 'Old name: 7506482_449857628865336633_n, New name: 7506482_449857628865336633_n', 2, '2024-09-05 13:22:23'),
+(786, 'File Deleted', 'File name: 7506482_449857628865336633_n', 2, '2024-09-05 13:22:32'),
+(787, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-05 13:23:34'),
+(788, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-05 13:23:40'),
+(789, 'Folder Updated', 'Folder name: อัครพล', 2, '2024-09-05 13:23:48'),
+(790, 'Folder Created', 'Folder name: อัครพลหก', 2, '2024-09-05 13:27:19'),
+(791, 'Folder Updated', 'Folder name: อัครพลหก', 2, '2024-09-05 13:27:23'),
+(792, 'Folder Updated', 'Folder name: ', 2, '2024-09-05 13:27:31'),
+(793, 'Folder Updated', 'Folder name: อัครพลหก', 2, '2024-09-05 13:27:39'),
+(794, 'Folder Deleted', 'Folder name: อัครพลหก', 2, '2024-09-05 13:28:58'),
+(795, 'Folder Created', 'Folder name: 1233', 2, '2024-09-05 13:44:30'),
+(796, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-05 13:44:30'),
+(797, 'File Uploaded', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-05 13:44:30'),
+(798, 'Folder Created', 'Folder name: 12334', 2, '2024-09-05 13:46:24'),
+(799, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-05 13:46:24'),
+(800, 'File Uploaded', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-05 13:46:24'),
+(801, 'Folder Created', 'Folder name: 1233232', 2, '2024-09-05 13:55:27'),
+(802, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-05 13:55:27'),
+(803, 'File Uploaded', 'File name: asdasdsad', 2, '2024-09-05 13:55:27'),
+(804, 'File Uploaded', 'File name: icon', 2, '2024-09-05 13:55:27'),
+(805, 'File Uploaded', 'File name: LINE_ALBUM_Meme_๒๔หหห๐๑๒๙_1', 2, '2024-09-05 13:55:27'),
+(806, 'File Uploaded', 'File name: LINE_ALBUM_Meme_๒๔๐๑๒๘_1', 2, '2024-09-05 13:55:27'),
+(807, 'File Uploaded', 'File name: จินเบ', 2, '2024-09-05 13:55:27'),
+(808, 'File Uploaded', 'File name: ปิดออเดอร์', 2, '2024-09-05 13:55:27'),
+(809, 'Folder Deleted', 'Folder name: 1233232', 2, '2024-09-05 13:59:38'),
+(810, 'Folder Deleted', 'Folder name: 12334', 2, '2024-09-05 13:59:45'),
+(811, 'Folder Deleted', 'Folder name: 1233', 2, '2024-09-05 13:59:48'),
+(812, 'Folder Created', 'Folder name: 12', 2, '2024-09-05 14:03:41'),
+(813, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-05 14:03:41'),
+(814, 'File Uploaded', 'File name: asdasdsad', 2, '2024-09-05 14:03:41'),
+(815, 'File Uploaded', 'File name: icon', 2, '2024-09-05 14:03:41'),
+(816, 'File Uploaded', 'File name: LINE_ALBUM_Meme_๒๔หหห๐๑๒๙_1', 2, '2024-09-05 14:03:41'),
+(817, 'Folder Deleted', 'Folder name: 12', 2, '2024-09-05 14:22:06'),
+(818, 'Folder Created', 'Folder name: 123', 2, '2024-09-05 17:59:38'),
+(819, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-05 17:59:38'),
+(820, 'File Uploaded', 'File name: asdasdsad', 2, '2024-09-05 17:59:38'),
+(821, 'File Uploaded', 'File name: icon', 2, '2024-09-05 17:59:38'),
+(822, 'File Uploaded', 'File name: LINE_ALBUM_Meme_๒๔หหห๐๑๒๙_1', 2, '2024-09-05 17:59:38'),
+(823, 'File Uploaded', 'File name: LINE_ALBUM_Meme_๒๔๐๑๒๘_1', 2, '2024-09-05 17:59:38'),
+(824, 'File Uploaded', 'File name: จินเบ', 2, '2024-09-05 17:59:38'),
+(825, 'File Uploaded', 'File name: ปิดออเดอร์', 2, '2024-09-05 17:59:38'),
+(826, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-05 18:24:48'),
+(827, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-05 18:24:55'),
+(828, 'Bill Deleted', 'Bill ID: PS2567/001, Company: FBH', 2, '2024-09-05 18:48:31'),
+(829, 'Bill Created', 'Bill ID: PS2567/001, Total Amount: 1754.38', 2, '2024-09-05 18:48:48'),
+(830, 'Bill Created', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 8252', 2, '2024-09-05 18:56:16'),
+(831, 'Folder Deleted', 'Folder name: 123', 2, '2024-09-05 19:19:12'),
+(832, 'File Deleted', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-05 19:19:18'),
+(833, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-07 18:30:26'),
+(834, 'Drum Updated', 'Drum ID: 8, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-07 18:30:29'),
+(835, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-07 18:30:34'),
+(836, 'Folder Created', 'Folder name: 1', 2, '2024-09-07 18:32:44'),
+(837, 'File Uploaded', 'File name: icon', 2, '2024-09-07 18:32:44'),
+(838, 'Folder Deleted', 'Folder name: 1', 2, '2024-09-07 18:32:47'),
+(839, 'Cable Updated', 'Cable ID: , Route: , Section: , Used: 0', 2, '2024-09-07 18:49:21'),
+(840, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-07 18:49:46'),
+(841, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-07 18:51:47'),
+(843, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-09-07 18:59:18'),
+(844, 'Cable Inserted', 'Cable ID: 14, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-07 19:19:23'),
+(845, 'Drum Updated', 'Drum ID: 8, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-07 19:20:42'),
+(846, 'Bill Created', 'Bill ID: PSNK/MIXED/67/002, Total Amount: 33', 2, '2024-09-07 19:45:52'),
+(847, 'Bill Created', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1521.44', 2, '2024-09-07 19:46:21'),
+(848, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1521.44', 2, '2024-09-08 14:44:07'),
+(849, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 8252', 2, '2024-09-08 14:44:09'),
+(850, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 1754.38', 2, '2024-09-08 14:44:12'),
+(851, 'Drum Updated', 'Drum ID: 8, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-08 14:45:06'),
+(852, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-08 14:45:09'),
+(853, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1521.44', 2, '2024-09-08 14:45:12'),
+(854, 'User Updated', 'User ID: 29, Username: admin3, Level: 3, Status: 1', 2, '2024-09-08 14:48:28'),
+(855, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-08 14:48:34'),
+(856, 'Drum Updated', 'Drum ID: 8, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-08 14:48:38'),
+(857, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 14:48:51'),
+(858, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-08 14:49:01'),
+(859, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 14:49:06'),
+(860, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 14:51:56'),
+(861, 'File Uploaded', 'File name: test', 2, '2024-09-08 14:52:06'),
+(862, 'File Renamed', 'Old name: test, New name: testsdsd', 2, '2024-09-08 14:52:10'),
+(863, 'File Renamed', 'Old name: testsdsd, New name: testsdsd', 2, '2024-09-08 14:52:10'),
+(864, 'File Renamed', 'Old name: testsdsd, New name: test', 2, '2024-09-08 14:52:14'),
+(865, 'File Renamed', 'Old name: test, New name: test', 2, '2024-09-08 14:52:14'),
+(866, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-08 14:52:33'),
+(867, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:00:58'),
+(868, 'File Renamed', 'Old name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L, New name: 25a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:03:31'),
+(869, 'File Renamed', 'Old name: 25a8336173_800x0xcover_lx5UkK5L, New name: 25a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:03:31'),
+(870, 'File Renamed', 'Old name: 25a8336173_800x0xcover_lx5UkK5L, New name: 25a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:03:31'),
+(871, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 15:03:42'),
+(872, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:03:50'),
+(873, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 15:08:09'),
+(874, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 15:20:12'),
+(875, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 15:45:35'),
+(876, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 15:48:29'),
+(877, 'File Uploaded', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-08 15:49:37'),
+(878, 'File Deleted', 'File name: 25a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:49:53'),
+(879, 'File Deleted', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 15:49:59'),
+(880, 'File Deleted', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 15:50:04'),
+(881, 'File Deleted', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 15:50:07'),
+(882, 'File Deleted', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-08 15:50:10'),
+(883, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-08 15:50:14'),
+(884, 'File Uploaded', 'File name: จินเบ', 2, '2024-09-08 15:50:28'),
+(885, 'File Renamed', 'Old name: จินเบ, New name: aasd', 2, '2024-09-08 15:50:39'),
+(886, 'File Renamed', 'Old name: aasd, New name: aasd', 2, '2024-09-08 15:50:39'),
+(887, 'File Renamed', 'Old name: aasd, New name: aasd', 2, '2024-09-08 15:50:39'),
+(888, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 15:50:51'),
+(889, 'File Uploaded', 'File name: icon', 2, '2024-09-08 15:50:57'),
+(890, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:52:01'),
+(891, 'File Uploaded', 'File name: LINE_ALBUM_Meme_๒๔หหห๐๑๒๙_1', 2, '2024-09-08 15:52:16'),
+(892, 'File Deleted', 'File name: aasd', 2, '2024-09-08 15:56:24'),
+(893, 'File Deleted', 'File name: icon', 2, '2024-09-08 15:56:32'),
+(894, 'File Deleted', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:56:38'),
+(895, 'File Deleted', 'File name: LINE_ALBUM_Meme_๒๔หหห๐๑๒๙_1', 2, '2024-09-08 15:56:43'),
+(896, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:56:51'),
+(897, 'File Deleted', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:56:54'),
+(898, 'File Uploaded', 'File name: asdasdsad', 2, '2024-09-08 15:57:06'),
+(899, 'File Renamed', 'Old name: asdasdsad, New name: dsad', 2, '2024-09-08 15:57:09'),
+(900, 'File Renamed', 'Old name: dsad, New name: dsad', 2, '2024-09-08 15:57:09'),
+(901, 'File Renamed', 'Old name: dsad, New name: dsa56565', 2, '2024-09-08 15:57:17'),
+(902, 'File Renamed', 'Old name: dsa56565, New name: dsa56565', 2, '2024-09-08 15:57:17'),
+(903, 'File Renamed', 'Old name: dsa56565, New name: 1', 2, '2024-09-08 15:57:40'),
+(904, 'File Renamed', 'Old name: 1, New name: 1', 2, '2024-09-08 15:57:40'),
+(905, 'File Deleted', 'File name: 1', 2, '2024-09-08 15:57:46'),
+(906, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-08 15:57:51'),
+(907, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 15:58:45'),
+(908, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:58:51'),
+(909, 'File Renamed', 'Old name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L, New name: 336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:58:59'),
+(910, 'File Renamed', 'Old name: 336173_800x0xcover_lx5UkK5L, New name: 336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:58:59'),
+(911, 'File Deleted', 'File name: 336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 15:59:03'),
+(912, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 16:00:17'),
+(913, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-08 16:05:52'),
+(914, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 16:06:00'),
+(915, 'Folder Updated', 'Folder name: อัค', 2, '2024-09-08 16:06:14'),
+(916, 'File Uploaded', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 16:06:22'),
+(917, 'File Deleted', 'File name: 61d580b1a973b025a8336173_800x0xcover_lx5UkK5L', 2, '2024-09-08 16:06:29'),
+(918, 'Folder Deleted', 'Folder name: อัค', 2, '2024-09-08 16:09:50'),
+(919, 'File Uploaded', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:09:57'),
+(920, 'File Deleted', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:10:57'),
+(921, 'File Uploaded', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:11:02'),
+(922, 'File Deleted', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:15:39'),
+(923, 'อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ หม่าล่าใหญ่', 2, '2024-09-08 16:16:30'),
+(924, 'File Deleted', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:16:37'),
+(925, 'อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ หม่าล่าใหญ่', 2, '2024-09-08 16:16:55'),
+(926, 'Folder Created', 'Folder name: อัครพล', 2, '2024-09-08 16:17:30'),
+(927, 'Folder Created', 'Folder name: อัครพล22', 2, '2024-09-08 16:17:36'),
+(928, 'อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ หม่าล่าใหญ่', 2, '2024-09-08 16:18:12'),
+(929, 'อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ หม่าล่าใหญ่ ||1', 2, '2024-09-08 16:18:20'),
+(930, 'File Deleted', 'File name: หม่าล่าใหญ่ ||1', 2, '2024-09-08 16:18:35'),
+(931, 'File Deleted', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:18:37'),
+(932, 'File Deleted', 'File name: หม่าล่าใหญ่', 2, '2024-09-08 16:18:40'),
+(933, 'Folder Deleted', 'Folder name: อัครพล22', 2, '2024-09-08 16:18:42'),
+(934, 'Folder Deleted', 'Folder name: อัครพล', 2, '2024-09-08 16:18:43'),
+(935, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-09-08 16:21:05'),
+(936, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:21:05'),
+(937, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:21:05'),
+(938, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:21:05'),
+(939, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:21:05'),
+(940, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:21:05'),
+(941, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:21:05'),
+(942, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:21:05'),
+(943, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:21:05'),
+(944, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:21:05'),
+(945, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:21:05'),
+(946, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:21:05'),
+(947, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:21:05'),
+(948, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:21:05'),
+(949, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:21:05'),
+(950, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:21:05'),
+(951, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:21:05'),
+(952, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:21:05'),
+(953, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:21:05'),
+(954, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:21:05'),
+(955, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:21:05'),
+(956, 'Folder Created', 'Folder name: ฟหกฟหกหหห', 2, '2024-09-08 16:21:13'),
+(957, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:21:13'),
+(958, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:21:13'),
+(959, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:21:13'),
+(960, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:21:13'),
+(961, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:21:13'),
+(962, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:21:13'),
+(963, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:21:13'),
+(964, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:21:13'),
+(965, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:21:13'),
+(966, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:21:13'),
+(967, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:21:13'),
+(968, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:21:13'),
+(969, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:21:13'),
+(970, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:21:13'),
+(971, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:21:13'),
+(972, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:21:13'),
+(973, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:21:13'),
+(974, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:21:13'),
+(975, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:21:13'),
+(976, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:21:13'),
+(977, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-09-08 16:21:25'),
+(978, 'Folder Deleted', 'Folder name: ฟหกฟหกหหห', 2, '2024-09-08 16:21:28'),
+(979, 'Folder Created', 'Folder name: 123', 2, '2024-09-08 16:26:43'),
+(980, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:26:43'),
+(981, 'Folder Created', 'Folder name: 1234', 2, '2024-09-08 16:26:57'),
+(982, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:26:57'),
+(983, 'Folder Created', 'Folder name: ฟหกฟหก', 2, '2024-09-08 16:27:55'),
+(984, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:27:55'),
+(985, 'Folder Deleted', 'Folder name: ฟหกฟหก', 2, '2024-09-08 16:28:02'),
+(986, 'Folder Deleted', 'Folder name: 1234', 2, '2024-09-08 16:28:04'),
+(987, 'Folder Deleted', 'Folder name: 123', 2, '2024-09-08 16:28:06'),
+(988, 'อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:31:39'),
+(989, 'File Deleted', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:32:56'),
+(990, 'Folder Created', 'Folder name: 1233', 2, '2024-09-08 16:47:59'),
+(991, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:47:59'),
+(992, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:47:59'),
+(993, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:47:59'),
+(994, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:47:59'),
+(995, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:47:59'),
+(996, 'Folder Deleted', 'Folder name: 1233', 2, '2024-09-08 16:48:14'),
+(997, 'Folder Created', 'Folder name: 12333', 2, '2024-09-08 16:53:27'),
+(998, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:53:27'),
+(999, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:53:27'),
+(1000, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:53:27'),
+(1001, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:53:27'),
+(1002, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:53:27'),
+(1003, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:53:27'),
+(1004, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:53:27'),
+(1005, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:53:27'),
+(1006, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:53:27'),
+(1007, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:53:27'),
+(1008, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:53:27'),
+(1009, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:53:27'),
+(1010, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:53:27'),
+(1011, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:53:27'),
+(1012, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:53:27'),
+(1013, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:53:27'),
+(1014, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:53:27'),
+(1015, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:53:27'),
+(1016, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:53:27'),
+(1017, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:53:27'),
+(1018, 'Folder Deleted', 'Folder name: 12333', 2, '2024-09-08 16:53:38'),
+(1019, 'Folder Created', 'Folder name: อัครพล กดดกด', 2, '2024-09-08 16:54:08'),
+(1020, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:54:08'),
+(1021, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:54:08'),
+(1022, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:54:08'),
+(1023, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:54:08'),
+(1024, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:54:08'),
+(1025, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:54:08'),
+(1026, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:54:08'),
+(1027, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:54:08'),
+(1028, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:54:08'),
+(1029, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:54:08'),
+(1030, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:54:08'),
+(1031, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:54:08'),
+(1032, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:54:08'),
+(1033, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:54:08'),
+(1034, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:54:08'),
+(1035, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:54:08'),
+(1036, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:54:08'),
+(1037, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:54:08'),
+(1038, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:54:08'),
+(1039, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:54:08'),
+(1040, 'Folder Created', 'Folder name: 123123123', 2, '2024-09-08 16:54:40'),
+(1041, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:54:40'),
+(1042, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:54:40'),
+(1043, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:54:40'),
+(1044, 'Folder Deleted', 'Folder name: 123123123', 2, '2024-09-08 16:54:44'),
+(1045, 'Folder Deleted', 'Folder name: อัครพล กดดกด', 2, '2024-09-08 16:54:46'),
+(1046, 'Folder Created', 'Folder name: หกหดกหดเกดหเหกด', 2, '2024-09-08 16:54:53'),
+(1047, 'Folder Created', 'Folder name: หกหดกหดเกดหเหกดฟหกฟหกฟหก', 2, '2024-09-08 16:55:10'),
+(1048, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:55:10'),
+(1049, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:55:10'),
+(1050, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:55:10'),
+(1051, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:55:10'),
+(1052, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:55:10'),
+(1053, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:55:10'),
+(1054, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:55:10'),
+(1055, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:55:10'),
+(1056, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:55:10'),
+(1057, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:55:10'),
+(1058, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:55:10'),
+(1059, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:55:10'),
+(1060, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:55:10'),
+(1061, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:55:10'),
+(1062, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:55:10'),
+(1063, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:55:10'),
+(1064, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:55:10'),
+(1065, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:55:10'),
+(1066, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:55:10'),
+(1067, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:55:10'),
+(1068, 'Folder Created', 'Folder name: ฟหฟฟฟฟฟ', 2, '2024-09-08 16:55:21'),
+(1069, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:55:21'),
+(1070, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:55:21'),
+(1071, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:55:21'),
+(1072, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:55:21'),
+(1073, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:55:21'),
+(1074, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:55:21'),
+(1075, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:55:21'),
+(1076, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:55:21'),
+(1077, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:55:21'),
+(1078, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:55:21'),
+(1079, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:55:21'),
+(1080, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:55:21'),
+(1081, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:55:21'),
+(1082, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:55:21'),
+(1083, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:55:21'),
+(1084, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:55:21'),
+(1085, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:55:21'),
+(1086, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:55:21'),
+(1087, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:55:21'),
+(1088, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:55:21'),
+(1089, 'Folder Created', 'Folder name: ฟ', 2, '2024-09-08 16:55:28'),
+(1090, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:55:28'),
+(1091, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:55:28'),
+(1092, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:55:28'),
+(1093, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:55:28'),
+(1094, 'Folder Created', 'Folder name: 54564564556', 2, '2024-09-08 16:55:57'),
+(1095, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:55:57'),
+(1096, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:55:57'),
+(1097, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:55:57'),
+(1098, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:55:57'),
+(1099, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:55:57'),
+(1100, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:55:57'),
+(1101, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:55:57'),
+(1102, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:55:57'),
+(1103, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:55:57'),
+(1104, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:55:57'),
+(1105, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:55:57'),
+(1106, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:55:57'),
+(1107, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:55:57'),
+(1108, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:55:57'),
+(1109, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:55:57'),
+(1110, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:55:57'),
+(1111, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:55:57'),
+(1112, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:55:57'),
+(1113, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:55:57'),
+(1114, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:55:57'),
+(1115, 'Folder Created', 'Folder name: หฟกฟหฟฟฟฟหกก', 2, '2024-09-08 16:56:28'),
+(1116, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:56:28'),
+(1117, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:56:28'),
+(1118, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:56:28'),
+(1119, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:56:28'),
+(1120, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:56:28'),
+(1121, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:56:28'),
+(1122, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:56:28'),
+(1123, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:56:28'),
+(1124, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:56:28'),
+(1125, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:56:28'),
+(1126, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:56:28'),
+(1127, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:56:28'),
+(1128, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:56:28'),
+(1129, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:56:28'),
+(1130, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:56:28'),
+(1131, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:56:28'),
+(1132, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:56:28'),
+(1133, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:56:28'),
+(1134, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:56:28'),
+(1135, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:56:28'),
+(1136, 'Folder Created', 'Folder name: หฟกฟหฟฟฟฟหกกฟฟฟหกหก', 2, '2024-09-08 16:56:33'),
+(1137, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_1', 2, '2024-09-08 16:56:33'),
+(1138, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_2', 2, '2024-09-08 16:56:33'),
+(1139, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_3', 2, '2024-09-08 16:56:33'),
+(1140, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_4', 2, '2024-09-08 16:56:33'),
+(1141, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_5', 2, '2024-09-08 16:56:33'),
+(1142, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_6', 2, '2024-09-08 16:56:33'),
+(1143, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_7', 2, '2024-09-08 16:56:33'),
+(1144, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_8', 2, '2024-09-08 16:56:33'),
+(1145, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_9', 2, '2024-09-08 16:56:33'),
+(1146, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_10', 2, '2024-09-08 16:56:33'),
+(1147, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_11', 2, '2024-09-08 16:56:33'),
+(1148, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_12', 2, '2024-09-08 16:56:33'),
+(1149, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_13', 2, '2024-09-08 16:56:33'),
+(1150, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_14', 2, '2024-09-08 16:56:33'),
+(1151, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_15', 2, '2024-09-08 16:56:33'),
+(1152, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_16', 2, '2024-09-08 16:56:33'),
+(1153, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_17', 2, '2024-09-08 16:56:33'),
+(1154, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_18', 2, '2024-09-08 16:56:33'),
+(1155, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_19', 2, '2024-09-08 16:56:33'),
+(1156, 'File Uploaded', 'File name: LINE_ALBUM_D_LPN0098 คัดก่อนลง_240810_20', 2, '2024-09-08 16:56:33'),
+(1157, 'Folder Deleted', 'Folder name: หกหดกหดเกดหเหกด', 2, '2024-09-08 16:56:43'),
+(1158, 'Folder Deleted', 'Folder name: หกหดกหดเกดหเหกดฟหกฟหกฟหก', 2, '2024-09-08 16:56:45'),
+(1159, 'Folder Deleted', 'Folder name: ฟหฟฟฟฟฟ', 2, '2024-09-08 16:56:47'),
+(1160, 'Folder Deleted', 'Folder name: ฟ', 2, '2024-09-08 16:56:50'),
+(1161, 'Folder Deleted', 'Folder name: หฟกฟหฟฟฟฟหกก', 2, '2024-09-08 16:56:53'),
+(1162, 'Folder Deleted', 'Folder name: 54564564556', 2, '2024-09-08 16:56:55'),
+(1163, 'Folder Deleted', 'Folder name: หฟกฟหฟฟฟฟหกกฟฟฟหกหก', 2, '2024-09-08 16:56:57'),
+(1164, 'Bill Created', 'Bill ID: PS2567/002, Total Amount: 2924.96', 2, '2024-09-08 17:23:30'),
+(1165, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1521.44', 2, '2024-09-08 18:19:18'),
+(1166, 'User Updated', 'User ID: 2, Username: admin, Level: 0, Status: 1', 2, '2024-09-08 18:21:18'),
+(1167, 'Folder Created', 'Folder name: โฟลเดอร์1', 2, '2024-09-09 15:18:29'),
+(1168, 'Folder Created', 'Folder name: โฟลเดอร์2', 2, '2024-09-09 15:18:37'),
+(1169, 'Folder Created', 'Folder name: โฟลเดอร์3', 2, '2024-09-09 15:19:19'),
+(1170, 'อัปโหลดไฟล์แล้ว', 'ชื่อไฟล์ Resume', 2, '2024-09-09 15:20:11'),
+(1171, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/002, Total Amount: 33', 2, '2024-09-18 14:42:23'),
+(1172, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1521.44', 2, '2024-09-18 14:43:38'),
+(1173, 'Bill Updated', 'Bill ID: PS2567/002, Total Amount: 8862.69', 2, '2024-09-18 15:11:07'),
+(1174, 'Bill Created', 'Bill ID: PS2567/003, Total Amount: 41.66', 2, '2024-09-19 12:28:34'),
+(1175, 'Folder Created', 'Folder name: งานแม่ปายsss', 2, '2024-09-20 00:25:59'),
+(1176, 'File Uploaded', 'File name: 213224417_800378113996553_6734008933617835215_n', 2, '2024-09-20 00:25:59'),
+(1177, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-20 00:25:59'),
+(1178, 'File Uploaded', 'File name: 415945709_1103847357506482_449857628865336633_n', 2, '2024-09-20 00:25:59'),
+(1179, 'File Uploaded', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-20 00:25:59'),
+(1180, 'File Uploaded', 'File name: Screenshot 2024-04-05 182619', 2, '2024-09-20 00:25:59'),
+(1181, 'Bill Created', 'Bill ID: PSNK/MIXED/67/004, Total Amount: 5', 2, '2024-09-21 12:46:24'),
+(1182, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/004, Company: mixed', 2, '2024-09-21 12:46:28'),
+(1183, '2', 'Login', 2, '2024-09-21 12:58:09'),
+(1184, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/001, Company: mixed', 2, '2024-09-21 13:03:17'),
+(1185, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/002, Company: mixed', 2, '2024-09-21 13:03:21'),
+(1186, 'Bill Updated', 'Bill ID: , Total Amount: 0', 2, '2024-09-21 13:03:36'),
+(1187, 'Bill Created', 'Bill ID: PS/67/004', 2, '2024-09-21 13:15:58'),
+(1188, 'Bill Deleted', 'Bill ID: PS/67/004, Company: FBH', 2, '2024-09-21 13:16:08'),
+(1189, 'Bill Deleted', 'Bill ID: PS2567/003, Company: FBH', 2, '2024-09-21 13:16:17'),
+(1190, 'Bill Created', 'Bill ID: PS/67/003', 2, '2024-09-21 13:16:35'),
+(1191, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/003, Total Amount: 1521.44', 2, '2024-09-21 13:18:09'),
+(1192, 'Bill Updated', 'Bill ID: PS2567/002, Total Amount: 8862.69', 2, '2024-09-21 13:18:13'),
+(1193, 'Bill Deleted', 'Bill ID: PS/67/003, Company: FBH', 2, '2024-09-21 13:18:16'),
+(1194, 'Bill Created', 'Bill ID: PS0067/001', 2, '2024-09-21 13:20:09'),
+(1195, 'Bill Deleted', 'Bill ID: PS0067/001, Company: FBH', 2, '2024-09-21 13:21:20'),
+(1196, 'Bill Deleted', 'Bill ID: PS2567/001, Company: FBH', 2, '2024-09-21 13:21:22'),
+(1197, 'Bill Deleted', 'Bill ID: PS2567/002, Company: FBH', 2, '2024-09-21 13:21:25'),
+(1198, 'Bill Created', 'Bill ID: PS0067/001', 2, '2024-09-21 13:21:36'),
+(1199, 'Bill Deleted', 'Bill ID: PS0067/001, Company: FBH', 2, '2024-09-21 13:21:55'),
+(1200, 'Bill Created', 'Bill ID: PS2567001', 2, '2024-09-21 13:27:55'),
+(1201, 'User Updated', 'User ID: 29, Username: admin3, Lv: 3, Status: 1', 2, '2024-09-21 13:32:19'),
+(1202, 'User Updated', 'User ID: 2, Username: admin, Lv: 0, Status: 1', 2, '2024-09-21 13:32:21'),
+(1203, 'User Updated', 'User ID: 29, Username: admin3, Lv: 3, Status: 1', 2, '2024-09-21 13:37:29'),
+(1204, 'User Updated', 'User ID: 29, Username: admin3, Lv: 3, Status: 1', 2, '2024-09-21 13:37:38'),
+(1205, 'User Updated', 'User ID: 29, Username: admin3, Lv: 3, Status: 1', 2, '2024-09-21 13:41:47'),
+(1206, '2', 'Login', 2, '2024-09-21 14:05:09'),
+(1207, 'Bill Deleted', 'Bill ID: PS2567001, Company: FBH', 2, '2024-09-21 14:21:46'),
+(1208, 'Bill Created', 'Bill ID: PS2567/001', 2, '2024-09-21 14:21:54'),
+(1209, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/003, Company: Mixed', 2, '2024-09-21 14:59:17'),
+(1210, 'Bill Created', 'Bill ID: PSNK/MIXED/67/001', 2, '2024-09-21 14:59:23'),
+(1211, 'Cable Inserted', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-09-21 15:15:15'),
+(1212, '2', 'Logout', 2, '2024-09-21 15:24:48'),
+(1213, '2', 'Login', 2, '2024-09-21 15:30:59'),
+(1214, 'Salary Created', 'Salary ID: 12', 2, '2024-09-21 15:57:34'),
+(1215, 'Salary Created', 'Salary ID: 13', 2, '2024-09-21 15:58:38'),
+(1216, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 316.8', 2, '2024-09-21 16:06:16'),
+(1217, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 18.14', 2, '2024-09-21 16:58:27'),
+(1218, '2', 'Logout', 2, '2024-09-21 17:33:45'),
+(1219, '2', 'Login', 2, '2024-09-21 17:54:35'),
+(1220, 'Bill Created', 'Bill ID: PSNK/MIXED/67/002', 2, '2024-09-21 18:06:16'),
+(1221, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/002, Company: mixed', 2, '2024-09-21 18:42:02'),
+(1222, 'Bill Created', 'Bill ID: PSNK/MIXED/67/002', 2, '2024-09-21 18:42:15'),
+(1223, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/002, Company: mixed', 2, '2024-09-21 18:42:18'),
+(1224, 'Bill Created', 'Bill ID: PS2567/002', 2, '2024-09-21 18:43:25'),
+(1225, 'Bill Deleted', 'Bill ID: PS2567/002, Company: FBH', 2, '2024-09-21 18:43:29'),
+(1226, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-21 20:34:44'),
+(1227, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-21 20:34:49'),
+(1228, 'Cable Updated', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-21 20:34:56'),
+(1229, '2', 'Logout', 2, '2024-09-21 22:05:09'),
+(1230, '2', 'Login', 2, '2024-09-21 22:05:19'),
+(1231, '2', 'Logout', 2, '2024-09-21 22:05:22'),
+(1232, '2', 'Login', 2, '2024-09-21 22:35:28'),
+(1233, 'User Updated', 'User ID: 29, Username: admin3, Lv: 3, Status: 1', 2, '2024-09-21 22:35:47'),
+(1234, 'Cable Updated', 'Cable ID: 14, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-21 22:36:25'),
+(1235, 'Cable Deleted', 'Cable ID: 14, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-21 22:36:29'),
+(1236, 'Bill Deleted', 'Bill ID: PS2567/001, Company: FBH', 2, '2024-09-21 22:36:44'),
+(1237, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 316.8', 2, '2024-09-21 22:36:48'),
+(1238, 'Bill Created', 'Bill ID: PSNK/MIXED/67/002', 2, '2024-09-21 22:37:03'),
+(1239, 'Bill Created', 'Bill ID: PS2567/001', 2, '2024-09-21 22:37:42'),
+(1240, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 18.14', 2, '2024-09-21 22:37:45'),
+(1241, '2', 'Login', 2, '2024-09-21 23:26:03'),
+(1242, 'Cable Updated', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-09-21 23:30:02'),
+(1243, '2', 'Login', 2, '2024-09-21 23:33:25'),
+(1244, '2', 'Login', 2, '2024-09-21 23:33:32'),
+(1245, '2', 'Login', 2, '2024-09-21 23:33:39'),
+(1246, '2', 'Login', 2, '2024-09-21 23:33:50'),
+(1247, '2', 'Login', 2, '2024-09-21 23:34:02'),
+(1248, '2', 'Login', 2, '2024-09-21 23:36:44'),
+(1249, '2', 'Login', 2, '2024-09-21 23:56:34'),
+(1250, '2', 'Logout', 2, '2024-09-21 23:57:34'),
+(1251, '2', 'Login', 2, '2024-09-21 23:57:47'),
+(1252, 'Cable Updated', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-09-22 00:00:21'),
+(1253, 'Drum Inserted', 'Drum ID: 9, Drum No: 0062, Company: FIBERHOME, Cable Company: TICC', 2, '2024-09-22 00:16:59'),
+(1254, 'Drum Inserted', 'Drum ID: 10, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-22 00:18:43'),
+(1255, 'Drum Inserted', 'Drum ID: 11, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-22 00:18:57'),
+(1256, 'Drum Inserted', 'Drum ID: 12, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:27:24'),
+(1261, 'Drum Inserted', 'Drum ID: 17, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:31:38'),
+(1262, 'Drum Inserted', 'Drum ID: 18, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:32:14'),
+(1263, 'Drum Inserted', 'Drum ID: 19, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:35:10'),
+(1264, 'Drum Inserted', 'Drum ID: 20, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:35:11'),
+(1265, 'Drum Inserted', 'Drum ID: 21, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:35:11'),
+(1266, 'Drum Inserted', 'Drum ID: 22, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:35:11'),
+(1267, 'Drum Inserted', 'Drum ID: 23, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:35:11'),
+(1268, 'Drum Inserted', 'Drum ID: 24, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:35:12'),
+(1269, 'Drum Inserted', 'Drum ID: 25, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:37:30'),
+(1270, 'Drum Inserted', 'Drum ID: 26, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:37:49'),
+(1271, 'Drum Inserted', 'Drum ID: 27, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:38:34'),
+(1272, 'Drum Inserted', 'Drum ID: 28, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 00:49:38'),
+(1273, 'Drum Inserted', 'Drum ID: 29, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-09-22 00:52:32'),
+(1274, 'Drum Inserted', 'Drum ID: 30, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-22 01:30:07'),
+(1275, '2', 'Login', 2, '2024-09-22 18:41:40'),
+(1276, 'Cable Updated', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-09-22 18:42:20'),
+(1277, '2', 'Logout', 2, '2024-09-22 18:44:03'),
+(1278, '2', 'Login', 2, '2024-09-22 18:44:09'),
+(1279, '2', 'Login', 2, '2024-09-23 12:54:15'),
+(1280, 'Salary Created', 'Salary ID: 14', 2, '2024-09-23 13:18:17'),
+(1281, 'Salary Created', 'Salary ID: 15', 2, '2024-09-23 13:35:33'),
+(1282, '2', 'Logout', 2, '2024-09-23 13:36:17'),
+(1283, '2', 'Login', 2, '2024-09-23 13:36:49'),
+(1284, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 18.14', 2, '2024-09-23 13:56:36'),
+(1285, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/002, Total Amount: 10', 2, '2024-09-23 14:31:10'),
+(1286, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/002, Total Amount: 10', 2, '2024-09-23 14:31:18'),
+(1287, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/002, Company: mixed', 2, '2024-09-23 14:31:33'),
+(1288, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 464.4', 2, '2024-09-23 14:48:32'),
+(1289, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 763.06', 2, '2024-09-23 15:01:14'),
+(1290, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 18.14', 2, '2024-09-23 15:01:21'),
+(1291, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 326.8', 2, '2024-09-23 15:23:28'),
+(1292, '2', 'Login', 2, '2024-09-24 00:15:04'),
+(1293, '2', 'Login', 2, '2024-09-24 11:53:57'),
+(1294, 'Bill Created', 'Bill ID: PS2567/002', 2, '2024-09-24 11:54:07'),
+(1295, 'Bill Updated', 'Bill ID: PS2567/001, Total Amount: 446.26', 2, '2024-09-24 11:54:42'),
+(1296, 'Bill Created', 'Bill ID: PS2567/003, Total Amount: 18.14', 2, '2024-09-24 11:56:53'),
+(1297, 'Bill Created', 'Bill ID: PSNK/MIXED/67/002, Total Amount: 5', 2, '2024-09-24 11:57:44'),
+(1298, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 326.8', 2, '2024-09-24 11:57:56'),
+(1299, 'Bill Deleted', 'Bill ID: PS2567/003, Company: FBH', 2, '2024-09-24 11:58:07'),
+(1300, 'Bill Deleted', 'Bill ID: PSNK/MIXED/67/002, Company: mixed', 2, '2024-09-24 11:58:19'),
+(1301, 'User Created', 'Username: admin2, Employee Name: อัครพล กันธิยะ, Position: 0', 2, '2024-09-24 12:05:31'),
+(1302, 'User Created', 'Username: admin2, Employee Name: อัครพล กันธิยะ, Position: แอดมิน', 2, '2024-09-24 12:07:11'),
+(1303, 'User Created', 'Username: admin, Employee Name: อัครพล กันธิยะ, Position: แอดมิน', 2, '2024-09-24 12:16:03'),
+(1304, 'User Created', 'Username: admin, Employee Name: อัครพล กันธิยะ, Position: แอดมิน', 2, '2024-09-24 12:18:09'),
+(1305, '2', 'Login', 2, '2024-09-25 13:34:59'),
+(1306, '2', 'Login', 2, '2024-09-25 20:38:09'),
+(1307, '2', 'Logout', 2, '2024-09-25 20:40:30'),
+(1308, '2', 'Login', 2, '2024-09-25 20:40:35'),
+(1309, '2', 'Login', 2, '2024-09-25 21:58:03'),
+(1310, '2', 'Login', 2, '2024-09-25 23:50:44'),
+(1311, '2', 'Login', 2, '2024-09-26 21:28:02'),
+(1312, '2', 'Login', 2, '2024-09-27 09:51:01'),
+(1313, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 27370', 2, '2024-09-27 15:17:14'),
+(1314, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 273610', 2, '2024-09-27 15:21:54'),
+(1315, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 27360010', 2, '2024-09-27 15:22:12'),
+(1316, 'Cable Updated', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 99', 2, '2024-09-27 16:10:22'),
+(1317, 'Cable Updated', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-09-27 16:10:34'),
+(1318, '2', 'Login', 2, '2024-09-28 01:20:43'),
+(1319, 'Bill Updated', 'Bill ID: PSNK/MIXED/67/001, Total Amount: 27360010', 2, '2024-09-28 01:40:45');
+INSERT INTO `log` (`log_id`, `log_status`, `log_detail`, `user_id`, `log_date`) VALUES
+(1320, 'Cable Deleted', 'Cable ID: 13, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 950', 2, '2024-09-28 02:49:37'),
+(1321, 'Cable Deleted', 'Cable ID: 15, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 100', 2, '2024-09-28 02:49:38'),
+(1322, '2', 'Login', 2, '2024-09-28 11:23:38'),
+(1323, 'Drum Inserted', 'Drum ID: 31, Drum No: 0062, Company: Mixed, Cable Company: TUC', 2, '2024-09-28 12:47:49'),
+(1324, 'Drum Inserted', 'Drum ID: 32, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 12:59:44'),
+(1325, 'Drum Inserted', 'Drum ID: 33, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 12:59:53'),
+(1326, 'Drum Inserted', 'Drum ID: 34, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:01:09'),
+(1327, 'Drum Inserted', 'Drum ID: 35, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:12:54'),
+(1328, 'Drum Inserted', 'Drum ID: 36, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:14:27'),
+(1329, 'Drum Inserted', 'Drum ID: 37, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:20:10'),
+(1330, 'Drum Inserted', 'Drum ID: 38, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:20:38'),
+(1331, 'Drum Inserted', 'Drum ID: 39, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-28 13:20:48'),
+(1332, 'Drum Inserted', 'Drum ID: 40, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:21:38'),
+(1333, 'Drum Inserted', 'Drum ID: 41, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-09-28 13:21:47'),
+(1334, 'Drum Inserted', 'Drum ID: 42, Drum No: 0062, Company: Mixed, Cable Company: TICC', 2, '2024-09-28 13:46:08'),
+(1335, 'Drum Inserted', 'Drum ID: 43, Drum No: 0062, Company: FBH, Cable Company: TUC', 2, '2024-09-28 13:46:18'),
+(1336, 'Drum Inserted', 'Drum ID: 44, Drum No: 0062, Company: FBH, Cable Company: TICC', 2, '2024-09-28 13:46:28'),
+(1337, 'Drum Inserted', 'Drum ID: 45, Drum No: 0061, Company: FBH, Cable Company: FIBERHOME', 2, '2024-09-28 13:48:34'),
+(1338, 'Drum Inserted', 'Drum ID: 46, Drum No: 0064, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:48:48'),
+(1339, 'Drum Inserted', 'Drum ID: 47, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:08'),
+(1340, 'Drum Inserted', 'Drum ID: 48, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:10'),
+(1341, 'Drum Inserted', 'Drum ID: 49, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:10'),
+(1342, 'Drum Inserted', 'Drum ID: 50, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:10'),
+(1343, 'Drum Inserted', 'Drum ID: 51, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:11'),
+(1344, 'Drum Inserted', 'Drum ID: 52, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:11'),
+(1345, 'Drum Inserted', 'Drum ID: 53, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:11'),
+(1346, 'Drum Inserted', 'Drum ID: 54, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:11'),
+(1347, 'Drum Inserted', 'Drum ID: 55, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:11'),
+(1348, 'Drum Inserted', 'Drum ID: 56, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:49:11'),
+(1349, 'Drum Inserted', 'Drum ID: 57, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-09-28 13:50:57'),
+(1350, 'Drum Inserted', 'Drum ID: 58, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 13:52:04'),
+(1351, 'Drum Inserted', 'Drum ID: 59, Drum No: 0062, Company: Mixed, Cable Company: FIBERHOME', 2, '2024-09-28 13:53:55'),
+(1352, 'Drum Inserted', 'Drum ID: 60, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-09-28 13:54:00'),
+(1353, 'Drum Inserted', 'Drum ID: 61, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-09-28 14:07:29'),
+(1354, 'Drum Inserted', 'Drum ID: 62, Drum No: 0062, Company: FBH, Cable Company: TICC', 2, '2024-09-28 14:07:33'),
+(1355, 'Drum Inserted', 'Drum ID: 63, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:07:53'),
+(1356, 'Drum Inserted', 'Drum ID: 64, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:07:54'),
+(1357, 'Drum Inserted', 'Drum ID: 65, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:07:55'),
+(1358, 'Drum Inserted', 'Drum ID: 66, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:07:55'),
+(1359, 'Drum Inserted', 'Drum ID: 67, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:07:56'),
+(1360, 'Drum Inserted', 'Drum ID: 68, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:07:56'),
+(1361, 'Drum Inserted', 'Drum ID: 69, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:08:43'),
+(1362, 'Drum Inserted', 'Drum ID: 70, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:08:44'),
+(1363, 'Drum Inserted', 'Drum ID: 71, Drum No: 0062, Company: Mixed, Cable Company: FIBERHOME', 2, '2024-09-28 14:09:29'),
+(1364, 'Drum Inserted', 'Drum ID: 72, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-09-28 14:10:46'),
+(1365, 'Drum Inserted', 'Drum ID: 73, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-09-28 14:10:48'),
+(1366, 'Drum Inserted', 'Drum ID: 74, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-28 14:10:50'),
+(1367, 'Drum Inserted', 'Drum ID: 75, Drum No: 0062, Company: FBH, Cable Company: FIBERHOME', 2, '2024-09-28 14:11:17'),
+(1368, 'Drum Inserted', 'Drum ID: 76, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-28 14:11:43'),
+(1369, 'Drum Inserted', 'Drum ID: 77, Drum No: 0062, Company: Mixed, Cable Company: FIBERHOME', 2, '2024-09-28 14:12:43'),
+(1370, 'Drum Inserted', 'Drum ID: 78, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-09-28 14:15:10'),
+(1371, 'Drum Inserted', 'Drum ID: 79, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:17:44'),
+(1372, 'Drum Inserted', 'Drum ID: 80, Drum No: 0062, Company: FBH, Cable Company: TICC', 2, '2024-09-28 14:20:03'),
+(1373, 'Drum Inserted', 'Drum ID: 81, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-28 14:20:30'),
+(1374, 'Drum Inserted', 'Drum ID: 82, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-28 14:20:43'),
+(1375, 'Drum Inserted', 'Drum ID: 83, Drum No: 0062, Company: CCS, Cable Company: FUTONG', 2, '2024-09-28 14:21:59'),
+(1376, 'Drum Inserted', 'Drum ID: 84, Drum No: 0062, Company: FIBERHOME, Cable Company: FIBERHOME', 2, '2024-09-28 14:22:29'),
+(1377, 'Drum Inserted', 'Drum ID: 85, Drum No: 0062, Company: FIBERHOME, Cable Company: FUTONG', 2, '2024-09-28 14:30:26'),
+(1378, 'Drum Inserted', 'Drum ID: 86, Drum No: 0062, Company: Mixed, Cable Company: FUTONG', 2, '2024-09-28 14:34:44'),
+(1379, 'Drum Inserted', 'Drum ID: 87, Drum No: 0062, Company: FBH, Cable Company: FUTONG', 2, '2024-09-28 15:30:05'),
+(1380, 'Cable Inserted', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 999', 2, '2024-09-28 17:44:09'),
+(1381, 'Cable Updated', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 999', 2, '2024-09-28 17:44:43'),
+(1382, 'Cable Updated', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 998', 2, '2024-09-28 17:44:49'),
+(1383, 'Cable Updated', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 998', 2, '2024-09-28 17:45:35'),
+(1384, 'Cable Updated', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 998', 2, '2024-09-28 17:47:27'),
+(1385, 'Cable Inserted', 'Cable ID: 17, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 99', 2, '2024-09-28 17:48:28'),
+(1386, 'Cable Inserted', 'Cable ID: 18, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 17:48:47'),
+(1387, 'Cable Inserted', 'Cable ID: 19, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 17:49:07'),
+(1388, 'Cable Inserted', 'Cable ID: 20, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:04:49'),
+(1389, 'Cable Inserted', 'Cable ID: 21, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 2000', 2, '2024-09-28 18:06:15'),
+(1390, 'Cable Deleted', 'Cable ID: 21, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 2000', 2, '2024-09-28 18:06:23'),
+(1391, 'Cable Inserted', 'Cable ID: 22, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:07:08'),
+(1392, 'Cable Deleted', 'Cable ID: 22, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:07:24'),
+(1393, 'Cable Inserted', 'Cable ID: 23, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:11:59'),
+(1394, 'Cable Deleted', 'Cable ID: 23, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:12:03'),
+(1395, 'Cable Deleted', 'Cable ID: 20, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:12:38'),
+(1396, 'Cable Deleted', 'Cable ID: 19, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:12:40'),
+(1397, 'Cable Deleted', 'Cable ID: 18, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:12:41'),
+(1398, 'Cable Deleted', 'Cable ID: 17, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 99', 2, '2024-09-28 18:12:47'),
+(1399, 'Cable Inserted', 'Cable ID: 24, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:14:55'),
+(1400, 'Cable Updated', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 18:28:10'),
+(1401, 'Cable Updated', 'Cable ID: 24, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-28 19:24:15'),
+(1402, 'Drum Inserted', 'Drum ID: 88, Drum No: 0062, Company: Mixed, Cable Company: FIBERHOME', 2, '2024-09-28 19:58:20'),
+(1403, '2', 'Logout', 2, '2024-09-28 21:22:54'),
+(1404, '2', 'Login', 2, '2024-09-28 21:24:10'),
+(1405, '2', 'Logout', 2, '2024-09-28 22:20:12'),
+(1406, '2', 'Login', 2, '2024-09-28 22:20:20'),
+(1407, '2', 'Logout', 2, '2024-09-28 22:24:50'),
+(1408, '2', 'Login', 2, '2024-09-28 22:25:01'),
+(1409, 'User Created', 'Username: view, Employee Name: view view, Position: 3', 2, '2024-09-28 22:39:07'),
+(1410, '2', 'Logout', 2, '2024-09-28 22:41:38'),
+(1411, '34', 'Login', 34, '2024-09-28 22:41:43'),
+(1412, '34', 'Logout', 34, '2024-09-28 22:42:43'),
+(1413, '34', 'Login', 34, '2024-09-28 22:42:51'),
+(1414, '34', 'Logout', 34, '2024-09-28 22:45:55'),
+(1415, '34', 'Login', 34, '2024-09-28 22:46:00'),
+(1416, '34', 'Logout', 34, '2024-09-28 23:00:27'),
+(1417, '2', 'Login', 2, '2024-09-28 23:00:31'),
+(1418, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`users`, CONSTRAINT `employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))', 2, '2024-09-28 23:13:12'),
+(1419, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`log`, CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`))', 2, '2024-09-28 23:14:12'),
+(1420, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`log`, CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`))', 2, '2024-09-28 23:14:39'),
+(1421, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`log`, CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`))', 2, '2024-09-28 23:15:05'),
+(1422, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`users`, CONSTRAINT `employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))', 2, '2024-09-28 23:21:04'),
+(1423, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`users`, CONSTRAINT `employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))', 2, '2024-09-28 23:21:38'),
+(1424, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`users`, CONSTRAINT `employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))', 2, '2024-09-28 23:24:00'),
+(1425, 'Error Deleting User', 'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`psnktelecom`.`users`, CONSTRAINT `employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`))', 2, '2024-09-28 23:25:31'),
+(1426, 'Cable Deleted', 'Cable ID: 16, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-29 02:36:03'),
+(1427, 'Cable Deleted', 'Cable ID: 24, Route: U2211148 เชียงใหม่, Section: CMI01X39ECQ - L2 NEW, Used: 1', 2, '2024-09-29 02:36:05'),
+(1428, '2', 'Logout', 2, '2024-09-29 02:49:40'),
+(1429, '34', 'Login', 34, '2024-09-29 02:49:47'),
+(1430, '34', 'Logout', 34, '2024-09-29 02:49:53'),
+(1431, '2', 'Login', 2, '2024-09-29 02:50:01'),
+(1432, '2', 'Login', 2, '2024-09-29 11:09:28');
 
 -- --------------------------------------------------------
 
@@ -872,14 +1881,8 @@ CREATE TABLE `salary` (
 --
 
 INSERT INTO `salary` (`salary_id`, `salary`, `ot`, `social_security`, `other`, `total_salary`, `salary_date`, `employee_id`) VALUES
-(9, 1.00, 1.00, 1.00, 1.00, 4.00, '2567-02-01', 1),
-(10, 1.00, 1.00, 1.00, 1.00, 4.00, '2552-01-01', 13),
-(13, 25000.00, 750.00, 750.00, 100.00, 26600.00, '2567-01-01', 1),
-(16, 20000.00, 700.00, 150.00, 200.00, 21050.00, '2566-01-01', 1),
-(17, 1.00, 1.00, 1.00, 1.00, 4.00, '2567-01-01', 13),
-(28, 1.00, 1.00, 1.00, 1.00, 4.00, '2563-01-01', 1),
-(29, 1.00, 1.00, 1.00, 1.00, 4.00, '2564-01-01', 1),
-(33, 11.00, 11.00, 11.00, 11.00, 44.00, '2562-01-01', 1);
+(14, 20000.00, 200.00, 200.00, 200.00, 20600.00, '2567-01-01', 1),
+(15, 2000.00, 2000.00, 2000.00, 200.00, 6200.00, '2566-02-01', 1);
 
 -- --------------------------------------------------------
 
@@ -890,20 +1893,21 @@ INSERT INTO `salary` (`salary_id`, `salary`, `ot`, `social_security`, `other`, `
 CREATE TABLE `users` (
   `user_id` int(4) NOT NULL,
   `username` varchar(100) NOT NULL,
-  `passW` varchar(100) DEFAULT NULL,
-  `lv` char(1) NOT NULL DEFAULT '1' COMMENT '0=admin,1=เจ้าของ,2=พนักงานเอกสาร,3=พนักงานปฏิบัติงาน',
-  `status` char(1) NOT NULL DEFAULT '1' COMMENT '1=ใช้งาน,0=แบน',
-  `users_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `employee_id` int(4) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `passW` varchar(100) NOT NULL,
+  `lv` varchar(1) NOT NULL COMMENT '0=admin,1=เจ้าของ,2=พนักงานเอกสาร,3=พนักงานปฏิบัติงาน',
+  `status` varchar(1) NOT NULL COMMENT '1=ใช้งาน,0=แบน',
+  `users_date` datetime NOT NULL,
+  `employee_id` int(4) NOT NULL,
+  `delete_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `username`, `passW`, `lv`, `status`, `users_date`, `employee_id`) VALUES
-(2, 'admin', '$2y$10$c8vj27z4jfmAEJFl76foR.NWV7ev8Is0zjjeZnVp8VI527nISuh3W', '0', '1', '2024-08-01 21:17:31', 1),
-(19, 'admin2', '$2y$10$liIUq.MhzSgsKxLCBZhtJug81ehqhz8JOlASMs8KDKFFteHwYnpyG', '2', '1', '2024-08-26 21:05:11', 13);
+INSERT INTO `users` (`user_id`, `username`, `passW`, `lv`, `status`, `users_date`, `employee_id`, `delete_at`) VALUES
+(2, 'admin', '$2y$10$c8vj27z4jfmAEJFl76foR.NWV7ev8Is0zjjeZnVp8VI527nISuh3W', '0', '1', '2024-08-26 22:49:06', 1, '2024-09-28 17:38:00'),
+(34, 'view', '$2y$10$qRo0vVrwB3rxbhLZ6/txbezqvCRpxMySATaHlZ/aY3muon3p67fwG', '3', '1', '2024-09-28 22:39:07', 31, '2024-09-28 17:38:00');
 
 --
 -- Indexes for dumped tables
@@ -919,25 +1923,63 @@ ALTER TABLE `au_all`
 -- Indexes for table `bill`
 --
 ALTER TABLE `bill`
-  ADD PRIMARY KEY (`bill_id`);
+  ADD PRIMARY KEY (`bill_id`),
+  ADD KEY `employee_id` (`employee_id`);
+
+--
+-- Indexes for table `bill_bank`
+--
+ALTER TABLE `bill_bank`
+  ADD PRIMARY KEY (`bank_id`);
 
 --
 -- Indexes for table `bill_detail`
 --
 ALTER TABLE `bill_detail`
-  ADD PRIMARY KEY (`bill_id`,`au_id`);
+  ADD PRIMARY KEY (`bill_id`,`au_id`),
+  ADD KEY `au_id` (`au_id`);
 
 --
 -- Indexes for table `cable`
 --
 ALTER TABLE `cable`
-  ADD PRIMARY KEY (`cable_id`);
+  ADD PRIMARY KEY (`cable_id`),
+  ADD KEY `employee_id` (`employee_id`),
+  ADD KEY `drum_id` (`drum_id`),
+  ADD KEY `cable_work_fk` (`cable_work_id`);
+
+--
+-- Indexes for table `cable_work`
+--
+ALTER TABLE `cable_work`
+  ADD PRIMARY KEY (`cable_work_id`);
+
+--
+-- Indexes for table `company_address`
+--
+ALTER TABLE `company_address`
+  ADD PRIMARY KEY (`company_address_id`);
 
 --
 -- Indexes for table `drum`
 --
 ALTER TABLE `drum`
-  ADD PRIMARY KEY (`drum_id`);
+  ADD PRIMARY KEY (`drum_id`),
+  ADD KEY `employee_id` (`employee_id`),
+  ADD KEY `drum_ibfk_2` (`drum_company_id`),
+  ADD KEY `drum_ibfk_3` (`drum_cable_company_id`);
+
+--
+-- Indexes for table `drum_cable_company`
+--
+ALTER TABLE `drum_cable_company`
+  ADD PRIMARY KEY (`drum_cable_company_id`);
+
+--
+-- Indexes for table `drum_company`
+--
+ALTER TABLE `drum_company`
+  ADD PRIMARY KEY (`drum_company_id`);
 
 --
 -- Indexes for table `employee`
@@ -946,86 +1988,138 @@ ALTER TABLE `employee`
   ADD PRIMARY KEY (`employee_id`);
 
 --
--- Indexes for table `files`
---
-ALTER TABLE `files`
-  ADD PRIMARY KEY (`files_id`);
-
---
--- Indexes for table `folders`
---
-ALTER TABLE `folders`
-  ADD PRIMARY KEY (`folders_id`);
-
---
 -- Indexes for table `log`
 --
 ALTER TABLE `log`
-  ADD PRIMARY KEY (`log_id`);
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `salary`
 --
 ALTER TABLE `salary`
-  ADD PRIMARY KEY (`salary_id`);
+  ADD PRIMARY KEY (`salary_id`),
+  ADD KEY `employee_id` (`employee_id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`);
+  ADD PRIMARY KEY (`user_id`),
+  ADD KEY `employee_id` (`employee_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `cable`
+-- AUTO_INCREMENT for table `bill_bank`
 --
-ALTER TABLE `cable`
-  MODIFY `cable_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+ALTER TABLE `bill_bank`
+  MODIFY `bank_id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `cable_work`
+--
+ALTER TABLE `cable_work`
+  MODIFY `cable_work_id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `company_address`
+--
+ALTER TABLE `company_address`
+  MODIFY `company_address_id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `drum`
 --
 ALTER TABLE `drum`
-  MODIFY `drum_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `drum_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+
+--
+-- AUTO_INCREMENT for table `drum_cable_company`
+--
+ALTER TABLE `drum_cable_company`
+  MODIFY `drum_cable_company_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `drum_company`
+--
+ALTER TABLE `drum_company`
+  MODIFY `drum_company_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `employee_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT for table `files`
---
-ALTER TABLE `files`
-  MODIFY `files_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
-
---
--- AUTO_INCREMENT for table `folders`
---
-ALTER TABLE `folders`
-  MODIFY `folders_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `employee_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `log`
 --
 ALTER TABLE `log`
-  MODIFY `log_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=254;
+  MODIFY `log_id` int(8) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1433;
 
 --
 -- AUTO_INCREMENT for table `salary`
 --
 ALTER TABLE `salary`
-  MODIFY `salary_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `salary_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `user_id` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bill`
+--
+ALTER TABLE `bill`
+  ADD CONSTRAINT `bill_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`);
+
+--
+-- Constraints for table `bill_detail`
+--
+ALTER TABLE `bill_detail`
+  ADD CONSTRAINT `bill_detail_ibfk_1` FOREIGN KEY (`bill_id`) REFERENCES `bill` (`bill_id`),
+  ADD CONSTRAINT `bill_detail_ibfk_2` FOREIGN KEY (`au_id`) REFERENCES `au_all` (`au_id`);
+
+--
+-- Constraints for table `cable`
+--
+ALTER TABLE `cable`
+  ADD CONSTRAINT `cable_work_fk` FOREIGN KEY (`cable_work_id`) REFERENCES `cable_work` (`cable_work_id`);
+
+--
+-- Constraints for table `drum`
+--
+ALTER TABLE `drum`
+  ADD CONSTRAINT `drum_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`),
+  ADD CONSTRAINT `drum_ibfk_2` FOREIGN KEY (`drum_company_id`) REFERENCES `drum_company` (`drum_company_id`),
+  ADD CONSTRAINT `drum_ibfk_3` FOREIGN KEY (`drum_cable_company_id`) REFERENCES `drum_cable_company` (`drum_cable_company_id`);
+
+--
+-- Constraints for table `log`
+--
+ALTER TABLE `log`
+  ADD CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `salary`
+--
+ALTER TABLE `salary`
+  ADD CONSTRAINT `salary_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`);
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`employee_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
