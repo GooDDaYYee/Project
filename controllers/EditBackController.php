@@ -4,7 +4,6 @@ require 'libs/phpspreadsheet/vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-
 class EditBackController extends BaseController
 {
     public function __construct()
@@ -19,7 +18,7 @@ class EditBackController extends BaseController
 
     public function index()
     {
-        $pageTitle = 'ข้อมูลเชิงลึก - PSNK TELECOM';
+        $pageTitle = 'แก้ไขข้อมูลเชิงลึก - PSNK TELECOM';
         $data = $this->QryDb();
         $this->render('edit_back/index', ['pageTitle' => $pageTitle, 'data' => $data]);
     }

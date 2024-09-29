@@ -23,7 +23,7 @@
 </style>
 <div class="container-xl">
     <div class="text-center">
-        <h1 class="h2 text-gray-900 mb-3">ข้อมูลเชิงลึก</h1>
+        <h1 class="h2 text-gray-900 mb-3">แก้ไขข้อมูลเชิงลึก</h1>
     </div>
     <div class="row">
         <div class="col-6 mb-4">
@@ -130,7 +130,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4>เพิ่ม AU ทั้งหมด</h4>
-                    <p style="color: red; font-size: 14px;">*ข้อมูลเก่าจะถูกลบ และแทนที่ใหม่ทั้งหมด โปรดอัปโหลดไฟล์ Excel (.xls หรือ .xlsx)*</p>
+                    <p style="color: red; font-size: 14px;">*ข้อมูลเก่าจะถูกลบ และแทนที่ใหม่ทั้งหมด โปรดอัปโหลดไฟล์ Excel (.xls หรือ .xlsx) และข้อมูลทั้งหมดต้องไม่ถูกเรียกใช้*</p>
                     <div class="row">
                         <form id="auUploadForm" action="index.php?page=edit-back&action=importAU" method="post" enctype="multipart/form-data">
                             <div class="col">

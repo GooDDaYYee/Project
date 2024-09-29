@@ -83,6 +83,10 @@ switch ($page) {
         require_once 'controllers/EditBackController.php';
         $controller = new EditBackController();
         break;
+    case 'au-page':
+        require_once 'controllers/AuPageController.php';
+        $controller = new AuPageController();
+        break;
     default:
         $pageTitle = '404 - Page Not Found';
         $content = '404.php';
