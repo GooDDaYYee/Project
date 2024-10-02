@@ -28,24 +28,18 @@
                                     <h4>รับจากบริษัท</h4>
                                     <select class="form-control" id="drum_company" name="drum_company">
                                         <option value="">เลือกบริษัท</option>
-                                        <option value="Mixed">Mixed</option>
-                                        <option value="FIBERHOME">FIBERHOME</option>
-                                        <option value="FBH">FBH</option>
-                                        <option value="CCS">CCS</option>
-                                        <option value="W&W">W&W</option>
-                                        <option value="TKI">TKI</option>
-                                        <option value="MTE">MTE</option>
-                                        <option value="Poonsub">Poonsub</option>
+                                        <?php foreach ($drum_companies as $company): ?>
+                                            <option value="<?= htmlspecialchars($company['drum_company_id']) ?>"><?= htmlspecialchars($company['drum_company_detail']) ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
                                     <h4>บริษัทผลิตสาย</h4>
                                     <select class="form-control" id="drum_cable_company" name="drum_cable_company">
                                         <option value="">เลือกบริษัท</option>
-                                        <option value="FUTONG">FUTONG</option>
-                                        <option value="FIBERHOME">FIBERHOME</option>
-                                        <option value="TICC">TICC</option>
-                                        <option value="TUC">TUC</option>
+                                        <?php foreach ($drum_cable_companies as $company): ?>
+                                            <option value="<?= htmlspecialchars($company['drum_cable_company_id']) ?>"><?= htmlspecialchars($company['drum_cable_company_detail']) ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
@@ -65,7 +59,6 @@
 
     <script>
         $(document).ready(function() {
-            // sweetalert editForm
             $('#insert_drum').on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
@@ -74,7 +67,7 @@
                     data: $(this).serialize(),
                     dataType: 'json',
                     success: function(response) {
-                        console.log(response)
+                        console.log(response);
                         if (response.success) {
                             Swal.fire({
                                 icon: 'success',
@@ -87,15 +80,16 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'ไม่สำเร็จ',
-                                text: response.message,
+                                text: response.message || 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล',
                             });
                         }
                     },
-                    error: function() {
+                    error: function(xhr, status, error) {
+                        console.error(xhr, status, error);
                         Swal.fire({
                             icon: 'error',
                             title: 'ไม่สำเร็จ',
-                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error,
                         });
                     }
                 });
