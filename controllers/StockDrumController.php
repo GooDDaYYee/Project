@@ -5,10 +5,7 @@ class StockDrumController extends BaseController
 {
     public function index()
     {
-        $drums = $this->fetchDrums();
-        $data = [
-            'drums' => $drums
-        ];
+        $data = $this->fetchDrums();
 
         $pageTitle = 'สต๊อกดั้ม - PSNK TELECOM';
         $this->render('stock_drum/index', ['pageTitle' => $pageTitle, 'data' => $data]);
@@ -20,6 +17,26 @@ class StockDrumController extends BaseController
             $this->createDrum();
         } else {
             $this->showCreateForm();
+        }
+    }
+
+    private function fetchDrums()
+    {
+        $query = "SELECT d.*, 
+                     dcc.drum_cable_company_detail,
+                     dc.drum_company_detail
+              FROM drum d
+              LEFT JOIN drum_cable_company dcc ON d.drum_cable_company_id = dcc.drum_cable_company_id
+              LEFT JOIN drum_company dc ON d.drum_company_id = dc.drum_company_id
+              ORDER BY d.drum_date ASC";
+
+        try {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("เกิดข้อผิดพลาดในการดึงข้อมูล Drum: " . $e->getMessage());
+            return [];
         }
     }
 
@@ -96,19 +113,6 @@ class StockDrumController extends BaseController
             } catch (PDOException) {
                 $this->errorResponse();
             }
-        }
-    }
-
-    private function fetchDrums()
-    {
-        $strsql = "SELECT * FROM drum ORDER BY drum_date ASC";
-        try {
-            $stmt = $this->db->prepare($strsql);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("เกิดข้อผิดพลาดในการดึงข้อมูล Drum: " . $e->getMessage());
-            return [];
         }
     }
 

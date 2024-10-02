@@ -113,122 +113,130 @@
 </div>
 
 <script>
-    let table = new DataTable('#myTable', {
-        language: {
-            emptyTable: "ไม่มีข้อมูล",
-            lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-            info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-            infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-            infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-            search: "ค้นหา:",
-            zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
-        }
-    });
-
-    $('.edit-employee').click(function() {
-        var EmployeeId = $(this).data('id');
-        var EmployeeName = $(this).data('name');
-        var EmployeeLastname = $(this).data('lastname');
-        var EmployeeAge = $(this).data('age');
-        var EmployeePhone = $(this).data('phone');
-        var EmployeeEmail = $(this).data('email');
-        var EmployeePosition = $(this).data('position');
-        var EmployeeStatus = $(this).data('status');
-
-        $('#edit-employee-id').val(EmployeeId);
-        $('#edit-employee-name').val(EmployeeName);
-        $('#edit-employee-lastname').val(EmployeeLastname);
-        $('#edit-employee-age').val(EmployeeAge);
-        $('#edit-employee-phone').val(EmployeePhone);
-        $('#edit-employee-email').val(EmployeeEmail);
-        $('#edit-employee-position').val(EmployeePosition);
-        $('#edit-employee-status').val(EmployeeStatus);
-
-        $('#editModal').modal('show');
-    });
-
-    $('#editForm').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'index.php?page=employee&action=updateEmployee',
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สำเร็จ',
-                        text: 'แก้ไขข้อมูลพนักงานสำเร็จ',
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ไม่สำเร็จ',
-                        text: response.message,
-                    });
-                }
+    $(document).ready(function() {
+        let table = new DataTable('#myTable', {
+            pageLength: 10,
+            language: {
+                emptyTable: "ไม่มีข้อมูล",
+                lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
+                info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
+                infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
+                search: "ค้นหา:",
+                zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
             },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ไม่สำเร็จ',
-                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-                });
+            drawCallback: function() {
+                // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
+                addEventListener();
             }
         });
-    });
 
-    $('.delete-employee').click(function() {
-        var employeeid = $(this).data('id');
-        var index = $(this).data('index');
+        function addEventListener() {
+            $('.edit-employee').off('click').on('click', function() {
+                var EmployeeId = $(this).data('id');
+                var EmployeeName = $(this).data('name');
+                var EmployeeLastname = $(this).data('lastname');
+                var EmployeeAge = $(this).data('age');
+                var EmployeePhone = $(this).data('phone');
+                var EmployeeEmail = $(this).data('email');
+                var EmployeePosition = $(this).data('position');
+                var EmployeeStatus = $(this).data('status');
 
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            html: "คุณต้องการลบข้อมูลพนักงาน " + index + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลพนักงาน ข้อมูลผู้ใช้จะหายไปด้วย !!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ใช่',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: 'index.php?page=employee&action=deleteEmployee',
-                    method: 'POST',
-                    data: {
-                        employeeid: employeeid
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'ลบสำเร็จ',
-                                text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'ไม่สำเร็จ',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ไม่สำเร็จ',
-                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                $('#edit-employee-id').val(EmployeeId);
+                $('#edit-employee-name').val(EmployeeName);
+                $('#edit-employee-lastname').val(EmployeeLastname);
+                $('#edit-employee-age').val(EmployeeAge);
+                $('#edit-employee-phone').val(EmployeePhone);
+                $('#edit-employee-email').val(EmployeeEmail);
+                $('#edit-employee-position').val(EmployeePosition);
+                $('#edit-employee-status').val(EmployeeStatus);
+
+                $('#editModal').modal('show');
+            });
+
+            $('.delete-employee').off('click').on('click', function() {
+                var employeeid = $(this).data('id');
+                var index = $(this).data('index');
+
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    html: "คุณต้องการลบข้อมูลพนักงาน " + index + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลพนักงาน ข้อมูลผู้ใช้จะหายไปด้วย !!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ใช่',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'index.php?page=employee&action=deleteEmployee',
+                            method: 'POST',
+                            data: {
+                                employeeid: employeeid
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'ลบสำเร็จ',
+                                        text: 'ลบพนักงาน ' + index + ' เรียบร้อยแล้ว!',
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'ไม่สำเร็จ',
+                                        text: response.message,
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไม่สำเร็จ',
+                                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                                });
+                            }
                         });
                     }
                 });
-            }
+            });
+        }
+        $('#editForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'index.php?page=employee&action=updateEmployee',
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'แก้ไขข้อมูลพนักงานสำเร็จ',
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                    });
+                }
+            });
         });
     });
 </script>

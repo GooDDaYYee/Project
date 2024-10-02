@@ -35,24 +35,33 @@
 </div>
 
 <script>
-    let table = new DataTable('#myTable', {
-        language: {
-            emptyTable: "ไม่มีข้อมูล",
-            lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-            info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-            infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-            infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-            search: "ค้นหา:",
-            zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
-        }
-    });
-
-    // Add confirmation for folder deletion
-    document.querySelectorAll('.delete-folder').forEach(button => {
-        button.addEventListener('click', function(e) {
-            if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบโฟลเดอร์นี้?')) {
-                e.preventDefault();
+    $(document).ready(function() {
+        let table = new DataTable('#myTable', {
+            pageLength: 10,
+            language: {
+                emptyTable: "ไม่มีข้อมูล",
+                lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
+                info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
+                infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
+                search: "ค้นหา:",
+                zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
+            },
+            drawCallback: function() {
+                // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
+                addEventListener();
             }
         });
+
+        function addEventListener() {
+            // Add confirmation for folder deletion
+            document.querySelectorAll('.delete-folder').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบโฟลเดอร์นี้?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
     });
 </script>

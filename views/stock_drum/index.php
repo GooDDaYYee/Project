@@ -26,14 +26,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($data['drums'] as $index => $drum): ?>
+                    <?php foreach ($data as $index => $drum): ?>
                         <tr>
                             <td><?= $index + 1 ?></td>
-                            <td><?= htmlspecialchars($drum['drum_cable_company']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_cable_company_detail'] ?? 'ไม่ระบุ') ?></td>
                             <td><?= htmlspecialchars($drum['drum_no']) ?></td>
                             <td><?= htmlspecialchars($drum['drum_to']) ?></td>
                             <td><?= htmlspecialchars($drum['drum_description']) ?></td>
-                            <td><?= htmlspecialchars($drum['drum_company']) ?></td>
+                            <td><?= htmlspecialchars($drum['drum_company_detail'] ?? 'ไม่ระบุ') ?></td>
                             <td><?= htmlspecialchars($drum['drum_full']) ?> เมตร</td>
                             <td><?= htmlspecialchars($drum['drum_used']) ?> เมตร</td>
                             <td><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</td>
@@ -119,6 +119,7 @@
 <script>
     $(document).ready(function() {
         let table = new DataTable('#myTable', {
+            pageLength: 10,
             language: {
                 emptyTable: "ไม่มีข้อมูล",
                 lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
@@ -127,70 +128,107 @@
                 infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
                 search: "ค้นหา:",
                 zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
+            },
+            drawCallback: function() {
+                addEventListener();
             }
         });
 
-        $('#saveEditDrum').click(function() {
-            var formData = $('#editDrumForm').serialize();
-            $.ajax({
-                url: 'index.php?page=stock-drum&action=updateDrum',
-                method: 'POST',
-                data: formData,
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire('สำเร็จ', 'แก้ไขข้อมูล Drum สำเร็จ', 'success').then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire('ไม่สำเร็จ', response.message);
-                    }
-                },
-                error: function() {
-                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
-                }
-            });
-        });
-
-        $('.delete-drum').click(function() {
-            var drum_id = $(this).data('id');
-            var index = $(this).data('index');
-
-            Swal.fire({
-                title: 'คุณแน่ใจหรือไม่?',
-                text: "คุณต้องการลบข้อมูล Drum ลำดับที่ " + index + " หรือไม่?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'ใช่',
-                cancelButtonText: 'ยกเลิก'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: 'index.php?page=stock-drum&action=deleteDrum',
-                        method: 'POST',
-                        data: {
-                            drum_id: drum_id
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Drum ลำดับที่ ' + index + ' เรียบร้อยแล้ว!', 'success')
-                                    .then(() => {
-                                        location.reload();
-                                    });
-                            } else {
-                                Swal.fire('ไม่สำเร็จ', response.message, 'error');
-                            }
-                        },
-                        error: function() {
-                            Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+        function addEventListener() {
+            $('#saveEditDrum').off('click').on('click', function() {
+                var formData = $('#editDrumForm').serialize();
+                $.ajax({
+                    url: 'index.php?page=stock-drum&action=updateDrum',
+                    method: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('สำเร็จ', 'แก้ไขข้อมูล Drum สำเร็จ', 'success').then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('ไม่สำเร็จ', response.message);
                         }
-                    });
-                }
+                    },
+                    error: function() {
+                        Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+                    }
+                });
             });
-        });
+
+            $('.delete-drum').off('click').on('click', function() {
+                var drum_id = $(this).data('id');
+                var index = $(this).data('index');
+
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "คุณต้องการลบข้อมูล Drum ลำดับที่ " + index + " หรือไม่?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ใช่',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'index.php?page=stock-drum&action=deleteDrum',
+                            method: 'POST',
+                            data: {
+                                drum_id: drum_id
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Drum ลำดับที่ ' + index + ' เรียบร้อยแล้ว!', 'success')
+                                        .then(() => {
+                                            location.reload();
+                                        });
+                                } else {
+                                    Swal.fire('ไม่สำเร็จ', response.message, 'error');
+                                }
+                            },
+                            error: function() {
+                                Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Fetch drum details when edit button is clicked
+            $('.edit-drum').off('click').on('click', function() {
+                var drumId = $(this).data('id');
+                $.ajax({
+                    url: 'index.php?page=stock-drum&action=getDrumDetails',
+                    method: 'GET',
+                    data: {
+                        drum_id: drumId
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            editDrum(
+                                response.data.drum_id,
+                                response.data.drum_no,
+                                response.data.drum_to,
+                                response.data.drum_description,
+                                response.data.drum_company,
+                                response.data.drum_cable_company,
+                                response.data.drum_full,
+                                response.data.drum_used
+                            );
+                        } else {
+                            Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Drum ได้', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+                    }
+                });
+            });
+        }
 
         function editDrum(drumId, drumNo, drumTo, drumDescription, drumCompany, drumCableCompany, drumFull, drumUsed) {
             $('#edit_drum_id').val(drumId);
@@ -236,38 +274,6 @@
 
             $('#editDrumModal').modal('show');
         }
-
-        // Fetch drum details when edit button is clicked
-        $('.edit-drum').click(function() {
-            var drumId = $(this).data('id');
-            $.ajax({
-                url: 'index.php?page=stock-drum&action=getDrumDetails',
-                method: 'GET',
-                data: {
-                    drum_id: drumId
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        editDrum(
-                            response.data.drum_id,
-                            response.data.drum_no,
-                            response.data.drum_to,
-                            response.data.drum_description,
-                            response.data.drum_company,
-                            response.data.drum_cable_company,
-                            response.data.drum_full,
-                            response.data.drum_used
-                        );
-                    } else {
-                        Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Drum ได้', 'error');
-                    }
-                },
-                error: function() {
-                    Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
-                }
-            });
-        });
 
         $('#editDrumForm').on('submit', function() {
             $('#edit_drum_no, #edit_drum_company, #edit_drum_cable_company, #edit_drum_full').prop('disabled', false);

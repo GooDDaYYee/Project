@@ -218,8 +218,21 @@ abstract class BaseController
             $company = $_POST['company'];
             $docType = $_POST['documentType'];
 
+            $queries = [
+                'address_psnk' => "SELECT * FROM company_address WHERE company_address_type = 0",
+                'address_mixed' => "SELECT * FROM company_address WHERE company_address_type = 1",
+                'address_fbh' => "SELECT * FROM company_address WHERE company_address_type = 2",
+                'address_bank' => "SELECT * FROM bill_bank WHERE bank_id = 1",
+            ];
             $strsql = "SELECT * FROM bill WHERE bill_id = ?";
             try {
+                $results = [];
+                foreach ($queries as $key => $query) {
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute();
+                    $results[$key] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                }
+
                 $stmt = $this->db->prepare($strsql);
                 $stmt->execute([$billId]);
                 $bill = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -298,13 +311,9 @@ abstract class BaseController
                         <table>
                             <tr>
                                 <td colspan="3" style="border: none; vertical-align: top;" class="center">
-                                    <div class="header">
-                                        <h2>บริษัท พีเอสเอ็นเค เทเลคอม จำกัด (สำนักงานใหญ่)</h2>
-                                        <h2>PSNK Telecom Company Limited (Head office)</h2>
-                                        <p>เลขที่ 99/2 หมู่ที่ 9 ตำบลสันทรายน้อย อำเภอสันทราย จังหวัดเชียงใหม่ 50130</p>
-                                        <p>Tel : 063-5415398 , 064-1954565 , 064-7898995 | E-Mail: psnktelecom@gmail.com</p>
-                                        <p>เลขประจำตัวผู้เสียภาษี 0-5055-64000-43-4</p>
-                                    </div>
+                                    <div class="header">'
+                        .  $results['address_psnk'][0]['company_address_detaill'] .
+                        '</div>
                                 </td>
                                 <td colspan="4" style="border: none; vertical-align: top;" class="center">
                                     <div class="header">';
@@ -331,28 +340,22 @@ abstract class BaseController
                     if ($company == 'mixed') {
                         $html .= '
                                 <tr>
-                                <td colspan="3" style="vertical-align: top;" class="left">
-                                    <strong>Customer : Mixed System Co.,Ltd</strong>
-                                    <br>Address : 1 ซ.อินทามระ 41 แขวงดินแดง เขตดินแดง กรุงเทพฯ 10400 ประเทศไทย
-                                    <br>Tax ID : 0-1055-49093-10-2
-                                </td>
-                                <td colspan="4" style="vertical-align: top;" class="left">
-                                    <strong>ผู้ติดต่อ : Management Center</strong>
-                                    <br>Tel.02 276-2236-8 Fax : 02 276-2239
-                                </td>
+                                <td colspan="3" style="vertical-align: top;" class="left">'
+                            .  $results['address_mixed'][0]['company_address_detaill'] .
+                            '</td>
+                                <td colspan="4" style="vertical-align: top;" class="left">'
+                            .  $results['address_mixed'][0]['company_address_name'] .
+                            '</td>
                             </tr>';
                     } elseif ($company == 'FBH') {
                         $html .= '
                                 <tr>
-                                <td colspan="3" style="vertical-align: top;" class="left">
-                                    <strong>Customer : บริษัท ไวร์เออ แอนด์ ไวร์เลส จำกัด</strong>
-                                    <br>Address : 240/64-67 อาคารอโยธยาทาวเวอร์ ชั้น 26 ถนนรัชดาภิเษก แขวงห้วยขวาง เขตห้วยขวาง กรุงเทพมหานคร 10310
-                                    <br>Tax ID : 0105538013293 สำนักงานใหญ่
-                                </td>
-                                <td colspan="4" style="vertical-align: top;" class="left">
-                                    <strong>ผู้ติดต่อ : Chavisa Wisetwohan</strong>
-                                    <br>Tel.02 276-2236-8 Fax : 099-614-9196
-                                </td>
+                                <td colspan="3" style="vertical-align: top;" class="left">'
+                            .  $results['address_fbh'][0]['company_address_detaill'] .
+                            '</td>
+                                <td colspan="4" style="vertical-align: top;" class="left">'
+                            .  $results['address_fbh'][0]['company_address_name'] .
+                            '</td>
                             </tr>';
                     }
                     $html .= '
@@ -448,12 +451,10 @@ abstract class BaseController
                     } elseif ($docType == 'receipt') {
                         $html .= '4';
                     }
-                    $html .= '" style="vertical-align: top;" class="left">
-                                หมายเหตุ  : ชำระเป็น เงินสด โอนเข้าบัญชี
-                                <br>ธนาคาร กสิกรไทย สาขา บ่อสร้าง ประเภท ออมทรัพย์
-                                <br>ในนาม บริษัท พีเอสเอ็นเค เทเลคอม จำกัด (สำนักงานใหญ่)
-                                <br>บัญชีเลขที่ 086-3-06705-7
-                        </td>
+                    $html .= '" style="vertical-align: top;" class="left">'
+                        //แสดข้อมูล ธนาคาร
+                        .  $results['address_bank'][0]['bank_detail'] .
+                        '</td>
                         <td class="right"><strong>Final BOQ 100%</strong></td>
                         <td class="right">' . number_format($bill['total_amount'], 2, '.', ',') . '</td>
                     </tr>

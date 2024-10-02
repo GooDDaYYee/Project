@@ -38,9 +38,9 @@ class AuPageController extends BaseController
 
     public function updateAu()
     {
-        // if (!isset($_POST['au_id']) || empty($_POST['au_id'])) {
-        //     $this->errorResponse();
-        // }
+        if (!isset($_POST['edit-au']) || empty($_POST['au_id'])) {
+            $this->errorResponse();
+        }
 
         $au = $_POST['edit-au'];
         $detail = $_POST['edit-detail'];

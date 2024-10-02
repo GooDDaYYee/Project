@@ -17,7 +17,7 @@ class EmployeeController extends BaseController
 
     private function fetchEmployees()
     {
-        $strsql = "SELECT * FROM employee ORDER BY employee_date ASC";
+        $strsql = "SELECT * FROM employee WHERE delete_at IS NULL ORDER BY employee_date ASC";
         try {
             $stmt = $this->db->prepare($strsql);
             $stmt->execute();
@@ -77,12 +77,10 @@ class EmployeeController extends BaseController
             try {
                 $this->db->beginTransaction();
 
-                // Delete related user account if exists
-                $stmt = $this->db->prepare("DELETE FROM users WHERE employee_id = :employee_id");
-                $stmt->execute([':employee_id' => $employee_id]);
+                $stmt2 = $this->db->prepare("UPDATE users SET delete_at = CURRENT_TIMESTAMP, status = 0 WHERE employee_id = :employee_id");
+                $stmt2->execute([':employee_id' => $employee_id]);
 
-                // Delete employee
-                $stmt = $this->db->prepare("DELETE FROM employee WHERE employee_id = :employee_id");
+                $stmt = $this->db->prepare("UPDATE employee SET delete_at = CURRENT_TIMESTAMP WHERE employee_id = :employee_id");
                 $stmt->execute([':employee_id' => $employee_id]);
 
                 $this->db->commit();

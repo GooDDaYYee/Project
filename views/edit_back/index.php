@@ -114,7 +114,6 @@
                 </div>
             </div>
         </div>
-
         <?php
         $stmt = $this->db->query("SELECT COUNT(*) as total FROM au_all");
         $totalCount = $stmt->fetchColumn();

@@ -126,116 +126,124 @@
 </div>
 
 <script>
-    let table = new DataTable('#myTable', {
-        language: {
-            emptyTable: "กรุณาเลือก เดือน และปี ก่อนดูข้อมูลเงินเดือน",
-            lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-            info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-            infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-            infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-            search: "ค้นหา:",
-            zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
-        }
-    });
-
-    $('.edit-salary').click(function() {
-        var salaryId = $(this).data('salary_id');
-        var salary = $(this).data('salary');
-        var ot = $(this).data('ot');
-        var socialSecurity = $(this).data('social_security');
-        var other = $(this).data('other');
-
-        $('#edit-salary-id').val(salaryId);
-        $('#edit-salary').val(salary);
-        $('#edit-ot').val(ot);
-        $('#edit-social_security').val(socialSecurity);
-        $('#edit-other').val(other);
-
-        $('#editModal').modal('show');
-    });
-
-    $('#editForm').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'index.php?page=employee-salary&action=updateSalary',
-            method: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สำเร็จ',
-                        text: 'แก้ไขข้อมูลเงินเดือนสำเร็จ',
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ไม่สำเร็จ',
-                        text: response.message,
-                    });
-                }
+    $(document).ready(function() {
+        let table = new DataTable('#myTable', {
+            pageLength: 10,
+            language: {
+                emptyTable: "กรุณาเลือก เดือน และปี ก่อนดูข้อมูลเงินเดือน",
+                lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
+                info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
+                infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
+                search: "ค้นหา:",
+                zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
             },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ไม่สำเร็จ',
-                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-                });
+            drawCallback: function() {
+                // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
+                addEventListener();
             }
         });
-    });
 
-    $('.delete-salary').click(function() {
-        var salaryId = $(this).data('salary_id');
-        var index = $(this).data('index');
+        function addEventListener() {
+            $('.edit-salary').off('click').on('click', function() {
+                var salaryId = $(this).data('salary_id');
+                var salary = $(this).data('salary');
+                var ot = $(this).data('ot');
+                var socialSecurity = $(this).data('social_security');
+                var other = $(this).data('other');
 
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: "คุณต้องการลบเงินเดือนลำดับที่ " + index + " หรือไม่?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ใช่',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: 'index.php?page=employee-salary&action=deleteSalary',
-                    method: 'POST',
-                    data: {
-                        salary_id: salaryId
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'ลบสำเร็จ',
-                                text: 'ลบเงินเดือนลำดับที่ ' + index + ' เรียบร้อยแล้ว!',
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'ไม่สำเร็จ',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ไม่สำเร็จ',
-                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                $('#edit-salary-id').val(salaryId);
+                $('#edit-salary').val(salary);
+                $('#edit-ot').val(ot);
+                $('#edit-social_security').val(socialSecurity);
+                $('#edit-other').val(other);
+
+                $('#editModal').modal('show');
+            });
+
+            $('.delete-salary').off('click').on('click', function() {
+                var salaryId = $(this).data('salary_id');
+                var index = $(this).data('index');
+
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "คุณต้องการลบเงินเดือนลำดับที่ " + index + " หรือไม่?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ใช่',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'index.php?page=employee-salary&action=deleteSalary',
+                            method: 'POST',
+                            data: {
+                                salary_id: salaryId
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'ลบสำเร็จ',
+                                        text: 'ลบเงินเดือนลำดับที่ ' + index + ' เรียบร้อยแล้ว!',
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'ไม่สำเร็จ',
+                                        text: response.message,
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไม่สำเร็จ',
+                                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                                });
+                            }
                         });
                     }
                 });
-            }
+            });
+        }
+        $('#editForm').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'index.php?page=employee-salary&action=updateSalary',
+                method: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'แก้ไขข้อมูลเงินเดือนสำเร็จ',
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+                    });
+                }
+            });
         });
     });
 </script>

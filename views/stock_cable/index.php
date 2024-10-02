@@ -99,106 +99,30 @@
 </div>
 
 <script>
-    let table = new DataTable('#myTable', {
-        language: {
-            emptyTable: "ไม่มีข้อมูล",
-            lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-            info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-            infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-            infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-            search: "ค้นหา:",
-            zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
-        }
-    });
-    $('.edit-btn').click(function() {
-        const cableId = $(this).data('id');
-        // Fetch cable details and populate the form
-        $.ajax({
-            url: 'index.php?page=stock-cable&action=fetchCableDetails',
-            method: 'POST',
-            data: {
-                cable_id: cableId
+    $(document).ready(function() {
+        let table = new DataTable('#myTable', {
+            pageLength: 10,
+            language: {
+                emptyTable: "ไม่มีข้อมูล",
+                lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
+                info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+                infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
+                infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
+                search: "ค้นหา:",
+                zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
             },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    $('#editCableId').val(response.data.cable_id);
-                    $('#editRoute').val(response.data.route_name);
-                    $('#editSection').val(response.data.installed_section);
-                    $('#editTeam').val(response.data.placing_team);
-                    $('#editCableFrom').val(response.data.cable_form);
-                    $('#editCableTo').val(response.data.cable_to);
-                    $('#editCableWork').val(response.data.cable_work);
-                    $('#editDrumId').val(response.data.drum_id);
-                    $('#editModal').modal('show');
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ไม่สำเร็จ',
-                        text: response.message
-                    });
-                }
-            },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ไม่สำเร็จ',
-                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์'
-                });
+            drawCallback: function() {
+                // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
+                addEventListener();
             }
         });
-    });
 
-    $('#saveChanges').click(function() {
-        $.ajax({
-            url: 'index.php?page=stock-cable&action=update',
-            method: 'POST',
-            data: $('#editForm').serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    $('#editModal').modal('hide');
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สำเร็จ',
-                        text: 'อัปเดตข้อมูล Cable สำเร็จ',
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ไม่สำเร็จ',
-                        text: response.message
-                    });
-                }
-            },
-            error: function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'ไม่สำเร็จ',
-                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์'
-                });
-            }
-        });
-    });
-
-    $('.delete-btn').click(function() {
-        const cableId = $(this).data('id');
-        const id = $(this).data('id');
-        Swal.fire({
-            title: 'คุณแน่ใจหรือไม่?',
-            text: "คุณต้องการลบข้อมูล" + id + "นี้หรือไม่?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'ใช่, ลบเลย!',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
+        function addEventListener() {
+            $('.edit-btn').off('click').on('click', function() {
+                const cableId = $(this).data('id');
+                // Fetch cable details and populate the form
                 $.ajax({
-                    url: 'index.php?page=stock-cable&action=delete',
+                    url: 'index.php?page=stock-cable&action=fetchCableDetails',
                     method: 'POST',
                     data: {
                         cable_id: cableId
@@ -206,11 +130,47 @@
                     dataType: 'json',
                     success: function(response) {
                         if (response.success) {
-                            Swal.fire(
-                                'ลบสำเร็จ!',
-                                'ข้อมูล Cable ถูกลบเรียบร้อยแล้ว',
-                                'success'
-                            ).then(() => {
+                            $('#editCableId').val(response.data.cable_id);
+                            $('#editRoute').val(response.data.route_name);
+                            $('#editSection').val(response.data.installed_section);
+                            $('#editTeam').val(response.data.placing_team);
+                            $('#editCableFrom').val(response.data.cable_form);
+                            $('#editCableTo').val(response.data.cable_to);
+                            $('#editCableWork').val(response.data.cable_work);
+                            $('#editDrumId').val(response.data.drum_id);
+                            $('#editModal').modal('show');
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ไม่สำเร็จ',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ไม่สำเร็จ',
+                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์'
+                        });
+                    }
+                });
+            });
+
+            $('#saveChanges').off('click').on('click', function() {
+                $.ajax({
+                    url: 'index.php?page=stock-cable&action=update',
+                    method: 'POST',
+                    data: $('#editForm').serialize(),
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#editModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'สำเร็จ',
+                                text: 'อัปเดตข้อมูล Cable สำเร็จ',
+                            }).then(() => {
                                 location.reload();
                             });
                         } else {
@@ -229,7 +189,57 @@
                         });
                     }
                 });
-            }
-        });
+            });
+
+            $('.delete-btn').off('click').on('click', function() {
+                const cableId = $(this).data('id');
+                const id = $(this).data('id');
+                Swal.fire({
+                    title: 'คุณแน่ใจหรือไม่?',
+                    text: "คุณต้องการลบข้อมูล" + id + "นี้หรือไม่?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่, ลบเลย!',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: 'index.php?page=stock-cable&action=delete',
+                            method: 'POST',
+                            data: {
+                                cable_id: cableId
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire(
+                                        'ลบสำเร็จ!',
+                                        'ข้อมูล Cable ถูกลบเรียบร้อยแล้ว',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'ไม่สำเร็จ',
+                                        text: response.message
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไม่สำเร็จ',
+                                    text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        }
     });
 </script>

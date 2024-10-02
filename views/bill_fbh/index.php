@@ -168,64 +168,184 @@
 </div>
 
 <script>
-  let table = new DataTable('#myTable', {
-    language: {
-      emptyTable: "ไม่มีข้อมูล",
-      lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-      info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-      infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-      infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-      search: "ค้นหา:",
-      zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
-    }
-  });
-
-  const auOptions = <?php echo json_encode($data['auOptions']); ?>;
-
-  $('.edit-btn').click(function() {
-    const billid = $(this).data('id');
-    $.ajax({
-      url: 'index.php?page=bill-fbh&action=fetchBillDetails',
-      method: 'POST',
-      data: {
-        bill_id: billid
+  $(document).ready(function() {
+    let table = new DataTable('#myTable', {
+      pageLength: 10,
+      language: {
+        emptyTable: "ไม่มีข้อมูล",
+        lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
+        info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+        infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
+        infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
+        search: "ค้นหา:",
+        zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
       },
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          populateEditForm(response.data.bill, response.data.details);
-          $('#editModal').modal('show');
-        } else {
-          alert('Error fetching bill details: ' + response.message);
-        }
-      },
-      error: function() {
-        alert('Error fetching bill details');
+      drawCallback: function() {
+        // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
+        addEventListener();
       }
     });
-  });
 
-  function populateEditForm(bill, details) {
-    $('#bill_Id').val(bill.bill_id);
-    $('#thai_date').val(bill.bill_date);
-    $('#thai_date_product').val(bill.bill_date_product);
-    $('#payment').val(bill.bill_payment);
-    $('#thai_due_date').val(bill.bill_due_date);
-    $('#refer').val(bill.bill_refer);
-    $('#Site').val(bill.bill_site);
-    $('#pr').val(bill.bill_pr);
-    $('#work_no').val(bill.bill_work_no);
-    $('#project').val(bill.bill_project);
-    $('#auCount').val(details.length);
+    const auOptions = <?php echo json_encode($data['auOptions']); ?>;
 
-    $('#auContainer').empty();
-    details.forEach((detail, index) => {
-      addAUInput(detail, index + 1);
-    });
-  }
+    function addEventListener() {
 
-  function addAUInput(detail, index) {
-    const newInputFrame = $(`
+      $('.edit-btn').off('click').on('click', function() {
+        const billid = $(this).data('id');
+        $.ajax({
+          url: 'index.php?page=bill-fbh&action=fetchBillDetails',
+          method: 'POST',
+          data: {
+            bill_id: billid
+          },
+          dataType: 'json',
+          success: function(response) {
+            if (response.success) {
+              populateEditForm(response.data.bill, response.data.details);
+              $('#editModal').modal('show');
+            } else {
+              alert('Error fetching bill details: ' + response.message);
+            }
+          },
+          error: function() {
+            alert('Error fetching bill details');
+          }
+        });
+      });
+
+      $('#addInputFrame').off('click').on('click', function() {
+        const numAU = parseInt($('#numAU').val());
+        if (numAU > 0) {
+          const currentCount = parseInt($('#auCount').val());
+          for (let i = 0; i < numAU; i++) {
+            addAUInput(null, currentCount + i + 1);
+          }
+          $('#auCount').val(currentCount + numAU);
+        }
+      });
+
+      $('#removeInputFrame').off('click').on('click', function() {
+        const $inputFrames = $('.inputFrame');
+        if ($inputFrames.length > 0) {
+          $inputFrames.last().remove();
+          const currentCount = parseInt($('#auCount').val());
+          $('#auCount').val(currentCount - 1);
+        }
+      });
+
+      $('#saveChanges').off('click').on('click', function() {
+        if (checkDuplicates()) {
+          Swal.fire({
+            icon: 'error',
+            title: 'ไม่สำเร็จ',
+            text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
+          });
+          return;
+        }
+        const formData = $('#editForm').serialize();
+        $.ajax({
+          url: 'index.php?page=bill-fbh&action=updateBill',
+          method: 'POST',
+          data: formData,
+          dataType: 'json',
+          success: function(response) {
+            if (response.success) {
+              Swal.fire({
+                icon: 'success',
+                title: 'สำเร็จ',
+                text: 'แก้ไขข้อมูลบิลสำเร็จ',
+              }).then(() => {
+                location.reload();
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'ไม่สำเร็จ',
+                text: response.message,
+              });
+            }
+          },
+          error: function() {
+            Swal.fire({
+              icon: 'error',
+              title: 'ไม่สำเร็จ',
+              text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
+            });
+          }
+        });
+      });
+
+      // sweetalert delete bill
+      $('.delete-btn').off('click').on('click', function() {
+        var bill_id = $(this).data('id');
+
+        Swal.fire({
+          title: 'คุณแน่ใจหรือไม่?',
+          text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'ใช่',
+          cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: 'index.php?page=bill-fbh&action=deleteBill',
+              method: 'POST',
+              data: {
+                bill_id: bill_id
+              },
+              dataType: 'json',
+              success: function(response) {
+                if (response.success) {
+                  Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
+                    .then(() => {
+                      location.reload();
+                    });
+                } else {
+                  Swal.fire('ไม่สำเร็จ', response.message, 'error');
+                }
+              },
+              error: function() {
+                Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
+              }
+            });
+          }
+        });
+      });
+
+      $('.pdf-btn').off('click').on('click', function() {
+        const billId = $(this).data('id');
+        const company = $(this).data('company');
+        $('#billId').val(billId);
+        $('#company').val(company);
+        $('#documentModal').modal('show');
+      });
+    }
+    //////// end addEventListener()
+
+    function populateEditForm(bill, details) {
+      $('#bill_Id').val(bill.bill_id);
+      $('#thai_date').val(bill.bill_date);
+      $('#thai_date_product').val(bill.bill_date_product);
+      $('#payment').val(bill.bill_payment);
+      $('#thai_due_date').val(bill.bill_due_date);
+      $('#refer').val(bill.bill_refer);
+      $('#Site').val(bill.bill_site);
+      $('#pr').val(bill.bill_pr);
+      $('#work_no').val(bill.bill_work_no);
+      $('#project').val(bill.bill_project);
+      $('#auCount').val(details.length);
+
+      $('#auContainer').empty();
+      details.forEach((detail, index) => {
+        addAUInput(detail, index + 1);
+      });
+    }
+
+    function addAUInput(detail, index) {
+      const newInputFrame = $(`
       <div class="inputFrame">
         <div class="row mt-md-3" style="margin-bottom: 1rem;">
           <div class="col-md-3">
@@ -250,150 +370,41 @@
         </div>
       </div>
     `);
-    $('#auContainer').append(newInputFrame);
+      $('#auContainer').append(newInputFrame);
 
-    $(`#inputField_${index}`).on('input', function() {
-      const selectedOption = $(this).val();
-      fetchAUDetails(selectedOption, index);
-    });
-  }
-
-  function fetchAUDetails(auId, index) {
-    $.ajax({
-      url: 'index.php?page=bill-fbh&action=fetchAUDetails2',
-      method: 'GET',
-      data: {
-        au_id: auId
-      },
-      dataType: 'json',
-      success: function(resp) {
-        $(`#selectedData_${index}`).text(resp.data.au_detail);
-        $(`#selectedDataDetail_${index}`).val(resp.data.au_detail);
-        $(`#selectedDataType_${index}`).val(resp.data.au_type);
-        $(`#selectedDataPrice_${index}`).val(resp.data.au_price);
-      },
-      error: function() {
-        console.log('Error fetching AU details');
-      }
-    });
-  }
-
-  $('#addInputFrame').click(function() {
-    const numAU = parseInt($('#numAU').val());
-    if (numAU > 0) {
-      const currentCount = parseInt($('#auCount').val());
-      for (let i = 0; i < numAU; i++) {
-        addAUInput(null, currentCount + i + 1);
-      }
-      $('#auCount').val(currentCount + numAU);
-    }
-  });
-
-  $('#removeInputFrame').click(function() {
-    const $inputFrames = $('.inputFrame');
-    if ($inputFrames.length > 0) {
-      $inputFrames.last().remove();
-      const currentCount = parseInt($('#auCount').val());
-      $('#auCount').val(currentCount - 1);
-    }
-  });
-
-  $('#saveChanges').click(function() {
-    if (checkDuplicates()) {
-      Swal.fire({
-        icon: 'error',
-        title: 'ไม่สำเร็จ',
-        text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
+      $(`#inputField_${index}`).on('input', function() {
+        const selectedOption = $(this).val();
+        fetchAUDetails(selectedOption, index);
       });
-      return;
     }
 
-    const formData = $('#editForm').serialize();
-    $.ajax({
-      url: 'index.php?page=bill-fbh&action=updateBill',
-      method: 'POST',
-      data: formData,
-      dataType: 'json',
-      success: function(response) {
-        if (response.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'สำเร็จ',
-            text: 'แก้ไขข้อมูลบิลสำเร็จ',
-          }).then(() => {
-            location.reload();
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'ไม่สำเร็จ',
-            text: response.message,
-          });
+    function fetchAUDetails(auId, index) {
+      $.ajax({
+        url: 'index.php?page=bill-fbh&action=fetchAUDetails2',
+        method: 'GET',
+        data: {
+          au_id: auId
+        },
+        dataType: 'json',
+        success: function(resp) {
+          $(`#selectedData_${index}`).text(resp.data.au_detail);
+          $(`#selectedDataDetail_${index}`).val(resp.data.au_detail);
+          $(`#selectedDataType_${index}`).val(resp.data.au_type);
+          $(`#selectedDataPrice_${index}`).val(resp.data.au_price);
+        },
+        error: function() {
+          console.log('Error fetching AU details');
         }
-      },
-      error: function() {
-        Swal.fire({
-          icon: 'error',
-          title: 'ไม่สำเร็จ',
-          text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์',
-        });
-      }
-    });
-  });
+      });
+    }
 
-  function checkDuplicates() {
-    const auIds = $('input[name="inputField[]"]').map(function() {
-      return $(this).val();
-    }).get();
-    const uniqueAuIds = [...new Set(auIds)];
-    return auIds.length !== uniqueAuIds.length;
-  }
+    function checkDuplicates() {
+      const auIds = $('input[name="inputField[]"]').map(function() {
+        return $(this).val();
+      }).get();
+      const uniqueAuIds = [...new Set(auIds)];
+      return auIds.length !== uniqueAuIds.length;
+    }
 
-  // sweetalert delete bill
-  $('.delete-btn').click(function() {
-    var bill_id = $(this).data('id');
-
-    Swal.fire({
-      title: 'คุณแน่ใจหรือไม่?',
-      text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'ใช่',
-      cancelButtonText: 'ยกเลิก'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          url: 'index.php?page=bill-fbh&action=deleteBill',
-          method: 'POST',
-          data: {
-            bill_id: bill_id
-          },
-          dataType: 'json',
-          success: function(response) {
-            if (response.success) {
-              Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
-                .then(() => {
-                  location.reload();
-                });
-            } else {
-              Swal.fire('ไม่สำเร็จ', response.message, 'error');
-            }
-          },
-          error: function() {
-            Swal.fire('ไม่สำเร็จ', 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
-          }
-        });
-      }
-    });
-  });
-
-  $('.pdf-btn').click(function() {
-    const billId = $(this).data('id');
-    const company = $(this).data('company');
-    $('#billId').val(billId);
-    $('#company').val(company);
-    $('#documentModal').modal('show');
   });
 </script>

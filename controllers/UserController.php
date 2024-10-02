@@ -26,12 +26,12 @@ class UserController extends BaseController
 
     private function fetchUsers()
     {
-        $strsql = "SELECT * FROM users ORDER BY users_date ASC";
+        $strsql = "SELECT * FROM users WHERE delete_at IS NULL ORDER BY users_date ASC";
         try {
             $stmt = $this->db->prepare($strsql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+        } catch (PDOException) {
             return [];
         }
     }
@@ -136,34 +136,34 @@ class UserController extends BaseController
             try {
                 $this->db->beginTransaction();
 
-                // ลบข้อมูลที่เกี่ยวข้องในตาราง log ก่อน
-                $stmt = $this->db->prepare("DELETE FROM log WHERE user_id = :user_id");
-                $stmt->execute([':user_id' => $user_id]);
+                // Update log table instead of deleting
+                // $stmt = $this->db->prepare("UPDATE log SET delete_at = CURRENT_TIMESTAMP WHERE user_id = :user_id");
+                // $stmt->execute([':user_id' => $user_id]);
 
-                // ตรวจสอบและลบข้อมูลใน employee ถ้ามี
+                // Check for associated employee record
                 $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
                 $stmt->execute([':user_id' => $user_id]);
                 $employee = $stmt->fetch();
 
                 if ($employee) {
                     $employee_id = $employee['employee_id'];
-                    $stmt = $this->db->prepare("DELETE FROM employee WHERE employee_id = :employee_id");
+                    // Update employee table
+                    $stmt = $this->db->prepare("UPDATE employee SET delete_at = CURRENT_TIMESTAMP WHERE employee_id = :employee_id");
                     $stmt->execute([':employee_id' => $employee_id]);
                 }
 
-                // ลบข้อมูลจากตาราง users
-                $stmt = $this->db->prepare("DELETE FROM users WHERE user_id = :user_id");
+                // Update users table
+                $stmt = $this->db->prepare("UPDATE users SET delete_at = CURRENT_TIMESTAMP, status = 0 WHERE user_id = :user_id");
                 $stmt->execute([':user_id' => $user_id]);
 
                 $this->db->commit();
 
                 $logDetail = "User ID: {$user_id}, Employee ID: " . ($employee_id ?? 'N/A');
-                $this->logAction('User Deleted', $logDetail);
+                $this->logAction('User Soft Deleted', $logDetail);
 
                 $this->successResponse();
             } catch (PDOException $e) {
-                $this->db->rollBack();
-                $this->logAction('Error Deleting User', $e->getMessage());
+                $this->logAction('Error Soft Deleting User', $e->getMessage());
                 $this->errorResponse($e->getMessage());
             }
         }

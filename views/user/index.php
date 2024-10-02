@@ -81,7 +81,7 @@
 <script>
     $(document).ready(function() {
         let table = new DataTable('#myTable', {
-            pageLength: 1,
+            pageLength: 10,
             language: {
                 emptyTable: "ไม่มีข้อมูล",
                 lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
@@ -97,11 +97,9 @@
             }
         });
 
-
         function addEventListener() {
             // Event ปุ่ม edit
             $('.edit-user').off('click').on('click', function() {
-                console.log("edit-user");
                 var userId = $(this).data('id');
                 var username = $(this).data('username');
                 var lv = $(this).data('lv');
@@ -167,7 +165,6 @@
                 });
             });
         }
-
 
         $('#editForm').on('submit', function(e) {
             e.preventDefault();
