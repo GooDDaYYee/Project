@@ -163,6 +163,7 @@ class StockDrumController extends BaseController
 
             $checkDupSQL = "SELECT * FROM drum WHERE drum_no = :drum_no AND drum_company_id = :drum_company_id AND drum_cable_company_id = :drum_cable_company_id AND drum_id != :drum_id";
             $checkDupStmt = $this->db->prepare($checkDupSQL);
+            $checkDupStmt->bindParam(':drum_id', $drum_id);
             $checkDupStmt->bindParam(':drum_no', $drum_no);
             $checkDupStmt->bindParam(':drum_company_id', $drum_company_id);
             $checkDupStmt->bindParam(':drum_cable_company_id', $drum_cable_company_id);
@@ -182,7 +183,16 @@ class StockDrumController extends BaseController
             }
 
             try {
-                $stmt = $this->db->prepare("UPDATE drum SET drum_no = :drum_no, drum_to = :drum_to, drum_description = :drum_description, drum_company_id = :drum_company_id, drum_cable_company_id = :drum_cable_company_id, drum_full = :drum_full WHERE drum_id = :drum_id");
+                $stmt = $this->db->prepare("UPDATE drum SET 
+                    drum_no = :drum_no, 
+                    drum_to = :drum_to, 
+                    drum_description = :drum_description, 
+                    drum_company_id = :drum_company_id, 
+                    drum_cable_company_id = :drum_cable_company_id, 
+                    drum_full = :drum_full,
+                    drum_remaining = :drum_remaining
+                    WHERE drum_id = :drum_id");
+
                 $stmt->execute([
                     ':drum_no' => $drum_no,
                     ':drum_to' => $drum_to,
@@ -190,11 +200,13 @@ class StockDrumController extends BaseController
                     ':drum_company_id' => $drum_company_id,
                     ':drum_cable_company_id' => $drum_cable_company_id,
                     ':drum_full' => $drum_full,
+                    ':drum_remaining' => $drum_full, // Assuming we reset drum_remaining to drum_full on update
                     ':drum_id' => $drum_id
                 ]);
-                $this->successResponse();
-            } catch (PDOException) {
-                $this->errorResponse();
+
+                $this->jsonResponse(true, 'อัปเดตข้อมูล Drum สำเร็จ');
+            } catch (PDOException $e) {
+                $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' . $e->getMessage());
             }
         } else {
             $this->jsonResponse(false, "ข้อมูลไม่ถูกส่งไป");
@@ -230,17 +242,37 @@ class StockDrumController extends BaseController
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['drum_id'])) {
             $drum_id = $_GET['drum_id'];
             try {
-                $stmt = $this->db->prepare("SELECT * FROM drum WHERE drum_id = :drum_id");
+                $stmt = $this->db->prepare("SELECT d.*, 
+                    dcc.drum_cable_company_detail,
+                    dc.drum_company_detail
+                    FROM drum d
+                    LEFT JOIN drum_cable_company dcc ON d.drum_cable_company_id = dcc.drum_cable_company_id
+                    LEFT JOIN drum_company dc ON d.drum_company_id = dc.drum_company_id
+                    WHERE d.drum_id = :drum_id");
                 $stmt->execute([':drum_id' => $drum_id]);
                 $drum = $stmt->fetch(PDO::FETCH_ASSOC);
 
+                // Fetch all drum companies
+                $stmt_companies = $this->db->prepare("SELECT * FROM drum_company ORDER BY drum_company_detail ASC");
+                $stmt_companies->execute();
+                $all_companies = $stmt_companies->fetchAll(PDO::FETCH_ASSOC);
+
+                // Fetch all drum cable companies
+                $stmt_cable_companies = $this->db->prepare("SELECT * FROM drum_cable_company ORDER BY drum_cable_company_detail ASC");
+                $stmt_cable_companies->execute();
+                $all_cable_companies = $stmt_cable_companies->fetchAll(PDO::FETCH_ASSOC);
+
                 if ($drum) {
-                    $this->successResponse('Ok', $drum);
+                    $this->successResponse('Ok', [
+                        'drum' => $drum,
+                        'all_companies' => $all_companies,
+                        'all_cable_companies' => $all_cable_companies
+                    ]);
                 } else {
                     $this->jsonResponse(false, "ไม่พบ Drum");
                 }
-            } catch (PDOException) {
-                $this->errorResponse();
+            } catch (PDOException $e) {
+                $this->errorResponse($e->getMessage());
             }
         } else {
             $this->jsonResponse(false, "ข้อมูลไม่ถูกส่งไป");

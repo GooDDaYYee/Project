@@ -32,10 +32,11 @@
                                 <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required>
                             </div>
                             <div class="col-sm-4">
-                                <select class="form-control" id="cable_work" name="cable_work">
-                                    <option value="">เลือกบริษัท</option>
-                                    <option value="Mixed">Mixed</option>
-                                    <option value="FHB">FHB</option>
+                                <select class="form-control" id="cable_work_id" name="cable_work_id" required>
+                                    <option value="">เลือกงานที่ทำ</option>
+                                    <?php foreach ($data['cableWorks'] as $id => $name): ?>
+                                        <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -43,16 +44,16 @@
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <select class="form-control" id="company" name="company">
                                     <option value="">เลือกบริษัท</option>
-                                    <?php foreach ($data['companies'] as $value => $label): ?>
-                                        <option value="<?= $value ?>"><?= $label ?></option>
+                                    <?php foreach ($data['companies'] as $id => $name): ?>
+                                        <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col-sm-4 mb-3 mb-sm-0">
                                 <select class="form-control" id="manufacturer" name="manufacturer">
                                     <option value="">เลือกบริษัทผลิตสาย</option>
-                                    <?php foreach ($data['manufacturers'] as $value => $label): ?>
-                                        <option value="<?= $value ?>"><?= $label ?></option>
+                                    <?php foreach ($data['manufacturers'] as $id => $name): ?>
+                                        <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -62,8 +63,8 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-user btn-block">
-                            เพิ่มข้อมูล
+                        <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" type="submit">
+                            <h5>เพิ่มข้อมูล</h5>
                         </button>
                     </form>
                 </div>
@@ -107,10 +108,11 @@
 
         $('#addCableForm').submit(function(e) {
             e.preventDefault();
+            var formData = $(this).serialize();
             $.ajax({
                 type: "POST",
                 url: "index.php?page=stock-cable&action=create",
-                data: $(this).serialize(),
+                data: formData,
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
@@ -129,7 +131,8 @@
                         });
                     }
                 },
-                error: function(xhr) {
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
                     Swal.fire({
                         icon: 'error',
                         title: 'ไม่สำเร็จ',

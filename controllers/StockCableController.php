@@ -6,8 +6,10 @@ class StockCableController extends BaseController
     public function index()
     {
         $cables = $this->fetchCables();
+        $cableWorks = $this->getCableWorks_update();
         $data = [
-            'cables' => $cables
+            'cables' => $cables,
+            'cableWorks' => $cableWorks
         ];
 
         $pageTitle = 'สต๊อกเคเบิ้ล - PSNK TELECOM';
@@ -16,12 +18,17 @@ class StockCableController extends BaseController
 
     private function fetchCables()
     {
-        $strsql = "SELECT c.*, d.drum_no FROM cable c JOIN drum d ON d.drum_id = c.drum_id ORDER BY cable_date ASC";
+        $strsql = "SELECT c.*, d.drum_no, cw.cable_work_name 
+               FROM cable c 
+               JOIN drum d ON d.drum_id = c.drum_id 
+               JOIN cable_work cw ON c.cable_work_id = cw.cable_work_id 
+               ORDER BY c.cable_date DESC";
         try {
             $stmt = $this->db->prepare($strsql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
+            error_log("Error fetching cables: " . $e->getMessage());
             return [];
         }
     }
@@ -36,9 +43,11 @@ class StockCableController extends BaseController
         $cable_id = $_POST['cable_id'];
 
         try {
-            $stmt = $this->db->prepare("SELECT c.*, d.drum_no FROM cable c 
-                                        JOIN drum d ON c.drum_id = d.drum_id 
-                                        WHERE c.cable_id = :cable_id");
+            $stmt = $this->db->prepare("SELECT c.*, d.drum_no, cw.cable_work_name 
+                                    FROM cable c 
+                                    JOIN drum d ON c.drum_id = d.drum_id 
+                                    JOIN cable_work cw ON c.cable_work_id = cw.cable_work_id
+                                    WHERE c.cable_id = :cable_id");
             $stmt->execute([':cable_id' => $cable_id]);
             $cable = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -47,8 +56,8 @@ class StockCableController extends BaseController
             } else {
                 $this->jsonResponse(false, 'ไม่พบ Cable');
             }
-        } catch (PDOException) {
-            $this->errorResponse('เกิดข้อผิดพลาดในการเรียกรายละเอียด Cable',);
+        } catch (PDOException $e) {
+            $this->errorResponse('เกิดข้อผิดพลาดในการเรียกรายละเอียด Cable: ' . $e->getMessage());
         }
     }
 
@@ -65,14 +74,42 @@ class StockCableController extends BaseController
     {
         $companies = $this->getCompanies();
         $manufacturers = $this->getManufacturers();
+        $cableWorks = $this->getCableWorks();
 
         $data = [
             'companies' => $companies,
-            'manufacturers' => $manufacturers
+            'manufacturers' => $manufacturers,
+            'cableWorks' => $cableWorks
         ];
 
         $pageTitle = 'เพิ่มงานสต๊อกเคเบิ้ล - PSNK TELECOM';
         $this->render('stock_cable/create', ['pageTitle' => $pageTitle, 'data' => $data]);
+    }
+
+    private function getCableWorks()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT cable_work_id, cable_work_name FROM cable_work ORDER BY cable_work_name");
+            $stmt->execute();
+            $cableWorks = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+            return $cableWorks;
+        } catch (PDOException $e) {
+            // Log the error and return an empty array
+            error_log("Error fetching cable works: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    private function getCableWorks_update()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT cable_work_id, cable_work_name FROM cable_work ORDER BY cable_work_name");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error fetching cable works: " . $e->getMessage());
+            return [];
+        }
     }
 
     private function createCable()
@@ -81,12 +118,16 @@ class StockCableController extends BaseController
             $this->db->beginTransaction();
 
             $cableData = $this->validateCableData($_POST);
+            if (!isset($cableData['cable_work_id']) || !is_numeric($cableData['cable_work_id'])) {
+                $this->jsonResponse(false, 'กรุณาเลือกงานที่ทำ');
+            }
+
             $cable_used = $cableData['cable_form'] - $cableData['cable_to'];
 
             $this->checkTotalCable($cableData['drum_id'], $cable_used);
 
-            $stmt = $this->db->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work, employee_id)
-                VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work, :employee_id)");
+            $stmt = $this->db->prepare("INSERT INTO cable (route_name, installed_section, placing_team, cable_form, cable_to, cable_used, drum_id, cable_work_id, employee_id)
+            VALUES (:route_name, :installed_section, :placing_team, :cable_form, :cable_to, :cable_used, :drum_id, :cable_work_id, :employee_id)");
 
             $stmt->execute([
                 ':route_name' => $cableData['route'],
@@ -96,20 +137,21 @@ class StockCableController extends BaseController
                 ':cable_to' => $cableData['cable_to'],
                 ':cable_used' => $cable_used,
                 ':drum_id' => $cableData['drum_id'],
-                ':cable_work' => $cableData['cable_work'],
+                ':cable_work_id' => $cableData['cable_work_id'],
                 ':employee_id' => $_SESSION['employee_id']
             ]);
 
             $cable_id = $this->db->lastInsertId();
 
-            $this->updateDrumUsage($cableData['drum_id']);
+            $this->updateAllDrumUsages();
 
             $this->logAction('Cable Inserted', "Cable ID: $cable_id, Route: {$cableData['route']}, Section: {$cableData['section']}, Used: $cable_used");
 
             $this->db->commit();
             $this->successResponse();
-        } catch (Exception) {
-            $this->errorResponse('เกิดข้อผิดพลาดในการสร้าง Cable');
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            $this->errorResponse('เกิดข้อผิดพลาดในการสร้าง Cable: ' . $e->getMessage());
         }
     }
 
@@ -135,19 +177,19 @@ class StockCableController extends BaseController
             $total_cable = $this->calculateTotalCable($cableData['drum_id'], $oldCableData['cable_used'], $new_cable_used);
 
             if ($total_cable > 4000) {
-                $this->jsonResponse(false, 'จำนวนสายเคเบิลทั้งหมดเกิน 4000');
+                $this->jsonResponse(false, 'จำนวนสายเคเบิลทั้งหมดเกิน 4000 เมตร');
             }
 
             $stmt = $this->db->prepare("UPDATE cable SET 
-                route_name = :route_name, 
-                installed_section = :installed_section, 
-                placing_team = :placing_team, 
-                cable_form = :cable_form, 
-                cable_to = :cable_to, 
-                cable_used = :cable_used, 
-                drum_id = :drum_id, 
-                cable_work = :cable_work 
-                WHERE cable_id = :cable_id");
+            route_name = :route_name, 
+            installed_section = :installed_section, 
+            placing_team = :placing_team, 
+            cable_form = :cable_form, 
+            cable_to = :cable_to, 
+            cable_used = :cable_used, 
+            drum_id = :drum_id, 
+            cable_work_id = :cable_work_id 
+            WHERE cable_id = :cable_id");
 
             $stmt->execute([
                 ':route_name' => $cableData['route'],
@@ -157,18 +199,19 @@ class StockCableController extends BaseController
                 ':cable_to' => $cableData['cable_to'],
                 ':cable_used' => $new_cable_used,
                 ':drum_id' => $cableData['drum_id'],
-                ':cable_work' => $cableData['cable_work'],
+                ':cable_work_id' => $cableData['cable_work_id'],
                 ':cable_id' => $cable_id
             ]);
 
-            $this->updateDrumUsage($cableData['drum_id']);
+            $this->updateAllDrumUsages();
 
             $this->logAction('Cable Updated', "Cable ID: $cable_id, Route: {$cableData['route']}, Section: {$cableData['section']}, Used: $new_cable_used");
 
             $this->db->commit();
             $this->successResponse();
-        } catch (Exception) {
-            $this->errorResponse("เกิดข้อผิดพลาดในการอัพเดตข้อมูล Cable");
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            $this->errorResponse("เกิดข้อผิดพลาดในการอัพเดตข้อมูล Cable: " . $e->getMessage());
         }
     }
 
@@ -194,33 +237,32 @@ class StockCableController extends BaseController
 
             $this->db->commit();
             $this->successResponse();
-        } catch (Exception) {
-            $this->errorResponse('การลบข้อมูลผิดพลาด');
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            $this->errorResponse('การลบข้อมูลผิดพลาด: ' . $e->getMessage());
         }
     }
 
     private function validateCableData($data)
     {
-        // Implement validation logic here
-        // This is a basic example, you should add more comprehensive validation
         $required = [
             'route' => 'Route',
             'section' => 'Section',
             'team' => 'Team',
             'cable_form' => 'Cable Form',
             'cable_to' => 'Cable To',
-            'cable_work' => 'งานที่ทำ',
+            'cable_work_id' => 'งานที่ทำ',
             'drum_id' => 'รหัส Drum'
         ];
 
         foreach ($required as $field => $fieldName) {
-            if (!isset($data[$field]) || empty($data[$field])) {
-                $this->jsonResponse(false, "กรุณากรอกข้อมูล $fieldName ก่อน");
+            if (!isset($data[$field]) || $data[$field] === '') {
+                $this->jsonResponse(false, "กรุณากรอกข้อมูล $fieldName");
             }
         }
 
         if ($data['cable_form'] <= $data['cable_to']) {
-            $this->jsonResponse(false, 'สายเคมีจำนวนเท่ากัน หรือน้อยกว่าปลายสาย');
+            $this->jsonResponse(false, 'สายเคเบิลจำนวนเท่ากัน หรือน้อยกว่าปลายสาย');
         }
 
         return $data;
@@ -243,14 +285,21 @@ class StockCableController extends BaseController
         $stmt = $this->db->prepare('SELECT SUM(cable_used) as total_cable FROM cable WHERE drum_id = :drum_id');
         $stmt->execute([':drum_id' => $drum_id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $total_cable = $result['total_cable'];
+        $total_cable = $result['total_cable'] ?? 0;  // ใช้ 0 ถ้าไม่มีข้อมูล
 
-        $sql = "UPDATE drum SET drum_used = :total_cable, drum_remaining = drum_full - :total_cable WHERE drum_id = :drum_id";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            ':total_cable' => $total_cable,
-            ':drum_id' => $drum_id
-        ]);
+        // ตรวจสอบว่า total_cable เป็น 0 หรือไม่
+        if ($total_cable == 0) {
+            $sql = "UPDATE drum SET drum_used = 0, drum_remaining = 4000 WHERE drum_id = :drum_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':drum_id' => $drum_id]);
+        } else {
+            $sql = "UPDATE drum SET drum_used = :total_cable, drum_remaining = CASE WHEN (drum_full - :total_cable) = 0 THEN 4000 ELSE (drum_full - :total_cable) END WHERE drum_id = :drum_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                ':total_cable' => $total_cable,
+                ':drum_id' => $drum_id
+            ]);
+        }
     }
 
     private function fetchCableData($cable_id)
@@ -270,75 +319,98 @@ class StockCableController extends BaseController
 
     private function updateAllDrumUsages()
     {
-        $strsql = 'SELECT d.drum_id, COALESCE(SUM(c.cable_used), 0) as total_cable 
-                   FROM drum d 
-                   LEFT JOIN cable c ON d.drum_id = c.drum_id 
-                   GROUP BY d.drum_id';
+        $strsql = 'SELECT d.drum_id, d.drum_full, COALESCE(SUM(c.cable_used), 0) as total_cable 
+               FROM drum d 
+               LEFT JOIN cable c ON d.drum_id = c.drum_id 
+               GROUP BY d.drum_id, d.drum_full';
         $stmt = $this->db->prepare($strsql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($result as $row) {
-            $this->updateDrumUsage($row['drum_id']);
+            $drum_id = $row['drum_id'];
+            $total_cable = $row['total_cable'];
+            $drum_full = $row['drum_full'];
+
+            if ($total_cable == 0) {
+                $sql = "UPDATE drum SET drum_used = 0, drum_remaining = 4000 WHERE drum_id = :drum_id";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([':drum_id' => $drum_id]);
+            } else {
+                $drum_remaining = $drum_full - $total_cable;
+                if ($drum_remaining == 0) {
+                    $drum_remaining = 4000;
+                }
+                $sql = "UPDATE drum SET drum_used = :total_cable, drum_remaining = :drum_remaining WHERE drum_id = :drum_id";
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute([
+                    ':total_cable' => $total_cable,
+                    ':drum_remaining' => $drum_remaining,
+                    ':drum_id' => $drum_id
+                ]);
+            }
         }
     }
 
     private function getCompanies()
     {
-        return [
-            'Mixed' => 'Mixed',
-            'FIBERHOME' => 'FIBERHOME',
-            'FBH' => 'FBH',
-            'CCS' => 'CCS',
-            'W&W' => 'W&W',
-            'TKI' => 'TKI',
-            'MTE' => 'MTE',
-            'Poonsub' => 'Poonsub'
-        ];
+        try {
+            $stmt = $this->db->prepare("SELECT drum_company_id, drum_company_detail FROM drum_company ORDER BY drum_company_detail");
+            $stmt->execute();
+            $companies = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+            return $companies;
+        } catch (PDOException $e) {
+            // Log the error and return an empty array
+            error_log("Error fetching companies: " . $e->getMessage());
+            return [];
+        }
     }
 
     private function getManufacturers()
     {
-        return [
-            'FUTONG' => 'FUTONG',
-            'FIBERHOME' => 'FIBERHOME',
-            'TICC' => 'TICC',
-            'TUC' => 'TUC'
-        ];
+        try {
+            $stmt = $this->db->prepare("SELECT drum_cable_company_id, drum_cable_company_detail FROM drum_cable_company ORDER BY drum_cable_company_detail");
+            $stmt->execute();
+            $manufacturers = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+            return $manufacturers;
+        } catch (PDOException $e) {
+            // Log the error and return an empty array
+            error_log("Error fetching manufacturers: " . $e->getMessage());
+            return [];
+        }
     }
 
     public function fetchDrums()
     {
-        if (!isset($_POST['manufacturer']) || !isset($_POST['company'])) {
-            $this->jsonResponse(false, 'Manufacturer and company are required');
+        if (!isset($_POST['company']) || !isset($_POST['manufacturer'])) {
+            $this->jsonResponse(false, 'Company and manufacturer are required');
             return;
         }
 
-        $manufacturer = $_POST['manufacturer'];
         $company = $_POST['company'];
+        $manufacturer = $_POST['manufacturer'];
 
         try {
-            $stmt = $this->db->prepare("SELECT * FROM drum WHERE drum_cable_company = :manufacturer AND drum_company = :company");
-            $stmt->execute([':manufacturer' => $manufacturer, ':company' => $company]);
+            $stmt = $this->db->prepare("SELECT drum_id, drum_no, drum_remaining FROM drum 
+                                        WHERE drum_company_id = :company 
+                                        AND drum_cable_company_id = :manufacturer");
+            $stmt->execute([':company' => $company, ':manufacturer' => $manufacturer]);
             $drums = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if (empty($drums)) {
-                $options = '<option value="">ไม่มีข้อมูล</option>';
-                $message = 'ไม่พบข้อมูล Drum สำหรับ manufacturer และ company ที่เลือก';
+                $options = '<option value="">ไม่มีข้อมูล Drum</option>';
+                $message = 'ไม่พบข้อมูล Drum สำหรับบริษัทและบริษัทผลิตสายที่เลือก';
             } else {
                 $options = '<option value="">เลือก Drum</option>';
                 foreach ($drums as $drum) {
                     $options .= "<option value='{$drum['drum_id']}'>{$drum['drum_no']} (คงเหลือ: {$drum['drum_remaining']})</option>";
                 }
-                $message = 'ดึงข้อมูลสำเร็จ Drums';
+                $message = 'ดึงข้อมูล Drums สำเร็จ';
             }
 
-            error_log("Found " . count($drums) . " drums for manufacturer $manufacturer and company $company");
-
-
             $this->successResponse($message, ['options' => $options]);
-        } catch (PDOException) {
-            $this->errorResponse('เกิดข้อผิดพลาดในการดึงข้อมูล Drums');
+        } catch (PDOException $e) {
+            $this->errorResponse('เกิดข้อผิดพลาดในการดึงข้อมูล Drums: ' . $e->getMessage());
         }
     }
 }

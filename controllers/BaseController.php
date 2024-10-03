@@ -415,7 +415,7 @@ abstract class BaseController
                                     <tr>
                                         <td class="center">' . ($x + 1) . '</td>
                                         <td class="center">' . $bill_details[$x]['au_id'] . '</td>
-                                        <td class="left">' . $this->trimText($bill_details[$x]['au_detail'], 80) . '</td>
+                                        <td class="left">' . $this->trimText($bill_details[$x]['au_detail'], 75) . '</td>
                                         <td class="center">' . $bill_details[$x]['au_type'] . '</td>
                                         <td class="right">' . $formatted_unit2 . '</td>
                                         <td class="right">' . $formatted_unit1 . '</td>

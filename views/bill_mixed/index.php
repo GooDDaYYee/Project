@@ -172,13 +172,7 @@
     let table = new DataTable('#myTable', {
       pageLength: 1,
       language: {
-        emptyTable: "ไม่มีข้อมูล",
-        lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-        info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-        infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-        infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-        search: "ค้นหา:",
-        zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
+        url: "assets/js/Thai.json"
       },
       drawCallback: function() {
         // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่

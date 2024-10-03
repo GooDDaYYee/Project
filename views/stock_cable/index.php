@@ -34,10 +34,10 @@
                             <td>ML <?= htmlspecialchars($cable['cable_to']) ?></td>
                             <td><?= htmlspecialchars($cable['cable_used']) ?> เมตร</td>
                             <td><?= htmlspecialchars($cable['drum_no']) ?></td>
-                            <td><?= htmlspecialchars($cable['cable_work']) ?></td>
+                            <td><?= htmlspecialchars($cable['cable_work_name']) ?></td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -82,9 +82,12 @@
                     </div>
                     <div class="form-group">
                         <label for="editCableWork">ใช้กับบริษัท</label>
-                        <select class="form-control" id="editCableWork" name="cable_work">
-                            <option value="Mixed">Mixed</option>
-                            <option value="FHB">FHB</option>
+                        <select class="form-control" id="editCableWork" name="cable_work_id">
+                            <?php foreach ($data['cableWorks'] as $cableWork): ?>
+                                <option value="<?= htmlspecialchars($cableWork['cable_work_id']) ?>">
+                                    <?= htmlspecialchars($cableWork['cable_work_name']) ?>
+                                </option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <input type="hidden" id="editDrumId" name="drum_id">
@@ -103,13 +106,7 @@
         let table = new DataTable('#myTable', {
             pageLength: 10,
             language: {
-                emptyTable: "ไม่มีข้อมูล",
-                lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-                info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-                infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-                infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-                search: "ค้นหา:",
-                zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
+                url: "assets/js/Thai.json"
             },
             drawCallback: function() {
                 // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
@@ -120,7 +117,6 @@
         function addEventListener() {
             $('.edit-btn').off('click').on('click', function() {
                 const cableId = $(this).data('id');
-                // Fetch cable details and populate the form
                 $.ajax({
                     url: 'index.php?page=stock-cable&action=fetchCableDetails',
                     method: 'POST',
@@ -136,7 +132,7 @@
                             $('#editTeam').val(response.data.placing_team);
                             $('#editCableFrom').val(response.data.cable_form);
                             $('#editCableTo').val(response.data.cable_to);
-                            $('#editCableWork').val(response.data.cable_work);
+                            $('#editCableWork').val(response.data.cable_work_id);
                             $('#editDrumId').val(response.data.drum_id);
                             $('#editModal').modal('show');
                         } else {

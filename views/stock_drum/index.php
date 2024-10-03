@@ -78,26 +78,12 @@
                     <div class="form-group">
                         <label for="edit_drum_company">รับจากบริษัท</label>
                         <select class="form-control" id="edit_drum_company" name="edit_drum_company">
-                            <option value="">เลือกบริษัท</option>
-                            <option value="Mixed">Mixed</option>
-                            <option value="FIBERHOME">FIBERHOME</option>
-                            <option value="FBH">FBH</option>
-                            <option value="CCS">CCS</option>
-                            <option value="W&W">W&W</option>
-                            <option value="TKI">TKI</option>
-                            <option value="MTE">MTE</option>
-                            <option value="Poonsub">Poonsub</option>
                         </select>
                         <p id="edit_drum_company_notice" style="display: none; color: red;"></p>
                     </div>
                     <div class="form-group">
                         <label for="edit_drum_cable_company">บริษัทผลิตสาย</label>
                         <select class="form-control" id="edit_drum_cable_company" name="edit_drum_cable_company">
-                            <option value="">เลือกบริษัท</option>
-                            <option value="FUTONG">FUTONG</option>
-                            <option value="FIBERHOME">FIBERHOME</option>
-                            <option value="TICC">TICC</option>
-                            <option value="TUC">TUC</option>
                         </select>
                         <p id="edit_drum_cable_company_notice" style="display: none; color: red;"></p>
                     </div>
@@ -121,13 +107,7 @@
         let table = new DataTable('#myTable', {
             pageLength: 10,
             language: {
-                emptyTable: "ไม่มีข้อมูล",
-                lengthMenu: "แสดง _MENU_ แถวต่อหน้า",
-                info: "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
-                infoEmpty: "แสดง 0 ถึง 0 จาก 0 แถว",
-                infoFiltered: "(กรองข้อมูล _MAX_ ทุกแถว)",
-                search: "ค้นหา:",
-                zeroRecords: "ไม่พบข้อมูลที่ตรงกัน"
+                url: "assets/js/Thai.json"
             },
             drawCallback: function() {
                 addEventListener();
@@ -148,7 +128,7 @@
                                 location.reload();
                             });
                         } else {
-                            Swal.fire('ไม่สำเร็จ', response.message);
+                            Swal.fire('ไม่สำเร็จ', response.message, 'error');
                         }
                     },
                     error: function() {
@@ -210,14 +190,9 @@
                     success: function(response) {
                         if (response.success) {
                             editDrum(
-                                response.data.drum_id,
-                                response.data.drum_no,
-                                response.data.drum_to,
-                                response.data.drum_description,
-                                response.data.drum_company,
-                                response.data.drum_cable_company,
-                                response.data.drum_full,
-                                response.data.drum_used
+                                response.data.drum,
+                                response.data.all_companies,
+                                response.data.all_cable_companies
                             );
                         } else {
                             Swal.fire('ไม่สำเร็จ', 'ไม่สามารถดึงข้อมูล Drum ได้', 'error');
@@ -230,16 +205,35 @@
             });
         }
 
-        function editDrum(drumId, drumNo, drumTo, drumDescription, drumCompany, drumCableCompany, drumFull, drumUsed) {
-            $('#edit_drum_id').val(drumId);
-            $('#edit_drum_to').val(drumTo);
-            $('#edit_drum_description').val(drumDescription);
-            $('#edit_drum_company').val(drumCompany);
-            $('#edit_drum_cable_company').val(drumCableCompany);
-            $('#edit_drum_full').val(drumFull);
+        function editDrum(drum, allCompanies, allCableCompanies) {
+            $('#edit_drum_id').val(drum.drum_id);
+            $('#edit_drum_no').val(drum.drum_no);
+            $('#edit_drum_to').val(drum.drum_to);
+            $('#edit_drum_description').val(drum.drum_description);
+            $('#edit_drum_full').val(drum.drum_full);
 
-            if (drumUsed > 0) {
-                $('#edit_drum_no').val(drumNo).prop('readonly', true);
+            // Populate drum company select
+            $('#edit_drum_company').empty();
+            $.each(allCompanies, function(i, company) {
+                $('<option>')
+                    .val(company.drum_company_id)
+                    .text(company.drum_company_detail)
+                    .appendTo('#edit_drum_company');
+            });
+            $('#edit_drum_company').val(drum.drum_company_id);
+
+            // Populate drum cable company select
+            $('#edit_drum_cable_company').empty();
+            $.each(allCableCompanies, function(i, cableCompany) {
+                $('<option>')
+                    .val(cableCompany.drum_cable_company_id)
+                    .text(cableCompany.drum_cable_company_detail)
+                    .appendTo('#edit_drum_cable_company');
+            });
+            $('#edit_drum_cable_company').val(drum.drum_cable_company_id);
+
+            if (parseInt(drum.drum_used) > 0) {
+                $('#edit_drum_no').prop('readonly', true);
                 $('#edit_drum_company').css({
                     'pointer-events': 'none',
                     'background-color': '#eaecf4'
@@ -255,7 +249,7 @@
                 $('#edit_drum_cable_company_notice').text('มีการเรียกใช้ดั้มอยู่').show();
                 $('#edit_drum_full_notice').text('มีการเรียกใช้ดั้มอยู่').show();
             } else {
-                $('#edit_drum_no').val(drumNo).prop('readonly', false);
+                $('#edit_drum_no').prop('readonly', false);
                 $('#edit_drum_full').prop('readonly', false);
                 $('#edit_drum_company').css({
                     'pointer-events': '',
@@ -274,7 +268,6 @@
 
             $('#editDrumModal').modal('show');
         }
-
         $('#editDrumForm').on('submit', function() {
             $('#edit_drum_no, #edit_drum_company, #edit_drum_cable_company, #edit_drum_full').prop('disabled', false);
         });
