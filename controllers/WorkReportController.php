@@ -12,7 +12,7 @@ class WorkReportController extends BaseController
     public function submitReport()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
+            $name = $_SESSION['employee_name'] ?? null;
             $jobname = $_POST['jobname'] ?? '';
             $group = $_POST['group'] ?? 1;
             $user_id = $_SESSION['user_id'] ?? null;

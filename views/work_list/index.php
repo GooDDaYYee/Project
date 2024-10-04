@@ -48,12 +48,26 @@
         });
 
         function addEventListener() {
-            // Add confirmation for folder deletion
             document.querySelectorAll('.delete-folder').forEach(button => {
                 button.addEventListener('click', function(e) {
-                    if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบโฟลเดอร์นี้?')) {
-                        e.preventDefault();
-                    }
+                    e.preventDefault();
+                    const folderName = this.getAttribute('href').split('folder=')[1];
+
+                    Swal.fire({
+                        title: 'คุณแน่ใจหรือไม่?',
+                        html: `คุณต้องการลบโฟลเดอร์ "${decodeURIComponent(folderName)}" หรือไม่?<br>การดำเนินการนี้ไม่สามารถย้อนกลับได้!`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'ใช่, ลบเลย',
+                        cancelButtonText: 'ยกเลิก'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Perform the deletion
+                            window.location.href = this.getAttribute('href');
+                        }
+                    });
                 });
             });
         }

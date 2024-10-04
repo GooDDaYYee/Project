@@ -99,35 +99,58 @@
         });
 
         deleteButton.addEventListener('click', function() {
-            if (confirm('คุณแน่ใจหรือไม่ที่จะลบรูปภาพที่เลือก?')) {
-                fetch('index.php?page=work-list&action=handleDeleteImages', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            images: selectedImages
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            selectedImages.forEach(path => {
-                                const imageCard = document.querySelector(`.image-checkbox[data-image-path="${path}"]`).closest('.col-6');
-                                imageCard.remove();
-                            });
-                            selectedImages = [];
-                            updateButtonVisibility();
-                            alert('ลบรูปภาพเรียบร้อยแล้ว');
-                        } else {
-                            alert('เกิดข้อผิดพลาดในการลบรูปภาพ');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('เกิดข้อผิดพลาดในการลบรูปภาพ');
-                    });
-            }
+            Swal.fire({
+                title: 'คุณแน่ใจหรือไม่?',
+                text: 'คุณต้องการลบรูปภาพที่เลือกหรือไม่?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบเลย',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('index.php?page=work-list&action=handleDeleteImages', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                images: selectedImages
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                selectedImages.forEach(path => {
+                                    const imageCard = document.querySelector(`.image-checkbox[data-image-path="${path}"]`).closest('.col-6');
+                                    imageCard.remove();
+                                });
+                                selectedImages = [];
+                                updateButtonVisibility();
+                                Swal.fire(
+                                    'ลบแล้ว!',
+                                    'รูปภาพที่เลือกถูกลบเรียบร้อยแล้ว',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'เกิดข้อผิดพลาด!',
+                                    'เกิดข้อผิดพลาดในการลบรูปภาพ',
+                                    'error'
+                                );
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                'เกิดข้อผิดพลาดในการลบรูปภาพ',
+                                'error'
+                            );
+                        });
+                }
+            });
         });
 
         uploadButton.addEventListener('click', function() {
@@ -139,6 +162,15 @@
                 const formData = new FormData(uploadForm);
                 formData.append('folder', '<?= htmlspecialchars($data['folderName']) ?>');
 
+                Swal.fire({
+                    title: 'กำลังอัพโหลด...',
+                    text: 'โปรดรอสักครู่',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
                 fetch('index.php?page=work-list&action=handleUploadImages', {
                         method: 'POST',
                         body: formData
@@ -146,15 +178,29 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert('อัพโหลดรูปภาพเรียบร้อยแล้ว');
-                            location.reload(); // รีโหลดหน้าเพื่อแสดงรูปภาพใหม่
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'สำเร็จ!',
+                                text: 'อัพโหลดรูปภาพเรียบร้อยแล้ว',
+                                confirmButtonText: 'ตกลง'
+                            }).then(() => {
+                                location.reload(); // รีโหลดหน้าเพื่อแสดงรูปภาพใหม่
+                            });
                         } else {
-                            alert('เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ');
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                'เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ',
+                                'error'
+                            );
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
-                        alert('เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ');
+                        Swal.fire(
+                            'เกิดข้อผิดพลาด!',
+                            'เกิดข้อผิดพลาดในการอัพโหลดรูปภาพ',
+                            'error'
+                        );
                     });
             }
         });

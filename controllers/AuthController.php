@@ -121,10 +121,33 @@ class AuthController extends BaseController
         $_SESSION['lv'] = $user['lv'];
         $_SESSION['employee_id'] = $user['employee_id'];
 
+        // Fetch employee name from the employee table
+        $employeeName = $this->getEmployeeName($user['employee_id']);
+        $_SESSION['employee_name'] = $employeeName;
+
         if ($rememberMe) {
             $_SESSION['remember_username'] = $user['username'];
         } else {
             unset($_SESSION['remember_username']);
+        }
+    }
+
+    private function getEmployeeName($employeeId)
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT employee_name FROM employee WHERE employee_id = :employee_id");
+            $stmt->bindParam(':employee_id', $employeeId);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $result['employee_name'];
+            }
+            return null;
+        } catch (PDOException $e) {
+            // Handle the error appropriately
+            error_log("Error fetching employee name: " . $e->getMessage());
+            return null;
         }
     }
 

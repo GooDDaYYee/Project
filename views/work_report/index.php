@@ -16,12 +16,8 @@
                                                             unset($_SESSION['error_message']); ?></div>
                         <?php endif; ?>
                         <form action="index.php?page=work-report&action=submitReport" method="post" enctype="multipart/form-data">
-                            <div class="form-group row mb-3">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <label for="name" class="form-label">ชื่อ:</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
-                                </div>
-                                <div class="col-sm-6">
+                            <div class="form-group row">
+                                <div class="col">
                                     <label for="jobname" class="form-label">ชื่องาน:</label>
                                     <input type="text" class="form-control" id="jobname" name="jobname" required>
                                 </div>

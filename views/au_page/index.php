@@ -26,10 +26,10 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-au_all"
                                     data-id="<?= $au_all['au_id'] ?>"
-                                    data-detail="<?= $au_all['au_detail'] ?>"
-                                    data-type="<?= $au_all['au_type'] ?>"
-                                    data-price="<?= $au_all['au_price'] ?>"
-                                    data-company="<?= $au_all['au_company'] ?>">แก้ไข</button>
+                                    data-detail="<?= htmlspecialchars($au_all['au_detail']) ?>"
+                                    data-type="<?= htmlspecialchars($au_all['au_type']) ?>"
+                                    data-price="<?= htmlspecialchars($au_all['au_price']) ?>"
+                                    data-company="<?= htmlspecialchars($au_all['au_company']) ?>">แก้ไข</button>
                                 <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $au_all['au_id'] ?>">ลบ</button>
                             </td>
                         </tr>
@@ -45,6 +45,7 @@
     <div class="modal-dialog modal-custom-size" role="document">
         <div class="modal-content">
             <form id="editForm">
+                <input type="hidden" id="original-au-id" name="original-au-id">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLabel">แก้ไข AU</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -111,6 +112,7 @@
                 var EditCompany = $(this).data('company');
 
                 $('#edit-au').val(EditId);
+                $('#original-au-id').val(EditId); // เพิ่มบรรทัดนี้
                 $('#edit-detail').val(EditDetail);
                 $('#edit-type').val(EditType);
                 $('#edit-price').val(EditPrice);
@@ -169,8 +171,6 @@
                 });
             });
         }
-
-
 
         $('#editForm').on('submit', function(e) {
             e.preventDefault();
