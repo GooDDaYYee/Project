@@ -31,12 +31,13 @@ class BillFBHController extends BaseController
 
     private function fetchAUOptions()
     {
-        $strsql = "SELECT * FROM au_all WHERE au_company = 'FBH'";
+        $strsql = "SELECT au_id, au_name, au_detail, au_type, au_price FROM au_all WHERE au_company = 'FBH'";
         try {
             $stmt = $this->db->prepare($strsql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
+            error_log("Error fetching AU options: " . $e->getMessage());
             return [];
         }
     }
@@ -83,31 +84,26 @@ class BillFBHController extends BaseController
             $this->jsonResponse(true, 'สร้างบิลสำเร็จแล้ว');
         } catch (PDOException $e) {
             $this->db->rollBack();
-            $this->jsonResponse(false, 'ไม่สามารถสร้างบิลได้ กรุณาตรวจสอบข้อมูลของคุณ', null, 400);
+            $this->jsonResponse(false, $e, null, 400);
         }
     }
 
     private function generateNewBillId()
     {
-        $stmt = $this->db->prepare("SELECT bill_id FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC LIMIT 1");
+        $stmt = $this->db->prepare("SELECT bill_name FROM bill WHERE bill_company = 'FBH' ORDER BY bill_id DESC LIMIT 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $currentYear = date('Y') + 543; // ปีพุทธศักราช 4 หลัก
+        $currentYear = date('Y') + 543;
         $newNumber = 1;
 
         if ($result) {
-            if (preg_match('/(\d{4})\/(\d+)$/', $result['bill_id'], $matches) && count($matches) == 3) {
-                $lastYear = intval($matches[1]);
-                $lastNumber = intval($matches[2]);
+            preg_match('/(\d{4})\/(\d+)$/', $result['bill_name'], $matches);
+            $lastYear = $matches[1];
+            $lastNumber = intval($matches[2]);
 
-                if ($currentYear == $lastYear) {
-                    $newNumber = $lastNumber + 1;
-                }
-            } else {
-                // ถ้าไม่สามารถแยกส่วนได้ ให้ใช้ค่าเริ่มต้น
-                $lastYear = $currentYear;
-                $lastNumber = 0;
+            if ($currentYear == $lastYear) {
+                $newNumber = $lastNumber + 1;
             }
         }
 
@@ -136,11 +132,11 @@ class BillFBHController extends BaseController
 
     private function insertBill($employeeId)
     {
-        $stmt = $this->db->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
-        VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
+        $stmt = $this->db->prepare("INSERT INTO bill (bill_name, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
+        VALUES (:bill_name, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
 
         $stmt->execute([
-            ':bill_id' => $_POST['number'],
+            ':bill_name' => $_POST['number'],
             ':bill_date' => $_POST['thai_date'],
             ':bill_date_product' => $_POST['thai_date_product'],
             ':bill_payment' => $_POST['payment'],
@@ -159,14 +155,15 @@ class BillFBHController extends BaseController
             ':employee_id' => $employeeId
         ]);
 
-        return $_POST['number'];
+        return $this->db->lastInsertId();
     }
 
     private function insertBillDetails($billId)
     {
         $stmt = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
-        foreach ($_POST['inputField'] as $i => $auId) {
+        foreach ($_POST['inputField'] as $i => $auName) {
+            $auId = $this->getAuIdFromName($auName);
             $unit = $_POST['unit'][$i];
             $price = $this->calculateItemPrice($auId, $unit);
 
@@ -177,6 +174,13 @@ class BillFBHController extends BaseController
                 ':price' => $price
             ]);
         }
+    }
+
+    private function getAuIdFromName($auName)
+    {
+        $stmt = $this->db->prepare("SELECT au_id FROM au_all WHERE au_name = :au_name");
+        $stmt->execute([':au_name' => $auName]);
+        return $stmt->fetchColumn();
     }
 
     private function calculateItemPrice($auId, $unit)
@@ -241,6 +245,8 @@ class BillFBHController extends BaseController
             foreach ($details as &$detail) {
                 $auDetails = $this->fetchAUDetails($detail['au_id'], $bill['bill_company']);
                 $detail = array_merge($detail, $auDetails);
+                // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่ามี au_id
+                $detail['au_id'] = $detail['au_id'];
             }
 
             $data = [
@@ -265,12 +271,14 @@ class BillFBHController extends BaseController
 
             if ($row) {
                 return [
+                    'au_name' => $row['au_name'], // เพิ่มบรรทัดนี้
                     'au_detail' => $row['au_detail'],
                     'au_type' => $row['au_type'],
                     'au_price' => $row['au_price']
                 ];
             } else {
                 return [
+                    'au_name' => 'undefined', // เพิ่มบรรทัดนี้
                     'au_detail' => 'undefined',
                     'au_type' => 'undefined',
                     'au_price' => 'undefined'
@@ -278,6 +286,7 @@ class BillFBHController extends BaseController
             }
         } catch (PDOException $e) {
             return [
+                'au_name' => 'error', // เพิ่มบรรทัดนี้
                 'au_detail' => 'error',
                 'au_type' => 'error',
                 'au_price' => 'error'
@@ -345,7 +354,7 @@ class BillFBHController extends BaseController
 
             $stmtInvoiceItem = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
-            foreach ($_POST['inputField'] as $i => $auId) {
+            foreach ($_POST['selectedAuId'] as $i => $auId) {
                 $stmtPrice = $this->db->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
                 $stmtPrice->execute([':au_id' => $auId]);
                 $auPrice = $stmtPrice->fetchColumn();
@@ -400,7 +409,7 @@ class BillFBHController extends BaseController
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
-                return $this->errorResponse('ไม่พบบิล', null, 500);
+                return $this->errorResponse('Bill not found', null, 500);
             }
 
             $this->db->prepare("DELETE FROM bill_detail WHERE bill_id = :bill_id")->execute([':bill_id' => $billId]);
@@ -415,6 +424,7 @@ class BillFBHController extends BaseController
             return $this->errorResponse('Error ' . $e->getMessage(), null, 500);
         }
     }
+
     public function exportPDF()
     {
         $this->exPDF();

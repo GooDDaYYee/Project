@@ -1,12 +1,33 @@
+<?php
+$stmt = $this->db->query("SELECT COUNT(*) as total FROM au_all");
+$totalCount = $stmt->fetchColumn();
+
+$stmt = $this->db->query("SELECT COUNT(*) as Mixed FROM au_all WHERE au_company = 'Mixed'");
+$mixedCount = $stmt->fetchColumn();
+
+$stmt = $this->db->query("SELECT COUNT(*) as FBH FROM au_all WHERE au_company = 'FBH'");
+$fbhCount = $stmt->fetchColumn();
+?>
 <div class="container-fluid">
     <div class="card shadow mb-4">
-        <div class="card-header d-flex align-items-center py-3">
-            <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;แก้ไข AU
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <div>
+                <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;แก้ไข AU
+            </div>
+            <div class="text-right">
+                <h5 class="mb-2">รายละเอียด</h5>
+                <p id="auDetails" class="mb-0">
+                    AU : ทั้งหมด <?php echo $totalCount; ?> รายการ |
+                    Mixed : <?php echo $mixedCount; ?> รายการ |
+                    FBH : <?php echo $fbhCount; ?> รายการ
+                </p>
+            </div>
         </div>
         <div class="card-body table-responsive">
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
+                        <th>ลำดับ</th>
                         <th>AU</th>
                         <th>Detail</th>
                         <th>Type</th>
@@ -16,9 +37,10 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 12;">
-                    <?php foreach ($data['au_all'] as $au_all): ?>
+                    <?php foreach ($data['au_all'] as $i => $au_all): ?>
                         <tr>
-                            <td style="width: 10%;"><?= htmlspecialchars($au_all['au_id']) ?></td>
+                            <td style="width: 5%; text-align: center;"><?= $i + 1 ?></td>
+                            <td style="width: 10%;"><?= htmlspecialchars($au_all['au_name']) ?></td>
                             <td style="text-align: left; width: 60%;"><?= htmlspecialchars($au_all['au_detail']) ?></td>
                             <td><?= htmlspecialchars($au_all['au_type']) ?></td>
                             <td><?= htmlspecialchars($au_all['au_price']) ?></td>
@@ -26,6 +48,7 @@
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-au_all"
                                     data-id="<?= $au_all['au_id'] ?>"
+                                    data-name="<?= $au_all['au_name'] ?>"
                                     data-detail="<?= htmlspecialchars($au_all['au_detail']) ?>"
                                     data-type="<?= htmlspecialchars($au_all['au_type']) ?>"
                                     data-price="<?= htmlspecialchars($au_all['au_price']) ?>"
@@ -54,6 +77,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <input type="hidden" class="form-control" id="edit-auid" name="edit-au" placeholder="AU">
                         <div class="row">
                             <div class="col">
                                 <label for="edit-au">AU</label>
@@ -106,12 +130,14 @@
         function addEventListener() {
             $('.edit-au_all').off('click').on('click', function() {
                 var EditId = $(this).data('id');
+                var EditName = $(this).data('name');
                 var EditDetail = $(this).data('detail');
                 var EditType = $(this).data('type');
                 var EditPrice = $(this).data('price');
                 var EditCompany = $(this).data('company');
 
-                $('#edit-au').val(EditId);
+                $('#edit-auid').val(EditId);
+                $('#edit-au').val(EditName);
                 $('#original-au-id').val(EditId); // เพิ่มบรรทัดนี้
                 $('#edit-detail').val(EditDetail);
                 $('#edit-type').val(EditType);

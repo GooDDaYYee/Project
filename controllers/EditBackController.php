@@ -159,8 +159,13 @@ class EditBackController extends BaseController
         $worksheet = $spreadsheet->getActiveSheet();
         $rows = $worksheet->toArray();
 
-        // Get headers
+        // Get headers from the first row
         $headers = array_shift($rows);
+
+        // Replace empty headers with placeholder names
+        $headers = array_map(function ($header, $index) {
+            return $header ?: "column_" . $index;
+        }, $headers, array_keys($headers));
 
         // Convert to object array
         $data = array_map(function ($row) use ($headers) {
@@ -171,27 +176,44 @@ class EditBackController extends BaseController
         $this->db->beginTransaction();
 
         try {
-            // Delete all existing data from the table
-            $this->db->exec("DELETE FROM $tableName");
+            // Prepare SQL for update
+            $stmt = $this->db->prepare("UPDATE $tableName SET 
+                                    au_detail = :au_detail,
+                                    au_type = :au_type,
+                                    au_price = :au_price,
+                                    au_company = :au_company
+                                    WHERE au_name = :au_name");
 
-            // Prepare SQL for insertion
-            $columns = implode(", ", array_map(function ($header) {
-                return "`" . str_replace("`", "``", $header) . "`";
-            }, $headers));
-            $placeholders = implode(", ", array_fill(0, count($headers), "?"));
-            $stmt = $this->db->prepare("INSERT INTO au_all VALUES ($placeholders)");
-
-            // Insert new data
+            // Update data
             foreach ($data as $row) {
-                try {
-                    $stmt->execute(array_values((array) $row));
-                } catch (PDOException $e) {
-                    // Log the error and the data that caused it
-                    error_log("Error inserting row: " . json_encode($row));
-                    error_log("Error message: " . $e->getMessage());
-                    // Optionally, you can choose to continue with the next row
-                    // If you want to stop the entire process on any error, you can re-throw the exception
-                    // throw $e;
+                if (!empty($row->au_name)) {
+                    try {
+                        $stmt->execute([
+                            ':au_detail' => $row->au_detail,
+                            ':au_type' => $row->au_type,
+                            ':au_price' => $row->au_price,
+                            ':au_company' => $row->au_company,
+                            ':au_name' => $row->au_name
+                        ]);
+
+                        // If no rows were updated, this is a new entry
+                        if ($stmt->rowCount() == 0) {
+                            $insertStmt = $this->db->prepare("INSERT INTO $tableName 
+                                                         (au_name, au_detail, au_type, au_price, au_company) 
+                                                         VALUES (:au_name, :au_detail, :au_type, :au_price, :au_company)");
+                            $insertStmt->execute([
+                                ':au_name' => $row->au_name,
+                                ':au_detail' => $row->au_detail,
+                                ':au_type' => $row->au_type,
+                                ':au_price' => $row->au_price,
+                                ':au_company' => $row->au_company
+                            ]);
+                        }
+                    } catch (PDOException $e) {
+                        // Log the error and the data that caused it
+                        error_log("Error updating/inserting row: " . json_encode($row));
+                        error_log("Error message: " . $e->getMessage());
+                    }
                 }
             }
 
@@ -220,15 +242,6 @@ class EditBackController extends BaseController
 
                     if ($importResult) {
                         // Count the imported records
-                        $stmt = $this->db->query("SELECT COUNT(*) as total FROM au_all");
-                        $totalCount = $stmt->fetchColumn();
-
-                        $stmt = $this->db->query("SELECT COUNT(*) as Mixed FROM au_all WHERE au_company = 'Mixed'");
-                        $mixedCount = $stmt->fetchColumn();
-
-                        $stmt = $this->db->query("SELECT COUNT(*) as FBH FROM au_all WHERE au_company = 'FBH'");
-                        $fbhCount = $stmt->fetchColumn();
-
                         echo json_encode([
                             'status' => 'success',
                             'message' => 'นำเข้าข้อมูล AU เรียบร้อยแล้ว ข้อมูลที่มีอยู่ถูกแทนที่'

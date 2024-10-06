@@ -1,12 +1,12 @@
-<div class="card o-hidden border-0 shadow-lg my-3">
-    <div class="card-body p-0">
-        <div class="row">
-            <div class="col-lg">
-                <div class="p-5">
-                    <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
-                    </div>
-                    <form id="FBHBillForm" method="post">
+<form id="fbhBillForm" method="post">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-lg">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
+                        </div>
                         <div class="row mt-md-3">
                             <div class="col">
                                 <h4>เลขที่</h4>
@@ -81,12 +81,12 @@
                                 <h5>เพิ่มข้อมูล</h5>
                             </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 <script>
     $(document).ready(function() {
@@ -99,7 +99,7 @@
                     <h4>AU ลำดับที่ ${index}</h4>
                     <input list="dataList" id="inputField_${index}" name="inputField[]" class="form-control" required>
                     <datalist id="dataList">
-                        ${auOptions.map(option => `<option value="${option.au_id}">${option.au_id}</option>`).join('')}
+                        ${auOptions.map(option => `<option value="${option.au_name}">${option.au_name} - ${option.au_detail}</option>`).join('')}
                     </datalist>
                 </div>
                 <div class="col-md-3">
@@ -121,8 +121,8 @@
             });
         }
 
-        function fetchAuDetails(auId, index) {
-            const auDetail = auOptions.find(option => option.au_id === auId);
+        function fetchAuDetails(auName, index) {
+            const auDetail = auOptions.find(option => option.au_name === auName);
             if (auDetail) {
                 $(`#selectedData_${index}`).text(auDetail.au_detail);
                 $(`#selectedDataDetail_${index}`).val(auDetail.au_detail);
@@ -161,13 +161,18 @@
                         }
                     });
                 });
-                alert("มี AU ID ชื่อ " + duplicates.join(', ') + ' ซ้ำกันที่ลำดับ: ' + duplicateIndices.join(', ') + " กรุณาตรวจสอบและแก้ไข");
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'พบ AU ID ซ้ำ',
+                    html: `มี AU ID ชื่อ <strong>${duplicates.join(', ')}</strong> ซ้ำกันที่ลำดับ: <strong>${duplicateIndices.join(', ')}</strong><br>กรุณาตรวจสอบและแก้ไข`,
+                    confirmButtonText: 'เข้าใจแล้ว'
+                });
                 return true;
             }
             return false;
         }
 
-        $('#FBHBillForm').submit(function(e) {
+        $('#fbhBillForm').submit(function(e) {
             e.preventDefault();
             if (checkDuplicates()) {
                 return;

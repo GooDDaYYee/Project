@@ -38,68 +38,43 @@ class AuPageController extends BaseController
 
     public function updateAu()
     {
-        $requiredFields = ['edit-au', 'edit-detail', 'edit-type', 'edit-price', 'edit-company', 'original-au-id'];
-        foreach ($requiredFields as $field) {
-            if (!isset($_POST[$field]) || empty($_POST[$field])) {
-                $this->jsonResponse(false, "ไม่มีข้อมูล {$field}");
-                return;
-            }
-        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $auId = $_POST['original-au-id'];
+            $auName = $_POST['edit-au'];
+            $auDetail = $_POST['edit-detail'];
+            $auType = $_POST['edit-type'];
+            $auPrice = $_POST['edit-price'];
+            $auCompany = $_POST['edit-company'];
 
-        $newAuId = $_POST['edit-au'];
-        $originalAuId = $_POST['original-au-id'];
-        $detail = $_POST['edit-detail'];
-        $type = $_POST['edit-type'];
-        $price = $_POST['edit-price'];
-        $company = $_POST['edit-company'];
 
-        try {
-            $this->db->beginTransaction();
-
-            // Check if the original AU ID exists
-            $checkSql = "SELECT * FROM au_all WHERE au_id = :original_au_id";
-            $checkStmt = $this->db->prepare($checkSql);
-            $checkStmt->execute([':original_au_id' => $originalAuId]);
-
-            if ($checkStmt->rowCount() === 0) {
-                throw new Exception("ไม่พบ AU ID: {$originalAuId} ในระบบ");
-            }
-
-            $currentData = $checkStmt->fetch(PDO::FETCH_ASSOC);
-
-            // Check if there are any changes
-            if (
-                $currentData['au_id'] === $newAuId &&
-                $currentData['au_detail'] === $detail &&
-                $currentData['au_type'] === $type &&
-                $currentData['au_price'] == $price &&  // Using == for loose comparison (string vs float)
-                $currentData['au_company'] === $company
-            ) {
-                $this->jsonResponse(true, 'ไม่มีการเปลี่ยนแปลงข้อมูล');
+            // Validate price
+            if (!is_numeric($auPrice) || $auPrice < 0) {
+                echo json_encode(['success' => false, 'message' => 'Invalid price.']);
                 return;
             }
 
-            $sql = "UPDATE au_all SET au_id = :new_au_id, au_detail = :au_detail, au_type = :au_type, au_price = :au_price, au_company = :au_company WHERE au_id = :original_au_id";
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([
-                ':new_au_id' => $newAuId,
-                ':au_detail' => $detail,
-                ':au_type' => $type,
-                ':au_price' => $price,
-                ':au_company' => $company,
-                ':original_au_id' => $originalAuId
-            ]);
+            try {
+                $sql = "UPDATE au_all SET au_name = :au_name, au_detail = :au_detail, au_type = :au_type, 
+                    au_price = :au_price, au_company = :au_company WHERE au_id = :au_id";
 
-            $this->db->commit();
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':au_id', $auId, PDO::PARAM_INT);
+                $stmt->bindParam(':au_name', $auName, PDO::PARAM_STR);
+                $stmt->bindParam(':au_detail', $auDetail, PDO::PARAM_STR);
+                $stmt->bindParam(':au_type', $auType, PDO::PARAM_STR);
+                $stmt->bindParam(':au_price', $auPrice, PDO::PARAM_STR);
+                $stmt->bindParam(':au_company', $auCompany, PDO::PARAM_STR);
 
-            $logDetail = "Updated AU: {$originalAuId} to {$newAuId}, Detail: {$detail}, Type: {$type}, Price: {$price}, Company: {$company}";
-            $this->logAction('AU Updated', $logDetail);
-
-            $this->jsonResponse(true, 'อัปเดตข้อมูลสำเร็จ');
-        } catch (PDOException $e) {
-            $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' . $e->getMessage());
-        } catch (Exception $e) {
-            $this->jsonResponse(false, 'เกิดข้อผิดพลาด: ' . $e->getMessage());
+                if ($stmt->execute()) {
+                    echo json_encode(['success' => true, 'message' => 'AU updated successfully.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to update AU.']);
+                }
+            } catch (PDOException $e) {
+                echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
         }
     }
 }

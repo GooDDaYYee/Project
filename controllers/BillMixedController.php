@@ -31,12 +31,13 @@ class BillMixedController extends BaseController
 
     private function fetchAUOptions()
     {
-        $strsql = "SELECT * FROM au_all WHERE au_company = 'Mixed'";
+        $strsql = "SELECT au_id, au_name, au_detail, au_type, au_price FROM au_all WHERE au_company = 'Mixed'";
         try {
             $stmt = $this->db->prepare($strsql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
+            error_log("Error fetching AU options: " . $e->getMessage());
             return [];
         }
     }
@@ -83,13 +84,13 @@ class BillMixedController extends BaseController
             $this->jsonResponse(true, 'สร้างบิลสำเร็จแล้ว');
         } catch (PDOException $e) {
             $this->db->rollBack();
-            $this->jsonResponse(false, 'ไม่สามารถสร้างบิลได้ กรุณาตรวจสอบข้อมูลของคุณ', null, 400);
+            $this->jsonResponse(false, $e, null, 400);
         }
     }
 
     private function generateNewBillId()
     {
-        $stmt = $this->db->prepare("SELECT bill_id FROM bill WHERE bill_company = 'mixed' ORDER BY bill_id DESC LIMIT 1");
+        $stmt = $this->db->prepare("SELECT bill_name FROM bill WHERE bill_company = 'Mixed' ORDER BY bill_id DESC LIMIT 1");
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -97,7 +98,7 @@ class BillMixedController extends BaseController
         $newNumber = 1;
 
         if ($result) {
-            preg_match('/(\d{2})\/(\d+)$/', $result['bill_id'], $matches);
+            preg_match('/(\d{2})\/(\d+)$/', $result['bill_name'], $matches);
             $lastYear = $matches[1];
             $lastNumber = intval($matches[2]);
 
@@ -117,7 +118,7 @@ class BillMixedController extends BaseController
 
     private function getAuOptions()
     {
-        $stmt = $this->db->prepare("SELECT * FROM au_all WHERE au_company = 'mixed'");
+        $stmt = $this->db->prepare("SELECT * FROM au_all WHERE au_company = 'Mixed'");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -131,11 +132,11 @@ class BillMixedController extends BaseController
 
     private function insertBill($employeeId)
     {
-        $stmt = $this->db->prepare("INSERT INTO bill (bill_id, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
-        VALUES (:bill_id, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
+        $stmt = $this->db->prepare("INSERT INTO bill (bill_name, bill_date, bill_date_product, bill_payment, bill_due_date, bill_refer, bill_site, bill_pr, bill_work_no, bill_project, list_num, total_amount, vat, withholding, grand_total, bill_company, employee_id) 
+        VALUES (:bill_name, :bill_date, :bill_date_product, :bill_payment, :bill_due_date, :bill_refer, :bill_site, :bill_pr, :bill_work_no, :bill_project, :list_num, :total_amount, :vat, :withholding, :grand_total, :bill_company, :employee_id)");
 
         $stmt->execute([
-            ':bill_id' => $_POST['number'],
+            ':bill_name' => $_POST['number'],
             ':bill_date' => $_POST['thai_date'],
             ':bill_date_product' => $_POST['thai_date_product'],
             ':bill_payment' => $_POST['payment'],
@@ -154,14 +155,15 @@ class BillMixedController extends BaseController
             ':employee_id' => $employeeId
         ]);
 
-        return $_POST['number'];
+        return $this->db->lastInsertId();
     }
 
     private function insertBillDetails($billId)
     {
         $stmt = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
-        foreach ($_POST['inputField'] as $i => $auId) {
+        foreach ($_POST['inputField'] as $i => $auName) {
+            $auId = $this->getAuIdFromName($auName);
             $unit = $_POST['unit'][$i];
             $price = $this->calculateItemPrice($auId, $unit);
 
@@ -172,6 +174,13 @@ class BillMixedController extends BaseController
                 ':price' => $price
             ]);
         }
+    }
+
+    private function getAuIdFromName($auName)
+    {
+        $stmt = $this->db->prepare("SELECT au_id FROM au_all WHERE au_name = :au_name");
+        $stmt->execute([':au_name' => $auName]);
+        return $stmt->fetchColumn();
     }
 
     private function calculateItemPrice($auId, $unit)
@@ -236,6 +245,8 @@ class BillMixedController extends BaseController
             foreach ($details as &$detail) {
                 $auDetails = $this->fetchAUDetails($detail['au_id'], $bill['bill_company']);
                 $detail = array_merge($detail, $auDetails);
+                // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่ามี au_id
+                $detail['au_id'] = $detail['au_id'];
             }
 
             $data = [
@@ -260,19 +271,22 @@ class BillMixedController extends BaseController
 
             if ($row) {
                 return [
+                    'au_name' => $row['au_name'], // เพิ่มบรรทัดนี้
                     'au_detail' => $row['au_detail'],
                     'au_type' => $row['au_type'],
                     'au_price' => $row['au_price']
                 ];
             } else {
                 return [
+                    'au_name' => 'undefined', // เพิ่มบรรทัดนี้
                     'au_detail' => 'undefined',
                     'au_type' => 'undefined',
                     'au_price' => 'undefined'
                 ];
             }
-        } catch (PDOException) {
+        } catch (PDOException $e) {
             return [
+                'au_name' => 'error', // เพิ่มบรรทัดนี้
                 'au_detail' => 'error',
                 'au_type' => 'error',
                 'au_price' => 'error'
@@ -340,7 +354,7 @@ class BillMixedController extends BaseController
 
             $stmtInvoiceItem = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
-            foreach ($_POST['inputField'] as $i => $auId) {
+            foreach ($_POST['selectedAuId'] as $i => $auId) {
                 $stmtPrice = $this->db->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
                 $stmtPrice->execute([':au_id' => $auId]);
                 $auPrice = $stmtPrice->fetchColumn();

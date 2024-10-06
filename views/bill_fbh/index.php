@@ -7,7 +7,7 @@
       <button type="button" class="btn btn-warning bg-gradient-purple ml-auto" onclick="window.open('index.php?page=bill-fbh&action=create', '_parent')">เพิ่มบิล</button>
     </div>
 
-    <div class="card-body table-responsive">
+    <div class="card-body  table-responsive">
       <table class="table table-bordered table-striped" id="myTable">
         <thead>
           <tr>
@@ -23,7 +23,7 @@
         <tbody>
           <?php foreach ($data['bills'] as $bill): ?>
             <tr>
-              <td><?= htmlspecialchars($bill['bill_id']) ?></td>
+              <td><?= htmlspecialchars($bill['bill_name']) ?></td>
               <td><?= $this->formatThaiDate($bill['bill_date']) ?></td>
               <td><?= htmlspecialchars($bill['bill_site']) ?></td>
               <td style="text-align: right;"><?= number_format($bill['total_amount'], 2) ?></td>
@@ -32,7 +32,7 @@
               <td>
                 <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
                 <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>" data-company="<?= $bill['bill_company'] ?>">PDF</button>
-                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $bill['bill_id'] ?>">ลบ</button>
+                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $bill['bill_id'] ?>" data-name="<?= $bill['bill_name'] ?>">ลบ</button>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -88,10 +88,11 @@
               <h1 class="h5 text-gray-900 mb-2" style="font-size: 1.5rem;">แก้ไข เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
             </div>
             <hr class="user">
+            <input type="hidden" id="bill_Id" name="bill_Id">
             <div class="row mt-md-3">
               <div class="col">
                 <h5>เลขที่</h5>
-                <input type="text" id="bill_Id" name="bill_Id" class="form-control form-control-user" value="" readonly>
+                <input type="text" id="bill_name" name="bill_name" class="form-control form-control-user" value="" readonly>
               </div>
               <div class="col">
                 <h5>วันที่ออกบิล</h5>
@@ -150,7 +151,7 @@
               <div class="col-md-3">
                 <h5>จำนวน AU ที่เพิ่ม</h5>
                 <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
-                <input type="hidden" name="company" value="FBH">
+                <input type="hidden" name="company" value="fbh">
               </div>
             </div>
             <div id="auContainer">
@@ -185,15 +186,18 @@
     function addEventListener() {
 
       $('.edit-btn').off('click').on('click', function() {
-        const billid = $(this).data('id');
+        const billId = $(this).data('id');
+        var loadingOverlay = new LoadingOverlay();
+        loadingOverlay.show();
         $.ajax({
           url: 'index.php?page=bill-fbh&action=fetchBillDetails',
           method: 'POST',
           data: {
-            bill_id: billid
+            bill_id: billId
           },
           dataType: 'json',
           success: function(response) {
+            loadingOverlay.hide();
             if (response.success) {
               populateEditForm(response.data.bill, response.data.details);
               $('#editModal').modal('show');
@@ -202,6 +206,7 @@
             }
           },
           error: function() {
+            loadingOverlay.hide();
             alert('Error fetching bill details');
           }
         });
@@ -228,11 +233,13 @@
       });
 
       $('#saveChanges').off('click').on('click', function() {
-        if (checkDuplicates()) {
+        const duplicateCheck = checkDuplicates();
+        if (duplicateCheck.hasDuplicates) {
           Swal.fire({
-            icon: 'error',
-            title: 'ไม่สำเร็จ',
-            text: 'มี AU ID ซ้ำกัน กรุณาตรวจสอบและแก้ไข',
+            icon: 'warning',
+            title: 'พบ AU ID ซ้ำ',
+            html: `มี AU ID ชื่อ <strong>${duplicateCheck.duplicates.join(', ')}</strong> ซ้ำกันที่ลำดับ: <strong>${duplicateCheck.indices.join(', ')}</strong><br>กรุณาตรวจสอบและแก้ไข`,
+            confirmButtonText: 'เข้าใจแล้ว'
           });
           return;
         }
@@ -272,10 +279,11 @@
       // sweetalert delete bill
       $('.delete-btn').off('click').on('click', function() {
         var bill_id = $(this).data('id');
+        var bill_name = $(this).data('name');
 
         Swal.fire({
           title: 'คุณแน่ใจหรือไม่?',
-          text: "คุณต้องการลบ Bill " + bill_id + " หรือไม่?",
+          text: "คุณต้องการลบ Bill " + bill_name + " หรือไม่?",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d33',
@@ -293,7 +301,7 @@
               dataType: 'json',
               success: function(response) {
                 if (response.success) {
-                  Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_id + ' เรียบร้อยแล้ว!', 'success')
+                  Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Bill ' + bill_name + ' เรียบร้อยแล้ว!', 'success')
                     .then(() => {
                       location.reload();
                     });
@@ -314,6 +322,7 @@
         const company = $(this).data('company');
         $('#billId').val(billId);
         $('#company').val(company);
+
         $('#documentModal').modal('show');
       });
     }
@@ -321,6 +330,7 @@
 
     function populateEditForm(bill, details) {
       $('#bill_Id').val(bill.bill_id);
+      $('#bill_name').val(bill.bill_name);
       $('#thai_date').val(bill.bill_date);
       $('#thai_date_product').val(bill.bill_date_product);
       $('#payment').val(bill.bill_payment);
@@ -335,40 +345,46 @@
       $('#auContainer').empty();
       details.forEach((detail, index) => {
         addAUInput(detail, index + 1);
+        // เพิ่มบรรทัดนี้เพื่อให้แน่ใจว่า au_id ถูกตั้งค่าเมื่อโหลดข้อมูล
+        $(`#selectedAuId_${index + 1}`).val(detail.au_id);
       });
     }
 
+
     function addAUInput(detail, index) {
       const newInputFrame = $(`
-      <div class="inputFrame">
-        <div class="row mt-md-3" style="margin-bottom: 1rem;">
-          <div class="col-md-3">
-            <h5>AU ลำดับที่ ${index}</h5>
-            <input list="dataList" id="inputField_${index}" name="inputField[]" class="form-control" required value="${detail ? detail.au_id : ''}">
-            <datalist id="dataList">
-                ${auOptions.map(option => `<option value="${option.au_id}">${option.au_id}</option>`).join('')}
-            </datalist>
+        <div class="inputFrame">
+          <div class="row mt-md-3" style="margin-bottom: 1rem;">
+            <div class="col-md-3">
+              <h5>AU ลำดับที่ ${index}</h5>
+              <input list="dataList_${index}" id="inputField_${index}" name="inputField[]" class="form-control" required value="${detail && detail.au_name ? detail.au_name : ''}">
+              <datalist id="dataList_${index}">
+                ${auOptions.map(option => `<option value="${option.au_name}" data-au-id="${option.au_id}">${option.au_name} - ${option.au_detail}</option>`).join('')}
+              </datalist>
+              <input type="hidden" id="selectedAuId_${index}" name="selectedAuId[]" value="${detail && detail.au_id ? detail.au_id : ''}">
+            </div>
+              <div class="col-md-3">
+                <h5>รายละเอียด AU</h5>
+                <p id="selectedData_${index}">${detail && detail.au_detail ? detail.au_detail : ''}</p>
+              </div>
+              <input type="hidden" id="selectedDataDetail_${index}" name="selectedDataDetail[]" value="${detail && detail.au_detail ? detail.au_detail : ''}">
+              <input type="hidden" id="selectedDataType_${index}" name="selectedDataType[]" value="${detail && detail.au_type ? detail.au_type : ''}">
+              <input type="hidden" id="selectedDataPrice_${index}" name="selectedDataPrice[]" value="${detail && detail.au_price ? detail.au_price : ''}">
+              <div class="col-md-3">
+                <h5>จำนวน</h5>
+                <input type="number" id="unit_${index}" name="unit[]" class="form-control form-control-user" required value="${detail && detail.unit ? detail.unit : ''}">
+              </div>
+            </div>
           </div>
-          <div class="col-md-3">
-            <h5>รายละเอียด AU</h5>
-            <p id="selectedData_${index}">${detail ? detail.au_detail : ''}</p>
-          </div>
-          <input type="hidden" id="selectedDataDetail_${index}" name="selectedDataDetail[]"
-          value="${detail ? detail.au_detail : ''}">
-          <input type="hidden" id="selectedDataType_${index}" name="selectedDataType[]" value="${detail ? detail.au_type : ''}">
-          <input type="hidden" id="selectedDataPrice_${index}" name="selectedDataPrice[]" value="${detail ? detail.au_price : ''}">
-          <div class="col-md-3">
-            <h5>จำนวน</h5>
-            <input type="number" id="unit_${index}" name="unit[]" class="form-control form-control-user" required value="${detail ? detail.unit : ''}">
-          </div>
-        </div>
-      </div>
-    `);
+        `);
+
       $('#auContainer').append(newInputFrame);
 
       $(`#inputField_${index}`).on('input', function() {
-        const selectedOption = $(this).val();
-        fetchAUDetails(selectedOption, index);
+        const selectedOption = $(`#dataList_${index} option[value="${this.value}"]`);
+        const auId = selectedOption.data('au-id');
+        $(`#selectedAuId_${index}`).val(auId);
+        fetchAUDetails(auId, index);
       });
     }
 
@@ -381,10 +397,15 @@
         },
         dataType: 'json',
         success: function(resp) {
-          $(`#selectedData_${index}`).text(resp.data.au_detail);
-          $(`#selectedDataDetail_${index}`).val(resp.data.au_detail);
-          $(`#selectedDataType_${index}`).val(resp.data.au_type);
-          $(`#selectedDataPrice_${index}`).val(resp.data.au_price);
+          if (resp.success) {
+            const data = resp.data;
+            $(`#selectedData_${index}`).text(data.au_detail);
+            $(`#selectedDataDetail_${index}`).val(data.au_detail);
+            $(`#selectedDataType_${index}`).val(data.au_type);
+            $(`#selectedDataPrice_${index}`).val(data.au_price);
+          } else {
+            console.log('Error fetching AU details:', resp.message);
+          }
         },
         error: function() {
           console.log('Error fetching AU details');
@@ -396,9 +417,25 @@
       const auIds = $('input[name="inputField[]"]').map(function() {
         return $(this).val();
       }).get();
-      const uniqueAuIds = [...new Set(auIds)];
-      return auIds.length !== uniqueAuIds.length;
+      const duplicates = auIds.filter((item, index) => auIds.indexOf(item) !== index);
+      if (duplicates.length > 0) {
+        const duplicateIndices = [];
+        duplicates.forEach(duplicate => {
+          auIds.forEach((id, index) => {
+            if (id === duplicate) {
+              duplicateIndices.push(index + 1);
+            }
+          });
+        });
+        return {
+          hasDuplicates: true,
+          duplicates: duplicates,
+          indices: duplicateIndices
+        };
+      }
+      return {
+        hasDuplicates: false
+      };
     }
-
   });
 </script>
