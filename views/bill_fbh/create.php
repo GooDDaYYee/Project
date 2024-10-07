@@ -151,20 +151,24 @@
             const auIds = $('input[name="inputField[]"]').map(function() {
                 return $(this).val();
             }).get();
-            const duplicates = auIds.filter((item, index) => auIds.indexOf(item) !== index);
-            if (duplicates.length > 0) {
-                const duplicateIndices = [];
-                duplicates.forEach(duplicate => {
-                    auIds.forEach((id, index) => {
-                        if (id === duplicate) {
-                            duplicateIndices.push(index + 1);
-                        }
-                    });
-                });
+            const duplicates = {};
+            auIds.forEach((id, index) => {
+                if (auIds.indexOf(id) !== index) {
+                    if (!duplicates[id]) {
+                        duplicates[id] = [auIds.indexOf(id) + 1];
+                    }
+                    duplicates[id].push(index + 1);
+                }
+            });
+
+            if (Object.keys(duplicates).length > 0) {
+                const duplicateMessages = Object.entries(duplicates).map(([id, indices]) =>
+                    `AU ID ชื่อ <strong>${id}</strong> ซ้ำกันที่ลำดับ: <strong>${indices.join(', ')}</strong>`
+                );
                 Swal.fire({
                     icon: 'warning',
                     title: 'พบ AU ID ซ้ำ',
-                    html: `มี AU ID ชื่อ <strong>${duplicates.join(', ')}</strong> ซ้ำกันที่ลำดับ: <strong>${duplicateIndices.join(', ')}</strong><br>กรุณาตรวจสอบและแก้ไข`,
+                    html: duplicateMessages.join('<br>') + '<br>กรุณาตรวจสอบและแก้ไข',
                     confirmButtonText: 'เข้าใจแล้ว'
                 });
                 return true;
@@ -174,6 +178,15 @@
 
         $('#fbhBillForm').submit(function(e) {
             e.preventDefault();
+            if ($('.au-input').length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'ไม่พบข้อมูล AU',
+                    text: 'กรุณาเพิ่ม AU อย่างน้อย 1 รายการก่อนบันทึกข้อมูล',
+                    confirmButtonText: 'เข้าใจแล้ว'
+                });
+                return;
+            }
             if (checkDuplicates()) {
                 return;
             }

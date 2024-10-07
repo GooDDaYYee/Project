@@ -233,16 +233,52 @@
       });
 
       $('#saveChanges').off('click').on('click', function() {
-        const duplicateCheck = checkDuplicates();
-        if (duplicateCheck.hasDuplicates) {
+        // ตรวจสอบว่ามีการเพิ่ม AU หรือไม่
+        if ($('.inputFrame').length === 0) {
           Swal.fire({
             icon: 'warning',
-            title: 'พบ AU ID ซ้ำ',
-            html: `มี AU ID ชื่อ <strong>${duplicateCheck.duplicates.join(', ')}</strong> ซ้ำกันที่ลำดับ: <strong>${duplicateCheck.indices.join(', ')}</strong><br>กรุณาตรวจสอบและแก้ไข`,
+            title: 'ไม่พบข้อมูล AU',
+            text: 'กรุณาเพิ่ม AU อย่างน้อย 1 รายการก่อนบันทึกข้อมูล',
             confirmButtonText: 'เข้าใจแล้ว'
           });
           return;
         }
+
+        const duplicateCheck = checkDuplicates();
+        if (duplicateCheck.hasDuplicates) {
+          const duplicateMessages = Object.entries(duplicateCheck.duplicates).map(([id, indices]) =>
+            `AU ID ชื่อ <strong>${id}</strong> ซ้ำกันที่ลำดับ: <strong>${indices.join(', ')}</strong>`
+          );
+          Swal.fire({
+            icon: 'warning',
+            title: 'พบ AU ID ซ้ำ',
+            html: duplicateMessages.join('<br>') + '<br>กรุณาตรวจสอบและแก้ไข',
+            confirmButtonText: 'เข้าใจแล้ว'
+          });
+          return;
+        }
+
+        // ตรวจสอบว่าทุก AU มีการกรอกข้อมูลครบถ้วนหรือไม่
+        let isValid = true;
+        $('.inputFrame').each(function(index) {
+          const auName = $(this).find('input[name="inputField[]"]').val();
+          const auUnit = $(this).find('input[name="unit[]"]').val();
+          if (!auName || !auUnit) {
+            isValid = false;
+            Swal.fire({
+              icon: 'warning',
+              title: 'ข้อมูลไม่ครบถ้วน',
+              text: `กรุณากรอกข้อมูล AU และจำนวนให้ครบถ้วนที่ลำดับที่ ${index + 1}`,
+              confirmButtonText: 'เข้าใจแล้ว'
+            });
+            return false; // break the loop
+          }
+        });
+
+        if (!isValid) {
+          return;
+        }
+
         const formData = $('#editForm').serialize();
         $.ajax({
           url: 'index.php?page=bill-mixed&action=updateBill',
@@ -417,20 +453,20 @@
       const auIds = $('input[name="inputField[]"]').map(function() {
         return $(this).val();
       }).get();
-      const duplicates = auIds.filter((item, index) => auIds.indexOf(item) !== index);
-      if (duplicates.length > 0) {
-        const duplicateIndices = [];
-        duplicates.forEach(duplicate => {
-          auIds.forEach((id, index) => {
-            if (id === duplicate) {
-              duplicateIndices.push(index + 1);
-            }
-          });
-        });
+      const duplicates = {};
+      auIds.forEach((id, index) => {
+        if (auIds.indexOf(id) !== index) {
+          if (!duplicates[id]) {
+            duplicates[id] = [auIds.indexOf(id) + 1];
+          }
+          duplicates[id].push(index + 1);
+        }
+      });
+
+      if (Object.keys(duplicates).length > 0) {
         return {
           hasDuplicates: true,
-          duplicates: duplicates,
-          indices: duplicateIndices
+          duplicates: duplicates
         };
       }
       return {
