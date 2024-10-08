@@ -55,13 +55,20 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        $this->logAction($_SESSION['user_id'] ?? null, 'Logout', 'User logged out');
-        session_unset();
-        session_destroy();
-        header("Location: index.php?page=auth");
-        exit();
+        try {
+            if (isset($_SESSION['user_id'])) {
+                $this->logAction($_SESSION['user_id'], 'Logout', 'User logged out');
+            }
+            session_unset();
+            session_destroy();
+            header("Location: index.php?page=auth");
+            exit();
+        } catch (Exception $e) {
+            error_log("Logout error: " . $e->getMessage());
+            // แสดงข้อความแจ้งเตือนแก่ผู้ใช้
+            echo "เกิดข้อผิดพลาดในการออกจากระบบ กรุณาลองใหม่อีกครั้ง";
+        }
     }
-
     public function forgotPassword()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
