@@ -679,8 +679,8 @@ abstract class BaseController
 
             $totalSalary += $salary['salary'];
             $totalOT += $salary['ot'];
-            $totalSocialSecurity -= $salary['social_security'];
-            $totalOther -= $salary['other'];
+            $totalSocialSecurity += $salary['social_security'];
+            $totalOther += $salary['other'];
             $grandTotal += $salary['total_salary'];
         }
 
