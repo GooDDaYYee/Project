@@ -80,7 +80,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit-employee-phone">เบอร์โทร</label>
-                        <input type="text" class="form-control" id="edit-employee-phone" name="employee_phone" required>
+                        <input type="text" class="form-control" id="edit-employee-phone" name="employee_phone" required maxlength="10">
                     </div>
                     <div class="form-group">
                         <label for="edit-employee-email">อีเมล</label>
