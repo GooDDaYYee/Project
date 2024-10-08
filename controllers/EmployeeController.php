@@ -3,6 +3,17 @@ require_once __DIR__ . '/BaseController.php';
 
 class EmployeeController extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if ($_SESSION["lv"] != 0 && $_SESSION["lv"] != 1) {
+            header("Location: index.php?page=home");
+            exit();
+        }
+    }
+
     public function index()
     {
         $employees = $this->fetchEmployees();

@@ -3,6 +3,17 @@ require_once __DIR__ . '/BaseController.php';
 
 class WorkListController extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if ($_SESSION["lv"] != 0 && $_SESSION["lv"] != 1 && $_SESSION["lv"] != 2 && $_SESSION["lv"] != 3) {
+            header("Location: index.php?page=home");
+            exit();
+        }
+    }
+
     public function index()
     {
         $path = 'assets/files/LINE';

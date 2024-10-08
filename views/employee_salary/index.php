@@ -42,7 +42,7 @@
                             <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" onclick="window.open('index.php?page=employee-salary&action=create', '_parent')">เพิ่มเงินเดือน</button>
                         </div>
                         <div class="col-sm-3">
-                            <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" onclick="window.open('index.php?page=employee-salary&action=exportPDF', '_parent')">สรุปเงินเดือน</button>
+                            <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" id="summarySalaryBtn">สรุปเงินเดือน</button>
                         </div>
                     </form>
                 </div>
@@ -152,6 +152,22 @@
         });
 
         function addEventListener() {
+            $('#summarySalaryBtn').on('click', function() {
+                var selectedMonth = $('#month').val();
+                var selectedYear = $('#year').val();
+
+                if (selectedMonth == "1" && selectedYear == "1") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'คำเตือน',
+                        text: 'กรุณาเลือกเดือนและปีก่อนทำการสรุปเงินเดือน',
+                    });
+                } else {
+                    var url = 'index.php?page=employee-salary&action=exportPDF&month=' + selectedMonth + '&year=' + selectedYear;
+                    window.open(url, '_blank');
+                }
+            });
+
             $('.edit-salary').off('click').on('click', function() {
                 var salaryId = $(this).data('salary_id');
                 var salary = $(this).data('salary');

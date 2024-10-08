@@ -3,6 +3,17 @@ require_once __DIR__ . '/BaseController.php';
 
 class EmployeeSalaryController extends BaseController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if ($_SESSION["lv"] != 0 && $_SESSION["lv"] != 1) {
+            header("Location: index.php?page=home");
+            exit();
+        }
+    }
+
     public function index()
     {
         $month = isset($_GET['month']) ? $_GET['month'] : NULL;
@@ -76,7 +87,7 @@ class EmployeeSalaryController extends BaseController
                         echo json_encode(['success' => false, 'message' => 'มีข้อมูลเงินเดือนของพนักงานมีอยู่แล้ว']);
                         exit();
                     } else {
-                        $total_salary = $salary + $ot + $social_security + $other;
+                        $total_salary = $salary  + $other - ($ot + $social_security);
 
                         $stmt_salary = $this->db->prepare("INSERT INTO salary (salary, ot, social_security, other, salary_date, employee_id, total_salary) VALUES (:salary, :ot, :social_security, :other, :salary_date, :employee_id, :total_salary)");
                         $stmt_salary->bindParam(':salary', $salary);
@@ -160,7 +171,7 @@ class EmployeeSalaryController extends BaseController
             $social_security = floatval($_POST['social_security']);
             $other = floatval($_POST['other']);
 
-            $total_salary = $salary + $ot - $social_security + $other;
+            $total_salary = $salary + $ot + $social_security + $other;
 
             $sql = "UPDATE salary SET 
                     salary = :salary, 

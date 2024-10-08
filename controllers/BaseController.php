@@ -281,10 +281,6 @@ abstract class BaseController
         
                             .header { text-align: center; }
         
-                            .right { text-align: right; }
-        
-                            .left { text-align: left; }
-        
                             .no-border { border: none; }
         
                             body { font-size: 12pt; }
@@ -547,7 +543,7 @@ abstract class BaseController
 
                     // สร้าง mpdf และแสดงผล
                     $mpdf->WriteHTML($html);
-                    $mpdf->Output();
+                    $mpdf->Output($bill['bill_name'] . '.pdf', 'I');
                 }
                 $this->logAction('PDF Created', "Bill $company Type $docType");
             } catch (PDOException $e) {
@@ -558,9 +554,49 @@ abstract class BaseController
         }
     }
 
+    private function fetchSalaries2($month, $year)
+    {
+        if ($month && $year) {
+            $gregorian_year = $year + 543;
+            $sql = "SELECT s.*, 
+                    DATE_FORMAT(s.salary_date, '%M') AS salary_month,
+                    DATE_FORMAT(s.salary_date, '%Y') AS salary_year,
+                    e.employee_name, 
+                    e.employee_lastname 
+                    FROM salary s
+                    INNER JOIN employee e ON s.employee_id = e.employee_id
+                    WHERE MONTH(s.salary_date) = :month AND YEAR(s.salary_date) = :year AND DAY(s.salary_date) = 1
+                    ORDER BY s.salary_id ASC";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':month', $month, PDO::PARAM_INT);
+            $stmt->bindParam(':year', $gregorian_year, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            return array();
+        }
+    }
+
     protected function exPDFSalary()
     {
+        $month = isset($_GET['month']) ? $_GET['month'] : date('n');
+        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
+
         require_once __DIR__ . '/../libs/mpdf/vendor/autoload.php';
+
+        $queries = [
+            'address_psnk' => "SELECT * FROM company_address WHERE company_address_type = 0",
+        ];
+        $results = [];
+        foreach ($queries as $key => $query) {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $results[$key] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // Fetch salary data for the specified month and year
+        $salaries = $this->fetchSalaries2($month, $year);
 
         $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
@@ -579,14 +615,83 @@ abstract class BaseController
                 ]
             ],
             'default_font' => 'th_sarabun',
-            'format' => [200, 150], // 4 x 6 นิ้ว ในหน่วยมิลลิเมตร
-            'margin_top' => 5,
-            'margin_bottom' => 5,
-            'margin_left' => 5,
-            'margin_right' => 5
+            'format' => 'A4-L',
+            'margin_top' => 10,
+            'margin_bottom' => 10,
+            'margin_left' => 20,
+            'margin_right' => 20
         ]);
-        $html = '';
+
+        $monthNames = [
+            1 => "มกราคม",
+            2 => "กุมภาพันธ์",
+            3 => "มีนาคม",
+            4 => "เมษายน",
+            5 => "พฤษภาคม",
+            6 => "มิถุนายน",
+            7 => "กรกฎาคม",
+            8 => "สิงหาคม",
+            9 => "กันยายน",
+            10 => "ตุลาคม",
+            11 => "พฤศจิกายน",
+            12 => "ธันวาคม"
+        ];
+
+        $html = '
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 5px; text-align: center; }
+        .header { text-align: center; }
+        .right { text-align: right; }
+        .left { text-align: left; }
+    </style>
+    <table>
+        <tr>
+            <td colspan="7" style="border: none; text-align: center;">
+                <h2>สรุปเงินเดือน ประจำเดือน ' . $monthNames[(int)$month] . ' พ.ศ.' . ($year + 543) . '</h2>
+                ' . $results['address_psnk'][0]['company_address_detaill'] . '
+            </td>
+        </tr>
+        <br>
+        <tr>
+            <th style="width: 5%;">ลำดับ</th>
+            <th style="width: 20%;">ชื่อ - นามสกุล</th>
+            <th style="width: 15%;">เงินเดือน</th>
+            <th style="width: 15%;">ค่าล่วงเวลา</th>
+            <th style="width: 15%;">ประกันสังคม</th>
+            <th style="width: 15%;">ค่าใช้จ่ายอื่นๆ</th>
+            <th style="width: 15%;">รวม</th>
+        </tr>';
+
+        $totalSalary = $totalOT = $totalSocialSecurity = $totalOther = $grandTotal = 0;
+
+        foreach ($salaries as $index => $salary) {
+            $html .= '
+        <tr>
+            <td>' . ($index + 1) . '</td>
+            <td class="center">' . $salary['employee_name'] . ' ' . $salary['employee_lastname'] . '</td>
+            <td class="right">' . number_format($salary['salary'], 2) . '</td>
+            <td class="right">' . number_format($salary['ot'], 2) . '</td>
+            <td class="right">' . number_format($salary['social_security'], 2) . '</td>
+            <td class="right">' . number_format($salary['other'], 2) . '</td>
+            <td class="right">' . number_format($salary['total_salary'], 2) . '</td>
+        </tr>';
+
+            $totalSalary += $salary['salary'];
+            $totalOT += $salary['ot'];
+            $totalSocialSecurity -= $salary['social_security'];
+            $totalOther -= $salary['other'];
+            $grandTotal += $salary['total_salary'];
+        }
+
+        $html .= '
+        <tr>
+            <th colspan="6" class="right">รวม</th>
+            <th class="right">' . number_format($grandTotal, 2) . '</th>
+        </tr>
+    </table>';
+
         $mpdf->WriteHTML($html);
-        $mpdf->Output();
+        $mpdf->Output('salary_summary_' . $month . '_' . $year . '.pdf', 'I');
     }
 }
