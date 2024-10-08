@@ -42,7 +42,6 @@
                 url: "assets/js/Thai.json"
             },
             drawCallback: function() {
-                // เรียกใช้ฟังก์ชันนี้ทุกครั้งที่ DataTables วาดตารางใหม่
                 addEventListener();
             }
         });
@@ -52,6 +51,7 @@
                 button.addEventListener('click', function(e) {
                     e.preventDefault();
                     const folderName = this.getAttribute('href').split('folder=')[1];
+                    const deleteUrl = this.getAttribute('href');
 
                     Swal.fire({
                         title: 'คุณแน่ใจหรือไม่?',
@@ -64,8 +64,31 @@
                         cancelButtonText: 'ยกเลิก'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Perform the deletion
-                            window.location.href = this.getAttribute('href');
+                            // Perform the deletion using AJAX
+                            $.ajax({
+                                url: deleteUrl,
+                                method: 'GET',
+                                success: function(response) {
+                                    // Assuming the server returns a success status
+                                    Swal.fire({
+                                        title: 'ลบสำเร็จ!',
+                                        text: `โฟลเดอร์ "${decodeURIComponent(folderName)}" ถูกลบเรียบร้อยแล้ว`,
+                                        icon: 'success',
+                                        confirmButtonText: 'ตกลง'
+                                    }).then(() => {
+                                        // Reload the page or update the table
+                                        location.reload();
+                                    });
+                                },
+                                error: function() {
+                                    Swal.fire({
+                                        title: 'เกิดข้อผิดพลาด!',
+                                        text: 'ไม่สามารถลบโฟลเดอร์ได้ กรุณาลองใหม่อีกครั้ง',
+                                        icon: 'error',
+                                        confirmButtonText: 'ตกลง'
+                                    });
+                                }
+                            });
                         }
                     });
                 });
