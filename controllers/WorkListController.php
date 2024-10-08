@@ -87,15 +87,14 @@ class WorkListController extends BaseController
                 ];
                 $this->render('work_list/view', ['pageTitle' => $pageTitle, 'data' => $data, 'customCSS' => $customCSS, 'customJS' =>  $customJS]);
             } else {
-                // จัดการกรณีที่โฟลเดอร์ไม่มีอยู่จริง
+                $this->logAction('Folder Not Found', "Attempted to view non-existent folder: $folderName");
                 header("Location: index.php?page=work-list");
             }
         } else {
-            // จัดการกรณีที่ไม่ได้ระบุชื่อโฟลเดอร์
+            $this->logAction('Invalid Folder Request', "Attempted to view folder without specifying folder name");
             header("Location: index.php?page=work-list");
         }
     }
-
     private function getImagesFromFolder($path)
     {
         $images = [];
@@ -124,6 +123,9 @@ class WorkListController extends BaseController
         $data = json_decode(file_get_contents('php://input'), true);
         $imagesToDelete = $data['images'] ?? [];
         $result = $this->deleteImg($imagesToDelete);
+
+        $logDetail = $result ? "deleted " . count($imagesToDelete) . " images" : "Failed to delete images";
+        $this->logAction('Delete Images', $logDetail);
 
         header('Content-Type: application/json');
         echo json_encode(['success' => $result]);
@@ -154,14 +156,18 @@ class WorkListController extends BaseController
             if (is_dir($path)) {
                 if ($this->deleteFolder($path)) {
                     $_SESSION['success_message'] = "โฟลเดอร์ถูกลบเรียบร้อยแล้ว";
+                    $this->logAction('Delete Folder', "deleted folder: $folderName");
                 } else {
                     $_SESSION['error_message'] = "ไม่สามารถลบโฟลเดอร์ได้";
+                    $this->logAction('Delete Folder Failed', "Failed to delete folder: $folderName");
                 }
             } else {
                 $_SESSION['error_message'] = "ไม่พบโฟลเดอร์ที่ระบุ";
+                $this->logAction('Folder Not Found', "Attempted to delete non-existent folder: $folderName");
             }
         } else {
             $_SESSION['error_message'] = "ไม่ได้ระบุชื่อโฟลเดอร์";
+            $this->logAction('Invalid Delete Request', "Attempted to delete folder without specifying folder name");
         }
         header("Location: index.php?page=work-list");
         exit;
@@ -210,6 +216,11 @@ class WorkListController extends BaseController
                 $errors[] = "เกิดข้อผิดพลาดในการอัพโหลดไฟล์ $name";
             }
         }
+
+        $logDetail = empty($errors)
+            ? "uploaded " . count($uploadedFiles) . " images to folder: $folderName"
+            : "Failed to upload some images to folder: $folderName. Errors: " . implode(", ", $errors);
+        $this->logAction('Upload Images', $logDetail);
 
         header('Content-Type: application/json');
         if (empty($errors)) {

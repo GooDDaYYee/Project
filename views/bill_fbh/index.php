@@ -11,24 +11,24 @@
       <table class="table table-bordered table-striped" id="myTable">
         <thead>
           <tr>
-            <th>เลขที่</th>
-            <th>วันที่ออกบิล</th>
-            <th>Site</th>
-            <th>Final BOQ 100%</th>
-            <th>VAT 7%</th>
-            <th>GRAND Total</th>
-            <th>การดำเนินการ</th>
+            <th class="center">เลขที่</th>
+            <th class="center">วันที่ออกบิล</th>
+            <th class="center">Site</th>
+            <th class="center">Final BOQ 100%</th>
+            <th class="center">VAT 7%</th>
+            <th class="center">GRAND Total</th>
+            <th class="center">การดำเนินการ</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($data['bills'] as $bill): ?>
             <tr>
-              <td><?= htmlspecialchars($bill['bill_name']) ?></td>
-              <td><?= $this->formatThaiDate($bill['bill_date']) ?></td>
-              <td><?= htmlspecialchars($bill['bill_site']) ?></td>
-              <td style="text-align: right;"><?= number_format($bill['total_amount'], 2) ?></td>
-              <td style="text-align: right;"><?= number_format($bill['vat'], 2) ?></td>
-              <td style="text-align: right;"><?= number_format($bill['grand_total'], 2) ?></td>
+              <td class="center"><?= htmlspecialchars($bill['bill_name']) ?></td>
+              <td class="center"><?= $this->formatThaiDate($bill['bill_date']) ?></td>
+              <td class="center"><?= htmlspecialchars($bill['bill_site']) ?></td>
+              <td class="right"><?= number_format($bill['total_amount'], 2) ?></td>
+              <td class="right"><?= number_format($bill['vat'], 2) ?></td>
+              <td class="right"><?= number_format($bill['grand_total'], 2) ?></td>
               <td>
                 <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $bill['bill_id'] ?>">แก้ไข</button>
                 <button type="button" class="btn btn-sm btn-outline-warning pdf-btn" data-id="<?= $bill['bill_id'] ?>" data-company="<?= $bill['bill_company'] ?>">PDF</button>

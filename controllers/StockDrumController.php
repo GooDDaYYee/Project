@@ -35,7 +35,7 @@ class StockDrumController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("เกิดข้อผิดพลาดในการดึงข้อมูล Drum: " . $e->getMessage());
+            $this->logAction('Fetch Drums Failed', $e->getMessage());
             return [];
         }
     }
@@ -125,14 +125,8 @@ class StockDrumController extends BaseController
                 $drum_id = $this->db->lastInsertId();
 
                 if ($result) {
-                    $stmtLog = $this->db->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
-                    $logStatus = 'Drum Inserted';
-                    $logDetail = 'Drum ID: ' . $drum_id . ', Drum No: ' . $drum_no . ', Company: ' . $drum_company_id . ', Cable Company: ' . $drum_cable_company_id;
-                    $user_id = $_SESSION['user_id'];
-                    $stmtLog->bindParam(':log_status', $logStatus);
-                    $stmtLog->bindParam(':log_detail', $logDetail);
-                    $stmtLog->bindParam(':user_id', $user_id);
-                    $stmtLog->execute();
+                    $logDetail = "Drum ID: $drum_id, Drum No: $drum_no, Company: $drum_company_id, Cable Company: $drum_cable_company_id";
+                    $this->logAction('Drum Created', $logDetail);
 
                     $this->db->commit();
                     $this->jsonResponse(true, 'เพิ่มข้อมูล Drum สำเร็จ');
@@ -143,6 +137,7 @@ class StockDrumController extends BaseController
                 if ($transactionStarted) {
                     $this->db->rollBack();
                 }
+                $this->logAction('Drum Creation Failed', $e->getMessage());
                 $this->jsonResponse(false, $e->getMessage());
             }
         } else {
@@ -170,49 +165,79 @@ class StockDrumController extends BaseController
             $checkDupStmt->execute();
             $dupResult = $checkDupStmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($drum_full > 4000 && $dupResult) {
-                $this->jsonResponse(false, 'จำนวน Drum มีมากกว่า 4000 เมตร และมีข้อมูล Drum อยู่แล้วกรุณาตรวจสอบข้อมูลใหม่');
-            }
-
             if ($dupResult) {
+                $this->logAction('Drum Update Failed', "มีข้อมูล drum อยู่แล้ว");
                 $this->jsonResponse(false, 'มีข้อมูล drum อยู่แล้วกรุณาเลือกใหม่');
-            }
-
-            if ($drum_full > 4000) {
-                $this->jsonResponse(false, "จำนวน Drum มีมากกว่า 4000 เมตร");
+                return;
             }
 
             try {
-                $stmt = $this->db->prepare("UPDATE drum SET 
-                    drum_no = :drum_no, 
-                    drum_to = :drum_to, 
-                    drum_description = :drum_description, 
-                    drum_company_id = :drum_company_id, 
-                    drum_cable_company_id = :drum_cable_company_id, 
-                    drum_full = :drum_full,
-                    drum_remaining = :drum_remaining
-                    WHERE drum_id = :drum_id");
+                $stmt = $this->db->prepare("SELECT drum_used, drum_full FROM drum WHERE drum_id = :drum_id");
+                $stmt->execute([':drum_id' => $drum_id]);
+                $currentDrum = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                $stmt->execute([
-                    ':drum_no' => $drum_no,
-                    ':drum_to' => $drum_to,
-                    ':drum_description' => $drum_description,
-                    ':drum_company_id' => $drum_company_id,
-                    ':drum_cable_company_id' => $drum_cable_company_id,
-                    ':drum_full' => $drum_full,
-                    ':drum_remaining' => $drum_full, // Assuming we reset drum_remaining to drum_full on update
-                    ':drum_id' => $drum_id
-                ]);
+                if ($currentDrum['drum_used'] > 0) {
+                    // Drum is in use, don't update drum_full and drum_remaining
+                    $stmt = $this->db->prepare("UPDATE drum SET 
+                        drum_no = :drum_no, 
+                        drum_to = :drum_to, 
+                        drum_description = :drum_description, 
+                        drum_company_id = :drum_company_id, 
+                        drum_cable_company_id = :drum_cable_company_id
+                        WHERE drum_id = :drum_id");
+
+                    $params = [
+                        ':drum_no' => $drum_no,
+                        ':drum_to' => $drum_to,
+                        ':drum_description' => $drum_description,
+                        ':drum_company_id' => $drum_company_id,
+                        ':drum_cable_company_id' => $drum_cable_company_id,
+                        ':drum_id' => $drum_id
+                    ];
+                } else {
+                    // Drum is not in use, update all fields including drum_full and drum_remaining
+                    if (empty($drum_full) || $drum_full > 4000) {
+                        $this->logAction('Drum Update Failed', "Invalid drum_full value: $drum_full");
+                        $this->jsonResponse(false, "จำนวน Drum ไม่ถูกต้อง กรุณาระบุค่าระหว่าง 1 ถึง 4000 เมตร");
+                        return;
+                    }
+
+                    $stmt = $this->db->prepare("UPDATE drum SET 
+                        drum_no = :drum_no, 
+                        drum_to = :drum_to, 
+                        drum_description = :drum_description, 
+                        drum_company_id = :drum_company_id, 
+                        drum_cable_company_id = :drum_cable_company_id, 
+                        drum_full = :drum_full,
+                        drum_remaining = :drum_remaining
+                        WHERE drum_id = :drum_id");
+
+                    $params = [
+                        ':drum_no' => $drum_no,
+                        ':drum_to' => $drum_to,
+                        ':drum_description' => $drum_description,
+                        ':drum_company_id' => $drum_company_id,
+                        ':drum_cable_company_id' => $drum_cable_company_id,
+                        ':drum_full' => $drum_full,
+                        ':drum_remaining' => $drum_full,
+                        ':drum_id' => $drum_id
+                    ];
+                }
+
+                $stmt->execute($params);
+
+                $logDetail = "Drum ID: $drum_id, Drum No: $drum_no, Company: $drum_company_id, Cable Company: $drum_cable_company_id";
+                $this->logAction('Drum Updated', $logDetail);
 
                 $this->jsonResponse(true, 'อัปเดตข้อมูล Drum สำเร็จ');
             } catch (PDOException $e) {
+                $this->logAction('Drum Update Failed', $e->getMessage());
                 $this->jsonResponse(false, 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' . $e->getMessage());
             }
         } else {
             $this->jsonResponse(false, "ข้อมูลไม่ถูกส่งไป");
         }
     }
-
     public function deleteDrum()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -225,11 +250,14 @@ class StockDrumController extends BaseController
                 if ($result && $result['drum_used'] == 0) {
                     $stmt = $this->db->prepare("DELETE FROM drum WHERE drum_id = :drum_id");
                     $stmt->execute([':drum_id' => $drum_id]);
+                    $this->logAction('Drum Deleted', "Drum ID: $drum_id, Drum No: " . $result['drum_no'] . ", Company: " . $result['drum_company_id'] . ", Cable Company: " . $result['drum_cable_company_id']);
                     $this->successResponse();
                 } else {
+                    $this->logAction('Drum Deletion Failed', "Drum ID: $drum_id - มีการเรียกใช้เคเบิลอยู่");
                     $this->jsonResponse(false, 'ไม่สามารถลบข้อมูล Drum ได้ มีการเรียกใช้เคเบิลอยู่!');
                 }
-            } catch (PDOException) {
+            } catch (PDOException $e) {
+                $this->logAction('Drum Deletion Failed', $e->getMessage());
                 $this->errorResponse();
             }
         } else {
@@ -252,12 +280,10 @@ class StockDrumController extends BaseController
                 $stmt->execute([':drum_id' => $drum_id]);
                 $drum = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                // Fetch all drum companies
                 $stmt_companies = $this->db->prepare("SELECT * FROM drum_company ORDER BY drum_company_detail ASC");
                 $stmt_companies->execute();
                 $all_companies = $stmt_companies->fetchAll(PDO::FETCH_ASSOC);
 
-                // Fetch all drum cable companies
                 $stmt_cable_companies = $this->db->prepare("SELECT * FROM drum_cable_company ORDER BY drum_cable_company_detail ASC");
                 $stmt_cable_companies->execute();
                 $all_cable_companies = $stmt_cable_companies->fetchAll(PDO::FETCH_ASSOC);

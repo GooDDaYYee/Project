@@ -8,20 +8,20 @@
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>ชื่อโฟรเดอร์</th>
-                        <th>จำนวนไฟล์</th>
-                        <th>วันที่รายงาน</th>
-                        <th>ดูรายงาน</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="left">ชื่อโฟรเดอร์</th>
+                        <th class="center">จำนวนไฟล์</th>
+                        <th class="center">วันที่รายงาน</th>
+                        <th class="center">ดูรายงาน</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($data['folders'] as $i => $folder): ?>
                         <tr>
-                            <td><?= $i + 1 ?></span></td>
-                            <td><?= htmlspecialchars($folder['name']) ?></td>
-                            <td><?= htmlspecialchars($folder['fileCount']) ?></td>
-                            <td><?= htmlspecialchars($folder['created']) ?></td>
+                            <td class="center"><?= $i + 1 ?></span></td>
+                            <td class="center"><?= htmlspecialchars($folder['name']) ?></td>
+                            <td class="center"><?= htmlspecialchars($folder['fileCount']) ?></td>
+                            <td class="center"><?= htmlspecialchars($folder['created']) ?></td>
                             <td>
                                 <a href="<?= "index.php?page=work-list&action=view&folder=" . urlencode($folder['name']) ?>" class="btn btn-sm btn-outline-primary">ดูรายงาน</a>
                                 <a href="<?= "index.php?page=work-list&action=delete&folder=" . urlencode($folder['name']) ?>" class="btn btn-sm btn-outline-danger delete-folder">ลบ</a>

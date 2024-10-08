@@ -1,3 +1,10 @@
+<style>
+    .custom-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 2;
+    }
+</style>
 <div class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header d-flex align-items-center py-3 justify-content-between">
@@ -5,10 +12,11 @@
                 <i class="fa fa-list-ul" aria-hidden="true"></i>&nbsp;จัดการเงินเดือน
             </div>
             <div class="row">
-                <form method="GET" id="filterForm">
-                    <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
-                    <div class="row">
-                        <div class="col-sm-6">
+                <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
+                <div class="row">
+                    <form method="GET" id="filterForm" class="d-flex align-items-center">
+                        <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
+                        <div class="col-sm-3">
                             <select name="month" class="form-control" id="month" onchange="document.getElementById('filterForm').submit()">
                                 <option value="1">เดือน</option>
                                 <?php
@@ -20,7 +28,7 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <select name="year" class="form-control" id="year" onchange="document.getElementById('filterForm').submit()">
                                 <option value="1">ปี</option>
                                 <?php for ($i = 0; $i <= 50; $i++) { ?>
@@ -30,9 +38,14 @@
                                 <?php } ?>
                             </select>
                         </div>
-                    </div>
-                </form>
-                <button type="button" class="btn btn-warning bg-gradient-purple ml-2" onclick="window.open('index.php?page=employee-salary&action=create', '_parent')">เพิ่มเงินเดือน</button>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" onclick="window.open('index.php?page=employee-salary&action=create', '_parent')">เพิ่มเงินเดือน</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" onclick="window.open('index.php?page=employee-salary&action=exportPDF', '_parent')">สรุปเงินเดือน</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
@@ -40,29 +53,29 @@
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>ชื่อ</th>
-                        <th>นามสกุล</th>
-                        <th>เงินเดือน</th>
-                        <th>OT</th>
-                        <th style="width: 14%;">ประกันสังคม (หักในเงินเดือน)</th>
-                        <th>อื่นๆ</th>
-                        <th>รวม</th>
-                        <th>การดำเนินการ</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="center">ชื่อ</th>
+                        <th class="center">นามสกุล</th>
+                        <th class="center">เงินเดือน</th>
+                        <th class="center">OT</th>
+                        <th class="center">ประกันสังคม (หักในเงินเดือน)</th>
+                        <th class="center">อื่นๆ</th>
+                        <th class="center">รวม</th>
+                        <th class="center">การดำเนินการ</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
                     foreach ($data['salaries'] as $index => $salary): ?>
                         <tr>
-                            <td><?= $index + 1 ?></td>
-                            <td><?= htmlspecialchars($salary['employee_name']) ?></td>
-                            <td><?= htmlspecialchars($salary['employee_lastname']) ?></td>
-                            <td style="text-align: right;"><?= number_format($salary['salary'], 2) ?></td>
-                            <td style="text-align: right;"><?= number_format($salary['ot'], 2) ?></td>
-                            <td style="text-align: right;"><?= number_format($salary['social_security'], 2) ?></td>
-                            <td style="text-align: right;"><?= number_format($salary['other'], 2) ?></td>
-                            <td style="text-align: right;"><?= number_format($salary['total_salary'], 2) ?></td>
+                            <td class="center"><?= $index + 1 ?></td>
+                            <td class="center"><?= htmlspecialchars($salary['employee_name']) ?></td>
+                            <td class="center"><?= htmlspecialchars($salary['employee_lastname']) ?></td>
+                            <td class="right"><?= number_format($salary['salary'], 2) ?></td>
+                            <td class="right"><?= number_format($salary['ot'], 2) ?></td>
+                            <td class="right"><?= number_format($salary['social_security'], 2) ?></td>
+                            <td class="right"><?= number_format($salary['other'], 2) ?></td>
+                            <td class="right"><?= number_format($salary['total_salary'], 2) ?></td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-salary"
                                     data-salary_id="<?= $salary['salary_id'] ?>"

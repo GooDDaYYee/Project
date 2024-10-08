@@ -354,6 +354,10 @@ class BillFBHController extends BaseController
 
             $stmtInvoiceItem = $this->db->prepare("INSERT INTO bill_detail (bill_id, au_id, unit, price) VALUES (:bill_id, :au_id, :unit, :price)");
 
+            $stmt = $this->db->prepare("SELECT bill_company FROM bill WHERE bill_id = :bill_id");
+            $stmt->execute([':bill_id' => $billId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
             foreach ($_POST['selectedAuId'] as $i => $auId) {
                 $stmtPrice = $this->db->prepare("SELECT au_price FROM au_all WHERE au_id = :au_id");
                 $stmtPrice->execute([':au_id' => $auId]);
@@ -383,7 +387,7 @@ class BillFBHController extends BaseController
 
             $stmtUpdateBill->execute();
 
-            $this->logAction('Bill Updated', "Bill ID: $billId, Total Amount: $total");
+            $this->logAction('Bill Updated', "Bill ID: $billId, Total Amount: $total, Company: {$result['bill_company']}");
 
             $this->db->commit();
             return $this->successResponse();

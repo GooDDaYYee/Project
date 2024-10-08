@@ -327,7 +327,7 @@ abstract class BaseController
                     $html .= '<table>
                                             <tr>
                                                 <td style="border: none;" class="right">เลขที่ :</td>
-                                                <td style="border: none;" class="center">' . $bill['bill_id'] . '</td>
+                                                <td style="border: none;" class="center">' . $bill['bill_name'] . '</td>
                                             </tr>
                                             <tr>
                                                 <td style="border: none;" class="right">วันที่ :</td>
@@ -337,7 +337,7 @@ abstract class BaseController
                                     </div>
                                 </td>
                             </tr>';
-                    if ($company == 'mixed') {
+                    if ($company == 'Mixed') {
                         $html .= '
                                 <tr>
                                 <td colspan="3" style="vertical-align: top;" class="left">'
@@ -381,8 +381,13 @@ abstract class BaseController
                                 <td colspan="4" class="left"><strong>Project : </strong> ' . $bill['bill_project'] . '</td>
                             </tr>
                         <tr>
-                            <th class="center" style="width: 8%;">ITEM NO.</th>
-                            <th class="center" style="width: 18%;">AU no.</th>
+                            <th class="center" style="width: 8%;">ITEM NO.</th>';
+                    if ($company == 'Mixed') {
+                        $html .= '<th class="center" style="width: 12%;">AU no.</th>';
+                    } elseif ($company == 'FBH') {
+                        $html .= '<th class="center" style="width: 18%;">AU no.</th>';
+                    }
+                    $html .= '
                             <th class="left" style="width: 50%;">Assembly Unit Description (รายการ)</th>
                             <th class="center" style="width: 10%;">Unit</th>
                             <th class="center" style="width: 8%;">Quantity</th>
@@ -469,7 +474,7 @@ abstract class BaseController
                     if ($docType == 'receipt') {
                         $html .= '<tr>
                                         <td class="right"><strong>หัก ณ ที่จ่าย 3%</strong></td>
-                                        <td class="right">' . number_format($bill['total_amount'], 2, '.', ',') . '</td>
+                                        <td class="right">' . number_format($bill['withholding'], 2, '.', ',') . '</td>
                                     </tr>';
                     }
 
@@ -483,13 +488,31 @@ abstract class BaseController
                                         </tr>
                                         <tr>
                                             <td style="border: none;" class="center hide">
-                                                ' . $this->Convert($bill['grand_total'], 2) . '
+                                                ';
+                    if ($docType == 'receipt') {
+                        $amountToConvert = $bill['grand_total'] - $bill['withholding'];
+                        if ($amountToConvert < 0) {
+                            $html .= '<span style="color: red;">Error: Negative amount after withholding</span>';
+                        } else {
+                            $html .= $this->Convert($amountToConvert, 2);
+                        }
+                    } else {
+                        $html .= $this->Convert($bill['grand_total'], 2);
+                    }
+                    $html .= '
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
                                 <td class="right"><strong>Grand Total</strong></td>
-                                <td class="right">' . number_format($bill['grand_total'], 2, '.', ',') . '</td>
+                                <td class="right">';
+                    if ($docType == 'receipt') {
+                        $amountToConvert = $bill['grand_total'] - $bill['withholding'];
+                        $html .= number_format($amountToConvert, 2, '.', ',');
+                    } else {
+                        $html .= number_format($bill['grand_total'], 2, '.', ',');
+                    }
+                    $html .= '</td>
                             </tr>
                         </table>
                         <table>
@@ -499,7 +522,7 @@ abstract class BaseController
                                 <td style="width: 30%;" class="center">บริษัท พีเอสเอ็นเค เทเลคอม จำกัด</td>
                             </tr>
                             <tr>
-                                <td class="center"><br><br><br><br><br><br><br><br></td>
+                                <td class="center"><br><br><br><br><br><br><br></td>
                                 <td class="center"></td>
                                 <td class="center"></td>
                             </tr>
@@ -526,11 +549,44 @@ abstract class BaseController
                     $mpdf->WriteHTML($html);
                     $mpdf->Output();
                 }
+                $this->logAction('PDF Created', "Bill $company Type $docType");
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();
             }
         } else {
             echo "Invalid request.";
         }
+    }
+
+    protected function exPDFSalary()
+    {
+        require_once __DIR__ . '/../libs/mpdf/vendor/autoload.php';
+
+        $defaultConfig = (new Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        $mpdf = new \Mpdf\Mpdf([
+            'fontDir' => array_merge($fontDirs, [
+                __DIR__ . '/../libs/mpdf/font',
+            ]),
+            'fontdata' => $fontData + [
+                'th_sarabun' => [
+                    'R' => 'THSarabun.ttf',
+                    'B' => 'THSarabun-Bold.ttf',
+                    'I' => 'THSarabun-Italic.ttf',
+                    'BI' => 'THSarabun-BoldItalic.ttf',
+                ]
+            ],
+            'default_font' => 'th_sarabun',
+            'format' => [200, 150], // 4 x 6 นิ้ว ในหน่วยมิลลิเมตร
+            'margin_top' => 5,
+            'margin_bottom' => 5,
+            'margin_left' => 5,
+            'margin_right' => 5
+        ]);
+        $html = '';
+        $mpdf->WriteHTML($html);
+        $mpdf->Output();
     }
 }

@@ -11,33 +11,33 @@
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>Route</th>
-                        <th>Section</th>
-                        <th>Team</th>
-                        <th>Cable จาก</th>
-                        <th>Cable ถึง</th>
-                        <th>Cable ใช้ไป</th>
-                        <th>Drum</th>
-                        <th>ใช้กับบริษัท</th>
-                        <th>การดำเนินการ</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="center">Route</th>
+                        <th class="center">Section</th>
+                        <th class="center">Team</th>
+                        <th class="center">Cable จาก</th>
+                        <th class="center">Cable ถึง</th>
+                        <th class="center">Cable ใช้ไป</th>
+                        <th class="center">Drum</th>
+                        <th class="center">ใช้กับบริษัท</th>
+                        <th class="center">การดำเนินการ</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($data['cables'] as $i => $cable): ?>
                         <tr>
-                            <td scope="row"><?= $i + 1 ?></td>
-                            <td><?= htmlspecialchars($cable['route_name']) ?></td>
-                            <td><?= htmlspecialchars($cable['installed_section']) ?></td>
-                            <td><?= htmlspecialchars($cable['placing_team']) ?></td>
-                            <td>ML <?= htmlspecialchars($cable['cable_form']) ?></td>
-                            <td>ML <?= htmlspecialchars($cable['cable_to']) ?></td>
-                            <td><?= htmlspecialchars($cable['cable_used']) ?> เมตร</td>
-                            <td><?= htmlspecialchars($cable['drum_no']) ?></td>
-                            <td><?= htmlspecialchars($cable['cable_work_name']) ?></td>
+                            <td class="center"><?= $i + 1 ?></td>
+                            <td class="center"><?= htmlspecialchars($cable['route_name']) ?></td>
+                            <td class="center"><?= htmlspecialchars($cable['installed_section']) ?></td>
+                            <td class="center"><?= htmlspecialchars($cable['placing_team']) ?></td>
+                            <td class="center">ML <?= htmlspecialchars($cable['cable_form']) ?></td>
+                            <td class="center">ML <?= htmlspecialchars($cable['cable_to']) ?></td>
+                            <td class="center"><?= htmlspecialchars($cable['cable_used']) ?> เมตร</td>
+                            <td class="center"><?= htmlspecialchars($cable['drum_no']) ?></td>
+                            <td class="center"><?= htmlspecialchars($cable['cable_work_name']) ?></td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-btn" data-id="<?= $cable['cable_id'] ?>">แก้ไข</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>">ลบ</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="<?= $cable['cable_id'] ?>" data-route="<?= $cable['route_name'] ?>">ลบ</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -74,11 +74,11 @@
                     </div>
                     <div class="form-group">
                         <label for="editCableFrom">Cable From</label>
-                        <input type="number" class="form-control" id="editCableFrom" name="cable_form" required>
+                        <input type="number" class="form-control" id="editCableFrom" name="cable_form" required maxlength="4">
                     </div>
                     <div class="form-group">
                         <label for="editCableTo">Cable To</label>
-                        <input type="number" class="form-control" id="editCableTo" name="cable_to" required>
+                        <input type="number" class="form-control" id="editCableTo" name="cable_to" required maxlength="4">
                     </div>
                     <div class="form-group">
                         <label for="editCableWork">ใช้กับบริษัท</label>
@@ -189,10 +189,10 @@
 
             $('.delete-btn').off('click').on('click', function() {
                 const cableId = $(this).data('id');
-                const id = $(this).data('id');
+                const Route = $(this).data('route');
                 Swal.fire({
                     title: 'คุณแน่ใจหรือไม่?',
-                    text: "คุณต้องการลบข้อมูล" + id + "นี้หรือไม่?",
+                    text: "คุณต้องการลบข้อมูล Cable " + Route + " นี้หรือไม่?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

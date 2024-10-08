@@ -7,15 +7,15 @@
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>ชื่อ</th>
-                        <th>นามสกุล</th>
-                        <th>อายุ</th>
-                        <th>เบอร์โทร</th>
-                        <th>อีเมล</th>
-                        <th>ตำแหน่ง</th>
-                        <th>สถานะ</th>
-                        <th>การดำเนินการ</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="center">ชื่อ</th>
+                        <th class="center">นามสกุล</th>
+                        <th class="center">อายุ</th>
+                        <th class="center">เบอร์โทร</th>
+                        <th class="center">อีเมล</th>
+                        <th class="center">ตำแหน่ง</th>
+                        <th class="center">สถานะ</th>
+                        <th class="center">การดำเนินการ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -23,14 +23,14 @@
                     if (count($data['employees']) > 0) {
                         foreach ($data['employees'] as $i => $employee): ?>
                             <tr>
-                                <td><?= $i + 1 ?></td>
-                                <td><?= htmlspecialchars($employee['employee_name']) ?></td>
-                                <td><?= htmlspecialchars($employee['employee_lastname']) ?></td>
-                                <td><?= htmlspecialchars($employee['employee_age']) ?></td>
-                                <td><?= htmlspecialchars($employee['employee_phone']) ?></td>
-                                <td><?= htmlspecialchars($employee['employee_email']) ?></td>
-                                <td><?= $this->getPositionName($employee['employee_position']) ?></td>
-                                <td><?= $this->getStatusName($employee['employee_status']) ?></td>
+                                <td class="center"><?= $i + 1 ?></td>
+                                <td class="center"><?= htmlspecialchars($employee['employee_name']) ?></td>
+                                <td class="center"><?= htmlspecialchars($employee['employee_lastname']) ?></td>
+                                <td class="center"><?= htmlspecialchars($employee['employee_age']) ?></td>
+                                <td class="center"><?= htmlspecialchars($employee['employee_phone']) ?></td>
+                                <td class="center"><?= htmlspecialchars($employee['employee_email']) ?></td>
+                                <td class="center"><?= $this->getPositionName($employee['employee_position']) ?></td>
+                                <td class="center"><?= $this->getStatusName($employee['employee_status']) ?></td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-primary edit-employee"
                                         data-id="<?= $employee['employee_id'] ?>"

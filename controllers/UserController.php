@@ -136,23 +136,16 @@ class UserController extends BaseController
             try {
                 $this->db->beginTransaction();
 
-                // Update log table instead of deleting
-                // $stmt = $this->db->prepare("UPDATE log SET delete_at = CURRENT_TIMESTAMP WHERE user_id = :user_id");
-                // $stmt->execute([':user_id' => $user_id]);
-
-                // Check for associated employee record
                 $stmt = $this->db->prepare("SELECT employee_id FROM users WHERE user_id = :user_id");
                 $stmt->execute([':user_id' => $user_id]);
                 $employee = $stmt->fetch();
 
                 if ($employee) {
                     $employee_id = $employee['employee_id'];
-                    // Update employee table
-                    $stmt = $this->db->prepare("UPDATE employee SET delete_at = CURRENT_TIMESTAMP WHERE employee_id = :employee_id");
+                    $stmt = $this->db->prepare("UPDATE employee SET delete_at = CURRENT_TIMESTAMP, employee_status = 0 WHERE employee_id = :employee_id");
                     $stmt->execute([':employee_id' => $employee_id]);
                 }
 
-                // Update users table
                 $stmt = $this->db->prepare("UPDATE users SET delete_at = CURRENT_TIMESTAMP, status = 0 WHERE user_id = :user_id");
                 $stmt->execute([':user_id' => $user_id]);
 

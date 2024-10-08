@@ -26,10 +26,10 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-4 mb-3 mb-sm-0">
-                                <input type="number" class="form-control form-control-user" id="cable_form" name="cable_form" placeholder="Cable From" required>
+                                <input type="number" class="form-control form-control-user" id="cable_form" name="cable_form" placeholder="Cable From" required maxlength="4">
                             </div>
                             <div class="col-sm-4 mb-3 mb-sm-0">
-                                <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required>
+                                <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required maxlength="4">
                             </div>
                             <div class="col-sm-4">
                                 <select class="form-control" id="cable_work_id" name="cable_work_id" required>

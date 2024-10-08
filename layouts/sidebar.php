@@ -62,7 +62,7 @@ function isActive($page)
                     <h6 class="collapse-header"><i class="fa-solid fa-users"></i> ผู้ใช้</h6>
                     <a class="collapse-item <?php isActive('user') ?>" href="index.php?page=user">&nbsp; จัดการผู้ใช้</a>
                     <a class="collapse-item <?php isActive('log') ?>" href="index.php?page=log">&nbsp; ประวัติการใช้งาน</a>
-                    <a class="collapse-item <?php isActive('edit-back') ?>" href="index.php?page=edit-back">&nbsp; แกไขข้อมูลเชิงลึก</a>
+                    <a class="collapse-item <?php isActive('edit-back') ?>" href="index.php?page=edit-back">&nbsp; แก้ไขข้อมูลเชิงลึก</a>
                     <a class="collapse-item <?php isActive('au-page') ?>" href="index.php?page=au-page">&nbsp; แก้ไข AU</a>
                 </div>
             <?php endif; ?>
@@ -70,7 +70,6 @@ function isActive($page)
     </li>
 
     <hr class="sidebar-divider d-none d-md-block">
-
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>

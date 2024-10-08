@@ -48,6 +48,18 @@ try {
         content: '\f0dd';
         color: #007bff;
     }
+
+    .right {
+        text-align: right !important;
+    }
+
+    .center {
+        text-align: center !important;
+    }
+
+    .left {
+        text-align: left !important;
+    }
 </style>
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

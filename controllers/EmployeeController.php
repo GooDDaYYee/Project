@@ -23,7 +23,7 @@ class EmployeeController extends BaseController
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("เกิดข้อผิดพลาดในการเรียกข้อมูลพนักงาน: " . $e->getMessage());
+            $this->logAction('Fetch Employees Error', $e->getMessage());
             return [];
         }
     }
@@ -62,8 +62,10 @@ class EmployeeController extends BaseController
                     ':status' => $status,
                     ':employee_id' => $employee_id
                 ]);
+                $this->logAction('Employee Updated', "Employee ID: $employee_id, Employee Name: $name, Employee Lastname: $lastname, Employee Age: $age, Employee Phone: $phone, Employee Email: $email, Employee Position: $position, Employee Status: $status");
                 echo json_encode(['success' => true, 'message' => 'อัปเดตพนักงานเรียบร้อยแล้ว']);
             } catch (PDOException $e) {
+                $this->logAction('Employee Update Error', $e->getMessage());
                 echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการอัปเดตพนักงาน: ' . $e->getMessage()]);
             }
         }
@@ -77,17 +79,32 @@ class EmployeeController extends BaseController
             try {
                 $this->db->beginTransaction();
 
+                $stmt_user = $this->db->prepare("SELECT user_id FROM users WHERE employee_id = :employee_id");
+                $stmt_user->execute([':employee_id' => $employee_id]);
+                $user_result = $stmt_user->fetch(PDO::FETCH_ASSOC);
+
+                if (!$user_result) {
+                    throw new Exception("ไม่พบข้อมูลผู้ใช้สำหรับพนักงานนี้");
+                }
+
+                $userid = $user_result['user_id'];
+
                 $stmt2 = $this->db->prepare("UPDATE users SET delete_at = CURRENT_TIMESTAMP, status = 0 WHERE employee_id = :employee_id");
                 $stmt2->execute([':employee_id' => $employee_id]);
 
-                $stmt = $this->db->prepare("UPDATE employee SET delete_at = CURRENT_TIMESTAMP WHERE employee_id = :employee_id");
+                $stmt = $this->db->prepare("UPDATE employee SET delete_at = CURRENT_TIMESTAMP, employee_status = 0 WHERE employee_id = :employee_id");
                 $stmt->execute([':employee_id' => $employee_id]);
 
                 $this->db->commit();
+
+                $this->logAction('Employee Soft Deleted', "Employee ID: $employee_id, User ID: $userid");
                 echo json_encode(['success' => true, 'message' => 'ลบพนักงานเรียบร้อยแล้ว']);
             } catch (PDOException $e) {
                 $this->db->rollBack();
                 echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบพนักงาน: ' . $e->getMessage()]);
+            } catch (Exception $e) {
+                $this->db->rollBack();
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             }
         }
     }

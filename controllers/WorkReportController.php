@@ -19,6 +19,7 @@ class WorkReportController extends BaseController
 
             if (empty($name) || empty($jobname) || empty($user_id)) {
                 $_SESSION['error_message'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
+                $this->logAction('Work Report Submission Failed', "Incomplete data: name={$name}, jobname={$jobname}, user_id={$user_id}");
                 header("Location: index.php?page=work-report");
                 exit();
             }
@@ -27,12 +28,13 @@ class WorkReportController extends BaseController
             $uploadedFiles = [];
             if (isset($_FILES['images']) && !empty($_FILES['images']['name'][0])) {
                 // Create a folder if not exist and folder name is slug name-jobname-YmdHis
-                $folderName =   $this->createSlug($jobname) . '-' . $this->createSlug($name) . '-' . date('YmdHis');
+                $folderName = $this->createSlug($jobname) . '-' . $this->createSlug($name) . '-' . date('YmdHis');
                 $uploadDir = 'assets/files/LINE/' . $folderName . '/';
 
                 if (!file_exists($uploadDir)) {
                     if (!mkdir($uploadDir, 0777, true)) {
                         $_SESSION['error_message'] = "ไม่สามารถสร้างโฟลเดอร์สำหรับอัปโหลดไฟล์ได้";
+                        $this->logAction('Folder Creation Failed', "Failed to create folder: {$uploadDir}");
                         header("Location: index.php?page=work-report");
                         exit();
                     }
@@ -49,6 +51,7 @@ class WorkReportController extends BaseController
                     // Check file size
                     if ($file_size > $maxFileSize) {
                         $_SESSION['error_message'] = "ไฟล์ {$file_name} มีขนาดใหญ่เกินไป (ไม่เกิน 5MB)";
+                        $this->logAction('File Upload Failed', "File size exceeded: {$file_name}, size={$file_size}");
                         header("Location: index.php?page=work-report");
                         exit();
                     }
@@ -57,6 +60,7 @@ class WorkReportController extends BaseController
                     $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
                     if (!in_array($file_ext, $allowed_extensions)) {
                         $_SESSION['error_message'] = "ไฟล์ {$file_name} ไม่ใช่รูปภาพที่รองรับ (jpg, jpeg, png, gif เท่านั้น)";
+                        $this->logAction('File Upload Failed', "Invalid file type: {$file_name}, type={$file_ext}");
                         header("Location: index.php?page=work-report");
                         exit();
                     }
@@ -64,8 +68,10 @@ class WorkReportController extends BaseController
                     $new_file_name = uniqid() . '.' . $file_ext;
                     if (move_uploaded_file($file_tmp, $uploadDir . $new_file_name)) {
                         $uploadedFiles[] = $folderName . '/' . $new_file_name;
+                        $this->logAction('File Uploaded', "File uploaded successfully: {$new_file_name}");
                     } else {
                         $_SESSION['error_message'] = "เกิดข้อผิดพลาดในการอัปโหลดไฟล์ {$file_name}";
+                        $this->logAction('File Upload Failed', "Failed to move uploaded file: {$file_name}");
                         header("Location: index.php?page=work-report");
                         exit();
                     }
@@ -83,9 +89,13 @@ class WorkReportController extends BaseController
 
             if (!$notify_result) {
                 $_SESSION['error_message'] = "เพิ่มรายงานใหม่แล้ว แต่ไม่สามารถส่งการแจ้งเตือน LINE Notify ได้";
+                $this->logAction('LINE Notify Failed', "Failed to send LINE notification for user: {$name}, job: {$jobname}");
+            } else {
+                $this->logAction('LINE Notify Sent', "LINE notification sent for user: {$name}, job: {$jobname}");
             }
 
             $_SESSION['success_message'] = "รายงานถูกบันทึกและส่งการแจ้งเตือนเรียบร้อยแล้ว";
+            $this->logAction('Work Report Submitted', "Report submitted by {$name} for job: {$jobname}, images: {$imageCount}");
             header("Location: $fullPath");
             exit();
         }
@@ -101,6 +111,7 @@ class WorkReportController extends BaseController
         $token = $tokens[$group] ?? null;
 
         if (!$token) {
+            $this->logAction('LINE Notify Failed', "Invalid group token for group: {$group}");
             return false;
         }
 
@@ -121,11 +132,13 @@ class WorkReportController extends BaseController
         $result = curl_exec($ch);
 
         if (curl_error($ch)) {
+            $this->logAction('LINE Notify Failed', "cURL error: " . curl_error($ch));
             curl_close($ch);
             return false;
         }
         curl_close($ch);
 
+        $this->logAction('LINE Notify Sent', "Notification sent to group: {$group}, user: {$name}, job: {$jobname}");
         return true;
     }
 

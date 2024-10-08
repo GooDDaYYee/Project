@@ -44,7 +44,13 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <h4>Drum เต็ม</h4>
-                                    <input type="number" id="drum_full" name="drum_full" class="form-control form-control-user" placeholder="Drum เต็ม" required="">
+                                    <input type="text"
+                                        id="drum_full"
+                                        name="drum_full"
+                                        class="form-control form-control-user"
+                                        placeholder="Drum เต็ม"
+                                        required
+                                        maxlength="4">
                                 </div>
                             </div>
                             <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_drum" type="submit">

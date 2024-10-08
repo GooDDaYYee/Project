@@ -13,33 +13,33 @@
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>บริษัทผลิตสาย</th>
-                        <th>Drum Number</th>
-                        <th>Drum To</th>
-                        <th>Description</th>
-                        <th>รับจากบริษัท</th>
-                        <th>Drum เต็ม</th>
-                        <th>Drum ใช้ไป</th>
-                        <th>Drum เหลือ</th>
-                        <th>การดำเนินการ</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="center">บริษัทผลิตสาย</th>
+                        <th class="center">Drum Number</th>
+                        <th class="center">Drum To</th>
+                        <th class="center">Description</th>
+                        <th class="center">รับจากบริษัท</th>
+                        <th class="center">Drum เต็ม</th>
+                        <th class="center">Drum ใช้ไป</th>
+                        <th class="center">Drum เหลือ</th>
+                        <th class="center">การดำเนินการ</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($data as $index => $drum): ?>
                         <tr>
-                            <td><?= $index + 1 ?></td>
-                            <td><?= htmlspecialchars($drum['drum_cable_company_detail'] ?? 'ไม่ระบุ') ?></td>
-                            <td><?= htmlspecialchars($drum['drum_no']) ?></td>
-                            <td><?= htmlspecialchars($drum['drum_to']) ?></td>
-                            <td><?= htmlspecialchars($drum['drum_description']) ?></td>
-                            <td><?= htmlspecialchars($drum['drum_company_detail'] ?? 'ไม่ระบุ') ?></td>
-                            <td><?= htmlspecialchars($drum['drum_full']) ?> เมตร</td>
-                            <td><?= htmlspecialchars($drum['drum_used']) ?> เมตร</td>
-                            <td><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</td>
+                            <td class="center"><?= $index + 1 ?></td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_cable_company_detail'] ?? 'ไม่ระบุ') ?></td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_no']) ?></td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_to']) ?></td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_description']) ?></td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_company_detail'] ?? 'ไม่ระบุ') ?></td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_full']) ?> เมตร</td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_used']) ?> เมตร</td>
+                            <td class="center"><?= htmlspecialchars($drum['drum_remaining']) ?> เมตร</td>
                             <td>
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-drum" data-id="<?= $drum['drum_id'] ?>">แก้ไข</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-index="<?= $index + 1 ?>">ลบ</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-drum" data-id="<?= $drum['drum_id'] ?>" data-no="<?= $drum['drum_no'] ?>">ลบ</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -89,7 +89,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit_drum_full">Drum เต็ม</label>
-                        <input type="number" id="edit_drum_full" name="edit_drum_full" class="form-control" required>
+                        <input type="number" id="edit_drum_full" name="edit_drum_full" class="form-control" required maxlength="4">
                         <p id="edit_drum_full_notice" style="display: none; color: red;"></p>
                     </div>
                 </form>
@@ -139,11 +139,11 @@
 
             $('.delete-drum').off('click').on('click', function() {
                 var drum_id = $(this).data('id');
-                var index = $(this).data('index');
+                var drum_no = $(this).data('no');
 
                 Swal.fire({
                     title: 'คุณแน่ใจหรือไม่?',
-                    text: "คุณต้องการลบข้อมูล Drum ลำดับที่ " + index + " หรือไม่?",
+                    text: "คุณต้องการลบข้อมูล Drum " + drum_no + " หรือไม่?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -161,7 +161,7 @@
                             dataType: 'json',
                             success: function(response) {
                                 if (response.success) {
-                                    Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Drum ลำดับที่ ' + index + ' เรียบร้อยแล้ว!', 'success')
+                                    Swal.fire('ลบสำเร็จ', 'ลบข้อมูล Drum ' + drum_no + ' เรียบร้อยแล้ว!', 'success')
                                         .then(() => {
                                             location.reload();
                                         });

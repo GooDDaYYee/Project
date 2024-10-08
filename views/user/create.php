@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <h4>เบอร์โทร</h4>
-                                <input type="text" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทร" required>
+                                <input type="text" id="phone" name="phone" class="form-control form-control-user" placeholder="เบอร์โทร" required maxlength="10">
                             </div>
                             <div class="col-sm-3">
                                 <h4>เลือกตำแหน่ง</h4>

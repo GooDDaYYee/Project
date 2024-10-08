@@ -40,7 +40,6 @@ class EmployeeSalaryController extends BaseController
     public function create_post()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
             $employee_id = $_POST['employee_id'];
             $salary = $_POST['salary'];
             $ot = $_POST['ot'];
@@ -49,7 +48,6 @@ class EmployeeSalaryController extends BaseController
             $month = $_POST['month'];
             $year = $_POST['year'];
 
-            // ตรวจสอบค่าว่าง ของเดือน และ ค่าที่ส่งมาเป็น 0
             if ($month == '0' || $year == '0' || $month == ' ' || $year == ' ') {
                 http_response_code(400);
                 echo json_encode(['success' => false, 'message' => 'กรุณาเลือกเดือนและปี']);
@@ -78,7 +76,6 @@ class EmployeeSalaryController extends BaseController
                         echo json_encode(['success' => false, 'message' => 'มีข้อมูลเงินเดือนของพนักงานมีอยู่แล้ว']);
                         exit();
                     } else {
-
                         $total_salary = $salary + $ot + $social_security + $other;
 
                         $stmt_salary = $this->db->prepare("INSERT INTO salary (salary, ot, social_security, other, salary_date, employee_id, total_salary) VALUES (:salary, :ot, :social_security, :other, :salary_date, :employee_id, :total_salary)");
@@ -93,14 +90,7 @@ class EmployeeSalaryController extends BaseController
 
                         $salary_id = $this->db->lastInsertId();
 
-                        $stmtLog = $this->db->prepare("INSERT INTO log (log_status, log_detail, user_id) VALUES (:log_status, :log_detail, :user_id)");
-                        $logStatus = 'Salary Created';
-                        $logDetail = 'Salary ID: ' . $salary_id;
-                        $admin_user_id = $_SESSION['user_id'];
-                        $stmtLog->bindParam(':log_status', $logStatus);
-                        $stmtLog->bindParam(':log_detail', $logDetail);
-                        $stmtLog->bindParam(':user_id', $admin_user_id);
-                        $stmtLog->execute();
+                        $this->logAction('Salary Created', "Salary ID: $salary_id, Employee ID: $employee_id, Date: $salary_date");
                     }
                     $this->db->commit();
                     echo json_encode(['success' => true]);
@@ -190,6 +180,13 @@ class EmployeeSalaryController extends BaseController
                     ':total_salary' => $total_salary,
                     ':salary_id' => $salary_id
                 ]);
+
+                // Fetch employee_id and salary_date for logging
+                $stmt = $this->db->prepare("SELECT employee_id, salary_date FROM salary WHERE salary_id = :salary_id");
+                $stmt->execute([':salary_id' => $salary_id]);
+                $salaryInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                $this->logAction('Salary Updated', "Salary ID: $salary_id, Employee ID: {$salaryInfo['employee_id']}, Date: {$salaryInfo['salary_date']}");
                 echo json_encode(['success' => true, 'message' => 'อัพเดตเงินเดือนเรียบร้อยแล้ว', 'total_salary' => $total_salary]);
             } catch (PDOException $e) {
                 echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการอัปเดตเงินเดือน: ' . $e->getMessage()]);
@@ -203,12 +200,24 @@ class EmployeeSalaryController extends BaseController
             $salary_id = $_POST['salary_id'];
 
             try {
+                $stmt = $this->db->prepare("SELECT employee_id, salary_date FROM salary WHERE salary_id = :salary_id");
+                $stmt->execute([':salary_id' => $salary_id]);
+                $salaryInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
                 $stmt = $this->db->prepare("DELETE FROM salary WHERE salary_id = :salary_id");
                 $stmt->execute([':salary_id' => $salary_id]);
+
+                $this->logAction('Salary Deleted', "Salary ID: $salary_id, Employee ID: {$salaryInfo['employee_id']}, Date: {$salaryInfo['salary_date']}");
                 echo json_encode(['success' => true, 'message' => 'ลบเงินเดือนเรียบร้อยแล้ว']);
             } catch (PDOException $e) {
                 echo json_encode(['success' => false, 'message' => 'เกิดข้อผิดพลาดในการลบเงินเดือน: ' . $e->getMessage()]);
             }
         }
+    }
+
+    public function exportPDF()
+    {
+        $this->logAction('PDF Export', 'Salary PDF export initiated');
+        $this->exPDFSalary();
     }
 }

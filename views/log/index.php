@@ -8,21 +8,21 @@
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>สถานะ</th>
-                        <th>รายละเอียด</th>
-                        <th>ผู้ใช้</th>
-                        <th scope="col" class="sortable" data-sort="date">วันที่</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="center">สถานะ</th>
+                        <th class="center">รายละเอียด</th>
+                        <th class="center">ผู้ใช้</th>
+                        <th scope="col" class="sortable" data-sort="date" class="center">วันที่</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($data['logs'] as $i => $log): ?>
                         <tr>
-                            <td scope="row"><span><?= $i + 1 ?></span></td>
-                            <td><?= htmlspecialchars($log['log_status']) ?></td>
-                            <td><?= htmlspecialchars($log['log_detail']) ?></td>
-                            <td><?= htmlspecialchars($log['employee_name'] ?? 'ไม่พบข้อมูลพนักงาน') ?></td>
-                            <td><?= htmlspecialchars($log['log_date']) ?></td>
+                            <td scope="row" class="center"><span><?= $i + 1 ?></span></td>
+                            <td class="center"><?= htmlspecialchars($log['log_status']) ?></td>
+                            <td style="width: 60%;" class="left"><?= htmlspecialchars($log['log_detail']) ?></td>
+                            <td class="center"><?= htmlspecialchars($log['employee_name'] ?? 'ไม่พบข้อมูลพนักงาน') ?></td>
+                            <td class="center"><?= htmlspecialchars($log['log_date']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

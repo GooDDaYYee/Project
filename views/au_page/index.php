@@ -27,25 +27,25 @@ $fbhCount = $stmt->fetchColumn();
             <table class="table table-bordered table-striped" id="myTable">
                 <thead>
                     <tr>
-                        <th>ลำดับ</th>
-                        <th>AU</th>
-                        <th>Detail</th>
-                        <th>Type</th>
-                        <th>Price</th>
-                        <th>Company</th>
+                        <th class="center">ลำดับ</th>
+                        <th class="center">AU</th>
+                        <th class="center">Detail</th>
+                        <th class="center">Type</th>
+                        <th class="center">Price</th>
+                        <th class="center">Company</th>
                         <th> </th>
                     </tr>
                 </thead>
                 <tbody style="font-size: 12;">
                     <?php foreach ($data['au_all'] as $i => $au_all): ?>
                         <tr>
-                            <td style="width: 5%; text-align: center;"><?= $i + 1 ?></td>
-                            <td style="width: 10%;"><?= htmlspecialchars($au_all['au_name']) ?></td>
-                            <td style="text-align: left; width: 60%;"><?= htmlspecialchars($au_all['au_detail']) ?></td>
-                            <td><?= htmlspecialchars($au_all['au_type']) ?></td>
-                            <td><?= htmlspecialchars($au_all['au_price']) ?></td>
-                            <td><?= htmlspecialchars($au_all['au_company']) ?></td>
-                            <td>
+                            <td style="width: 5%;" class="center"><?= $i + 1 ?></td>
+                            <td style="width: 10%;" class="center"><?= htmlspecialchars($au_all['au_name']) ?></td>
+                            <td style="width: 50%;" class="left"><?= htmlspecialchars($au_all['au_detail']) ?></td>
+                            <td class="center"><?= htmlspecialchars($au_all['au_type']) ?></td>
+                            <td class="right"><?= htmlspecialchars($au_all['au_price']) ?></td>
+                            <td class="center"><?= htmlspecialchars($au_all['au_company']) ?></td>
+                            <td class="center">
                                 <button type="button" class="btn btn-sm btn-outline-primary edit-au_all"
                                     data-id="<?= $au_all['au_id'] ?>"
                                     data-name="<?= $au_all['au_name'] ?>"
@@ -53,7 +53,9 @@ $fbhCount = $stmt->fetchColumn();
                                     data-type="<?= htmlspecialchars($au_all['au_type']) ?>"
                                     data-price="<?= htmlspecialchars($au_all['au_price']) ?>"
                                     data-company="<?= htmlspecialchars($au_all['au_company']) ?>">แก้ไข</button>
-                                <button type="button" class="btn btn-sm btn-outline-danger delete-user" data-id="<?= $au_all['au_id'] ?>">ลบ</button>
+                                <button type="button" class="btn btn-sm btn-outline-danger delete-au"
+                                    data-id="<?= $au_all['au_id'] ?>"
+                                    data-name="<?= htmlspecialchars($au_all['au_name']) ?>">ลบ</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -146,13 +148,14 @@ $fbhCount = $stmt->fetchColumn();
 
                 $('#editModal').modal('show');
             });
-            $('.delete-user').off('click').on('click', function() {
-                var userId = $(this).data('id');
-                var username = $(this).data('username');
+
+            $('.delete-au').off('click').on('click', function() {
+                var auId = $(this).data('id');
+                var auName = $(this).data('name');
 
                 Swal.fire({
                     title: 'คุณแน่ใจหรือไม่?',
-                    html: "คุณต้องการลบผู้ใช้ " + username + " หรือไม่? <br>!! คำเตือนหากลบข้อมูลผู้ใช้ ข้อมูลพนักงานจะหายไปด้วย !!",
+                    html: "คุณต้องการลบ AU " + auName + " หรือไม่?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -162,10 +165,11 @@ $fbhCount = $stmt->fetchColumn();
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: 'index.php?page=user&action=deleteUser',
+                            url: 'index.php?page=au-page&action=deleteAu',
                             method: 'POST',
                             data: {
-                                user_id: userId
+                                au_id: auId,
+                                au_name: auName
                             },
                             dataType: 'json',
                             success: function(response) {
@@ -173,7 +177,7 @@ $fbhCount = $stmt->fetchColumn();
                                     Swal.fire({
                                         icon: 'success',
                                         title: 'ลบสำเร็จ',
-                                        text: 'ลบผู้ใช้ ' + username + ' เรียบร้อยแล้ว!',
+                                        text: 'ลบ AU ' + auName + ' เรียบร้อยแล้ว!',
                                     }).then(() => {
                                         location.reload();
                                     });
