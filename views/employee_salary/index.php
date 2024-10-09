@@ -85,6 +85,9 @@
                                     data-other="<?= $salary['other'] ?>">
                                     แก้ไข
                                 </button>
+                                <button type="button" class="btn btn-sm btn-outline-warning pdf-btn">
+                                    <a href="index.php?page=employee-salary&action=exportPDFpersonal&employee_id=<?= $salary['employee_id'] ?>&month=<?= $data['selectedMonth'] ?>&year=<?= $data['selectedYear'] ?>" target="_blank" style="text-decoration: none; color: inherit;">PDF</a>
+                                </button>
                                 <button type="button" class="btn btn-sm btn-outline-danger delete-salary"
                                     data-salary_id="<?= $salary['salary_id'] ?>"
                                     data-index="<?= $index + 1 ?>">
@@ -139,6 +142,12 @@
 </div>
 
 <script>
+    function exportPersonalPDF(employeeId, month, year) {
+        window.open('index.php?page=employee-salary&action=exportPDFpersonal&employee_id=' + employeeId + '&month=' + month + '&year=' + year, '_blank');
+    }
+</script>
+
+<script>
     $(document).ready(function() {
         let table = new DataTable('#myTable', {
             pageLength: 10,
@@ -152,7 +161,7 @@
         });
 
         function addEventListener() {
-            $('#summarySalaryBtn').on('click', function() {
+            $('#summarySalaryBtn').off('click').on('click', function() {
                 var selectedMonth = $('#month').val();
                 var selectedYear = $('#year').val();
 

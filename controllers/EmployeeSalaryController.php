@@ -16,8 +16,8 @@ class EmployeeSalaryController extends BaseController
 
     public function index()
     {
-        $month = isset($_GET['month']) ? $_GET['month'] : NULL;
-        $year = isset($_GET['year']) ? $_GET['year'] : NULL;
+        $month = isset($_GET['month']) ? $_GET['month'] : date('n');
+        $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
 
         $salaries = $this->fetchSalaries($month, $year);
         $months = $this->getMonths();
@@ -230,5 +230,25 @@ class EmployeeSalaryController extends BaseController
     {
         $this->logAction('PDF Export', 'Salary PDF export initiated');
         $this->exPDFSalary();
+    }
+
+    public function exportPDFpersonal()
+    {
+        $employee_id = isset($_GET['employee_id']) ? $_GET['employee_id'] : null;
+        $month = isset($_GET['month']) ? intval($_GET['month']) : null;
+        $year = isset($_GET['year']) ? intval($_GET['year']) : null;
+
+        if (!$employee_id || !$month || !$year) {
+            echo "Invalid request: Missing required parameters";
+            return;
+        }
+
+        // แปลงปีเป็น พ.ศ. ถ้าเป็น ค.ศ.
+        if ($year < 2500) {
+            $year += 543;
+        }
+
+        $this->logAction('PDF Export', "Personal Salary PDF export initiated for employee_id: $employee_id, month: $month, year: $year");
+        $this->exPDFSalary2($employee_id, $month, $year);
     }
 }

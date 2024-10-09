@@ -694,4 +694,183 @@ abstract class BaseController
         $mpdf->WriteHTML($html);
         $mpdf->Output('salary_summary_' . $month . '_' . $year . '.pdf', 'I');
     }
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    protected function exPDFSalary2($employee_id, $month, $year)
+    {
+        require_once __DIR__ . '/../libs/mpdf/vendor/autoload.php';
+
+        // แปลงปีเป็น พ.ศ. ถ้าเป็น ค.ศ.
+        $searchYear = ($year < 2500) ? $year + 543 : $year;
+
+        $queries = [
+            'address_psnk' => "SELECT * FROM company_address WHERE company_address_type = 0",
+        ];
+        $results = [];
+        foreach ($queries as $key => $query) {
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $results[$key] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $query = "SELECT s.*, e.*
+          FROM salary s
+          INNER JOIN employee e ON s.employee_id = e.employee_id
+          WHERE s.employee_id = :employee_id
+          AND MONTH(s.salary_date) = :month
+          AND YEAR(s.salary_date) = :year
+          ORDER BY s.salary_date DESC
+          LIMIT 1";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->execute([
+            ':employee_id' => $employee_id,
+            ':month' => $month,
+            ':year' => $searchYear
+        ]);
+        $salary = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$salary) {
+            echo "ไม่พบข้อมูลเงินเดือนสำหรับพนักงานและวันที่ที่ระบุ";
+            return;
+        }
+
+        $mpdf = new \Mpdf\Mpdf([
+            'fontDir' => [__DIR__ . '/../libs/mpdf/font'],
+            'fontdata' => [
+                'th_sarabun' => [
+                    'R' => 'THSarabun.ttf',
+                    'B' => 'THSarabun-Bold.ttf',
+                    'I' => 'THSarabun-Italic.ttf',
+                    'BI' => 'THSarabun-BoldItalic.ttf',
+                ]
+            ],
+            'default_font' => 'th_sarabun',
+            'format' => 'A4'
+        ]);
+
+        $monthNames = [
+            1 => "มกราคม",
+            2 => "กุมภาพันธ์",
+            3 => "มีนาคม",
+            4 => "เมษายน",
+            5 => "พฤษภาคม",
+            6 => "มิถุนายน",
+            7 => "กรกฎาคม",
+            8 => "สิงหาคม",
+            9 => "กันยายน",
+            10 => "ตุลาคม",
+            11 => "พฤศจิกายน",
+            12 => "ธันวาคม"
+        ];
+
+        $positionMap = [
+            '1' => 'เจ้าของกิจการ',
+            '2' => 'พนักงาน',
+            '3' => 'ผู้ดูแลระบบ'
+        ];
+
+        $statusMap = [
+            '1' => 'ทำงาน',
+            '0' => 'ลาออก'
+        ];
+
+        $html = '
+    <style>
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 5px;
+                                margin-bottom: 5px;
+                            }
+        
+                            th, td {
+                                border: 1px solid black;
+                                padding: 3px 5px;
+                                text-align: center;
+                            }
+        
+                            .header { text-align: center; }
+        
+                            .no-border { border: none; }
+        
+                            body { font-size: 12pt; }
+        
+                            table { width: 100%; border-collapse: collapse; margin-top: 5px; margin-bottom: 5px; }
+         
+                            th, td { border: 1px solid black; padding: 2px 3px; text-align: center; } /* ลด padding */
+        
+                            .header h2, .header p { margin: 0; padding: 1px 0; line-height: 1.1; } /* ลด padding และ line-height */
+        
+                            .right { text-align: right; }
+        
+                            .center { text-align: center; }
+        
+                            .left { text-align: left; }
+        
+                            .hide{
+                                padding: 0;
+                                margin: 0;
+                            }
+        
+    </style>
+    <div class="header">
+        <h2>รายละเอียดเงินเดือน</h2>
+        <h2>ประจำเดือน ' . $monthNames[(int)$month] . ' พ.ศ. ' . $searchYear . '</h2>
+        ' . $results['address_psnk'][0]['company_address_detaill'] . '
+        
+    </div>
+    <div class="info">
+        <div class="info-item"><strong>ชื่อ-นามสกุล:</strong> ' . $salary['employee_name'] . ' ' . $salary['employee_lastname'] . '</div>
+        <div class="info-item"><strong>เบอร์โทร:</strong> ' . $salary['employee_phone'] . '</div>
+        <div class="info-item"><strong>อีเมลล์:</strong> ' . $salary['employee_email'] . '</div>
+        <div class="info-item"><strong>ตำแหน่ง:</strong> ' . $positionMap[$salary['employee_position']] . '</div>
+        <div class="info-item"><strong>สถานะ:</strong> ' . $statusMap[$salary['employee_status']] . '</div>
+    </div>
+    <table>
+        <tr>
+            <th>รายการ</th>
+            <th>จำนวนเงิน (บาท)</th>
+        </tr>
+        <tr>
+            <td class="amount left">เงินเดือน</td>
+            <td class="amount right">' . number_format($salary['salary'], 2) . '</td>
+        </tr>
+        <tr>
+            <td class="amount left">ค่าล่วงเวลา (OT)</td>
+            <td class="amount right">' . number_format($salary['ot'], 2) . '</td>
+        </tr>
+        <tr>
+            <td class="amount left">ประกันสังคม (หัก)</td>
+            <td class="amount right">' . number_format($salary['social_security'], 2) . '</td>
+        </tr>
+        <tr>
+            <td class="amount left">อื่นๆ</td>
+            <td class="amount right">' . number_format($salary['other'], 2) . '</td>
+        </tr>
+        <tr>
+            <th class="amount right">รวมทั้งสิ้น</th>
+            <th class="amount right">' . number_format($salary['total_salary'], 2) . '</th>
+        </tr>
+        <tr>
+            <th class="center" style="border: none;">
+                    <br>
+                    <br>
+                    <br>
+                    <p>ลงชื่อ ................................................ ผู้รับเงิน</p>
+                    <br>
+                    <p style="margin-left: 30px;">(&nbsp;' . $salary['employee_name'] . ' ' . $salary['employee_lastname'] . '&nbsp;)</p>
+                    <br>
+                    <p>วันที่รับเงิน ............................................</p>
+            </th>
+        </tr>
+    </table>
+    <div style="margin-top: 30px;">
+
+    </div>
+    ';
+
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('salary_slip_' . $salary['employee_name'] . '_' . $monthNames[(int)$month] . '_' . $searchYear . '.pdf', 'I');
+    }
 }
