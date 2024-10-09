@@ -109,11 +109,9 @@ class StockDrumController extends BaseController
                 if ($drum_full > 4000 && $dupResult) {
                     throw new Exception('จำนวน Drum มีมากกว่า 4000 เมตร และมีข้อมูล Drum อยู่แล้วกรุณาตรวจสอบข้อมูลใหม่');
                 }
-
                 if ($drum_full > 4000) {
                     throw new Exception('จำนวน Drum มีมากกว่า 4000 เมตร');
                 }
-
                 if ($dupResult) {
                     throw new Exception('มีข้อมูล Drum อยู่แล้วกรุณาตรวจสอบข้อมูลใหม่');
                 }
@@ -121,12 +119,13 @@ class StockDrumController extends BaseController
                 $this->db->beginTransaction();
                 $transactionStarted = true;
 
-                $stmt = $this->db->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company_id, drum_cable_company_id, employee_id) VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_remaining, :drum_company_id, :drum_cable_company_id, :employee_id)");
-
+                $stmt = $this->db->prepare("INSERT INTO drum (drum_no, drum_to, drum_description, drum_full, drum_remaining, drum_company_id, drum_cable_company_id, drum_used, employee_id) VALUES (:drum_no, :drum_to, :drum_description, :drum_full, :drum_remaining, :drum_company_id, :drum_cable_company_id, :drum_used, :employee_id)");
                 $stmt->bindParam(':drum_no', $drum_no);
                 $stmt->bindParam(':drum_to', $drum_to);
                 $stmt->bindParam(':drum_description', $drum_description);
                 $stmt->bindParam(':drum_full', $drum_full);
+                $drum_used = 0; // Set the initial value for drum_used
+                $stmt->bindParam(':drum_used', $drum_used);
                 $stmt->bindParam(':drum_remaining', $drum_full);
                 $stmt->bindParam(':drum_company_id', $drum_company_id);
                 $stmt->bindParam(':drum_cable_company_id', $drum_cable_company_id);
@@ -138,7 +137,6 @@ class StockDrumController extends BaseController
                 if ($result) {
                     $logDetail = "Drum ID: $drum_id, Drum No: $drum_no, Company: $drum_company_id, Cable Company: $drum_cable_company_id";
                     $this->logAction('Drum Created', $logDetail);
-
                     $this->db->commit();
                     $this->jsonResponse(true, 'เพิ่มข้อมูล Drum สำเร็จ');
                 } else {
