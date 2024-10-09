@@ -95,7 +95,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
-                <button type="button" class="btn btn-primary" id="saveChanges">บันทึกการแก้ไข</button>
+                <button type="button" class="btn btn-warning bg-gradient-purple" id="saveChanges">บันทึกการแก้ไข</button>
             </div>
         </div>
     </div>
