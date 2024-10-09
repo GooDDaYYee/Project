@@ -3,70 +3,80 @@
         box-shadow: 0 0 4px rgba(60, 179, 113);
     }
 </style>
-<div class="card o-hidden border-0 shadow-lg my-5">
-    <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-            <div class="col-lg">
-                <div class="p-5">
-                    <div class="text-center">
-                        <h1 class="h4 text-gray-900 mb-4">เพิ่มสต๊อกเคเบิ้ล</h1>
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <div>
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;เพิ่มสต๊อกเคเบิ้ล
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">เพิ่มสต๊อกเคเบิ้ล</h1>
+                        </div>
+                        <hr>
+                        <form id="addCableForm">
+                            <div class="form-group row">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="route" name="route" placeholder="Route" required>
+                                </div>
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="section" name="section" placeholder="Section" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control form-control-user" id="team" name="team" placeholder="Team" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <input type="number" class="form-control form-control-user" id="cable_form" name="cable_form" placeholder="Cable From" required maxlength="4">
+                                </div>
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required maxlength="4">
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="cable_work_id" name="cable_work_id" required>
+                                        <option value="">เลือกงานที่ทำ</option>
+                                        <?php foreach ($data['cableWorks'] as $id => $name): ?>
+                                            <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <select class="form-control" id="company" name="company">
+                                        <option value="">เลือกบริษัท</option>
+                                        <?php foreach ($data['companies'] as $id => $name): ?>
+                                            <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                    <select class="form-control" id="manufacturer" name="manufacturer">
+                                        <option value="">เลือกบริษัทผลิตสาย</option>
+                                        <?php foreach ($data['manufacturers'] as $id => $name): ?>
+                                            <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 mb-3">
+                                    <select class="form-control" id="drum_id" name="drum_id">
+                                        <option value="">เลือก Drum</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row-md-auto mt-md-3">
+                                <button class='btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container' type='submit' id="submitButton">
+                                    <i class="fa fa-save"></i> เพิ่มข้อมูล
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <form id="addCableForm">
-                        <div class="form-group row">
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="route" name="route" placeholder="Route" required>
-                            </div>
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="section" name="section" placeholder="Section" required>
-                            </div>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control form-control-user" id="team" name="team" placeholder="Team" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <input type="number" class="form-control form-control-user" id="cable_form" name="cable_form" placeholder="Cable From" required maxlength="4">
-                            </div>
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required maxlength="4">
-                            </div>
-                            <div class="col-sm-4">
-                                <select class="form-control" id="cable_work_id" name="cable_work_id" required>
-                                    <option value="">เลือกงานที่ทำ</option>
-                                    <?php foreach ($data['cableWorks'] as $id => $name): ?>
-                                        <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <select class="form-control" id="company" name="company">
-                                    <option value="">เลือกบริษัท</option>
-                                    <?php foreach ($data['companies'] as $id => $name): ?>
-                                        <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-4 mb-3 mb-sm-0">
-                                <select class="form-control" id="manufacturer" name="manufacturer">
-                                    <option value="">เลือกบริษัทผลิตสาย</option>
-                                    <?php foreach ($data['manufacturers'] as $id => $name): ?>
-                                        <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            <div class="col-sm-4 mb-3">
-                                <select class="form-control" id="drum_id" name="drum_id">
-                                    <option value="">เลือก Drum</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" type="submit">
-                            <h5>เพิ่มข้อมูล</h5>
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>

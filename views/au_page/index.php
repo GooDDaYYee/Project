@@ -21,6 +21,7 @@ $fbhCount = $stmt->fetchColumn();
                     Mixed : <?php echo $mixedCount; ?> รายการ |
                     FBH : <?php echo $fbhCount; ?> รายการ
                 </p>
+                <button type="button" class="btn btn-warning bg-gradient-purple mt-2" onclick="window.open('index.php?page=au-page&action=create', '_blank')">เพิ่ม AU</button>
             </div>
         </div>
         <div class="card-body table-responsive">

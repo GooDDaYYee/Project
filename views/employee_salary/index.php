@@ -13,39 +13,35 @@
             </div>
             <div class="row">
                 <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
-                <div class="row">
-                    <form method="GET" id="filterForm" class="d-flex align-items-center">
-                        <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
-                        <div class="col-sm-3">
-                            <select name="month" class="form-control" id="month" onchange="document.getElementById('filterForm').submit()">
-                                <option value="1">เดือน</option>
-                                <?php
-                                for ($i = 0; $i < sizeof($data['months']); $i++) {
-                                ?>
-                                    <option value="<?php echo $i + 1 ?>" <?php echo isset($_GET['month']) && $_GET['month'] == $i + 1 ? 'selected' : '' ?>>
-                                        <?php echo $data['months'][$i] ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <select name="year" class="form-control" id="year" onchange="document.getElementById('filterForm').submit()">
-                                <option value="1">ปี</option>
-                                <?php for ($i = 0; $i <= 50; $i++) { ?>
-                                    <option value="<?php echo date("Y") - $i ?>" <?php echo isset($_GET['year']) && $_GET['year'] == date("Y") - $i ? 'selected' : '' ?>>
-                                        <?php echo date("Y") - $i + 543 ?>
-                                    </option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" onclick="window.open('index.php?page=employee-salary&action=create', '_parent')">เพิ่มเงินเดือน</button>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="button" class="btn btn-warning bg-gradient-purple ml-2 btn-sm custom-btn" id="summarySalaryBtn">สรุปเงินเดือน</button>
-                        </div>
-                    </form>
-                </div>
+                <form method="GET" id="filterForm" class="d-flex align-items-center">
+                    <input type="hidden" name="page" value="<?php echo isset($_GET['page']) ? $_GET['page'] : base64_encode('home'); ?>" />
+                    <div class="col-sm-3 px-1">
+                        <select name="month" class="form-control" id="month" onchange="document.getElementById('filterForm').submit()">
+                            <option value="1">เดือน</option>
+                            <?php for ($i = 0; $i < sizeof($data['months']); $i++) { ?>
+                                <option value="<?php echo $i + 1 ?>" <?php echo isset($_GET['month']) && $_GET['month'] == $i + 1 ? 'selected' : '' ?>>
+                                    <?php echo $data['months'][$i] ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 px-1">
+                        <select name="year" class="form-control" id="year" onchange="document.getElementById('filterForm').submit()">
+                            <option value="1">ปี</option>
+                            <?php for ($i = 0; $i <= 50; $i++) { ?>
+                                <option value="<?php echo date("Y") - $i ?>" <?php echo isset($_GET['year']) && $_GET['year'] == date("Y") - $i ? 'selected' : '' ?>>
+                                    <?php echo date("Y") - $i + 543 ?>
+                                </option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 px-1">
+                        <button type="button" class="btn btn-warning bg-gradient-purple btn-sm custom-btn w-100" onclick="window.open('index.php?page=employee-salary&action=create', '_parent')">เพิ่มเงินเดือน</button>
+                    </div>
+                    <div class="col-sm-3 px-1">
+                        <button type="button" class="btn btn-warning bg-gradient-purple btn-sm custom-btn w-100" id="summarySalaryBtn">สรุปเงินเดือน</button>
+                    </div>
+                </form>
             </div>
         </div>
 

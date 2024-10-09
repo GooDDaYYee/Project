@@ -1,92 +1,100 @@
-<form id="fbhBillForm" method="post">
-    <div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card-body p-0">
-            <div class="row">
-                <div class="col-lg">
-                    <div class="p-5">
-                        <div class="text-center">
-                            <h1 class="h4 text-gray-900 mb-2" style="font-size: 1.5rem;">เอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
-                        </div>
-                        <div class="row mt-md-3">
-                            <div class="col">
-                                <h4>เลขที่</h4>
-                                <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $newBillId; ?>" readonly>
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <div>
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;เพิ่มเอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH
+            </div>
+        </div>
+        <div class="card-body">
+            <form id="fbhBillForm" method="post">
+                <div class="row">
+                    <div class="col-lg">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h2 text-gray-900 mb-4">เพิ่มเอกสารใบเสนอราคา/ใบแจ้งหนี้/ใบเสร็จรับเงิน บริษัท FBH</h1>
                             </div>
-                            <div class="col">
-                                <h4>วันที่ออกบิล</h4>
-                                <input type="text" class="form-control" value="<?php echo date('d/m/Y', strtotime($thaiDate)); ?>" readonly>
-                                <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
-                                <input type="hidden" name="company" value="FBH">
+                            <hr>
+                            <div class="row mt-md-3">
+                                <div class="col">
+                                    <h4>เลขที่</h4>
+                                    <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $newBillId; ?>" readonly>
+                                </div>
+                                <div class="col">
+                                    <h4>วันที่ออกบิล</h4>
+                                    <input type="text" class="form-control" value="<?php echo date('d/m/Y', strtotime($thaiDate)); ?>" readonly>
+                                    <input type="hidden" name="thai_date" value="<?php echo $thaiDate; ?>">
+                                    <input type="hidden" name="company" value="FBH">
+                                </div>
+                                <div class="col">
+                                    <h4>วันที่ส่งสินค้า</h4>
+                                    <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $thaiDate; ?>">
+                                </div>
                             </div>
-                            <div class="col">
-                                <h4>วันที่ส่งสินค้า</h4>
-                                <input type="date" id="thai_date_product" name="thai_date_product" class="form-control" value="<?php echo $thaiDate; ?>">
+                            <div class="row mt-md-3">
+                                <div class="col-md-6">
+                                    <h4>เงื่อนไขการชำระเงิน</h4>
+                                    <input type="text" id="payment" name="payment" class="form-control form-control-user" value="N/A">
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>วันครบกำหนด</h4>
+                                    <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo $thaiDate; ?>">
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
+                                    <input type="text" id="refer" name="refer" class="form-control form-control-user" value="-">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mt-md-3">
-                            <div class="col-md-6">
-                                <h4>เงื่อนไขการชำระเงิน</h4>
-                                <input type="text" id="payment" name="payment" class="form-control form-control-user" value="N/A">
+                            <div class="row mt-md-3">
+                                <div class="col-md-3">
+                                    <h4>Site</h4>
+                                    <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>PR No</h4>
+                                    <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>Work No</h4>
+                                    <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="Work No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                                </div>
+                                <div class="col-md-3">
+                                    <h4>Project</h4>
+                                    <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="Project (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <h4>วันครบกำหนด</h4>
-                                <input type="date" id="thai_due_date" name="thai_due_date" class="form-control" value="<?php echo $thaiDate; ?>">
+                            <div class="row mt-md-3">
+                                <div class="col-md-3">
+                                    <h4>จำนวนAU</h4>
+                                    <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>&nbsp;</h4>
+                                    <button type="button" id="addInputFrame" class="btn btn-success btn-user btn-block">เพิ่ม AU</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>&nbsp;</h4>
+                                    <button type="button" id="removeInputFrame" class="btn btn-danger btn-user btn-block">ลบ AU</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>จำนวน AU ที่เพิ่ม</h4>
+                                    <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <h4>เลขที่ใบแจ้งหนี้/อ้างถึง</h4>
-                                <input type="text" id="refer" name="refer" class="form-control form-control-user" value="-">
+                            <div id="auInputs" class="mt-md-3">
+                                <!-- AU inputs will be added here dynamically -->
                             </div>
-                        </div>
-                        <div class="row mt-md-3">
-                            <div class="col-md-3">
-                                <h4>Site</h4>
-                                <input type="text" id="Site" name="Site" class="form-control form-control-user" placeholder="Site">
+                            <div class="row-md-auto mt-md-3">
+                                <button class='btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container' type='submit' id="submitButton">
+                                    <i class="fa fa-save"></i> เพิ่มข้อมูล
+                                </button>
                             </div>
-                            <div class="col-md-3">
-                                <h4>PR No</h4>
-                                <input type="text" id="pr" name="pr" class="form-control form-control-user" placeholder="PR No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
-                            </div>
-                            <div class="col-md-3">
-                                <h4>Work No</h4>
-                                <input type="text" id="work_no" name="work_no" class="form-control form-control-user" placeholder="Work No (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
-                            </div>
-                            <div class="col-md-3">
-                                <h4>Project</h4>
-                                <input type="text" id="project" name="project" class="form-control form-control-user" placeholder="Project (เฉพาะใบแจ้งหนี้/ใบเสร็จรับเงิน)">
-                            </div>
-                        </div>
-                        <div class="row mt-md-3">
-                            <div class="col-md-3">
-                                <h4>จำนวนAU</h4>
-                                <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required>
-                            </div>
-                            <div class="col-md-2">
-                                <h4>&nbsp;</h4>
-                                <button type="button" id="addInputFrame" class="btn btn-success btn-user btn-block">เพิ่ม AU</button>
-                            </div>
-                            <div class="col-md-2">
-                                <h4>&nbsp;</h4>
-                                <button type="button" id="removeInputFrame" class="btn btn-danger btn-user btn-block">ลบ AU</button>
-                            </div>
-                            <div class="col-md-2">
-                                <h4>จำนวน AU ที่เพิ่ม</h4>
-                                <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
-                            </div>
-                        </div>
-                        <div id="auInputs" class="mt-md-3">
-                            <!-- AU inputs will be added here dynamically -->
-                        </div>
-                        <div class="row-md-auto mt-md-3">
-                            <button class='btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container' type='submit' id="submitButton">
-                                <h5>เพิ่มข้อมูล</h5>
-                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-</form>
+</div>
 
 <script>
     $(document).ready(function() {

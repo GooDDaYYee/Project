@@ -1,12 +1,18 @@
 <div class="container-fluid">
-    <div class="card o-hidden border-0 shadow-lg my-5">
-        <div class="card-body p-0">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <div>
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;เพิ่มรายงานการปฏิบัติงาน
+            </div>
+        </div>
+        <div class="card-body">
             <div class="row">
                 <div class="col-lg-8 mx-auto">
                     <div class="p-5">
                         <div class="text-center">
                             <h1 class="h2 text-gray-900 mb-4">รายงานการปฏิบัติงาน</h1>
                         </div>
+                        <hr>
                         <?php if (isset($_SESSION['success_message'])): ?>
                             <div class="alert alert-success"><?= $_SESSION['success_message'];
                                                                 unset($_SESSION['success_message']); ?></div>
@@ -46,84 +52,82 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-<script>
-    $(document).ready(function() {
-        $('#images').on('change', function(e) {
-            $('#imagePreviewGrid').empty();
-            var files = e.target.files;
-            var maxSize = 5 * 1024 * 1024; // 5MB
+        <script>
+            $(document).ready(function() {
+                $('#images').on('change', function(e) {
+                    $('#imagePreviewGrid').empty();
+                    var files = e.target.files;
+                    var maxSize = 5 * 1024 * 1024; // 5MB
 
-            for (var i = 0; i < files.length; i++) {
-                if (files[i].size > maxSize) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ไฟล์ขนาดใหญ่เกินไป',
-                        text: 'กรุณาอัปโหลดไฟล์ขนาดไม่เกิน 5MB',
-                        confirmButtonText: 'ตกลง'
-                    });
-                    $(this).val('');
-                    return false;
-                }
+                    for (var i = 0; i < files.length; i++) {
+                        if (files[i].size > maxSize) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'ไฟล์ขนาดใหญ่เกินไป',
+                                text: 'กรุณาอัปโหลดไฟล์ขนาดไม่เกิน 5MB',
+                                confirmButtonText: 'ตกลง'
+                            });
+                            $(this).val('');
+                            return false;
+                        }
 
-                var reader = new FileReader();
-                reader.onload = (function(file) {
-                    return function(e) {
-                        $('#imagePreviewGrid').append(`
+                        var reader = new FileReader();
+                        reader.onload = (function(file) {
+                            return function(e) {
+                                $('#imagePreviewGrid').append(`
                             <div class="col-md-3 col-sm-6 mb-3 preview-container">
                                 <div class="img-preview" style="background-image: url('${e.target.result}');"></div>
                                 <span class="remove-img" data-file="${file.name}"><i class="fas fa-times"></i></span>
                             </div>
                         `);
-                    };
-                })(files[i]);
-                reader.readAsDataURL(files[i]);
-            }
-        });
-
-        $(document).on('click', '.remove-img', function() {
-            var fileName = $(this).data('file');
-            var fileInput = $('#images')[0];
-            var files = Array.from(fileInput.files);
-
-            files = files.filter(function(file) {
-                return file.name !== fileName;
-            });
-
-            var dataTransfer = new DataTransfer();
-            files.forEach(function(file) {
-                dataTransfer.items.add(file);
-            });
-
-            fileInput.files = dataTransfer.files;
-            $(this).closest('.preview-container').remove();
-        });
-
-        $('form').on('submit', function(e) {
-            var loadingOverlay = new LoadingOverlay();
-            loadingOverlay.show();
-            var fileInput = $('#images');
-            var maxSize = 5 * 1024 * 1024; // 5MB
-
-            if (fileInput[0].files.length > 0) {
-                for (var i = 0; i < fileInput[0].files.length; i++) {
-                    if (fileInput[0].files[i].size > maxSize) {
-                        e.preventDefault();
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'ไฟล์ขนาดใหญ่เกินไป',
-                            text: 'กรุณาอัปโหลดไฟล์ขนาดไม่เกิน 5MB',
-                            confirmButtonText: 'ตกลง'
-                        });
-                        return false;
+                            };
+                        })(files[i]);
+                        reader.readAsDataURL(files[i]);
                     }
-                }
-            }
-        });
-    });
-</script>
-</body>
+                });
 
-</html>
+                $(document).on('click', '.remove-img', function() {
+                    var fileName = $(this).data('file');
+                    var fileInput = $('#images')[0];
+                    var files = Array.from(fileInput.files);
+
+                    files = files.filter(function(file) {
+                        return file.name !== fileName;
+                    });
+
+                    var dataTransfer = new DataTransfer();
+                    files.forEach(function(file) {
+                        dataTransfer.items.add(file);
+                    });
+
+                    fileInput.files = dataTransfer.files;
+                    $(this).closest('.preview-container').remove();
+                });
+
+                $('form').on('submit', function(e) {
+                    var loadingOverlay = new LoadingOverlay();
+                    loadingOverlay.show();
+                    var fileInput = $('#images');
+                    var maxSize = 5 * 1024 * 1024; // 5MB
+
+                    if (fileInput[0].files.length > 0) {
+                        for (var i = 0; i < fileInput[0].files.length; i++) {
+                            if (fileInput[0].files[i].size > maxSize) {
+                                e.preventDefault();
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'ไฟล์ขนาดใหญ่เกินไป',
+                                    text: 'กรุณาอัปโหลดไฟล์ขนาดไม่เกิน 5MB',
+                                    confirmButtonText: 'ตกลง'
+                                });
+                                return false;
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        </body>
+
+        </html>

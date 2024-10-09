@@ -24,6 +24,21 @@ class AuPageController extends BaseController
         $this->render('au_page/index', ['pageTitle' => $pageTitle, 'data' => $data]);
     }
 
+    public function create()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->addAu();
+        } else {
+            $this->create_get();
+        }
+    }
+
+    private function create_get()
+    {
+        $pageTitle = 'เพิ่มAU - PSNK TELECOM';
+        $this->render('au_page/create', ['pageTitle' => $pageTitle]);
+    }
+
     private function fetchAu()
     {
         $strsql = "SELECT * FROM au_all ORDER BY au_company ASC";
@@ -33,6 +48,52 @@ class AuPageController extends BaseController
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return [];
+        }
+    }
+
+    public function addAu()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $auName = $_POST['au_name'];
+            $auDetail = $_POST['au_detail'];
+            $auType = $_POST['au_type'];
+            $auPrice = $_POST['au_price'];
+            $auCompany = $_POST['au_company'];
+
+            // Validate price
+            if (!is_numeric($auPrice) || $auPrice < 0) {
+                echo json_encode(['success' => false, 'message' => 'Invalid price.']);
+                return;
+            }
+
+            try {
+                $sql = "INSERT INTO au_all (au_name, au_detail, au_type, au_price, au_company) 
+                    VALUES (:au_name, :au_detail, :au_type, :au_price, :au_company)";
+
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':au_name', $auName, PDO::PARAM_STR);
+                $stmt->bindParam(':au_detail', $auDetail, PDO::PARAM_STR);
+                $stmt->bindParam(':au_type', $auType, PDO::PARAM_STR);
+                $stmt->bindParam(':au_price', $auPrice, PDO::PARAM_STR);
+                $stmt->bindParam(':au_company', $auCompany, PDO::PARAM_STR);
+
+                if ($stmt->execute()) {
+                    // Log the successful addition
+                    $logDetail = "AU Name: $auName, Type: $auType, Price: $auPrice, Company: $auCompany";
+                    $this->logAction('AU Added', $logDetail);
+
+                    echo json_encode(['success' => true, 'message' => 'AU added successfully.']);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Failed to add AU.']);
+                }
+            } catch (PDOException $e) {
+                // Log the error
+                $this->logAction('AU Add Error', $e->getMessage());
+
+                echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
         }
     }
 

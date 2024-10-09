@@ -1,7 +1,12 @@
-    <form id="insert_drum" method="post">
-        <!-- Begin Page Content -->
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
+<div class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center py-3">
+            <div>
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;เพิ่ม Drum
+            </div>
+        </div>
+        <form id="insert_drum" method="post">
+            <div class="card-body">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
                     <div class="col-lg">
@@ -53,52 +58,56 @@
                                         maxlength="4">
                                 </div>
                             </div>
-                            <button class="btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container" id="insert_drum" type="submit">
-                                <h5>เพิ่มข้อมูล</h5>
-                            </button>
+                            <div class="row-md-auto mt-md-3">
+                                <button class='btn btn-warning bg-gradient-purple btn-user btn-block col-sm-3 container' type='submit' id="submitButton">
+                                    <i class="fa fa-save"></i> เพิ่มข้อมูล
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+</div>
 
-    <script>
-        $(document).ready(function() {
-            $('#insert_drum').on('submit', function(e) {
-                e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: "index.php?page=stock-drum&action=create",
-                    data: $(this).serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log(response);
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'สำเร็จ',
-                                text: 'เพิ่มข้อมูล Drum สำเร็จ',
-                            }).then(function() {
-                                window.location.href = "index.php?page=stock-drum";
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'ไม่สำเร็จ',
-                                text: response.message || 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล',
-                            });
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr, status, error);
+
+<script>
+    $(document).ready(function() {
+        $('#insert_drum').on('submit', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "index.php?page=stock-drum&action=create",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ',
+                            text: 'เพิ่มข้อมูล Drum สำเร็จ',
+                        }).then(function() {
+                            window.location.href = "index.php?page=stock-drum";
+                        });
+                    } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'ไม่สำเร็จ',
-                            text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error,
+                            text: response.message || 'เกิดข้อผิดพลาดในการเพิ่มข้อมูล',
                         });
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr, status, error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สำเร็จ',
+                        text: 'เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์: ' + error,
+                    });
+                }
             });
         });
-    </script>
+    });
+</script>
