@@ -17,7 +17,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-4">
                                     <h4>Drum Number</h4>
-                                    <input type="text" id="drum_no" name="drum_no" class="form-control form-control-user" placeholder="Drum Number" required="" autofocus="">
+                                    <input type="text" id="drum_no" name="drum_no" class="form-control form-control-user" placeholder="Drum Number" required="" maxlength="4">
                                 </div>
                                 <div class="col-sm-4">
                                     <h4>Drum To</h4>

@@ -76,7 +76,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit-employee-age">อายุ</label>
-                        <input type="number" class="form-control" id="edit-employee-age" name="employee_age" required>
+                        <input type="number" class="form-control" id="edit-employee-age" name="employee_age" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-employee-phone">เบอร์โทร</label>

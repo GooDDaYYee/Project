@@ -138,7 +138,7 @@
             <div class="row mt-md-3">
               <div class="col-md-3">
                 <h5>จำนวนAU</h5>
-                <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" value="0" required>
+                <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" step="0.01" min="0" value="0" required>
               </div>
               <div class="col-md-2">
                 <h5>&nbsp;</h5>
@@ -150,7 +150,7 @@
               </div>
               <div class="col-md-3">
                 <h5>จำนวน AU ที่เพิ่ม</h5>
-                <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
+                <input type="number" id="auCount" name="auCount" class="form-control form-control-user" step="0.01" min="0" value="0" readonly>
                 <input type="hidden" name="company" value="fbh">
               </div>
             </div>
@@ -408,7 +408,7 @@
               <input type="hidden" id="selectedDataPrice_${index}" name="selectedDataPrice[]" value="${detail && detail.au_price ? detail.au_price : ''}">
               <div class="col-md-3">
                 <h5>จำนวน</h5>
-                <input type="number" id="unit_${index}" name="unit[]" class="form-control form-control-user" required value="${detail && detail.unit ? detail.unit : ''}">
+                <input type="number" id="unit_${index}" name="unit[]" class="form-control form-control-user" required step="0.01" min="0" value="${detail && detail.unit ? detail.unit : ''}">
               </div>
             </div>
           </div>

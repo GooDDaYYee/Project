@@ -17,7 +17,7 @@
                             <div class="row mt-md-3">
                                 <div class="col">
                                     <h4>เลขที่</h4>
-                                    <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $newBillId; ?>" readonly>
+                                    <input type="text" id="number" name="number" class="form-control form-control-user" value="<?php echo $newBillId; ?>" step="0.01" min="0" readonly>
                                 </div>
                                 <div class="col">
                                     <h4>วันที่ออกบิล</h4>
@@ -65,7 +65,7 @@
                             <div class="row mt-md-3">
                                 <div class="col-md-3">
                                     <h4>จำนวนAU</h4>
-                                    <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" required>
+                                    <input type="number" id="numAU" name="numAU" class="form-control form-control-user" placeholder="จำนวนAU" step="0.01" min="0" required>
                                 </div>
                                 <div class="col-md-2">
                                     <h4>&nbsp;</h4>
@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <h4>จำนวน AU ที่เพิ่ม</h4>
-                                    <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" readonly>
+                                    <input type="number" id="auCount" name="auCount" class="form-control form-control-user" value="0" step="0.01" min="0" readonly>
                                 </div>
                             </div>
                             <div id="auInputs" class="mt-md-3">
@@ -119,7 +119,7 @@
                 <input type="hidden" id="selectedDataPrice_${index}" name="selectedDataPrice[]">
                 <div class="col-md-3">
                     <h4>จำนวน</h4>
-                    <input type="number" id="unit_${index}" name="unit[]" class="form-control form-control-user" required>
+                    <input type="number" id="unit_${index}" name="unit[]" class="form-control form-control-user" step="0.01" min="0" required>
                 </div>
             </div>
         `;

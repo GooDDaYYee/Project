@@ -100,7 +100,7 @@ $fbhCount = $stmt->fetchColumn();
                             </div>
                             <div class="col">
                                 <label for="edit-price">Price</label>
-                                <input type="number" class="form-control" id="edit-price" name="edit-price" placeholder="Price" step="any">
+                                <input type="number" class="form-control" id="edit-price" name="edit-price" placeholder="Price" step="0.01" min="0" step="any">
                             </div>
                             <div class="col">
                                 <label for="edit-company">Company</label>

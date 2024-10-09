@@ -113,19 +113,19 @@
                     <input type="hidden" id="edit-salary-id" name="salary_id">
                     <div class="form-group">
                         <label for="edit-salary">เงินเดือน</label>
-                        <input type="number" class="form-control" id="edit-salary" name="salary" required>
+                        <input type="number" class="form-control" id="edit-salary" name="salary" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-ot">OT</label>
-                        <input type="number" class="form-control" id="edit-ot" name="ot" required>
+                        <input type="number" class="form-control" id="edit-ot" name="ot" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-social_security">ประกันสังคม</label>
-                        <input type="number" class="form-control" id="edit-social_security" name="social_security" required>
+                        <input type="number" class="form-control" id="edit-social_security" name="social_security" step="0.01" min="0" required>
                     </div>
                     <div class="form-group">
                         <label for="edit-other">อื่นๆ</label>
-                        <input type="number" class="form-control" id="edit-other" name="other" required>
+                        <input type="number" class="form-control" id="edit-other" name="other" step="0.01" min="0" required>
                     </div>
                 </div>
                 <div class="modal-footer">

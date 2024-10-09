@@ -89,7 +89,7 @@
                     </div>
                     <div class="form-group">
                         <label for="edit_drum_full">Drum เต็ม</label>
-                        <input type="number" id="edit_drum_full" name="edit_drum_full" class="form-control" required maxlength="4">
+                        <input type="number" id="edit_drum_full" name="edit_drum_full" class="form-control" required step="0.01" min="0" required maxlength="4">
                         <p id="edit_drum_full_notice" style="display: none; color: red;"></p>
                     </div>
                 </form>

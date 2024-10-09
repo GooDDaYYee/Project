@@ -74,11 +74,11 @@
                     </div>
                     <div class="form-group">
                         <label for="editCableFrom">Cable From</label>
-                        <input type="number" class="form-control" id="editCableFrom" name="cable_form" required maxlength="4">
+                        <input type="number" class="form-control" id="editCableFrom" name="cable_form" required step="0.01" min="0" required maxlength="4">
                     </div>
                     <div class="form-group">
                         <label for="editCableTo">Cable To</label>
-                        <input type="number" class="form-control" id="editCableTo" name="cable_to" required maxlength="4">
+                        <input type="number" class="form-control" id="editCableTo" name="cable_to" required step="0.01" min="0" required maxlength="4">
                     </div>
                     <div class="form-group">
                         <label for="editCableWork">ใช้กับบริษัท</label>

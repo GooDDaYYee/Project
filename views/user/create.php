@@ -38,7 +38,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-3">
                                     <h4>อายุ</h4>
-                                    <input type="number" id="age" name="age" class="form-control form-control-user" placeholder="อายุ" required>
+                                    <input type="number" id="age" name="age" class="form-control form-control-user" placeholder="อายุ" step="0.01" min="0" required>
                                 </div>
                                 <div class="col-sm-3">
                                     <h4>อีเมล</h4>

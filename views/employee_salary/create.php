@@ -39,19 +39,19 @@ try {
                             <div class="form-group row">
                                 <div class="col-sm-3">
                                     <h4>เงินเดือน</h4>
-                                    <input type="number" id="salary" name="salary" class="form-control form-control-user" placeholder="เงินเดือน" required="">
+                                    <input type="number" id="salary" name="salary" class="form-control form-control-user" placeholder="เงินเดือน" step="0.01" min="0" required="">
                                 </div>
                                 <div class="col-sm-3">
                                     <h4>OT</h4>
-                                    <input type="number" id="ot" name="ot" class="form-control form-control-user" placeholder="OT" required="">
+                                    <input type="number" id="ot" name="ot" class="form-control form-control-user" placeholder="OT" step="0.01" min="0" required="">
                                 </div>
                                 <div class="col-sm-3">
                                     <h4>ประกันสังคม(หักในเงินเดือน)</h4>
-                                    <input type="number" id="social_security" name="social_security" class="form-control form-control-user" placeholder="ประกันสังคม" required="">
+                                    <input type="number" id="social_security" name="social_security" class="form-control form-control-user" placeholder="ประกันสังคม" step="0.01" min="0" required="">
                                 </div>
                                 <div class="col-sm-3">
                                     <h4>อื่นๆ</h4>
-                                    <input type="number" id="other" name="other" class="form-control form-control-user" placeholder="อื่นๆ" required="">
+                                    <input type="number" id="other" name="other" class="form-control form-control-user" placeholder="อื่นๆ" step="0.01" min="0" required="">
                                 </div>
                             </div>
                             <div class="form-group row">
