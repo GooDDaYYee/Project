@@ -227,36 +227,81 @@ class EditBackController extends BaseController
 
     public function importAU()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['excelFile'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!isset($_FILES['excelFile']) || $_FILES['excelFile']['error'] !== UPLOAD_ERR_OK) {
+                $error = isset($_FILES['excelFile']) ? $this->getFileUploadErrorMessage($_FILES['excelFile']['error']) : 'No file uploaded';
+                error_log("File upload error: " . $error);
+                echo json_encode(['status' => 'error', 'message' => 'File upload error: ' . $error]);
+                return;
+            }
+
             $file = $_FILES['excelFile'];
             $allowedExtensions = ['xls', 'xlsx'];
             $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
-            if (in_array($fileExtension, $allowedExtensions)) {
-                try {
-                    $importResult = $this->importExcelToMysql($file['tmp_name'], 'au_all');
-
-                    if ($importResult) {
-                        $this->logAction('AU Data Imported', "File: " . $file['name']);
-                        echo json_encode([
-                            'status' => 'success',
-                            'message' => 'นำเข้าข้อมูล AU เรียบร้อยแล้ว ข้อมูลที่มีอยู่ถูกแทนที่'
-                        ]);
-                    } else {
-                        $this->logAction('AU Data Import Failed', "File: " . $file['name']);
-                        echo json_encode(['status' => 'error', 'message' => 'ไม่สามารถนำเข้าข้อมูล AU']);
-                    }
-                } catch (Exception $e) {
-                    $this->logAction('AU Data Import Error', "File: " . $file['name'] . ", Error: " . $e->getMessage());
-                    echo json_encode(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดระหว่างการนำเข้า: ' . $e->getMessage()]);
-                }
-            } else {
+            if (!in_array($fileExtension, $allowedExtensions)) {
                 $this->logAction('AU Data Import Invalid File', "File: " . $file['name']);
                 echo json_encode(['status' => 'error', 'message' => 'ประเภทไฟล์ไม่ถูกต้อง โปรดอัปโหลดไฟล์ Excel (.xls หรือ .xlsx)']);
+                return;
+            }
+
+            $uploadDir = '/tmp/'; // Use a writable directory in your Docker container
+            $uploadFile = $uploadDir . basename($file['name']);
+
+            if (!move_uploaded_file($file['tmp_name'], $uploadFile)) {
+                error_log("Failed to move uploaded file to: " . $uploadFile);
+                echo json_encode(['status' => 'error', 'message' => 'ไม่สามารถย้ายไฟล์ที่อัปโหลด']);
+                return;
+            }
+
+            try {
+                $importResult = $this->importExcelToMysql($uploadFile, 'au_all');
+
+                if ($importResult) {
+                    $this->logAction('AU Data Imported', "File: " . $file['name']);
+                    echo json_encode([
+                        'status' => 'success',
+                        'message' => 'นำเข้าข้อมูล AU เรียบร้อยแล้ว ข้อมูลที่มีอยู่ถูกแทนที่'
+                    ]);
+                } else {
+                    $this->logAction('AU Data Import Failed', "File: " . $file['name']);
+                    echo json_encode(['status' => 'error', 'message' => 'ไม่สามารถนำเข้าข้อมูล AU']);
+                }
+            } catch (Exception $e) {
+                error_log("Error during AU import: " . $e->getMessage());
+                $this->logAction('AU Data Import Error', "File: " . $file['name'] . ", Error: " . $e->getMessage());
+                echo json_encode(['status' => 'error', 'message' => 'เกิดข้อผิดพลาดระหว่างการนำเข้า: ' . $e->getMessage()]);
+            } finally {
+                // Clean up the temporary file
+                if (file_exists($uploadFile)) {
+                    unlink($uploadFile);
+                }
             }
         } else {
-            $this->logAction('AU Data Import No File', "No file uploaded");
-            echo json_encode(['status' => 'error', 'message' => 'ไม่มีการอัปโหลดไฟล์']);
+            $this->logAction('AU Data Import Invalid Request', "Invalid request method");
+            echo json_encode(['status' => 'error', 'message' => 'คำขอไม่ถูกต้อง']);
+        }
+    }
+
+    private function getFileUploadErrorMessage($errorCode)
+    {
+        switch ($errorCode) {
+            case UPLOAD_ERR_INI_SIZE:
+                return "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+            case UPLOAD_ERR_FORM_SIZE:
+                return "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+            case UPLOAD_ERR_PARTIAL:
+                return "The uploaded file was only partially uploaded";
+            case UPLOAD_ERR_NO_FILE:
+                return "No file was uploaded";
+            case UPLOAD_ERR_NO_TMP_DIR:
+                return "Missing a temporary folder";
+            case UPLOAD_ERR_CANT_WRITE:
+                return "Failed to write file to disk";
+            case UPLOAD_ERR_EXTENSION:
+                return "File upload stopped by extension";
+            default:
+                return "Unknown upload error";
         }
     }
 }

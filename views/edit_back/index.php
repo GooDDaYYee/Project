@@ -428,16 +428,29 @@
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        var result = JSON.parse(response);
-                        if (result.status === 'success') {
-                            Swal.fire({
-                                title: 'สำเร็จ!',
-                                text: result.message,
-                                icon: 'success'
-                            })
-                        } else {
-                            Swal.fire('Error', result.message, 'error');
+                        try {
+                            var result = JSON.parse(response);
+                            if (result.status === 'success') {
+                                Swal.fire({
+                                    title: 'สำเร็จ!',
+                                    text: result.message,
+                                    icon: 'success'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload(); // Reload the page when OK is clicked
+                                    }
+                                });
+                            } else {
+                                Swal.fire('Error', result.message, 'error');
+                            }
+                        } catch (e) {
+                            console.error("Error parsing JSON response:", e);
+                            Swal.fire('Error', 'เกิดข้อผิดพลาดในการประมวลผลการตอบสนองจากเซิร์ฟเวอร์', 'error');
                         }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX error:", status, error);
+                        Swal.fire('Error', 'เกิดข้อผิดพลาดในการส่งคำขอ: ' + error, 'error');
                     },
                     cache: false,
                     contentType: false,
