@@ -33,10 +33,10 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-4 mb-3 mb-sm-0">
-                                    <input type="number" class="form-control form-control-user" id="cable_form" name="cable_form" placeholder="Cable From" required step="0.01" min="0" maxlength="4">
+                                    <input type="number" class="form-control form-control-user" id="cable_form inputcolr" name="cable_form" placeholder="Cable From" required step="0.01" min="0" maxlength="4">
                                 </div>
                                 <div class="col-sm-4 mb-3 mb-sm-0">
-                                    <input type="number" class="form-control form-control-user" id="cable_to" name="cable_to" placeholder="Cable To" required step="0.01" min="0" maxlength="4">
+                                    <input type="number" class="form-control form-control-user" id="cable_to inputcolr" name="cable_to" placeholder="Cable To" required step="0.01" min="0" maxlength="4">
                                 </div>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="cable_work_id" name="cable_work_id" required>
@@ -48,26 +48,29 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                <div class="col-sm-3 mb-3 mb-sm-0">
                                     <select class="form-control" id="company" name="company">
-                                        <option value="">เลือกบริษัท</option>
+                                        <option value="">เลือกบริษัท (เลือกก่อนเลือกDrum)</option>
                                         <?php foreach ($data['companies'] as $id => $name): ?>
                                             <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="col-sm-4 mb-3 mb-sm-0">
+                                <div class="col-sm-3 mb-3 mb-sm-0">
                                     <select class="form-control" id="manufacturer" name="manufacturer">
-                                        <option value="">เลือกบริษัทผลิตสาย</option>
+                                        <option value="">เลือกบริษัทผลิตสาย (เลือกก่อนเลือกDrum)</option>
                                         <?php foreach ($data['manufacturers'] as $id => $name): ?>
                                             <option value="<?= htmlspecialchars($id) ?>"><?= htmlspecialchars($name) ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-                                <div class="col-sm-4 mb-3">
+                                <div class="col-sm-3 mb-3">
                                     <select class="form-control" id="drum_id" name="drum_id">
                                         <option value="">เลือก Drum</option>
                                     </select>
+                                </div>
+                                <div class="col-sm-3 mb-3">
+                                    <input type="number" class="form-control" id="min_remaining" name="min_remaining" placeholder="จำนวนคงเหลือCableขั้นต่ำ" maxlength="4" style="box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);">
                                 </div>
                             </div>
                             <div class="row-md-auto mt-md-3">
@@ -85,9 +88,10 @@
 
 <script>
     $(document).ready(function() {
-        $('#manufacturer, #company').change(function() {
+        $('#manufacturer, #company, #min_remaining').change(function() {
             var manufacturer = $('#manufacturer').val();
             var company = $('#company').val();
+            var minRemaining = $('#min_remaining').val();
             if (manufacturer && company) {
                 $.ajax({
                     type: 'POST',
@@ -95,16 +99,21 @@
                     data: {
                         'manufacturer': manufacturer,
                         'company': company,
-                        'request_type': 'manufacturer'
+                        'min_remaining': minRemaining
                     },
                     success: function(response) {
                         console.log("AJAX response:", response);
                         if (response.success) {
                             $('#drum_id').html(response.data.options);
                             console.log("Drum options updated");
-                            if (response.message === 'ไม่พบข้อมูล Drum สำหรับ manufacturer และ company ที่เลือก') {
-                                // อาจจะแสดง alert หรือข้อความแจ้งเตือนเพิ่มเติมที่นี่
-                                console.log("No drums found for the selected manufacturer and company");
+                            if (response.message === 'ไม่พบ Drum ที่มีสายเคเบิลเหลือ') {
+                                console.log("No drums available");
+                                // อาจจะแสดงข้อความแจ้งเตือนให้ผู้ใช้ทราบ
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'ไม่พบ Drum',
+                                    text: 'ไม่มี Drum ที่มีสายเคเบิลเหลือสำหรับบริษัทและผู้ผลิตที่เลือก'
+                                });
                             }
                         } else {
                             console.error("Error in AJAX response:", response.message);
@@ -112,7 +121,7 @@
                     }
                 });
             } else {
-                $('#drum_id').html('<option value="">ไม่มีข้อมูล</option>');
+                $('#drum_id').html('<option value="">เลือก Drum</option>');
             }
         });
 

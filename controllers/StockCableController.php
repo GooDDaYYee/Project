@@ -347,9 +347,9 @@ class StockCableController extends BaseController
     private function updateAllDrumUsages()
     {
         $strsql = 'SELECT d.drum_id, d.drum_full, COALESCE(SUM(c.cable_used), 0) as total_cable 
-               FROM drum d 
-               LEFT JOIN cable c ON d.drum_id = c.drum_id 
-               GROUP BY d.drum_id, d.drum_full';
+           FROM drum d 
+           LEFT JOIN cable c ON d.drum_id = c.drum_id 
+           GROUP BY d.drum_id, d.drum_full';
         $stmt = $this->db->prepare($strsql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -360,13 +360,13 @@ class StockCableController extends BaseController
             $drum_full = $row['drum_full'];
 
             if ($total_cable == 0) {
-                $sql = "UPDATE drum SET drum_used = 0, drum_remaining = 4000 WHERE drum_id = :drum_id";
+                $sql = "UPDATE drum SET drum_used = 0, drum_remaining = :drum_full WHERE drum_id = :drum_id";
                 $stmt = $this->db->prepare($sql);
-                $stmt->execute([':drum_id' => $drum_id]);
+                $stmt->execute([':drum_full' => $drum_full, ':drum_id' => $drum_id]);
             } else {
                 $drum_remaining = $drum_full - $total_cable;
-                if ($drum_remaining == 0) {
-                    $drum_remaining = 4000;
+                if ($drum_remaining <= 0) {
+                    $drum_remaining = 0;  // เมื่อใช้หมดแล้ว ให้ set เป็น 0
                 }
                 $sql = "UPDATE drum SET drum_used = :total_cable, drum_remaining = :drum_remaining WHERE drum_id = :drum_id";
                 $stmt = $this->db->prepare($sql);
@@ -414,17 +414,32 @@ class StockCableController extends BaseController
 
         $company = $_POST['company'];
         $manufacturer = $_POST['manufacturer'];
+        $minRemaining = isset($_POST['min_remaining']) ? intval($_POST['min_remaining']) : 0;
 
         try {
-            $stmt = $this->db->prepare("SELECT drum_id, drum_no, drum_remaining FROM drum 
-                                        WHERE drum_company_id = :company 
-                                        AND drum_cable_company_id = :manufacturer");
-            $stmt->execute([':company' => $company, ':manufacturer' => $manufacturer]);
+            $sql = "SELECT drum_id, drum_no, drum_remaining FROM drum 
+                WHERE drum_company_id = :company 
+                AND drum_cable_company_id = :manufacturer
+                AND drum_remaining > 0";  // เพิ่มเงื่อนไขนี้
+
+            if ($minRemaining > 0) {
+                $sql .= " AND drum_remaining <= :min_remaining";
+            }
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':company', $company);
+            $stmt->bindParam(':manufacturer', $manufacturer);
+
+            if ($minRemaining > 0) {
+                $stmt->bindParam(':min_remaining', $minRemaining);
+            }
+
+            $stmt->execute();
             $drums = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if (empty($drums)) {
-                $options = '<option value="">ไม่มีข้อมูล Drum</option>';
-                $message = 'ไม่พบข้อมูล Drum สำหรับบริษัทและบริษัทผลิตสายที่เลือก';
+                $options = '<option value="">ไม่มี Drum ที่เหลือ</option>';
+                $message = 'ไม่พบ Drum ที่มีสายเคเบิลเหลือ';
             } else {
                 $options = '<option value="">เลือก Drum</option>';
                 foreach ($drums as $drum) {
