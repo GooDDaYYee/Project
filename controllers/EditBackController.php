@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/BaseController.php';
-require 'libs/phpspreadsheet/vendor/autoload.php';
+require_once 'libs/SimpleXLSX/vendor/autoload.php';
 
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use Shuchkin\SimpleXLSX;
 
 class EditBackController extends BaseController
 {
@@ -159,69 +159,68 @@ class EditBackController extends BaseController
         }
     }
 
-
     public function importExcelToMysql($excelFile, $tableName)
     {
-        $spreadsheet = IOFactory::load($excelFile);
-        $worksheet = $spreadsheet->getActiveSheet();
-        $rows = $worksheet->toArray();
+        if ($xlsx = SimpleXLSX::parse($excelFile)) {
+            $rows = $xlsx->rows();
+            $headers = array_shift($rows);
 
-        $headers = array_shift($rows);
+            $headers = array_map(function ($header, $index) {
+                return $header ?: "column_" . $index;
+            }, $headers, array_keys($headers));
 
-        $headers = array_map(function ($header, $index) {
-            return $header ?: "column_" . $index;
-        }, $headers, array_keys($headers));
+            $data = array_map(function ($row) use ($headers) {
+                return (object) array_combine($headers, $row);
+            }, $rows);
 
-        $data = array_map(function ($row) use ($headers) {
-            return (object) array_combine($headers, $row);
-        }, $rows);
+            $this->db->beginTransaction();
 
-        $this->db->beginTransaction();
+            try {
+                $stmt = $this->db->prepare("UPDATE $tableName SET 
+                                        au_detail = :au_detail,
+                                        au_type = :au_type,
+                                        au_price = :au_price,
+                                        au_company = :au_company
+                                        WHERE au_name = :au_name");
 
-        try {
-            $stmt = $this->db->prepare("UPDATE $tableName SET 
-                                    au_detail = :au_detail,
-                                    au_type = :au_type,
-                                    au_price = :au_price,
-                                    au_company = :au_company
-                                    WHERE au_name = :au_name");
-
-            foreach ($data as $row) {
-                if (!empty($row->au_name)) {
-                    try {
-                        $stmt->execute([
-                            ':au_detail' => $row->au_detail,
-                            ':au_type' => $row->au_type,
-                            ':au_price' => $row->au_price,
-                            ':au_company' => $row->au_company,
-                            ':au_name' => $row->au_name
-                        ]);
-
-                        if ($stmt->rowCount() == 0) {
-                            $insertStmt = $this->db->prepare("INSERT INTO $tableName 
-                                                         (au_name, au_detail, au_type, au_price, au_company) 
-                                                         VALUES (:au_name, :au_detail, :au_type, :au_price, :au_company)");
-                            $insertStmt->execute([
-                                ':au_name' => $row->au_name,
+                foreach ($data as $row) {
+                    if (!empty($row->au_name)) {
+                        try {
+                            $stmt->execute([
                                 ':au_detail' => $row->au_detail,
                                 ':au_type' => $row->au_type,
                                 ':au_price' => $row->au_price,
-                                ':au_company' => $row->au_company
+                                ':au_company' => $row->au_company,
+                                ':au_name' => $row->au_name
                             ]);
+
+                            if ($stmt->rowCount() == 0) {
+                                $insertStmt = $this->db->prepare("INSERT INTO $tableName 
+                                                             (au_name, au_detail, au_type, au_price, au_company) 
+                                                             VALUES (:au_name, :au_detail, :au_type, :au_price, :au_company)");
+                                $insertStmt->execute([
+                                    ':au_name' => $row->au_name,
+                                    ':au_detail' => $row->au_detail,
+                                    ':au_type' => $row->au_type,
+                                    ':au_price' => $row->au_price,
+                                    ':au_company' => $row->au_company
+                                ]);
+                            }
+                        } catch (PDOException $e) {
+                            error_log("Error updating/inserting row: " . json_encode($row));
+                            error_log("Error message: " . $e->getMessage());
                         }
-                    } catch (PDOException $e) {
-                        error_log("Error updating/inserting row: " . json_encode($row));
-                        error_log("Error message: " . $e->getMessage());
                     }
                 }
+
+                $this->db->commit();
+                return true;
+            } catch (Exception $e) {
+                $this->db->rollBack();
+                throw $e;
             }
-
-            $this->db->commit();
-
-            return true;
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
+        } else {
+            throw new Exception(SimpleXLSX::parseError());
         }
     }
 

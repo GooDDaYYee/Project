@@ -423,7 +423,7 @@ class StockCableController extends BaseController
                 AND drum_remaining > 0";  // เพิ่มเงื่อนไขนี้
 
             if ($minRemaining > 0) {
-                $sql .= " AND drum_remaining <= :min_remaining";
+                $sql .= " AND drum_remaining >= :min_remaining";
             }
 
             $stmt = $this->db->prepare($sql);
